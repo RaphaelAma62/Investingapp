@@ -185,7 +185,7 @@ footer{background:var(--g900);color:var(--g500);padding:40px clamp(16px,4vw,48px
         </div>
         <div class="field"><label>Email</label><input id="su-em" type="email" placeholder="you@example.com"/></div>
         <div class="field"><label>Password</label><input id="su-pw" type="password" placeholder="Min. 8 characters"/></div>
-        <button class="auth-btn" onclick="doSignup()">Create my account →</button>
+        <button class="auth-btn" id="su-btn" data-label="Create my account →" onclick="doSignup()">Create my account →</button>
         <div class="or-row">or continue with</div>
         <div class="oauth">
           <button class="oauth-btn">G Google</button>
@@ -198,7 +198,7 @@ footer{background:var(--g900);color:var(--g500);padding:40px clamp(16px,4vw,48px
         <div class="field"><label>Email</label><input id="li-em" type="email" placeholder="you@example.com"/></div>
         <div class="field"><label>Password</label><input id="li-pw" type="password" placeholder="••••••••"/></div>
         <div style="text-align:right;margin-bottom:12px;"><a href="#" style="font-size:12px;color:var(--p);">Forgot password?</a></div>
-        <button class="auth-btn" onclick="doLogin()">Log in to GopexFund →</button>
+        <button class="auth-btn" id="li-btn" data-label="Log in to GopexFund →" onclick="doLogin()">Log in to GopexFund →</button>
         <div class="or-row">or continue with</div>
         <div class="oauth">
           <button class="oauth-btn">G Google</button>
@@ -235,29 +235,127 @@ footer{background:var(--g900);color:var(--g500);padding:40px clamp(16px,4vw,48px
   </div>
 </footer>
 
-<script>
-// Show visual only on wide screens
-function checkVis(){document.getElementById('hero-vis').style.display=window.innerWidth>=900?'flex':'none';}
-checkVis();window.addEventListener('resize',checkVis);
+<script type="module">
+// ── SUPABASE CONFIG ──────────────────────────────────────────
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-function switchTab(t){
-  const su=t==='signup';
-  document.getElementById('form-su').style.display=su?'block':'none';
-  document.getElementById('form-li').style.display=su?'none':'block';
-  document.getElementById('tab-su').classList.toggle('on',su);
-  document.getElementById('tab-li').classList.toggle('on',!su);
+const SUPABASE_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON)
+
+// ── UI HELPERS ───────────────────────────────────────────────
+function showError(msg) {
+  let el = document.getElementById('auth-error')
+  if (!el) {
+    el = document.createElement('div')
+    el.id = 'auth-error'
+    el.style.cssText = 'background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;border-radius:9px;padding:10px 13px;font-size:13px;margin-bottom:12px;'
+    document.querySelector('.auth-card').insertBefore(el, document.querySelector('.auth-tabs'))
+  }
+  el.textContent = msg
+  el.style.display = 'block'
 }
-function doSignup(){
-  const fn=(document.getElementById('su-fn').value.trim()||'Adaeze');
-  const ln=(document.getElementById('su-ln').value.trim()||'Obi');
-  sessionStorage.setItem('gopex_user',JSON.stringify({name:fn+' '+ln,firstName:fn,initials:(fn[0]||'A').toUpperCase()+(ln[0]||'O').toUpperCase(),email:document.getElementById('su-em').value||'user@gopexfund.com',joined:new Date().toLocaleDateString('en-NG',{month:'long',year:'numeric'})}));
-  window.location.href='home.html';
+function hideError() {
+  const el = document.getElementById('auth-error')
+  if (el) el.style.display = 'none'
 }
-function doLogin(){
-  sessionStorage.setItem('gopex_user',JSON.stringify({name:'Adaeze Obi',firstName:'Adaeze',initials:'AO',email:document.getElementById('li-em').value||'demo@gopexfund.com',joined:'January 2024'}));
-  window.location.href='home.html';
+function setLoading(btn, loading) {
+  btn.disabled = loading
+  btn.textContent = loading ? '⏳ Please wait…' : btn.dataset.label
 }
-document.addEventListener('keydown',e=>{if(e.key==='Enter'){document.getElementById('form-su').style.display!=='none'?doSignup():doLogin();}});
+function saveSession(user, profile) {
+  const fn = profile?.name?.split(' ')[0] || user.email.split('@')[0]
+  const ln = profile?.name?.split(' ')[1] || ''
+  sessionStorage.setItem('gopex_user', JSON.stringify({
+    id: user.id,
+    name: profile?.name || fn,
+    firstName: fn,
+    initials: (fn[0]||'U').toUpperCase() + (ln[0]||'').toUpperCase(),
+    email: user.email,
+    joined: new Date(user.created_at).toLocaleDateString('en-NG', {month:'long', year:'numeric'})
+  }))
+}
+
+// ── CHECK IF ALREADY LOGGED IN ───────────────────────────────
+const { data: { session } } = await supabase.auth.getSession()
+if (session) window.location.href = 'home.html'
+
+// ── SIGN UP ──────────────────────────────────────────────────
+window.doSignup = async function() {
+  const btn = document.getElementById('su-btn')
+  const fn  = document.getElementById('su-fn').value.trim()
+  const ln  = document.getElementById('su-ln').value.trim()
+  const em  = document.getElementById('su-em').value.trim()
+  const pw  = document.getElementById('su-pw').value
+
+  hideError()
+  if (!fn || !em || !pw) return showError('Please fill in all fields.')
+  if (pw.length < 8)     return showError('Password must be at least 8 characters.')
+
+  setLoading(btn, true)
+
+  // 1. Create auth account
+  const { data, error } = await supabase.auth.signUp({ email: em, password: pw })
+  if (error) { setLoading(btn, false); return showError(error.message) }
+
+  // 2. Save profile to database
+  const fullName = (fn + ' ' + ln).trim()
+  const initials = fn[0].toUpperCase() + (ln[0]||'').toUpperCase()
+  await supabase.from('profiles').insert({
+    id: data.user.id,
+    name: fullName,
+    first_name: fn,
+    initials,
+  })
+
+  // 3. Save to sessionStorage & redirect
+  saveSession(data.user, { name: fullName })
+  window.location.href = 'home.html'
+}
+
+// ── LOG IN ───────────────────────────────────────────────────
+window.doLogin = async function() {
+  const btn = document.getElementById('li-btn')
+  const em  = document.getElementById('li-em').value.trim()
+  const pw  = document.getElementById('li-pw').value
+
+  hideError()
+  if (!em || !pw) return showError('Please enter your email and password.')
+
+  setLoading(btn, true)
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email: em, password: pw })
+  if (error) { setLoading(btn, false); return showError('Incorrect email or password.') }
+
+  // Fetch profile
+  const { data: profile } = await supabase
+    .from('profiles').select('*').eq('id', data.user.id).single()
+
+  saveSession(data.user, profile)
+  window.location.href = 'home.html'
+}
+
+// ── TAB SWITCH ───────────────────────────────────────────────
+window.switchTab = function(t) {
+  const su = t === 'signup'
+  document.getElementById('form-su').style.display = su ? 'block' : 'none'
+  document.getElementById('form-li').style.display = su ? 'none' : 'block'
+  document.getElementById('tab-su').classList.toggle('on', su)
+  document.getElementById('tab-li').classList.toggle('on', !su)
+  hideError()
+}
+
+// ── VISUAL SHOW/HIDE ─────────────────────────────────────────
+function checkVis(){document.getElementById('hero-vis').style.display=window.innerWidth>=900?'flex':'none';}
+checkVis(); window.addEventListener('resize', checkVis)
+
+// ── ENTER KEY ────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    document.getElementById('form-su').style.display !== 'none' ? doSignup() : doLogin()
+  }
+})
 </script>
 </body>
 </html>

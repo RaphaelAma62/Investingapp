@@ -110,7 +110,7 @@
     </div>
     <div class="prof-btns">
       <button class="btn-edit" onclick="openEdit()">✏ Edit profile</button>
-      <button class="btn-logout" onclick="if(confirm('Log out of GopexFund?')){sessionStorage.clear();location='landing.html';}">Log out</button>
+      <button class="btn-logout" onclick="realLogout()">Log out</button>
     </div>
   </div>
 
@@ -187,6 +187,49 @@
 </div>
 
 <script>
+// ── SUPABASE CONFIG ──────────────────────────
+const _SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
+const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+let _sb = null, _session = null
+
+async function realLogout() {
+  if (!confirm('Log out of GopexFund?')) return
+  if (_sb) await _sb.auth.signOut()
+  sessionStorage.clear(); localStorage.removeItem('gx_holdings'); localStorage.removeItem('gx_connected')
+  window.location.href = 'landing.html'
+}
+
+const sbScript = document.createElement('script')
+sbScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
+sbScript.onload = async () => {
+  _sb = supabase.createClient(_SB_URL, _SB_ANON)
+  const { data: { session } } = await _sb.auth.getSession()
+  if (!session) { window.location.href = 'landing.html'; return }
+  _session = session
+
+  const { data: profile } = await _sb.from('profiles').select('*').eq('id', session.user.id).single()
+  const el = id => document.getElementById(id)
+  const fn = profile?.first_name || profile?.name?.split(' ')[0] || 'User'
+  const initials = profile?.initials || fn[0].toUpperCase()
+
+  if(el('nav-av'))   el('nav-av').textContent   = initials
+  if(el('prof-av'))  el('prof-av').textContent  = initials
+  if(el('prof-name'))el('prof-name').textContent = profile?.name || fn
+  if(el('prof-bio') && profile?.bio) el('prof-bio').textContent = profile.bio
+  if(el('prof-join'))
+    el('prof-join').textContent = 'Member since ' + new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
+  if(profile?.is_verified) {
+    const vb = el('v-badge'); if(vb){ vb.className='v-badge'; vb.textContent='✓ Verified'; }
+  }
+
+  sessionStorage.setItem('gopex_user', JSON.stringify({
+    id: session.user.id, name: profile?.name || fn,
+    firstName: fn, initials, email: session.user.email,
+    joined: new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
+  }))
+}
+document.head.appendChild(sbScript)
+
 function switchTab(t,btn){
   ['posts','portfolio','activity'].forEach(id=>{const el=document.getElementById('tab-'+id);if(el)el.style.display=id===t?'block':'none';});
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
@@ -196,22 +239,27 @@ function openEdit(){
   document.getElementById('edit-bio').value=document.getElementById('prof-bio').textContent;
   document.getElementById('edit-modal').classList.add('open');
 }
-function saveProfile(){
+async function saveProfile(){
   const n=document.getElementById('edit-name').value.trim();
   const b=document.getElementById('edit-bio').value.trim();
-  if(n)document.getElementById('prof-name').textContent=n;
-  if(b)document.getElementById('prof-bio').textContent=b;
+  if(n) document.getElementById('prof-name').textContent=n;
+  if(b) document.getElementById('prof-bio').textContent=b;
   document.getElementById('edit-modal').classList.remove('open');
+  // Save to database
+  if(_sb && _session) {
+    await _sb.from('profiles').update({ name: n, bio: b }).eq('id', _session.user.id)
+  }
 }
 document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
-(function(){
+// Fallback from sessionStorage while Supabase loads
+;(function(){
   const raw=sessionStorage.getItem('gopex_user');if(!raw)return;const u=JSON.parse(raw);
   const el=id=>document.getElementById(id);
   if(el('nav-av'))el('nav-av').textContent=u.initials||'AO';
   if(el('prof-av'))el('prof-av').textContent=u.initials||'AO';
-  if(el('prof-name'))el('prof-name').textContent=u.name||'Adaeze Okonkwo';
+  if(el('prof-name'))el('prof-name').textContent=u.name||'You';
   if(el('prof-join')&&u.joined)el('prof-join').textContent='Member since '+u.joined;
-})();
+})()
 </script>
 </body>
 </html>

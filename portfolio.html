@@ -466,7 +466,10 @@ function addHolding(){
   const shares=parseFloat(document.getElementById('af-shares').value)||0;
   const buyPrice=parseFloat(document.getElementById('af-price').value)||0;
   if(!tk||!shares||!buyPrice){alert('Please fill in all fields');return;}
-  holdings.push({tk,name,shares,buyPrice});saveHoldings();renderHoldings();
+  const holding = {tk,name,shares,buyPrice};
+  holdings.push(holding); saveHoldings(); renderHoldings();
+  // Save to DB
+  if(window._saveHoldingToDB) window._saveHoldingToDB(holding).then(dbRow => { if(dbRow) holding.dbId = dbRow.id; });
   document.getElementById('af-tk').value='';document.getElementById('af-name').value='';
   document.getElementById('af-shares').value='';document.getElementById('af-price').value='';
   document.getElementById('add-form').classList.remove('open');
@@ -533,19 +536,104 @@ function connectBrokerage(id,url){
     const card=document.getElementById('brok-'+id);card.classList.add('connected');
     btn.className='brok-btn brok-btn-synced';btn.textContent='✓ Synced — View account';btn.classList.remove('connecting');
     document.getElementById('v-badge').className='vbadge badge-v';document.getElementById('v-badge').textContent='✓ Verified Portfolio';
+    // Save connection to database
+    const brokerName=BROKERAGES.find(b=>b.id===id)?.name||id;
+    if(window._saveBrokerageToDB) window._saveBrokerageToDB(brokerName);
     window.open(url,'_blank');
   },1800);
 }
 
-// ─── INIT ────────────────────────────────────
-(function(){
+// ─── SUPABASE AUTH + REAL DATA ───────────────
+const _SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
+const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+let _sb = null
+
+const sbScript = document.createElement('script')
+sbScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
+sbScript.onload = async () => {
+  _sb = supabase.createClient(_SB_URL, _SB_ANON)
+
+  // Auth guard
+  const { data: { session } } = await _sb.auth.getSession()
+  if (!session) { window.location.href = 'landing.html'; return }
+
+  // Fetch profile
+  const { data: profile } = await _sb.from('profiles').select('*').eq('id', session.user.id).single()
+  const firstName = profile?.first_name || profile?.name?.split(' ')[0] || 'You'
+  const initials  = profile?.initials || firstName[0].toUpperCase()
+  const fullName  = profile?.name || firstName
+
+  // Update nav
+  const av=document.getElementById('nav-av'); const nm=document.getElementById('nav-name')
+  const hn=document.getElementById('hero-name')
+  if(av) av.textContent = initials
+  if(nm) nm.textContent = firstName
+  if(hn) hn.textContent = fullName
+
+  sessionStorage.setItem('gopex_user', JSON.stringify({
+    id: session.user.id, name: fullName, firstName, initials, email: session.user.email,
+    joined: new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
+  }))
+
+  // Load holdings from DB (merge with localStorage for demo data)
+  const { data: dbHoldings } = await _sb.from('holdings')
+    .select('*').eq('user_id', session.user.id)
+  if (dbHoldings && dbHoldings.length > 0) {
+    holdings = dbHoldings.map(h => ({
+      tk: h.ticker, name: h.company_name,
+      shares: parseFloat(h.shares), buyPrice: parseFloat(h.buy_price),
+      dbId: h.id
+    }))
+    saveHoldings()
+  }
+
+  // Load brokerage connections from DB
+  const { data: dbBrokers } = await _sb.from('brokerage_connections')
+    .select('*').eq('user_id', session.user.id).eq('is_active', true)
+  if (dbBrokers?.length) {
+    dbBrokers.forEach(b => { connected[b.broker_name.toLowerCase()] = true })
+    localStorage.setItem('gx_connected', JSON.stringify(connected))
+  }
+
+  // Override saveToDB functions
+  window._saveHoldingToDB = async (holding) => {
+    if (!_sb || !session) return
+    const { data } = await _sb.from('holdings').insert({
+      user_id: session.user.id, ticker: holding.tk,
+      company_name: holding.name, shares: holding.shares, buy_price: holding.buyPrice
+    }).select().single()
+    return data
+  }
+  window._deleteHoldingFromDB = async (dbId) => {
+    if (!_sb || !session || !dbId) return
+    await _sb.from('holdings').delete().eq('id', dbId)
+  }
+  window._saveBrokerageToDB = async (brokerName) => {
+    if (!_sb || !session) return
+    await _sb.from('brokerage_connections').upsert({
+      user_id: session.user.id, broker_name: brokerName, is_active: true
+    })
+    // Mark profile as verified
+    await _sb.from('profiles').update({ is_verified: true }).eq('id', session.user.id)
+  }
+
+  const anyConn = Object.keys(connected).length > 0
+  if (!anyConn) { document.getElementById('v-badge').className='vbadge badge-uv'; document.getElementById('v-badge').textContent='◌ Unverified — Connect a broker' }
+
+  renderHoldings(); buildPerfChart('1M'); renderBrokerages()
+  document.getElementById('stock-modal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open') })
+}
+document.head.appendChild(sbScript)
+
+// Fallback init from sessionStorage while Supabase loads
+;(function(){
   const raw=sessionStorage.getItem('gopex_user');
   if(raw){const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');const hn=document.getElementById('hero-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];if(hn)hn.textContent=u.name||'Adaeze Obi';}
   const anyConn=Object.keys(connected).length>0;
-  if(!anyConn){document.getElementById('v-badge').className='vbadge badge-uv';document.getElementById('v-badge').textContent='◌ Unverified — Connect a broker';}
-  renderHoldings();buildPerfChart('1M');renderBrokerages();
+  if(!anyConn){const vb=document.getElementById('v-badge');if(vb){vb.className='vbadge badge-uv';vb.textContent='◌ Unverified — Connect a broker';}}
+  renderHoldings(); buildPerfChart('1M'); renderBrokerages();
   document.getElementById('stock-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
-})();
+})()
 </script>
 </body>
 </html>
