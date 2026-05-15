@@ -1,0 +1,737 @@
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --g:#00C896;--gd:#009E78;--gb:rgba(0,200,150,0.1);--gbr:rgba(0,200,150,0.25);
+  --dk:#0A0E14;--dk2:#111820;--dk3:#1A2330;--card:#192030;
+  --tx:#F0F4F8;--mt:#8A9BB0;--br:#233040;
+  --ac:#FFD166;--red:#FF6B6B;--blue:#4E9EFF;--purple:#A78BFA;
+  --font:'Bricolage Grotesque',sans-serif;--body:'DM Sans',sans-serif;
+}
+body{font-family:var(--body);background:var(--dk);color:var(--tx);overflow-x:hidden;}
+*::-webkit-scrollbar{width:4px;height:4px;}
+*::-webkit-scrollbar-track{background:var(--dk3);}
+*::-webkit-scrollbar-thumb{background:var(--br);border-radius:2px;}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--br);background:rgba(10,14,20,0.96);position:sticky;top:0;z-index:200;}
+.logo{font-family:var(--font);font-weight:700;font-size:20px;display:flex;align-items:center;gap:7px;}
+.ld{width:7px;height:7px;background:var(--g);border-radius:50%;}
+.tabs{display:flex;gap:2px;}
+.tab{padding:7px 15px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--mt);background:transparent;border:none;font-family:var(--body);transition:all 0.18s;}
+.tab:hover{color:var(--tx);}
+.tab.on{background:var(--dk3);color:var(--tx);}
+.nav-r{display:flex;align-items:center;gap:8px;}
+.nb{width:32px;height:32px;border-radius:8px;background:var(--dk3);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;}
+.up{display:flex;align-items:center;gap:7px;background:var(--dk3);border:1px solid var(--br);border-radius:8px;padding:5px 11px 5px 5px;cursor:pointer;}
+.upa{width:24px;height:24px;border-radius:50%;background:var(--gb);color:var(--g);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+/* PAGES */
+.page{display:none;}
+.page.on{display:block;}
+/* SHARED */
+.pg{padding:24px 28px;max-width:1180px;margin:0 auto;}
+.card{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:20px;}
+.sec-hd{font-size:13px;font-weight:500;color:var(--mt);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
+.g{color:var(--g);}
+.r{color:var(--red);}
+.mt{color:var(--mt);}
+.btn-g{background:var(--g);color:#0A0E14;border:none;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--body);transition:background 0.2s;}
+.btn-g:hover{background:var(--gd);}
+.btn-out{background:transparent;border:1px solid var(--br);color:var(--mt);padding:8px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--body);transition:all 0.18s;}
+.btn-out:hover{border-color:var(--mt);color:var(--tx);}
+/* ─── PORTFOLIO PAGE ─── */
+#pf .layout{display:grid;grid-template-columns:1fr 280px;gap:18px;}
+.pf-hero{background:var(--dk3);border:1px solid rgba(0,200,150,0.15);border-radius:16px;padding:24px;margin-bottom:16px;}
+.pf-hero .lbl{font-size:11px;color:rgba(0,200,150,0.7);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.pf-hero .big{font-family:var(--font);font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:4px;}
+.pf-hero .chg{font-size:13px;color:var(--g);margin-bottom:18px;}
+.periods{display:flex;gap:6px;margin-top:14px;}
+.per{padding:4px 11px;border-radius:6px;font-size:11px;cursor:pointer;border:1px solid var(--br);background:transparent;color:var(--mt);font-family:var(--body);}
+.per.on{background:var(--gb);border-color:var(--gbr);color:var(--g);}
+.alloc-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--br);}
+.alloc-row:last-child{border:none;}
+.alloc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.alloc-name{font-size:13px;flex:1;}
+.alloc-bar{height:4px;border-radius:2px;background:var(--dk2);}
+.alloc-fill{height:100%;border-radius:2px;}
+.alloc-pct{font-size:12px;color:var(--mt);min-width:32px;text-align:right;}
+.hold-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--br);}
+.hold-row:last-child{border:none;}
+.htk{font-size:10px;font-weight:600;background:var(--dk3);padding:2px 7px;border-radius:4px;color:var(--mt);}
+.hn{font-size:13px;font-weight:500;flex:1;}
+.hs{font-size:11px;color:var(--mt);}
+.hv{font-size:13px;font-weight:500;text-align:right;}
+.hc{font-size:11px;text-align:right;}
+/* ─── GOALS PAGE ─── */
+#gl .layout{display:grid;grid-template-columns:1fr 300px;gap:18px;}
+.goal-card{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:20px;margin-bottom:14px;}
+.gc-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+.gc-ico{font-size:26px;line-height:1;}
+.gc-name{font-size:16px;font-weight:600;font-family:var(--font);margin-bottom:2px;}
+.gc-sub{font-size:12px;color:var(--mt);}
+.gc-amounts{display:flex;justify-content:space-between;margin-bottom:10px;}
+.gc-cur{font-family:var(--font);font-size:22px;font-weight:700;}
+.gc-tgt{font-size:12px;color:var(--mt);text-align:right;padding-top:4px;}
+.prog-bg{background:var(--dk3);border-radius:5px;height:7px;overflow:hidden;margin-bottom:8px;}
+.prog-fill{height:100%;border-radius:5px;background:var(--g);}
+.gc-footer{display:flex;justify-content:space-between;font-size:11px;color:var(--mt);}
+.gc-milestone{display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--br);}
+.ms{flex:1;text-align:center;font-size:10px;padding:5px;border-radius:6px;}
+.ms.done{background:var(--gb);color:var(--g);}
+.ms.next{background:rgba(255,209,102,0.1);color:var(--ac);}
+.ms.todo{background:var(--dk3);color:var(--mt);}
+/* NEW GOAL FORM */
+.goal-form{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:20px;}
+.gf-title{font-family:var(--font);font-size:16px;font-weight:700;margin-bottom:4px;}
+.gf-sub{font-size:12px;color:var(--mt);margin-bottom:18px;}
+.gf-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
+.gf-chip{background:var(--dk3);border:1px solid var(--br);border-radius:9px;padding:10px 12px;cursor:pointer;font-size:12px;font-weight:500;display:flex;align-items:center;gap:8px;transition:all 0.18s;}
+.gf-chip:hover{border-color:rgba(0,200,150,0.4);}
+.gf-chip.sel{background:var(--gb);border-color:var(--gbr);}
+.fld{margin-bottom:14px;}
+.fld label{font-size:11px;color:var(--mt);display:block;margin-bottom:5px;letter-spacing:0.4px;text-transform:uppercase;}
+.fld input,.fld select{width:100%;background:var(--dk3);border:1px solid var(--br);color:var(--tx);padding:10px 12px;border-radius:8px;font-size:13px;font-family:var(--body);outline:none;}
+.fld input:focus,.fld select:focus{border-color:var(--g);}
+.fld select option{background:var(--dk2);}
+/* ─── FEED PAGE ─── */
+#fd .layout{display:grid;grid-template-columns:1fr 270px;gap:18px;}
+.compose{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:16px;margin-bottom:16px;}
+.compose-row{display:flex;gap:10px;align-items:flex-start;}
+.compose-av{width:36px;height:36px;border-radius:50%;background:var(--gb);color:var(--g);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.compose-box{flex:1;background:var(--dk3);border:1px solid var(--br);border-radius:10px;padding:10px 13px;font-size:13px;color:var(--mt);cursor:text;}
+.compose-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--br);}
+.compose-tags{display:flex;gap:8px;}
+.ctag{font-size:12px;color:var(--mt);cursor:pointer;}
+.ctag:hover{color:var(--tx);}
+.post{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:18px;margin-bottom:13px;}
+.post-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.pav-g{background:var(--gb);color:var(--g);}
+.pav-a{background:rgba(255,209,102,0.15);color:var(--ac);}
+.pav-r{background:rgba(255,107,107,0.15);color:var(--red);}
+.pav-b{background:rgba(78,158,255,0.15);color:var(--blue);}
+.pav-p{background:rgba(167,139,250,0.15);color:var(--purple);}
+.pn{font-size:14px;font-weight:500;}
+.pt{font-size:11px;color:var(--mt);}
+.pbadge{margin-left:auto;background:var(--gb);color:var(--g);border:1px solid var(--gbr);font-size:10px;padding:2px 7px;border-radius:20px;}
+.post-body{font-size:14px;color:#B0C2D5;line-height:1.65;margin-bottom:10px;}
+.ptags{margin-bottom:10px;}
+.ptag{display:inline-block;background:var(--dk3);color:var(--mt);font-size:11px;padding:2px 8px;border-radius:4px;margin-right:5px;}
+.ticker-box{background:var(--dk3);border-radius:8px;padding:7px 12px;display:inline-flex;align-items:center;gap:8px;font-size:12px;margin-bottom:10px;}
+.post-acts{display:flex;gap:16px;padding-top:10px;border-top:1px solid var(--br);}
+.pa{font-size:12px;color:var(--mt);cursor:pointer;display:flex;align-items:center;gap:4px;}
+.pa:hover{color:var(--g);}
+.pa.liked{color:var(--red);}
+/* COMMENTS */
+.comments{margin-top:12px;padding-top:12px;border-top:1px solid var(--br);display:none;}
+.comments.open{display:block;}
+.comment{display:flex;gap:8px;margin-bottom:10px;}
+.cav{width:28px;height:28px;border-radius:50%;background:var(--dk3);color:var(--mt);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;}
+.cbody{background:var(--dk3);border-radius:8px;padding:8px 11px;flex:1;}
+.cname{font-size:12px;font-weight:500;margin-bottom:2px;}
+.ctext{font-size:12px;color:#8A9BB0;line-height:1.5;}
+.comment-inp{display:flex;gap:8px;margin-top:8px;}
+.comment-inp input{flex:1;background:var(--dk3);border:1px solid var(--br);color:var(--tx);padding:8px 11px;border-radius:8px;font-size:12px;font-family:var(--body);outline:none;}
+.comment-inp input:focus{border-color:var(--g);}
+.comment-inp button{background:var(--g);color:#0A0E14;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--body);}
+/* TRENDING SIDEBAR */
+.trend-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--br);}
+.trend-item:last-child{border:none;}
+.trend-rank{font-size:12px;color:var(--mt);width:16px;}
+.trend-tag{font-size:13px;font-weight:500;flex:1;}
+.trend-cnt{font-size:11px;color:var(--mt);}
+/* WHO TO FOLLOW */
+.wtf-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--br);}
+.wtf-row:last-child{border:none;}
+.wtf-info{flex:1;}
+.wtf-name{font-size:13px;font-weight:500;}
+.wtf-sub{font-size:11px;color:var(--mt);}
+.follow-btn{background:transparent;border:1px solid var(--gbr);color:var(--g);font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:var(--body);transition:all 0.18s;}
+.follow-btn:hover{background:var(--gb);}
+/* ─── LEARN PAGE ─── */
+#lrn .layout{display:grid;grid-template-columns:1fr 270px;gap:18px;}
+.learn-hero{background:var(--dk3);border:1px solid var(--gbr);border-radius:16px;padding:24px;margin-bottom:16px;display:flex;align-items:center;gap:20px;}
+.lh-ico{font-size:38px;}
+.lh-pts{font-family:var(--font);font-size:28px;font-weight:700;color:var(--ac);}
+.lh-sub{font-size:12px;color:var(--mt);}
+.lh-streak{font-size:12px;color:var(--g);margin-top:4px;}
+.lesson-card{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:18px;margin-bottom:12px;cursor:pointer;transition:border-color 0.18s;}
+.lesson-card:hover{border-color:#334455;}
+.lesson-card.done{border-left:3px solid var(--g);border-radius:14px;}
+.lesson-card.active-lesson{border:1px solid var(--gbr);background:rgba(0,200,150,0.04);}
+.lc-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.lc-ico{font-size:24px;}
+.lc-title{font-size:15px;font-weight:600;font-family:var(--font);}
+.lc-sub{font-size:12px;color:var(--mt);}
+.lc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.lc-tag{font-size:10px;padding:3px 8px;border-radius:4px;background:var(--dk3);color:var(--mt);}
+.lc-tag.beginner{background:rgba(0,200,150,0.1);color:var(--g);}
+.lc-tag.intermediate{background:rgba(255,209,102,0.1);color:var(--ac);}
+.lc-footer{display:flex;justify-content:space-between;align-items:center;}
+.lc-mins{font-size:11px;color:var(--mt);}
+.lc-pts{font-size:11px;color:var(--ac);font-weight:600;}
+.lc-done{font-size:11px;color:var(--g);}
+/* QUIZ MODAL */
+.quiz-area{background:var(--dk3);border:1px solid var(--gbr);border-radius:14px;padding:20px;margin-top:12px;display:none;}
+.quiz-area.open{display:block;}
+.quiz-q{font-size:14px;font-weight:500;margin-bottom:14px;line-height:1.5;}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;}
+.qopt{background:var(--card);border:1px solid var(--br);border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;transition:all 0.18s;}
+.qopt:hover{border-color:rgba(0,200,150,0.4);}
+.qopt.correct{background:var(--gb);border-color:var(--gbr);color:var(--g);}
+.qopt.wrong{background:rgba(255,107,107,0.1);border-color:rgba(255,107,107,0.3);color:var(--red);}
+/* LEADERBOARD */
+.lb-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--br);}
+.lb-row:last-child{border:none;}
+.lb-rank{font-size:12px;color:var(--mt);width:18px;}
+.lb-name{font-size:13px;font-weight:500;flex:1;}
+.lb-pts{font-size:12px;color:var(--ac);font-weight:600;}
+/* BADGES */
+.badges-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.badge-item{text-align:center;padding:10px 6px;background:var(--dk3);border-radius:10px;}
+.bi-ico{font-size:20px;margin-bottom:4px;}
+.bi-name{font-size:10px;color:var(--mt);}
+.badge-item.earned{background:var(--gb);border:1px solid var(--gbr);}
+.badge-item.earned .bi-name{color:var(--g);}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Velora app with portfolio, goals, social feed, and learn sections</h2>
+
+<nav class="nav">
+  <div class="logo"><div class="ld"></div>Velora</div>
+  <div class="tabs">
+    <div class="tab on" onclick="nav('home')">Home</div>
+    <div class="tab" onclick="nav('pf')">Portfolio</div>
+    <div class="tab" onclick="nav('gl')">Goals</div>
+    <div class="tab" onclick="nav('fd')">Feed</div>
+    <div class="tab" onclick="nav('lrn')">Learn</div>
+  </div>
+  <div class="nav-r">
+    <div class="nb">🔔</div>
+    <div class="up"><div class="upa">AO</div><span style="font-size:12px;font-weight:500;">Adaeze</span></div>
+  </div>
+</nav>
+
+<!-- HOME (placeholder redirect) -->
+<div id="home" class="page on">
+  <div class="pg" style="text-align:center;padding-top:80px;">
+    <div style="font-size:40px;margin-bottom:16px;">👋</div>
+    <div style="font-family:var(--font);font-size:24px;font-weight:700;margin-bottom:8px;">Welcome back, Adaeze</div>
+    <div style="font-size:14px;color:var(--mt);margin-bottom:28px;">Tap a section in the nav to explore the new features.</div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-g" onclick="nav('pf')">Portfolio →</button>
+      <button class="btn-out" onclick="nav('gl')">My Goals</button>
+      <button class="btn-out" onclick="nav('fd')">Social Feed</button>
+      <button class="btn-out" onclick="nav('lrn')">Learn &amp; Earn</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PORTFOLIO PAGE ═══════════════ -->
+<div id="pf" class="page">
+<div class="pg">
+  <div class="layout">
+    <div>
+      <div class="pf-hero">
+        <div class="lbl">Total Portfolio Value</div>
+        <div class="big" id="pf-total">₦4,823,500</div>
+        <div class="chg" id="pf-chg">▲ +₦142,300 &nbsp;(+3.04%) today</div>
+        <div style="position:relative;height:110px;margin:4px 0;">
+          <canvas id="lineChart" role="img" aria-label="Portfolio value over time line chart">Portfolio value trending upward from ₦3.8M to ₦4.8M.</canvas>
+        </div>
+        <div class="periods">
+          <button class="per on" onclick="setPeriod(this,'1D')">1D</button>
+          <button class="per" onclick="setPeriod(this,'1W')">1W</button>
+          <button class="per" onclick="setPeriod(this,'1M')">1M</button>
+          <button class="per" onclick="setPeriod(this,'3M')">3M</button>
+          <button class="per" onclick="setPeriod(this,'1Y')">1Y</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="sec-hd"><span>Holdings</span><button class="btn-out" style="font-size:11px;padding:4px 10px;">+ Add asset</button></div>
+        <div class="hold-row"><div class="htk">MTNN</div><div><div class="hn">MTN Nigeria</div><div class="hs">120 shares · NGX</div></div><div style="margin-left:auto;text-align:right;"><div class="hv">₦1,420,000</div><div class="hc g">+2.4%</div></div></div>
+        <div class="hold-row"><div class="htk">DANGCEM</div><div><div class="hn">Dangote Cement</div><div class="hs">85 shares · NGX</div></div><div style="margin-left:auto;text-align:right;"><div class="hv">₦890,000</div><div class="hc g">+0.9%</div></div></div>
+        <div class="hold-row"><div class="htk">ZENITH</div><div><div class="hn">Zenith Bank</div><div class="hs">400 shares · NGX</div></div><div style="margin-left:auto;text-align:right;"><div class="hv">₦460,000</div><div class="hc r">-0.4%</div></div></div>
+        <div class="hold-row"><div class="htk">BTC</div><div><div class="hn">Bitcoin</div><div class="hs">0.042 BTC · Crypto</div></div><div style="margin-left:auto;text-align:right;"><div class="hv">₦1,960,000</div><div class="hc r">-1.8%</div></div></div>
+        <div class="hold-row"><div class="htk">AAPL</div><div><div class="hn">Apple Inc.</div><div class="hs">8 shares · US Stocks</div></div><div style="margin-left:auto;text-align:right;"><div class="hv">₦553,500</div><div class="hc g">+0.5%</div></div></div>
+      </div>
+
+      <div class="card">
+        <div class="sec-hd"><span>Performance — Gains &amp; Losses</span></div>
+        <div style="position:relative;height:180px;">
+          <canvas id="barChart" role="img" aria-label="Monthly portfolio performance bar chart showing gains and losses">Monthly gains and losses from Jan to Jun.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="sec-hd"><span>Asset Allocation</span></div>
+        <div style="display:flex;justify-content:center;position:relative;height:160px;margin-bottom:12px;">
+          <canvas id="donutChart" role="img" aria-label="Donut chart showing asset allocation by category">Asset allocation: NGX Stocks 57%, Crypto 28%, US Stocks 15%.</canvas>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <div class="alloc-row"><div class="alloc-dot" style="background:#00C896;"></div><span class="alloc-name" style="font-size:12px;">NGX Stocks</span><div style="flex:1;padding:0 10px;"><div class="alloc-bar"><div class="alloc-fill" style="width:57%;background:#00C896;"></div></div></div><span class="alloc-pct">57%</span></div>
+          <div class="alloc-row"><div class="alloc-dot" style="background:#FFD166;"></div><span class="alloc-name" style="font-size:12px;">Crypto</span><div style="flex:1;padding:0 10px;"><div class="alloc-bar"><div class="alloc-fill" style="width:28%;background:#FFD166;"></div></div></div><span class="alloc-pct">28%</span></div>
+          <div class="alloc-row"><div class="alloc-dot" style="background:#4E9EFF;"></div><span class="alloc-name" style="font-size:12px;">US Stocks</span><div style="flex:1;padding:0 10px;"><div class="alloc-bar"><div class="alloc-fill" style="width:15%;background:#4E9EFF;"></div></div></div><span class="alloc-pct">15%</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <div class="sec-hd"><span>Portfolio Stats</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;">
+            <div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Total Invested</div>
+            <div style="font-size:15px;font-weight:600;font-family:var(--font);">₦4.1M</div>
+          </div>
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;">
+            <div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Total Return</div>
+            <div style="font-size:15px;font-weight:600;font-family:var(--font);color:var(--g);">+17.6%</div>
+          </div>
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;">
+            <div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Best Performer</div>
+            <div style="font-size:15px;font-weight:600;font-family:var(--font);">MTNN</div>
+          </div>
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;">
+            <div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Dividends (YTD)</div>
+            <div style="font-size:15px;font-weight:600;font-family:var(--font);color:var(--g);">₦28,400</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-hd"><span>Connect Brokerage</span></div>
+        <div style="font-size:12px;color:var(--mt);margin-bottom:12px;line-height:1.6;">Sync your portfolios automatically from your brokerage accounts.</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div style="display:flex;align-items:center;gap:8px;background:var(--dk3);border-radius:8px;padding:9px 12px;"><span style="font-size:13px;flex:1;">🌿 Bamboo</span><button class="btn-out" style="font-size:11px;padding:4px 10px;">Connect</button></div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--dk3);border-radius:8px;padding:9px 12px;"><span style="font-size:13px;flex:1;">📈 Risevest</span><button class="btn-out" style="font-size:11px;padding:4px 10px;">Connect</button></div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--dk3);border-radius:8px;padding:9px 12px;"><span style="font-size:13px;flex:1;">🔶 Trove</span><button class="btn-out" style="font-size:11px;padding:4px 10px;">Connect</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ GOALS PAGE ═══════════════ -->
+<div id="gl" class="page">
+<div class="pg">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+    <div><div style="font-family:var(--font);font-size:22px;font-weight:700;letter-spacing:-0.5px;">Wealth Goals</div><div style="font-size:13px;color:var(--mt);">Track your savings journey</div></div>
+    <button class="btn-g" onclick="toggleGoalForm()">+ New goal</button>
+  </div>
+  <div class="layout">
+    <div>
+      <div id="new-goal-form" style="display:none;margin-bottom:18px;">
+        <div class="goal-form">
+          <div class="gf-title">Create a new goal</div>
+          <div class="gf-sub">Choose a goal type to get started</div>
+          <div class="gf-chips">
+            <div class="gf-chip sel" onclick="selChip(this)"><span>✈️</span>Japa Fund</div>
+            <div class="gf-chip" onclick="selChip(this)"><span>🚗</span>First Car</div>
+            <div class="gf-chip" onclick="selChip(this)"><span>🏠</span>House Fund</div>
+            <div class="gf-chip" onclick="selChip(this)"><span>💍</span>Wedding Fund</div>
+            <div class="gf-chip" onclick="selChip(this)"><span>⚡</span>Emergency Fund</div>
+            <div class="gf-chip" onclick="selChip(this)"><span>🎯</span>Custom Goal</div>
+          </div>
+          <div class="fld"><label>Goal name</label><input type="text" placeholder="e.g. My Japa Fund" /></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="fld"><label>Target amount (₦)</label><input type="text" placeholder="1,500,000" /></div>
+            <div class="fld"><label>Target date</label><input type="text" placeholder="Dec 2025" /></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="fld"><label>Monthly contribution (₦)</label><input type="text" placeholder="25,000" /></div>
+            <div class="fld"><label>Frequency</label><select><option>Monthly</option><option>Weekly</option><option>Daily</option></select></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn-g" style="flex:1;" onclick="toggleGoalForm()">Create goal</button>
+            <button class="btn-out" onclick="toggleGoalForm()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="goal-card">
+        <div class="gc-top"><div class="gc-ico">✈️</div><div><div class="gc-name">Japa Fund</div><div class="gc-sub">Relocation savings · Monthly contribution ₦25,000</div></div><button class="btn-out" style="margin-left:auto;font-size:11px;padding:4px 10px;">+ Add funds</button></div>
+        <div class="gc-amounts"><div class="gc-cur">₦832,000</div><div class="gc-tgt">of ₦1,500,000<br><span style="color:var(--g);">55% complete</span></div></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:55%;"></div></div>
+        <div class="gc-footer"><span>Est. completion: Aug 2025</span><span>+₦25K/mo</span></div>
+        <div class="gc-milestone"><div class="ms done">25% ✓</div><div class="ms done">50% ✓</div><div class="ms next">75% →</div><div class="ms todo">100%</div></div>
+      </div>
+
+      <div class="goal-card">
+        <div class="gc-top"><div class="gc-ico">🚗</div><div><div class="gc-name">First Car Fund</div><div class="gc-sub">Vehicle savings · Monthly contribution ₦50,000</div></div><button class="btn-out" style="margin-left:auto;font-size:11px;padding:4px 10px;">+ Add funds</button></div>
+        <div class="gc-amounts"><div class="gc-cur">₦1,200,000</div><div class="gc-tgt">of ₦2,000,000<br><span style="color:var(--g);">60% complete</span></div></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:60%;"></div></div>
+        <div class="gc-footer"><span>Est. completion: Oct 2025</span><span>+₦50K/mo</span></div>
+        <div class="gc-milestone"><div class="ms done">25% ✓</div><div class="ms done">50% ✓</div><div class="ms next">75% →</div><div class="ms todo">100%</div></div>
+      </div>
+
+      <div class="goal-card">
+        <div class="gc-top"><div class="gc-ico">🏠</div><div><div class="gc-name">House Fund</div><div class="gc-sub">Real estate savings · Monthly contribution ₦100,000</div></div><button class="btn-out" style="margin-left:auto;font-size:11px;padding:4px 10px;">+ Add funds</button></div>
+        <div class="gc-amounts"><div class="gc-cur">₦2,800,000</div><div class="gc-tgt">of ₦8,000,000<br><span style="color:var(--ac);">35% complete</span></div></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:35%;background:var(--ac);"></div></div>
+        <div class="gc-footer"><span>Est. completion: Mar 2027</span><span>+₦100K/mo</span></div>
+        <div class="gc-milestone"><div class="ms done">25% ✓</div><div class="ms next">50% →</div><div class="ms todo">75%</div><div class="ms todo">100%</div></div>
+      </div>
+
+      <div class="goal-card">
+        <div class="gc-top"><div class="gc-ico">💍</div><div><div class="gc-name">Wedding Fund</div><div class="gc-sub">Special day savings · Monthly contribution ₦40,000</div></div><button class="btn-out" style="margin-left:auto;font-size:11px;padding:4px 10px;">+ Add funds</button></div>
+        <div class="gc-amounts"><div class="gc-cur">₦400,000</div><div class="gc-tgt">of ₦2,500,000<br><span style="color:var(--red);">16% complete</span></div></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:16%;background:var(--red);"></div></div>
+        <div class="gc-footer"><span>Est. completion: Jun 2027</span><span>+₦40K/mo</span></div>
+        <div class="gc-milestone"><div class="ms next">25% →</div><div class="ms todo">50%</div><div class="ms todo">75%</div><div class="ms todo">100%</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="sec-hd"><span>Goals Summary</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;"><div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Total saved</div><div style="font-family:var(--font);font-size:16px;font-weight:700;color:var(--g);">₦5.2M</div></div>
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;"><div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Active goals</div><div style="font-family:var(--font);font-size:16px;font-weight:700;">4</div></div>
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;"><div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Monthly total</div><div style="font-family:var(--font);font-size:16px;font-weight:700;">₦215K</div></div>
+          <div style="background:var(--dk3);border-radius:8px;padding:10px;"><div style="font-size:10px;color:var(--mt);margin-bottom:3px;">Savings streak</div><div style="font-family:var(--font);font-size:16px;font-weight:700;color:var(--ac);">🔥 12 mo</div></div>
+        </div>
+        <div style="position:relative;height:130px;">
+          <canvas id="goalDonut" role="img" aria-label="Donut chart showing goals progress breakdown">Goals progress by fund type.</canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-hd"><span>Contribution history</span></div>
+        <div style="font-size:12px;color:var(--mt);margin-bottom:10px;">Last 5 contributions</div>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br);font-size:12px;"><span>✈️ Japa Fund</span><span style="color:var(--g);">+₦25,000</span><span style="color:var(--mt);">May 1</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br);font-size:12px;"><span>🚗 Car Fund</span><span style="color:var(--g);">+₦50,000</span><span style="color:var(--mt);">May 1</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br);font-size:12px;"><span>🏠 House Fund</span><span style="color:var(--g);">+₦100,000</span><span style="color:var(--mt);">May 1</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br);font-size:12px;"><span>💍 Wedding</span><span style="color:var(--g);">+₦40,000</span><span style="color:var(--mt);">May 1</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:12px;"><span>✈️ Japa Fund</span><span style="color:var(--g);">+₦25,000</span><span style="color:var(--mt);">Apr 1</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ FEED PAGE ═══════════════ -->
+<div id="fd" class="page">
+<div class="pg">
+  <div class="layout">
+    <div>
+      <div class="compose">
+        <div class="compose-row">
+          <div class="compose-av">AO</div>
+          <div class="compose-box">What's your investment move today?</div>
+        </div>
+        <div class="compose-actions">
+          <div class="compose-tags">
+            <span class="ctag">📈 Add ticker</span>
+            <span class="ctag">🎯 Add goal</span>
+            <span class="ctag"># Hashtag</span>
+          </div>
+          <button class="btn-g" style="padding:7px 16px;font-size:12px;">Post</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button class="per on" style="font-size:12px;padding:6px 14px;">For you</button>
+        <button class="per" style="font-size:12px;padding:6px 14px;">Following</button>
+        <button class="per" style="font-size:12px;padding:6px 14px;">Nigerian Stocks</button>
+        <button class="per" style="font-size:12px;padding:6px 14px;">Crypto</button>
+      </div>
+
+      <!-- POST 1 -->
+      <div class="post">
+        <div class="post-hd"><div class="pav pav-g">KA</div><div><div class="pn">Kunle Adeyemi <span style="font-size:10px;color:var(--g)">✓</span></div><div class="pt">14 minutes ago · 1.2K followers</div></div><div class="pbadge">Verified</div></div>
+        <div class="post-body">Just crossed ₦5M in total portfolio value 🎉 Started 18 months ago with ₦150K seed capital. Consistency + discipline truly compounds. The NGX rally this quarter has been something else — anyone else loading up on banking stocks before the dividend season? 📊</div>
+        <div class="ptags"><span class="ptag">#NGX</span><span class="ptag">#PortfolioMilestone</span><span class="ptag">#Investing</span></div>
+        <div class="post-acts">
+          <div class="pa" onclick="likePost(this)">❤ <span>312</span></div>
+          <div class="pa" onclick="toggleComments('c1')">💬 <span>58</span></div>
+          <div class="pa">🔖 Save</div>
+          <div class="pa">↗ Share</div>
+        </div>
+        <div id="c1" class="comments">
+          <div class="comment"><div class="cav">AO</div><div class="cbody"><div class="cname">Adaeze Obi</div><div class="ctext">This is so inspiring! What was your allocation when you started?</div></div></div>
+          <div class="comment"><div class="cav">NE</div><div class="cbody"><div class="cname">Ngozi Eze</div><div class="ctext">GTCO and Zenith have been carrying my portfolio this quarter too 💪</div></div></div>
+          <div class="comment"><div class="cav">TF</div><div class="cbody"><div class="cname">Tunde Fadeyi</div><div class="ctext">Congrats bro! Banking stocks for the win before Q2 dividends 🏦</div></div></div>
+          <div class="comment-inp"><div class="cav" style="width:28px;height:28px;background:var(--gb);color:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">AO</div><input type="text" placeholder="Write a comment…" id="ci1"/><button onclick="addComment('c1','ci1')">Post</button></div>
+        </div>
+      </div>
+
+      <!-- POST 2 -->
+      <div class="post">
+        <div class="post-hd"><div class="pav pav-a">AO</div><div><div class="pn">Adaeze Obi <span style="font-size:10px;color:var(--g)">✓</span></div><div class="pt">1 hour ago · 890 followers</div></div></div>
+        <div class="post-body">Thread: Why I switched from saving in naira to dollar-denominated ETFs 🧵<br><br>The naira lost ~40% against the dollar last year. Meanwhile my dollar-index ETF is up 18%. The math doesn't lie — diversifying your currency exposure is no longer optional for Nigerians 📉➡️📈</div>
+        <div class="ticker-box"><span>USD/NGN</span><span style="color:var(--red);">▼ Naira at 1,590</span></div>
+        <div class="ptags"><span class="ptag">#Thread</span><span class="ptag">#DollarInvesting</span><span class="ptag">#Naira</span></div>
+        <div class="post-acts">
+          <div class="pa" onclick="likePost(this)">❤ <span>178</span></div>
+          <div class="pa" onclick="toggleComments('c2')">💬 <span>34</span></div>
+          <div class="pa">🔖 Save</div>
+          <div class="pa">↗ Share</div>
+        </div>
+        <div id="c2" class="comments">
+          <div class="comment"><div class="cav">BB</div><div class="cbody"><div class="cname">Bola Bakare</div><div class="ctext">Which broker do you use for dollar ETFs? Bamboo or Risevest?</div></div></div>
+          <div class="comment"><div class="cav">KA</div><div class="cbody"><div class="cname">Kunle Adeyemi</div><div class="ctext">This is exactly the thread I needed today. Following for the rest 🔥</div></div></div>
+          <div class="comment-inp"><div class="cav" style="width:28px;height:28px;background:var(--gb);color:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">AO</div><input type="text" placeholder="Write a comment…" id="ci2"/><button onclick="addComment('c2','ci2')">Post</button></div>
+        </div>
+      </div>
+
+      <!-- POST 3 -->
+      <div class="post">
+        <div class="post-hd"><div class="pav pav-b">TF</div><div><div class="pn">Tunde Fadeyi</div><div class="pt">3 hours ago · 420 followers</div></div></div>
+        <div class="post-body">Beginner question — is now a good time to start investing on the NGX or should I wait for a dip? I have ₦200K ready to deploy 👀</div>
+        <div class="ptags"><span class="ptag">#Beginner</span><span class="ptag">#NGX</span><span class="ptag">#Question</span></div>
+        <div class="post-acts">
+          <div class="pa" onclick="likePost(this)">❤ <span>67</span></div>
+          <div class="pa" onclick="toggleComments('c3')">💬 <span>22</span></div>
+          <div class="pa">🔖 Save</div>
+          <div class="pa">↗ Share</div>
+        </div>
+        <div id="c3" class="comments">
+          <div class="comment"><div class="cav">AO</div><div class="cbody"><div class="cname">Adaeze Obi <span style="font-size:9px;color:var(--g)">✓</span></div><div class="ctext">Time in the market beats timing the market. Start with a diversified position — don't try to time the dip!</div></div></div>
+          <div class="comment-inp"><div class="cav" style="width:28px;height:28px;background:var(--gb);color:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">AO</div><input type="text" placeholder="Write a comment…" id="ci3"/><button onclick="addComment('c3','ci3')">Post</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="sec-hd"><span>Trending Topics</span></div>
+        <div class="trend-item"><div class="trend-rank">1</div><div class="trend-tag">#NGXRally</div><div class="trend-cnt">2.4K posts</div></div>
+        <div class="trend-item"><div class="trend-rank">2</div><div class="trend-tag">#JapaFund</div><div class="trend-cnt">1.8K posts</div></div>
+        <div class="trend-item"><div class="trend-rank">3</div><div class="trend-tag">#DollarInvesting</div><div class="trend-cnt">1.2K posts</div></div>
+        <div class="trend-item"><div class="trend-rank">4</div><div class="trend-tag">#MTNN</div><div class="trend-cnt">940 posts</div></div>
+        <div class="trend-item"><div class="trend-rank">5</div><div class="trend-tag">#CryptoNG</div><div class="trend-cnt">780 posts</div></div>
+      </div>
+      <div class="card">
+        <div class="sec-hd"><span>Who to follow</span></div>
+        <div class="wtf-row"><div class="pav pav-p" style="width:34px;height:34px;flex-shrink:0;font-size:11px;">NE</div><div class="wtf-info"><div class="wtf-name">Ngozi Eze</div><div class="wtf-sub">Crypto & ETFs · 540 followers</div></div><button class="follow-btn">Follow</button></div>
+        <div class="wtf-row"><div class="pav pav-a" style="width:34px;height:34px;flex-shrink:0;font-size:11px;">BB</div><div class="wtf-info"><div class="wtf-name">Bola Bakare</div><div class="wtf-sub">NGX analyst · 310 followers</div></div><button class="follow-btn">Follow</button></div>
+        <div class="wtf-row"><div class="pav pav-r" style="width:34px;height:34px;flex-shrink:0;font-size:11px;">EO</div><div class="wtf-info"><div class="wtf-name">Emeka Okafor</div><div class="wtf-sub">Real estate · 220 followers</div></div><button class="follow-btn">Follow</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ LEARN PAGE ═══════════════ -->
+<div id="lrn" class="page">
+<div class="pg">
+  <div class="learn-hero">
+    <div class="lh-ico">⭐</div>
+    <div>
+      <div class="lh-pts">2,450 pts</div>
+      <div class="lh-sub">Your Velora Points balance</div>
+      <div class="lh-streak">🔥 5-day learning streak — keep it up!</div>
+    </div>
+    <div style="margin-left:auto;text-align:right;">
+      <div style="font-size:12px;color:var(--mt);margin-bottom:4px;">Today's goal</div>
+      <div style="font-size:20px;font-weight:700;font-family:var(--font);">2 / 3 <span style="font-size:12px;color:var(--mt);">lessons</span></div>
+      <div style="background:var(--dk2);border-radius:4px;height:5px;width:120px;margin-top:6px;overflow:hidden;"><div style="width:66%;height:100%;background:var(--g);border-radius:4px;"></div></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div style="font-size:13px;font-weight:500;color:var(--mt);margin-bottom:12px;">Continue learning</div>
+
+      <div class="lesson-card active-lesson" onclick="openLesson('q1')">
+        <div class="lc-top"><div class="lc-ico">📊</div><div><div class="lc-title">What is a P/E ratio and why does it matter?</div><div class="lc-sub">Understanding stock valuation fundamentals</div></div></div>
+        <div class="lc-tags"><span class="lc-tag beginner">Beginner</span><span class="lc-tag">Stocks</span><span class="lc-tag">NGX</span></div>
+        <div class="lc-footer"><span class="lc-mins">⏱ 5 min read</span><span class="lc-pts">+100 pts on completion</span></div>
+        <div id="q1" class="quiz-area">
+          <div style="font-size:12px;color:var(--g);margin-bottom:10px;font-weight:500;">📖 Quick lesson</div>
+          <div style="font-size:13px;color:#B0C2D5;line-height:1.7;margin-bottom:16px;">The <strong style="color:var(--tx);">Price-to-Earnings (P/E) ratio</strong> tells you how much investors are paying for each naira of a company's earnings. A P/E of 10x means investors pay ₦10 for every ₦1 the company earns. Higher P/E = higher growth expectations. Nigerian banks like GTCO typically trade at 3–6x P/E, while growth stocks globally trade at 20–40x.</div>
+          <div class="quiz-q">Quick quiz: If a stock trades at ₦50 and earns ₦5 per share, what is its P/E ratio?</div>
+          <div class="quiz-opts">
+            <div class="qopt" onclick="answerQ(this,false)">5x</div>
+            <div class="qopt" onclick="answerQ(this,true)">10x</div>
+            <div class="qopt" onclick="answerQ(this,false)">50x</div>
+            <div class="qopt" onclick="answerQ(this,false)">0.1x</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card done">
+        <div class="lc-top"><div class="lc-ico">💵</div><div><div class="lc-title">Dollar-cost averaging (DCA) explained</div><div class="lc-sub">The strategy used by Nigeria's top investors</div></div></div>
+        <div class="lc-tags"><span class="lc-tag beginner">Beginner</span><span class="lc-tag">Strategy</span></div>
+        <div class="lc-footer"><span class="lc-mins">⏱ 4 min read</span><span class="lc-done">✓ Completed · +100 pts earned</span></div>
+      </div>
+
+      <div class="lesson-card done">
+        <div class="lc-top"><div class="lc-ico">🏦</div><div><div class="lc-title">How Nigerian bank stocks pay dividends</div><div class="lc-sub">GTCO, Zenith, Access — dividend investing 101</div></div></div>
+        <div class="lc-tags"><span class="lc-tag beginner">Beginner</span><span class="lc-tag">Dividends</span><span class="lc-tag">NGX</span></div>
+        <div class="lc-footer"><span class="lc-mins">⏱ 6 min read</span><span class="lc-done">✓ Completed · +100 pts earned</span></div>
+      </div>
+
+      <div style="font-size:13px;font-weight:500;color:var(--mt);margin:20px 0 12px;">Up next</div>
+
+      <div class="lesson-card" onclick="openLesson('q2')">
+        <div class="lc-top"><div class="lc-ico">🌍</div><div><div class="lc-title">Investing in US stocks from Nigeria — full guide</div><div class="lc-sub">Bamboo, Risevest, and what the CBN rules mean</div></div></div>
+        <div class="lc-tags"><span class="lc-tag intermediate">Intermediate</span><span class="lc-tag">US Stocks</span><span class="lc-tag">Dollar</span></div>
+        <div class="lc-footer"><span class="lc-mins">⏱ 8 min read</span><span class="lc-pts">+150 pts on completion</span></div>
+        <div id="q2" class="quiz-area">
+          <div style="font-size:12px;color:var(--g);margin-bottom:10px;font-weight:500;">📖 Quick lesson</div>
+          <div style="font-size:13px;color:#B0C2D5;line-height:1.7;margin-bottom:16px;">Nigerians can invest in US stocks through apps like <strong style="color:var(--tx);">Bamboo</strong>, <strong style="color:var(--tx);">Risevest</strong>, and <strong style="color:var(--tx);">Trove</strong>. These platforms are regulated and allow you to fund in naira or dollars. The CBN allows individuals to invest up to $10,000/year through approved channels. Your US investments are denominated in dollars — giving you a natural hedge against naira devaluation.</div>
+          <div class="quiz-q">What is the CBN's approximate annual limit for individual foreign investment through approved platforms?</div>
+          <div class="quiz-opts">
+            <div class="qopt" onclick="answerQ(this,false)">$1,000</div>
+            <div class="qopt" onclick="answerQ(this,false)">$5,000</div>
+            <div class="qopt" onclick="answerQ(this,true)">$10,000</div>
+            <div class="qopt" onclick="answerQ(this,false)">$50,000</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <div class="lc-top"><div class="lc-ico">₿</div><div><div class="lc-title">Crypto investing for Nigerians — risks and rewards</div><div class="lc-sub">Bitcoin, Ethereum, and stablecoins in the Nigerian context</div></div></div>
+        <div class="lc-tags"><span class="lc-tag intermediate">Intermediate</span><span class="lc-tag">Crypto</span></div>
+        <div class="lc-footer"><span class="lc-mins">⏱ 7 min read</span><span class="lc-pts">+150 pts on completion</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="sec-hd"><span>Points Leaderboard</span></div>
+        <div class="lb-row"><div class="lb-rank">🥇</div><div class="pav pav-g" style="width:26px;height:26px;font-size:9px;flex-shrink:0;">KA</div><div class="lb-name">Kunle A.</div><div class="lb-pts">4,200 pts</div></div>
+        <div class="lb-row"><div class="lb-rank">🥈</div><div class="pav pav-b" style="width:26px;height:26px;font-size:9px;flex-shrink:0;">NE</div><div class="lb-name">Ngozi E.</div><div class="lb-pts">3,800 pts</div></div>
+        <div class="lb-row" style="background:rgba(0,200,150,0.05);border-radius:6px;padding:8px 6px;"><div class="lb-rank">🏅</div><div class="pav pav-a" style="width:26px;height:26px;font-size:9px;flex-shrink:0;">AO</div><div class="lb-name" style="color:var(--g);">You</div><div class="lb-pts">2,450 pts</div></div>
+        <div class="lb-row"><div class="lb-rank">4</div><div class="pav pav-r" style="width:26px;height:26px;font-size:9px;flex-shrink:0;">TF</div><div class="lb-name">Tunde F.</div><div class="lb-pts">2,100 pts</div></div>
+        <div class="lb-row"><div class="lb-rank">5</div><div class="pav pav-p" style="width:26px;height:26px;font-size:9px;flex-shrink:0;">BB</div><div class="lb-name">Bola B.</div><div class="lb-pts">1,760 pts</div></div>
+      </div>
+
+      <div class="card">
+        <div class="sec-hd"><span>Your Badges</span></div>
+        <div class="badges-grid">
+          <div class="badge-item earned"><div class="bi-ico">🔥</div><div class="bi-name">5-Day Streak</div></div>
+          <div class="badge-item earned"><div class="bi-ico">📚</div><div class="bi-name">First Lesson</div></div>
+          <div class="badge-item earned"><div class="bi-ico">💰</div><div class="bi-name">First Goal</div></div>
+          <div class="badge-item"><div class="bi-ico">🏆</div><div class="bi-name">Top 10</div></div>
+          <div class="badge-item"><div class="bi-ico">📈</div><div class="bi-name">10 Lessons</div></div>
+          <div class="badge-item"><div class="bi-ico">👥</div><div class="bi-name">10 Follows</div></div>
+          <div class="badge-item"><div class="bi-ico">✓</div><div class="bi-name">Verified</div></div>
+          <div class="badge-item"><div class="bi-ico">🌟</div><div class="bi-name">Pro Member</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function nav(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  const tabs={home:0,pf:1,gl:2,fd:3,lrn:4};
+  document.querySelectorAll('.tab')[tabs[id]].classList.add('on');
+  window.scrollTo(0,0);
+  if(id==='pf'&&!window._chartsBuilt){buildCharts();window._chartsBuilt=true;}
+  if(id==='gl'&&!window._goalChartBuilt){buildGoalChart();window._goalChartBuilt=true;}
+}
+
+const periodData={
+  '1D':{labels:['9am','10am','11am','12pm','1pm','2pm','3pm','4pm'],data:[4681,4695,4710,4703,4738,4755,4798,4823]},
+  '1W':{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],data:[4520,4560,4610,4580,4650,4700,4823]},
+  '1M':{labels:['Apr 1','Apr 8','Apr 15','Apr 22','May 1','May 7','May 14'],data:[4200,4310,4280,4390,4510,4700,4823]},
+  '3M':{labels:['Feb','Mar','Apr','May'],data:[3900,4100,4400,4823]},
+  '1Y':{labels:['Jun','Aug','Oct','Dec','Feb','Apr','May'],data:[3200,3500,3700,4100,4300,4600,4823]}
+};
+let lineChart;
+function buildCharts(){
+  const ctx=document.getElementById('lineChart').getContext('2d');
+  const d=periodData['1D'];
+  lineChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:d.labels,datasets:[{data:d.data,borderColor:'#00C896',borderWidth:2,pointRadius:0,tension:0.4,fill:true,backgroundColor:'rgba(0,200,150,0.08)'}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>'₦'+v.raw.toLocaleString()+'K'}}},scales:{x:{display:false},y:{display:false}}}
+  });
+  const bctx=document.getElementById('barChart').getContext('2d');
+  new Chart(bctx,{
+    type:'bar',
+    data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{data:[42000,-18000,67000,91000,-22000,142300],backgroundColor:d=>d.raw>=0?'rgba(0,200,150,0.7)':'rgba(255,107,107,0.7)',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>'₦'+(v.raw>=0?'+':'')+v.raw.toLocaleString()}}},scales:{x:{ticks:{color:'#8A9BB0',font:{size:11}}},y:{ticks:{color:'#8A9BB0',font:{size:11},callback:v=>'₦'+Math.abs(v/1000).toFixed(0)+'K'},grid:{color:'rgba(35,48,64,0.5)'}}}}
+  });
+  const dctx=document.getElementById('donutChart').getContext('2d');
+  new Chart(dctx,{
+    type:'doughnut',
+    data:{labels:['NGX Stocks','Crypto','US Stocks'],datasets:[{data:[57,28,15],backgroundColor:['#00C896','#FFD166','#4E9EFF'],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.label+': '+v.raw+'%'}}}}
+  });
+}
+function buildGoalChart(){
+  const ctx=document.getElementById('goalDonut').getContext('2d');
+  new Chart(ctx,{
+    type:'doughnut',
+    data:{labels:['Japa Fund','Car Fund','House Fund','Wedding'],datasets:[{data:[832,1200,2800,400],backgroundColor:['#00C896','#4E9EFF','#FFD166','#A78BFA'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.label+': ₦'+v.raw.toLocaleString()+'K'}}}}
+  });
+}
+function setPeriod(btn,period){
+  document.querySelectorAll('.per').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(!lineChart)return;
+  const d=periodData[period];
+  lineChart.data.labels=d.labels;
+  lineChart.data.datasets[0].data=d.data;
+  lineChart.update();
+  const last=d.data[d.data.length-1];
+  const first=d.data[0];
+  const diff=last-first;
+  const pct=((diff/first)*100).toFixed(2);
+  document.getElementById('pf-total').textContent='₦'+last.toLocaleString()+'K';
+  document.getElementById('pf-chg').textContent=(diff>=0?'▲ +':'▼ ')+' ₦'+Math.abs(diff).toLocaleString()+'K ('+(diff>=0?'+':'')+pct+'%) this period';
+  document.getElementById('pf-chg').style.color=diff>=0?'#00C896':'#FF6B6B';
+}
+function toggleGoalForm(){
+  const f=document.getElementById('new-goal-form');
+  f.style.display=f.style.display==='none'?'block':'none';
+  window.scrollTo(0,0);
+}
+function selChip(el){
+  document.querySelectorAll('.gf-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function likePost(el){
+  el.classList.toggle('liked');
+  const n=parseInt(el.querySelector('span').textContent);
+  el.querySelector('span').textContent=el.classList.contains('liked')?n+1:n-1;
+}
+function toggleComments(id){
+  const c=document.getElementById(id);
+  c.classList.toggle('open');
+}
+function addComment(cid,iid){
+  const inp=document.getElementById(iid);
+  const txt=inp.value.trim();
+  if(!txt)return;
+  const c=document.getElementById(cid);
+  const div=document.createElement('div');
+  div.className='comment';
+  div.innerHTML='<div class="cav" style="width:28px;height:28px;border-radius:50%;background:rgba(0,200,150,0.15);color:#00C896;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">AO</div><div class="cbody"><div class="cname">Adaeze Obi</div><div class="ctext">'+txt+'</div></div>';
+  const inpRow=c.querySelector('.comment-inp');
+  c.insertBefore(div,inpRow);
+  inp.value='';
+}
+function openLesson(id){
+  const q=document.getElementById(id);
+  if(q)q.classList.toggle('open');
+}
+function answerQ(el,correct){
+  const opts=el.closest('.quiz-opts').querySelectorAll('.qopt');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(correct?'correct':'wrong');
+  if(correct){
+    setTimeout(()=>{
+      const pts=document.querySelector('.lh-pts');
+      const cur=parseInt(pts.textContent.replace(/[^0-9]/g,''));
+      pts.textContent=(cur+100).toLocaleString()+' pts';
+    },600);
+  }
+}
+</script>
