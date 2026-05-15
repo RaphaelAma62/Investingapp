@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Velora — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--g:#00D896;--gd:#00B07A;--gg:rgba(0,216,150,0.13);--gbr:rgba(0,216,150,0.28);--gold:#F5C842;--red:#FF5C5C;--blue:#5B9CF6;--purple:#9B7BFF;--dk:#080C10;--dk2:#0E141C;--dk3:#141E28;--dk4:#1C2A38;--card:#111922;--tx:#EEF2F7;--tx2:#A8B8CC;--tx3:#607080;--br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.11);--fd:'Clash Display',sans-serif;--fb:'Satoshi',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:var(--fb);}
+body{background:var(--dk);color:var(--tx);min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--fb);}
+
+/* LAYOUT */
+.page-wrap{display:grid;grid-template-columns:280px 1fr 300px;gap:0;padding-top:60px;min-height:100vh;max-width:1280px;margin:0 auto;}
+
+/* LEFT SIDEBAR */
+.l-sidebar{padding:24px 16px;border-right:1px solid var(--br);position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.ls-balance{background:linear-gradient(135deg,rgba(0,216,150,0.08),rgba(0,216,150,0.02));border:1px solid var(--gbr);border-radius:16px;padding:18px;margin-bottom:20px;}
+.lsb-label{font-size:10px;color:rgba(0,216,150,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.lsb-amount{font-family:var(--fd);font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:4px;}
+.lsb-change{font-size:12px;color:var(--g);display:flex;align-items:center;gap:4px;}
+.lsb-change.down{color:var(--red);}
+.ls-quicklinks{display:flex;flex-direction:column;gap:2px;margin-bottom:20px;}
+.lql{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all 0.18s;}
+.lql:hover{background:rgba(255,255,255,0.05);color:var(--tx);}
+.lql.active{background:rgba(0,216,150,0.08);color:var(--g);}
+.lql-icon{width:20px;text-align:center;font-size:15px;}
+.ls-goals{background:var(--card);border:1px solid var(--br2);border-radius:12px;padding:14px;}
+.lsg-title{font-size:11px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.goal-mini{margin-bottom:10px;}
+.goal-mini:last-child{margin-bottom:0;}
+.gm-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.gm-name{font-size:12px;font-weight:500;}
+.gm-pct{font-size:11px;color:var(--g);font-weight:600;}
+.gm-bar{background:var(--dk3);border-radius:3px;height:3px;overflow:hidden;}
+.gm-fill{height:100%;border-radius:3px;background:var(--g);}
+
+/* CENTER FEED */
+.c-feed{border-right:1px solid var(--br);min-height:calc(100vh - 60px);}
+
+/* Portfolio hero strip */
+.portfolio-strip{padding:20px 24px 0;border-bottom:1px solid var(--br);}
+.ps-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;}
+.ps-greeting{font-size:13px;color:var(--tx2);}
+.ps-name{font-family:var(--fd);font-size:22px;font-weight:700;letter-spacing:-0.5px;}
+.ps-amount{font-family:var(--fd);font-size:32px;font-weight:700;letter-spacing:-1.5px;text-align:right;}
+.ps-change{font-size:12px;color:var(--g);text-align:right;}
+.ps-chart{height:48px;position:relative;margin-bottom:0;}
+.ps-chart svg{width:100%;height:100%;}
+
+/* Feed tabs */
+.feed-tabs{display:flex;gap:0;padding:0 24px;border-bottom:1px solid var(--br);position:sticky;top:60px;background:rgba(8,12,16,0.96);backdrop-filter:blur(16px);z-index:50;}
+.ft{padding:14px 20px;font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.18s;border-top:none;border-left:none;border-right:none;background:transparent;}
+.ft:hover{color:var(--tx2);}
+.ft.on{color:var(--g);border-bottom-color:var(--g);}
+
+/* Compose */
+.compose-box{padding:16px 24px;border-bottom:1px solid var(--br);}
+.compose-inner{display:flex;gap:10px;align-items:flex-start;}
+.c-av{width:38px;height:38px;border-radius:50%;background:var(--gg);color:var(--g);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.c-input-wrap{flex:1;}
+.c-input{width:100%;background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:11px 14px;border-radius:10px;font-size:14px;outline:none;resize:none;min-height:44px;transition:border-color 0.2s;}
+.c-input:focus{border-color:var(--gbr);}
+.c-input::placeholder{color:var(--tx3);}
+.compose-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--br);}
+.compose-opts{display:flex;gap:12px;}
+.copt{font-size:12px;color:var(--tx3);cursor:pointer;display:flex;align-items:center;gap:4px;transition:color 0.18s;}
+.copt:hover{color:var(--tx2);}
+.post-btn{background:var(--g);color:#080C10;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;transition:all 0.2s;}
+.post-btn:hover{background:var(--gd);}
+
+/* POSTS */
+.post{padding:18px 24px;border-bottom:1px solid var(--br);transition:background 0.18s;}
+.post:hover{background:rgba(255,255,255,0.015);}
+.post-hd{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
+.p-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;cursor:pointer;}
+.p-av-g{background:rgba(0,216,150,0.18);color:var(--g);}
+.p-av-a{background:rgba(245,200,66,0.18);color:var(--gold);}
+.p-av-r{background:rgba(255,92,92,0.18);color:var(--red);}
+.p-av-b{background:rgba(91,156,246,0.18);color:var(--blue);}
+.p-av-p{background:rgba(155,123,255,0.18);color:var(--purple);}
+.p-meta{flex:1;}
+.p-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.p-name:hover{text-decoration:underline;}
+.p-verified{background:var(--gg);color:var(--g);border:1px solid var(--gbr);font-size:9px;padding:2px 6px;border-radius:20px;font-weight:600;}
+.p-perf{background:rgba(0,216,150,0.08);color:var(--g);font-size:9px;padding:2px 6px;border-radius:20px;font-weight:600;}
+.p-time{font-size:11px;color:var(--tx3);margin-top:1px;}
+.follow-pill{background:transparent;border:1px solid var(--gbr);color:var(--g);font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;transition:all 0.18s;font-family:var(--fb);}
+.follow-pill:hover{background:var(--gg);}
+.follow-pill.following{background:var(--gg);border-color:transparent;color:var(--g);}
+.post-body{font-size:14px;color:#C0D0E0;line-height:1.7;margin-bottom:12px;}
+.post-tags{margin-bottom:10px;}
+.p-tag{display:inline-block;background:rgba(91,156,246,0.1);color:var(--blue);font-size:11px;padding:3px 8px;border-radius:5px;margin-right:5px;cursor:pointer;}
+.ticker-chip{display:inline-flex;align-items:center;gap:7px;background:var(--dk3);border:1px solid var(--br2);border-radius:8px;padding:6px 12px;font-size:12px;margin-bottom:10px;}
+.tc-up{color:var(--g);font-weight:600;}
+.tc-dn{color:var(--red);font-weight:600;}
+
+/* Post actions */
+.post-acts{display:flex;gap:20px;padding-top:10px;}
+.pa{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx3);cursor:pointer;transition:color 0.18s;border:none;background:transparent;padding:4px 0;}
+.pa:hover{color:var(--tx2);}
+.pa.liked{color:var(--red);}
+.pa.bookmarked{color:var(--gold);}
+.pa svg{width:14px;height:14px;}
+
+/* Emoji reaction bar */
+.emoji-bar{display:flex;gap:4px;padding:8px 0 0;}
+.emo{font-size:16px;cursor:pointer;padding:3px 5px;border-radius:6px;transition:all 0.18s;border:none;background:transparent;}
+.emo:hover{background:rgba(255,255,255,0.08);transform:scale(1.3);}
+
+/* COMMENTS */
+.comments-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--br);}
+.comment{display:flex;gap:8px;margin-bottom:10px;}
+.c-cm-av{width:30px;height:30px;border-radius:50%;background:var(--dk4);color:var(--tx2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.c-cm-body{background:var(--dk3);border-radius:10px;padding:8px 12px;flex:1;}
+.c-cm-name{font-size:12px;font-weight:600;margin-bottom:2px;}
+.c-cm-text{font-size:13px;color:var(--tx2);line-height:1.5;}
+.c-cm-acts{display:flex;gap:12px;margin-top:5px;}
+.c-cm-act{font-size:11px;color:var(--tx3);cursor:pointer;transition:color 0.18s;}
+.c-cm-act:hover{color:var(--tx2);}
+.comment-input-row{display:flex;gap:8px;align-items:center;margin-top:8px;}
+.cm-inp{flex:1;background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:8px 12px;border-radius:20px;font-size:13px;outline:none;}
+.cm-inp:focus{border-color:var(--gbr);}
+.cm-send{background:var(--g);color:#080C10;border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:background 0.18s;}
+.cm-send:hover{background:var(--gd);}
+
+/* RIGHT SIDEBAR */
+.r-sidebar{padding:24px 16px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+
+/* Suggested investors */
+.rs-section{margin-bottom:24px;}
+.rs-title{font-size:12px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;}
+.investor-card{background:var(--card);border:1px solid var(--br2);border-radius:14px;padding:14px;margin-bottom:10px;transition:border-color 0.2s;}
+.investor-card:hover{border-color:rgba(255,255,255,0.18);}
+.ic-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ic-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;position:relative;}
+.ic-ring{position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--g);}
+.ic-info{flex:1;}
+.ic-name{font-size:13px;font-weight:600;cursor:pointer;}
+.ic-name:hover{text-decoration:underline;}
+.ic-role{font-size:11px;color:var(--tx3);}
+.ic-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
+.ic-stat{background:var(--dk3);border-radius:7px;padding:7px 8px;}
+.ic-stat-val{font-size:13px;font-weight:700;font-family:var(--fd);}
+.ic-stat-lbl{font-size:9px;color:var(--tx3);}
+.ic-follow{width:100%;background:var(--gg);border:1px solid var(--gbr);color:var(--g);padding:7px;border-radius:8px;font-size:12px;font-weight:600;transition:all 0.2s;}
+.ic-follow:hover{background:rgba(0,216,150,0.2);}
+.ic-follow.following{background:var(--dk3);border-color:var(--br2);color:var(--tx2);}
+
+/* Trending */
+.trend-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--br);cursor:pointer;}
+.trend-item:last-child{border:none;}
+.trend-item:hover .trend-tag{color:var(--g);}
+.trend-rank{font-size:11px;color:var(--tx3);width:16px;}
+.trend-tag{font-size:13px;font-weight:500;flex:1;transition:color 0.18s;}
+.trend-cnt{font-size:11px;color:var(--tx3);}
+
+/* News feed item */
+.news-item{padding:14px 0;border-bottom:1px solid var(--br);}
+.news-item:last-child{border:none;}
+.news-src{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.news-title{font-size:13px;font-weight:500;line-height:1.4;color:var(--tx);cursor:pointer;}
+.news-title:hover{color:var(--g);}
+.news-time{font-size:10px;color:var(--tx3);margin-top:4px;}
+
+@media(max-width:1100px){.r-sidebar{display:none;}}
+@media(max-width:768px){.page-wrap{grid-template-columns:1fr;}.l-sidebar{display:none;}.c-feed{border:none;}}
+</style>
+</head>
+<body>
+
+<!-- NAV (inline for now) -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,12,16,0.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);">
+  <a href="landing.html" style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:7px;color:#EEF2F7;">
+    <div style="width:7px;height:7px;background:#00D896;border-radius:50%;animation:npulse 2.5s infinite;"></div>
+    Velora
+  </a>
+  <div style="display:flex;gap:2px;">
+    <a href="home.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;background:rgba(0,216,150,0.08);color:#00D896;">🏠 <span>Home</span></a>
+    <a href="market.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#A8B8CC;">📈 <span>Market</span></a>
+    <a href="portfolio.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#A8B8CC;">💼 <span>Portfolio</span></a>
+    <a href="learn.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#A8B8CC;">📚 <span>Learn</span></a>
+    <a href="about.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#A8B8CC;">ℹ️ <span>About</span></a>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div style="position:relative;width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;">🔔<div style="position:absolute;top:7px;right:7px;width:7px;height:7px;background:#00D896;border-radius:50%;border:1.5px solid #080C10;"></div></div>
+    <a href="profile.html" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:5px 10px 5px 5px;cursor:pointer;">
+      <div id="nav-av" style="width:28px;height:28px;border-radius:50%;background:rgba(0,216,150,0.2);color:#00D896;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">AO</div>
+      <span id="nav-uname" style="font-size:12px;font-weight:500;color:#EEF2F7;">Adaeze</span>
+    </a>
+  </div>
+</nav>
+<style>@keyframes npulse{0%,100%{box-shadow:0 0 0 0 rgba(0,216,150,0.4);}50%{box-shadow:0 0 0 6px rgba(0,216,150,0);}}</style>
+
+<div class="page-wrap">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="l-sidebar">
+    <div class="ls-balance">
+      <div class="lsb-label">My Portfolio Value</div>
+      <div class="lsb-amount" id="sb-total">₦4,823,500</div>
+      <div class="lsb-change" id="sb-change">▲ +₦142,300 today (+3.04%)</div>
+    </div>
+
+    <div class="ls-quicklinks">
+      <div class="lql active" onclick="window.location='home.html'"><span class="lql-icon">🏠</span>Home Feed</div>
+      <div class="lql" onclick="window.location='portfolio.html'"><span class="lql-icon">💼</span>My Portfolio</div>
+      <div class="lql" onclick="window.location='portfolio.html#goals'"><span class="lql-icon">🎯</span>Wealth Goals</div>
+      <div class="lql" onclick="window.location='market.html'"><span class="lql-icon">📊</span>Markets</div>
+      <div class="lql" onclick="window.location='learn.html'"><span class="lql-icon">📚</span>Learn & Earn</div>
+      <div class="lql" onclick="window.location='profile.html'"><span class="lql-icon">👤</span>My Profile</div>
+    </div>
+
+    <div class="ls-goals">
+      <div class="lsg-title">Active Goals</div>
+      <div class="goal-mini">
+        <div class="gm-row"><span class="gm-name">✈️ Japa Fund</span><span class="gm-pct">55%</span></div>
+        <div class="gm-bar"><div class="gm-fill" style="width:55%"></div></div>
+      </div>
+      <div class="goal-mini">
+        <div class="gm-row"><span class="gm-name">🚗 First Car</span><span class="gm-pct">60%</span></div>
+        <div class="gm-bar"><div class="gm-fill" style="width:60%"></div></div>
+      </div>
+      <div class="goal-mini">
+        <div class="gm-row"><span class="gm-name">🏠 House Fund</span><span class="gm-pct">35%</span></div>
+        <div class="gm-bar"><div class="gm-fill" style="width:35%;background:var(--gold)"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER FEED -->
+  <main class="c-feed">
+
+    <!-- Portfolio strip -->
+    <div class="portfolio-strip">
+      <div class="ps-row">
+        <div>
+          <div class="ps-greeting">Good morning 👋</div>
+          <div class="ps-name" id="ps-name">Adaeze</div>
+        </div>
+        <div>
+          <div class="ps-amount">₦4,823,500</div>
+          <div class="ps-change">▲ +₦142,300 (3.04%) today</div>
+        </div>
+      </div>
+      <div class="ps-chart">
+        <svg viewBox="0 0 600 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00D896" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#00D896" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,38 L40,36 L80,33 L120,35 L160,28 L200,24 L240,21 L280,18 L320,15 L360,13 L400,10 L450,7 L500,5 L550,3 L600,2 L600,48 L0,48Z" fill="url(#chartGrad)"/>
+          <path d="M0,38 L40,36 L80,33 L120,35 L160,28 L200,24 L240,21 L280,18 L320,15 L360,13 L400,10 L450,7 L500,5 L550,3 L600,2" fill="none" stroke="#00D896" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Feed tabs -->
+    <div class="feed-tabs">
+      <button class="ft on" onclick="switchFeed('foryou',this)">✨ For You</button>
+      <button class="ft" onclick="switchFeed('following',this)">👥 Following</button>
+      <button class="ft" onclick="switchFeed('news',this)">📰 News</button>
+    </div>
+
+    <!-- Compose box -->
+    <div class="compose-box">
+      <div class="compose-inner">
+        <div class="c-av" id="compose-av">AO</div>
+        <div class="c-input-wrap">
+          <textarea class="c-input" id="compose-input" rows="1" placeholder="What's your investment move today?" oninput="autoResize(this)" onfocus="autoResize(this)"></textarea>
+          <div class="compose-actions" id="compose-actions" style="display:none;">
+            <div class="compose-opts">
+              <span class="copt">📈 Add ticker</span>
+              <span class="copt">📸 Photo</span>
+              <span class="copt"># Hashtag</span>
+              <span class="copt">😊 Emoji</span>
+            </div>
+            <button class="post-btn" onclick="submitPost()">Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOR YOU FEED -->
+    <div id="feed-foryou">
+
+      <!-- POST 1 -->
+      <div class="post" id="post-1">
+        <div class="post-hd">
+          <div class="p-av p-av-g" onclick="window.location='profile.html'">KA</div>
+          <div class="p-meta">
+            <div class="p-name">
+              Kunle Adeyemi
+              <span class="p-verified">✓ Verified</span>
+              <span class="p-perf">+34.2% YTD</span>
+            </div>
+            <div class="p-time">14 minutes ago · 1.2K followers</div>
+          </div>
+          <button class="follow-pill" onclick="toggleFollow(this)">Follow</button>
+        </div>
+        <div class="post-body">Just crossed ₦5M in total portfolio value 🎉🎉 Started 18 months ago with ₦150K seed capital. Consistency + discipline truly compounds. The NGX rally this quarter has been something else. Anyone else loading up on banking stocks before the Q2 dividend season? Drop your picks below 👇</div>
+        <div class="post-tags"><span class="p-tag">#NGX</span><span class="p-tag">#PortfolioMilestone</span><span class="p-tag">#Investing</span></div>
+        <div class="post-acts">
+          <button class="pa" onclick="likePost('1',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="like-count">312</span>
+          </button>
+          <button class="pa" onclick="toggleComments('1')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>58 Comments</span>
+          </button>
+          <button class="pa" onclick="this.classList.toggle('bookmarked')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span>Save</span>
+          </button>
+          <button class="pa">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span>Share</span>
+          </button>
+        </div>
+        <div class="emoji-bar">
+          <button class="emo" onclick="addEmoji('1',this)">🔥</button>
+          <button class="emo" onclick="addEmoji('1',this)">💯</button>
+          <button class="emo" onclick="addEmoji('1',this)">🚀</button>
+          <button class="emo" onclick="addEmoji('1',this)">👏</button>
+          <button class="emo" onclick="addEmoji('1',this)">💰</button>
+          <button class="emo" onclick="addEmoji('1',this)">🎉</button>
+          <button class="emo" onclick="addEmoji('1',this)">📈</button>
+          <button class="emo" onclick="addEmoji('1',this)">😍</button>
+        </div>
+        <div class="comments-section" id="comments-1" style="display:none;">
+          <div id="comments-list-1">
+            <div class="comment">
+              <div class="c-cm-av p-av-g" style="background:rgba(0,216,150,0.18);color:var(--g);">AO</div>
+              <div class="c-cm-body">
+                <div class="c-cm-name">Adaeze Obi <span style="font-size:9px;color:var(--g);">✓</span></div>
+                <div class="c-cm-text">This is so inspiring! What was your allocation when you started? 🙌</div>
+                <div class="c-cm-acts"><span class="c-cm-act">❤ 12</span><span class="c-cm-act">Reply</span></div>
+              </div>
+            </div>
+            <div class="comment">
+              <div class="c-cm-av" style="background:rgba(245,200,66,0.18);color:var(--gold);">NE</div>
+              <div class="c-cm-body">
+                <div class="c-cm-name">Ngozi Eze</div>
+                <div class="c-cm-text">GTCO and Zenith have been carrying my portfolio this quarter too 💪 Banking stocks for the win!</div>
+                <div class="c-cm-acts"><span class="c-cm-act">❤ 8</span><span class="c-cm-act">Reply</span></div>
+              </div>
+            </div>
+            <div class="comment">
+              <div class="c-cm-av" style="background:rgba(91,156,246,0.18);color:var(--blue);">TF</div>
+              <div class="c-cm-body">
+                <div class="c-cm-name">Tunde Fadeyi</div>
+                <div class="c-cm-text">Congrats bro! Just hitting ₦5M is already a huge achievement. What's next target? 🎯</div>
+                <div class="c-cm-acts"><span class="c-cm-act">❤ 5</span><span class="c-cm-act">Reply</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="comment-input-row">
+            <div class="c-av" style="width:30px;height:30px;font-size:10px;" id="comment-av-1">AO</div>
+            <input class="cm-inp" id="cm-1" placeholder="Write a comment…" onkeydown="if(event.key==='Enter')sendComment('1')"/>
+            <button class="cm-send" onclick="sendComment('1')">→</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST 2 -->
+      <div class="post" id="post-2">
+        <div class="post-hd">
+          <div class="p-av p-av-a" onclick="window.location='profile.html'">AO</div>
+          <div class="p-meta">
+            <div class="p-name">Adaeze Obi <span class="p-verified">✓ Verified</span><span class="p-perf">+41.5% all time</span></div>
+            <div class="p-time">1 hour ago · 890 followers</div>
+          </div>
+          <button class="follow-pill following" onclick="toggleFollow(this)">Following ✓</button>
+        </div>
+        <div class="post-body">Thread 🧵: Why I switched from keeping savings in naira to dollar-denominated ETFs — and how it changed my wealth trajectory.<br><br>The naira lost ~40% of its value against the dollar in the last 18 months. Meanwhile my dollar-index ETF (via Risevest) is up 18% in that same period. The math is simple. Diversifying currency exposure is no longer optional for Nigerians — it's survival.</div>
+        <div class="ticker-chip"><span>USD/NGN</span><span class="tc-dn">▼ Naira at ₦1,592</span></div>
+        <div class="post-tags"><span class="p-tag">#Thread</span><span class="p-tag">#DollarInvesting</span><span class="p-tag">#Naira</span></div>
+        <div class="post-acts">
+          <button class="pa" onclick="likePost('2',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="like-count">178</span>
+          </button>
+          <button class="pa" onclick="toggleComments('2')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>34 Comments</span>
+          </button>
+          <button class="pa" onclick="this.classList.toggle('bookmarked')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span>Save</span>
+          </button>
+          <button class="pa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span>Share</span></button>
+        </div>
+        <div class="emoji-bar">
+          <button class="emo" onclick="addEmoji('2',this)">🔥</button><button class="emo" onclick="addEmoji('2',this)">💯</button><button class="emo" onclick="addEmoji('2',this)">🚀</button><button class="emo" onclick="addEmoji('2',this)">💡</button><button class="emo" onclick="addEmoji('2',this)">📈</button><button class="emo" onclick="addEmoji('2',this)">🇳🇬</button>
+        </div>
+        <div class="comments-section" id="comments-2" style="display:none;">
+          <div id="comments-list-2">
+            <div class="comment">
+              <div class="c-cm-av" style="background:rgba(155,123,255,0.18);color:var(--purple);">BB</div>
+              <div class="c-cm-body">
+                <div class="c-cm-name">Bola Bakare</div>
+                <div class="c-cm-text">Which platform do you use? Bamboo or Risevest? Thinking of switching from fixed deposits 🤔</div>
+                <div class="c-cm-acts"><span class="c-cm-act">❤ 6</span><span class="c-cm-act">Reply</span></div>
+              </div>
+            </div>
+            <div class="comment">
+              <div class="c-cm-av" style="background:rgba(0,216,150,0.18);color:var(--g);">KA</div>
+              <div class="c-cm-body">
+                <div class="c-cm-name">Kunle Adeyemi <span style="font-size:9px;color:var(--g);">✓</span></div>
+                <div class="c-cm-text">This is exactly the content Velora needs more of. Bookmarked this thread 🙌</div>
+                <div class="c-cm-acts"><span class="c-cm-act">❤ 14</span><span class="c-cm-act">Reply</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="comment-input-row">
+            <div class="c-av" style="width:30px;height:30px;font-size:10px;" id="comment-av-2">AO</div>
+            <input class="cm-inp" id="cm-2" placeholder="Write a comment…" onkeydown="if(event.key==='Enter')sendComment('2')"/>
+            <button class="cm-send" onclick="sendComment('2')">→</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST 3 -->
+      <div class="post" id="post-3">
+        <div class="post-hd">
+          <div class="p-av p-av-p" onclick="window.location='profile.html'">QA</div>
+          <div class="p-meta">
+            <div class="p-name">Kwame Asante <span class="p-verified">✓ Verified</span><span class="p-perf">+28.7% YTD</span></div>
+            <div class="p-time">3 hours ago · 2.1K followers</div>
+          </div>
+          <button class="follow-pill" onclick="toggleFollow(this)">Follow</button>
+        </div>
+        <div class="post-body">My top 3 Nigerian stocks for H2 2025 based on fundamentals and upcoming catalysts:<br><br>1. MTNN — Dividend yield is insane + 5G rollout upside 📡<br>2. GEREGU — Power sector reform tailwinds 💡<br>3. AIRTELAFRI — Fintech pivot gaining traction 📱<br><br>Not financial advice. Do your own research. What's your pick?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <div class="ticker-chip"><span>MTNN</span><span class="tc-up">+2.4% ↑</span></div>
+          <div class="ticker-chip"><span>GEREGU</span><span class="tc-up">+5.1% ↑</span></div>
+          <div class="ticker-chip"><span>AIRTELAFRI</span><span class="tc-dn">-0.8% ↓</span></div>
+        </div>
+        <div class="post-tags"><span class="p-tag">#NGX</span><span class="p-tag">#StockPicks</span><span class="p-tag">#Nigeria</span></div>
+        <div class="post-acts">
+          <button class="pa" onclick="likePost('3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="like-count">445</span></button>
+          <button class="pa" onclick="toggleComments('3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>92 Comments</span></button>
+          <button class="pa" onclick="this.classList.toggle('bookmarked')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>Save</span></button>
+          <button class="pa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span>Share</span></button>
+        </div>
+        <div class="emoji-bar">
+          <button class="emo" onclick="addEmoji('3',this)">🔥</button><button class="emo" onclick="addEmoji('3',this)">💯</button><button class="emo" onclick="addEmoji('3',this)">🚀</button><button class="emo" onclick="addEmoji('3',this)">📈</button><button class="emo" onclick="addEmoji('3',this)">🙏</button><button class="emo" onclick="addEmoji('3',this)">🇳🇬</button>
+        </div>
+        <div class="comments-section" id="comments-3" style="display:none;">
+          <div id="comments-list-3">
+            <div class="comment">
+              <div class="c-cm-av" style="background:rgba(0,216,150,0.18);color:var(--g);">AO</div>
+              <div class="c-cm-body"><div class="c-cm-name">Adaeze Obi <span style="font-size:9px;color:var(--g);">✓</span></div><div class="c-cm-text">MTNN is a no-brainer for dividend investors. Been holding since 2022 😊</div><div class="c-cm-acts"><span class="c-cm-act">❤ 21</span><span class="c-cm-act">Reply</span></div></div>
+            </div>
+          </div>
+          <div class="comment-input-row">
+            <div class="c-av" style="width:30px;height:30px;font-size:10px;" id="comment-av-3">AO</div>
+            <input class="cm-inp" id="cm-3" placeholder="Write a comment…" onkeydown="if(event.key==='Enter')sendComment('3')"/>
+            <button class="cm-send" onclick="sendComment('3')">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOLLOWING FEED -->
+    <div id="feed-following" style="display:none;padding:32px 24px;text-align:center;color:var(--tx3);">
+      <div style="font-size:32px;margin-bottom:12px;">👥</div>
+      <div style="font-size:15px;font-weight:500;color:var(--tx2);margin-bottom:6px;">Follow investors to see their posts here</div>
+      <div style="font-size:13px;">Tap "Follow" on posts or profiles to build your feed</div>
+    </div>
+
+    <!-- NEWS FEED -->
+    <div id="feed-news" style="display:none;padding:8px 24px;">
+      <div class="news-item"><div class="news-src">BusinessDay · 2h ago</div><div class="news-title" onclick="">NGX All-Share Index gains 3.8% as banking stocks lead Friday rally</div><div class="news-time">Nigerian Exchange Group</div></div>
+      <div class="news-item"><div class="news-src">Reuters · 4h ago</div><div class="news-title">Nigeria's inflation rate eases to 31.2% in April, first decline in 12 months</div><div class="news-time">CBN Monetary Policy</div></div>
+      <div class="news-item"><div class="news-src">TechCabal · 5h ago</div><div class="news-title">Flutterwave closes $250M Series D at $3B valuation, plans African expansion</div><div class="news-time">African Fintech</div></div>
+      <div class="news-item"><div class="news-src">Nairametrics · 6h ago</div><div class="news-title">MTN Nigeria announces Q1 dividend of ₦5.04 per share — yield hits 7.2%</div><div class="news-time">Dividends</div></div>
+      <div class="news-item"><div class="news-src">The Punch · 8h ago</div><div class="news-title">Dangote Cement posts ₦800bn revenue in FY2024, beats analyst expectations</div><div class="news-time">Corporate Earnings</div></div>
+      <div class="news-item"><div class="news-src">Bloomberg · 9h ago</div><div class="news-title">Africa ETF inflows hit record $4.8B in Q1 2025 as investors eye emerging markets</div><div class="news-time">Global Markets</div></div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="r-sidebar">
+
+    <!-- Suggested Investors -->
+    <div class="rs-section">
+      <div class="rs-title">⭐ Suggested Investors</div>
+
+      <div class="investor-card">
+        <div class="ic-top">
+          <div class="ic-av p-av-g" style="width:42px;height:42px;font-size:14px;position:relative;">
+            KA
+            <div class="ic-ring"></div>
+          </div>
+          <div class="ic-info">
+            <div class="ic-name" onclick="window.location='profile.html'">Kunle Adeyemi</div>
+            <div class="ic-role">NGX & Crypto · 1.2K followers</div>
+          </div>
+        </div>
+        <div class="ic-stats">
+          <div class="ic-stat"><div class="ic-stat-val" style="color:var(--g);">+34.2%</div><div class="ic-stat-lbl">YTD Return</div></div>
+          <div class="ic-stat"><div class="ic-stat-val">₦5.1M</div><div class="ic-stat-lbl">Portfolio</div></div>
+          <div class="ic-stat"><div class="ic-stat-val">18mo</div><div class="ic-stat-lbl">Investing</div></div>
+          <div class="ic-stat"><div class="ic-stat-val" style="color:var(--gold);">Elite</div><div class="ic-stat-lbl">Tier</div></div>
+        </div>
+        <button class="ic-follow" onclick="toggleFollowCard(this)">+ Follow</button>
+      </div>
+
+      <div class="investor-card">
+        <div class="ic-top">
+          <div class="ic-av p-av-a" style="width:42px;height:42px;font-size:14px;position:relative;">
+            AO
+            <div class="ic-ring"></div>
+          </div>
+          <div class="ic-info">
+            <div class="ic-name" onclick="window.location='profile.html'">Amara Osei</div>
+            <div class="ic-role">US Stocks & ETFs · 890 followers</div>
+          </div>
+        </div>
+        <div class="ic-stats">
+          <div class="ic-stat"><div class="ic-stat-val" style="color:var(--g);">+41.5%</div><div class="ic-stat-lbl">All Time</div></div>
+          <div class="ic-stat"><div class="ic-stat-val">₦3.8M</div><div class="ic-stat-lbl">Portfolio</div></div>
+          <div class="ic-stat"><div class="ic-stat-val">24mo</div><div class="ic-stat-lbl">Investing</div></div>
+          <div class="ic-stat"><div class="ic-stat-val" style="color:var(--gold);">Elite</div><div class="ic-stat-lbl">Tier</div></div>
+        </div>
+        <button class="ic-follow" onclick="toggleFollowCard(this)">+ Follow</button>
+      </div>
+
+      <div class="investor-card">
+        <div class="ic-top">
+          <div class="ic-av p-av-p" style="width:42px;height:42px;font-size:14px;position:relative;">
+            QA
+            <div class="ic-ring"></div>
+          </div>
+          <div class="ic-info">
+            <div class="ic-name" onclick="window.location='profile.html'">Kwame Asante</div>
+            <div class="ic-role">Ghanaian stocks · 2.1K followers</div>
+          </div>
+        </div>
+        <div class="ic-stats">
+          <div class="ic-stat"><div class="ic-stat-val" style="color:var(--g);">+28.7%</div><div class="ic-stat-lbl">YTD Return</div></div>
+          <div class="ic-stat"><div class="ic-stat-val">$24K</div><div class="ic-stat-lbl">Portfolio</div></div>
+          <div class="ic-stat"><div class="ic-stat-val">36mo</div><div class="ic-stat-lbl">Investing</div></div>
+          <div class="ic-stat"><div class="ic-stat-val" style="color:var(--g);">Pro</div><div class="ic-stat-lbl">Tier</div></div>
+        </div>
+        <button class="ic-follow" onclick="toggleFollowCard(this)">+ Follow</button>
+      </div>
+    </div>
+
+    <!-- Trending Topics -->
+    <div class="rs-section">
+      <div class="rs-title">🔥 Trending</div>
+      <div style="background:var(--card);border:1px solid var(--br2);border-radius:12px;padding:4px 14px;">
+        <div class="trend-item"><div class="trend-rank">1</div><div class="trend-tag">#NGXRally</div><div class="trend-cnt">2.4K posts</div></div>
+        <div class="trend-item"><div class="trend-rank">2</div><div class="trend-tag">#JapaFund</div><div class="trend-cnt">1.8K posts</div></div>
+        <div class="trend-item"><div class="trend-rank">3</div><div class="trend-tag">#DollarInvesting</div><div class="trend-cnt">1.2K</div></div>
+        <div class="trend-item"><div class="trend-rank">4</div><div class="trend-tag">#MTNN</div><div class="trend-cnt">940 posts</div></div>
+        <div class="trend-item"><div class="trend-rank">5</div><div class="trend-tag">#CryptoNG</div><div class="trend-cnt">780 posts</div></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+(function(){
+  const raw = sessionStorage.getItem('velora_user');
+  if(raw){
+    const u = JSON.parse(raw);
+    const avEls = [document.getElementById('nav-av'), document.getElementById('compose-av')];
+    const un = document.getElementById('nav-uname');
+    const ps = document.getElementById('ps-name');
+    avEls.forEach(el=>{ if(el) el.textContent = u.initials||'AO'; });
+    ['comment-av-1','comment-av-2','comment-av-3'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.textContent=u.initials||'AO';
+    });
+    if(un) un.textContent = u.firstName || u.name.split(' ')[0];
+    if(ps) ps.textContent = u.firstName || u.name.split(' ')[0];
+  }
+})();
+
+function switchFeed(tab, btn){
+  ['foryou','following','news'].forEach(t=>{
+    const el=document.getElementById('feed-'+t);
+    if(el) el.style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.ft').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,200)+'px';
+  document.getElementById('compose-actions').style.display='flex';
+}
+
+function submitPost(){
+  const inp = document.getElementById('compose-input');
+  const text = inp.value.trim();
+  if(!text) return;
+  const raw = sessionStorage.getItem('velora_user');
+  const u = raw ? JSON.parse(raw) : {initials:'AO',name:'You',firstName:'You'};
+  const id = 'user-' + Date.now();
+  const colors = ['p-av-g','p-av-a','p-av-b'];
+  const feed = document.getElementById('feed-foryou');
+  const div = document.createElement('div');
+  div.className='post';
+  div.id='post-'+id;
+  div.innerHTML=`
+    <div class="post-hd">
+      <div class="p-av ${colors[0]}">${u.initials||'AO'}</div>
+      <div class="p-meta">
+        <div class="p-name">${u.firstName||'You'}</div>
+        <div class="p-time">Just now</div>
+      </div>
+    </div>
+    <div class="post-body">${text.replace(/\n/g,'<br>')}</div>
+    <div class="post-acts">
+      <button class="pa" onclick="likePost('${id}',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="like-count">0</span></button>
+      <button class="pa" onclick="toggleComments('${id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>0 Comments</span></button>
+      <button class="pa" onclick="this.classList.toggle('bookmarked')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>Save</span></button>
+    </div>
+    <div class="emoji-bar"><button class="emo" onclick="addEmoji('${id}',this)">🔥</button><button class="emo" onclick="addEmoji('${id}',this)">💯</button><button class="emo" onclick="addEmoji('${id}',this)">🚀</button><button class="emo" onclick="addEmoji('${id}',this)">❤️</button></div>
+    <div class="comments-section" id="comments-${id}" style="display:none;">
+      <div id="comments-list-${id}"></div>
+      <div class="comment-input-row">
+        <div class="c-av" style="width:30px;height:30px;font-size:10px;">${u.initials||'AO'}</div>
+        <input class="cm-inp" id="cm-${id}" placeholder="Write a comment…" onkeydown="if(event.key==='Enter')sendComment('${id}')"/>
+        <button class="cm-send" onclick="sendComment('${id}')">→</button>
+      </div>
+    </div>`;
+  const compose = document.querySelector('.compose-box');
+  feed.insertBefore(div, compose.nextSibling);
+  inp.value='';
+  inp.style.height='auto';
+  document.getElementById('compose-actions').style.display='none';
+}
+
+function likePost(id, btn){
+  btn.classList.toggle('liked');
+  const cnt = btn.querySelector('.like-count');
+  const n = parseInt(cnt.textContent);
+  cnt.textContent = btn.classList.contains('liked') ? n+1 : n-1;
+}
+
+function toggleComments(id){
+  const el = document.getElementById('comments-'+id);
+  if(el){ el.style.display = el.style.display==='none' ? 'block' : 'none'; }
+}
+
+function sendComment(postId){
+  const inp = document.getElementById('cm-'+postId);
+  const text = inp.value.trim();
+  if(!text) return;
+  const raw = sessionStorage.getItem('velora_user');
+  const u = raw ? JSON.parse(raw) : {initials:'AO',firstName:'You'};
+  const list = document.getElementById('comments-list-'+postId);
+  const div = document.createElement('div');
+  div.className='comment';
+  div.innerHTML=`<div class="c-cm-av" style="background:rgba(0,216,150,0.18);color:var(--g);">${u.initials||'AO'}</div><div class="c-cm-body"><div class="c-cm-name">${u.firstName||'You'}</div><div class="c-cm-text">${text}</div><div class="c-cm-acts"><span class="c-cm-act">❤ 0</span><span class="c-cm-act">Reply</span></div></div>`;
+  list.appendChild(div);
+  inp.value='';
+  list.scrollTop = list.scrollHeight;
+}
+
+function addEmoji(postId, btn){
+  btn.style.transform='scale(1.5)';
+  btn.style.transition='transform 0.2s';
+  setTimeout(()=>{ btn.style.transform='scale(1)'; },300);
+}
+
+function toggleFollow(btn){
+  btn.classList.toggle('following');
+  btn.textContent = btn.classList.contains('following') ? 'Following ✓' : 'Follow';
+}
+
+function toggleFollowCard(btn){
+  btn.classList.toggle('following');
+  btn.textContent = btn.classList.contains('following') ? '✓ Following' : '+ Follow';
+}
+</script>
+</body>
+</html>
