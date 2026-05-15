@@ -150,6 +150,42 @@
 .ni-title{font-size:13px;font-weight:600;color:var(--tx);line-height:1.5;cursor:pointer;}
 .ni-title:hover{color:var(--p);}
 .ni-time{font-size:10px;color:var(--tx3);margin-top:3px;}
+/* ── COMPOSE ENHANCEMENTS ── */
+.compose-extras{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+/* Ticker picker */
+.ticker-picker{background:var(--g50);border:1.5px solid var(--pbr);border-radius:10px;padding:10px 12px;display:none;}
+.ticker-picker.open{display:block;}
+.tp-label{font-size:10px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+.tp-row{display:flex;gap:7px;align-items:center;}
+.tp-input{flex:1;background:var(--white);border:1.5px solid var(--bdr);color:var(--tx);padding:7px 11px;border-radius:8px;font-size:13px;outline:none;text-transform:uppercase;}
+.tp-input:focus{border-color:var(--p);}
+.tp-input::placeholder{text-transform:none;color:var(--tx3);}
+.tp-add{background:var(--p);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;}
+.tp-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.tp-chip{display:inline-flex;align-items:center;gap:5px;background:var(--plt);border:1px solid var(--pbr);color:var(--p);font-size:12px;font-weight:700;padding:3px 9px;border-radius:20px;}
+.tp-chip-x{cursor:pointer;opacity:.6;font-size:11px;}
+.tp-chip-x:hover{opacity:1;}
+/* Portfolio share toggle */
+.perf-share{background:var(--gbg);border:1px solid var(--gbr);border-radius:10px;padding:10px 12px;display:none;}
+.perf-share.open{display:block;}
+.ps-label{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+.ps-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ps-toggle{display:flex;align-items:center;gap:7px;cursor:pointer;}
+.ps-toggle input{width:16px;height:16px;cursor:pointer;}
+.ps-toggle span{font-size:13px;font-weight:600;color:var(--green);}
+.ps-preview{font-size:12px;color:var(--tx2);background:var(--white);border:1px solid var(--gbr);border-radius:7px;padding:4px 10px;}
+/* ── POST TICKER CARDS ── */
+.post-tickers{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;}
+.ptk{background:var(--white);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;min-width:120px;}
+.ptk-sym{font-size:11px;font-weight:800;color:var(--tx);font-family:monospace;margin-bottom:3px;}
+.ptk-price{font-size:13px;font-weight:700;margin-bottom:4px;}
+.ptk-held{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;}
+.ptk-held-yes{background:var(--gbg);color:var(--green);}
+.ptk-held-no{background:var(--g100);color:var(--tx3);}
+/* Portfolio gain badge on post */
+.post-perf-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;margin-bottom:8px;}
+.ppb-up{background:var(--gbg);color:var(--green);border:1px solid var(--gbr);}
+.ppb-dn{background:var(--rbg);color:var(--red);border:1px solid #fca5a5;}
 /* RESPONSIVE */
 @media(max-width:1100px){.r-side{display:none;}.layout{grid-template-columns:256px 1fr;}}
 @media(max-width:768px){.l-side{display:none;}.layout{grid-template-columns:1fr;}.nav-links{display:none;}.burger{display:block;}}
@@ -239,14 +275,44 @@
       <div class="c-av" id="c-av">AO</div>
       <div class="c-right">
         <textarea class="c-input" id="c-input" placeholder="What's your investment move today?" oninput="autoH(this)" onfocus="showC()"></textarea>
-        <div class="c-actions" id="c-actions" style="display:none;">
-          <div class="c-opts">
-            <span class="c-opt">📈 Ticker</span>
-            <span class="c-opt">📷 Photo</span>
-            <span class="c-opt"># Tag</span>
+
+        <div class="compose-extras" id="c-extras" style="display:none;">
+
+          <!-- Ticker picker -->
+          <div class="ticker-picker" id="ticker-picker">
+            <div class="tp-label">📈 Tag stock tickers</div>
+            <div class="tp-row">
+              <input class="tp-input" id="tp-input" placeholder="Type ticker e.g. MTNN" maxlength="12"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();addTicker();}"
+                oninput="this.value=this.value.toUpperCase()"/>
+              <button class="tp-add" onclick="addTicker()">Add</button>
+            </div>
+            <div class="tp-chips" id="tp-chips"></div>
           </div>
-          <button class="c-post" onclick="doPost()">Post</button>
+
+          <!-- Portfolio performance share -->
+          <div class="perf-share" id="perf-share">
+            <div class="ps-label">📊 Share portfolio performance</div>
+            <div class="ps-row">
+              <label class="ps-toggle">
+                <input type="checkbox" id="ps-toggle-check" onchange="togglePerfShare(this)"/>
+                <span>Include my % gain/loss</span>
+              </label>
+              <div class="ps-preview" id="ps-preview" style="display:none;"></div>
+            </div>
+          </div>
+
+          <!-- Action bar -->
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="c-opts">
+              <span class="c-opt" id="opt-ticker" onclick="toggleTickerPicker()" title="Tag stocks">📈 Ticker</span>
+              <span class="c-opt" id="opt-perf" onclick="togglePerfPicker()" title="Share % gain">📊 Performance</span>
+              <span class="c-opt" title="Coming soon">📷 Photo</span>
+            </div>
+            <button class="c-post" onclick="doPost()" id="c-post-btn">Post</button>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -387,9 +453,438 @@
 </div>
 
 <script>
-// ── SUPABASE AUTH + DATA ─────────────────────────────────────
+// ── CONFIG ────────────────────────────────────────────────────
 const _SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
 const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+
+// NGX prices for ticker chips (static snapshot — replace with live API later)
+const PRICES = {MTNN:{p:245.00,c:6.52,u:true},DANGCEM:{p:543.00,c:0.90,u:true},GTCO:{p:54.05,c:-7.60,u:false},ZENITHBANK:{p:42.10,c:-8.66,u:false},BUAFOODS:{p:385.00,c:2.10,u:true},ACCESSCORP:{p:25.75,c:-2.50,u:false},AIRTELAFRI:{p:2200,c:0.80,u:true},SEPLAT:{p:4850,c:1.40,u:true},GEREGU:{p:1250,c:5.10,u:true},FIRSTHOLDCO:{p:75.30,c:-7.80,u:false},BUACEMENT:{p:435,c:2.36,u:true},NGXGROUP:{p:158,c:5.50,u:true},TRANSCORP:{p:390,c:2.80,u:true},FIDSON:{p:113.30,c:10.00,u:true},BERGER:{p:140.10,c:17.29,u:true}}
+
+// ── STATE ─────────────────────────────────────────────────────
+let _sb = null, _session = null, _myInitials = 'AO', _myFirstName = 'You'
+let _myTickers = []      // [{ticker, pct}] — my holdings from DB
+let _pendingTickers = [] // tickers being added to current post
+let _sharePerf = false   // whether to share % gain in post
+let _myPctGain = null    // my portfolio % gain
+
+// ── SUPABASE INIT ─────────────────────────────────────────────
+const sbScript = document.createElement('script')
+sbScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
+sbScript.onload = async () => {
+  _sb = supabase.createClient(_SB_URL, _SB_ANON)
+
+  // Auth guard
+  const { data: { session } } = await _sb.auth.getSession()
+  if (!session) { window.location.href = 'landing.html'; return }
+  _session = session
+
+  // Profile
+  const { data: profile } = await _sb.from('profiles').select('*').eq('id', session.user.id).single()
+  _myFirstName = profile?.first_name || profile?.name?.split(' ')[0] || session.user.email.split('@')[0]
+  _myInitials  = profile?.initials || _myFirstName[0].toUpperCase()
+
+  // Sync nav
+  document.querySelectorAll('#nav-av,#c-av').forEach(el => { if(el) el.textContent = _myInitials })
+  const nn = document.getElementById('nav-name'); if(nn) nn.textContent = _myFirstName
+  const pn = document.getElementById('ps-name'); if(pn) pn.textContent = _myFirstName
+
+  sessionStorage.setItem('gopex_user', JSON.stringify({
+    id: session.user.id, name: profile?.name || _myFirstName,
+    firstName: _myFirstName, initials: _myInitials, email: session.user.email,
+    joined: new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
+  }))
+
+  // Load my ticker holdings (% only, no ₦ values)
+  try {
+    const { data: th } = await _sb.rpc('get_my_ticker_holdings', { user_uuid: session.user.id })
+    if (th) _myTickers = th
+  } catch(e) {}
+
+  // Calculate my portfolio % gain for sharing
+  const { data: holdings } = await _sb.from('holdings').select('shares,buy_price,ticker').eq('user_id', session.user.id)
+  if (holdings?.length) {
+    // Use market prices vs buy price to compute % gain
+    let costBasis = 0, marketVal = 0
+    holdings.forEach(h => {
+      const mp = PRICES[h.ticker]?.p || h.buy_price
+      costBasis  += h.shares * h.buy_price
+      marketVal  += h.shares * mp
+    })
+    if (costBasis > 0) {
+      _myPctGain = parseFloat(((marketVal - costBasis) / costBasis * 100).toFixed(2))
+      // Update profile with latest % gain (opt-in controlled by share_performance flag)
+      await _sb.from('profiles').update({ portfolio_pct_gain: _myPctGain }).eq('id', session.user.id)
+    }
+  }
+  // Update performance share preview
+  updatePerfPreview()
+
+  // Load posts
+  await loadPosts()
+
+  // Real-time: new posts & likes
+  _sb.channel('social')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' },
+      payload => prependPost(payload.new))
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'posts' },
+      payload => updatePostLikes(payload.new))
+    .subscribe()
+}
+document.head.appendChild(sbScript)
+
+// ── LOAD POSTS ────────────────────────────────────────────────
+async function loadPosts() {
+  const { data: posts } = await _sb
+    .from('posts')
+    .select('*, profiles(name, initials, is_verified, share_performance, portfolio_pct_gain, portfolio_pct_period)')
+    .order('created_at', { ascending: false })
+    .limit(30)
+
+  const feed = document.getElementById('feed-fy')
+  const compose = document.querySelector('.compose')
+  feed.querySelectorAll('.post').forEach(p => p.remove())
+
+  if (!posts?.length) return
+  posts.forEach(p => feed.insertBefore(buildPostEl(p), compose.nextSibling))
+}
+
+// ── BUILD POST ELEMENT ────────────────────────────────────────
+function buildPostEl(p) {
+  const d = document.createElement('div')
+  d.className = 'post'; d.dataset.postId = p.id
+  const name    = p.profiles?.name || 'GopexFund User'
+  const inits   = p.profiles?.initials || name[0].toUpperCase()
+  const verified = p.profiles?.is_verified
+  const mins    = Math.floor((Date.now() - new Date(p.created_at)) / 60000)
+  const timeStr = mins < 1 ? 'Just now' : mins < 60 ? mins+'m ago' : mins < 1440 ? Math.floor(mins/60)+'h ago' : Math.floor(mins/1440)+'d ago'
+  const isMe    = _session && p.user_id === _session.user.id
+
+  // Portfolio performance badge (only if poster opted to share)
+  let perfBadge = ''
+  if (p.portfolio_pct_gain != null && p.profiles?.share_performance) {
+    const pct = p.portfolio_pct_gain
+    const up  = pct >= 0
+    perfBadge = `<div class="post-perf-badge ${up?'ppb-up':'ppb-dn'}">
+      ${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}% portfolio ${p.portfolio_period||'return'}
+      <span style="opacity:.6;font-size:9px;">% only · value hidden</span>
+    </div>`
+  }
+
+  // Ticker chips with "do I hold this?" context
+  let tickerHtml = ''
+  if (p.ticker_holdings?.length) {
+    tickerHtml = '<div class="post-tickers">'
+    p.ticker_holdings.forEach(th => {
+      const tk  = th.ticker
+      const mp  = PRICES[tk]
+      const price = mp ? `₦${mp.p.toLocaleString()}` : '—'
+      const chg   = mp ? `<span style="color:${mp.u?'var(--green)':'var(--red)'};font-size:11px;font-weight:700;">${mp.u?'▲':'▼'} ${Math.abs(mp.c).toFixed(2)}%</span>` : ''
+      // Check if viewer holds this ticker
+      const myHolding = _myTickers?.find(h => h.ticker === tk)
+      const heldHtml = myHolding
+        ? `<div class="ptk-held ptk-held-yes">✓ I hold ${myHolding.pct}% of portfolio</div>`
+        : `<div class="ptk-held ptk-held-no">— Not in my portfolio</div>`
+      tickerHtml += `<div class="ptk">
+        <div class="ptk-sym">NGX: ${tk}</div>
+        <div class="ptk-price">${price} ${chg}</div>
+        ${heldHtml}
+      </div>`
+    })
+    tickerHtml += '</div>'
+  }
+
+  d.innerHTML = `
+    <div class="p-head">
+      <div class="p-av" style="background:var(--plt);color:var(--p);">${inits}</div>
+      <div class="p-meta">
+        <div class="p-name">
+          ${name}
+          ${verified ? '<span class="p-vbadge">✓ Verified</span>' : ''}
+        </div>
+        <div class="p-time">${timeStr}</div>
+      </div>
+      ${!isMe ? `<button class="p-follow" data-uid="${p.user_id}" onclick="toggleFollow(this)">+ Follow</button>` : ''}
+    </div>
+    ${perfBadge}
+    ${tickerHtml}
+    <div class="p-body">${p.body.replace(/\n/g,'<br>')}</div>
+    <div class="p-actions">
+      <button class="p-act like-btn" data-pid="${p.id}" onclick="toggleLike(this)">❤ <span>${p.likes_count||0}</span></button>
+      <button class="p-act" onclick="toggleComments(this,'${p.id}')">💬 <span>${p.comments_count||0}</span></button>
+      <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
+      <button class="p-act" onclick="sharePost('${p.id}')">↗ Share</button>
+    </div>
+    <div class="emo-bar">
+      <button class="emo" onclick="reactEmoji(this,'${p.id}','🔥')">🔥</button>
+      <button class="emo" onclick="reactEmoji(this,'${p.id}','💯')">💯</button>
+      <button class="emo" onclick="reactEmoji(this,'${p.id}','🚀')">🚀</button>
+      <button class="emo" onclick="reactEmoji(this,'${p.id}','📈')">📈</button>
+      <button class="emo" onclick="reactEmoji(this,'${p.id}','💰')">💰</button>
+    </div>
+    <div class="comments" id="cmt-${p.id}" style="display:none;margin-top:10px;">
+      <div id="cml-${p.id}"></div>
+      <div class="cm-input-row">
+        <div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;flex-shrink:0;">${_myInitials}</div>
+        <input placeholder="Write a comment…" id="cmi-${p.id}" onkeydown="if(event.key==='Enter')postComment('${p.id}')"/>
+        <button class="cm-send" onclick="postComment('${p.id}')">→</button>
+      </div>
+    </div>`
+  return d
+}
+
+function prependPost(p) {
+  const feed = document.getElementById('feed-fy')
+  const compose = document.querySelector('.compose')
+  feed.insertBefore(buildPostEl(p), compose.nextSibling)
+}
+
+function updatePostLikes(p) {
+  const btn = document.querySelector(`.like-btn[data-pid="${p.id}"] span`)
+  if (btn) btn.textContent = p.likes_count || 0
+}
+
+// ── LIKE / UNLIKE ─────────────────────────────────────────────
+async function toggleLike(btn) {
+  if (!_sb || !_session) return
+  const pid = btn.dataset.pid
+  const isLiked = btn.classList.contains('liked')
+  btn.classList.toggle('liked')
+  const span = btn.querySelector('span')
+  span.textContent = parseInt(span.textContent) + (isLiked ? -1 : 1)
+  if (isLiked) {
+    await _sb.from('likes').delete().eq('post_id', pid).eq('user_id', _session.user.id)
+  } else {
+    await _sb.from('likes').insert({ post_id: pid, user_id: _session.user.id })
+  }
+}
+
+// ── COMMENTS ──────────────────────────────────────────────────
+async function toggleComments(btn, postId) {
+  const box = document.getElementById('cmt-'+postId)
+  const isOpen = box.style.display !== 'none'
+  box.style.display = isOpen ? 'none' : 'block'
+  if (!isOpen && _sb) {
+    // Load comments from DB
+    const { data: cmts } = await _sb.from('comments')
+      .select('*, profiles(name,initials)')
+      .eq('post_id', postId).order('created_at', { ascending: true })
+    const list = document.getElementById('cml-'+postId)
+    list.innerHTML = ''
+    cmts?.forEach(c => {
+      const d = document.createElement('div'); d.className = 'comment'
+      d.innerHTML = `<div class="cm-av" style="background:var(--plt);color:var(--p);">${c.profiles?.initials||'U'}</div>
+        <div class="cm-body"><div class="cm-name">${c.profiles?.name||'User'}</div>
+        <div class="cm-text">${c.body}</div></div>`
+      list.appendChild(d)
+    })
+  }
+}
+
+async function postComment(postId) {
+  const inp = document.getElementById('cmi-'+postId)
+  const txt = inp.value.trim(); if (!txt) return
+  if (!_sb || !_session) return
+  inp.value = ''
+  // Optimistic UI
+  const list = document.getElementById('cml-'+postId)
+  const d = document.createElement('div'); d.className = 'comment'
+  d.innerHTML = `<div class="cm-av" style="background:var(--plt);color:var(--p);">${_myInitials}</div>
+    <div class="cm-body"><div class="cm-name">${_myFirstName}</div><div class="cm-text">${txt}</div></div>`
+  list.appendChild(d)
+  // Save to DB
+  await _sb.from('comments').insert({ post_id: postId, user_id: _session.user.id, body: txt })
+}
+
+// ── FOLLOW / UNFOLLOW ─────────────────────────────────────────
+async function toggleFollow(btn) {
+  if (!_sb || !_session) return
+  const uid = btn.dataset.uid
+  const isFollowing = btn.classList.contains('on')
+  btn.classList.toggle('on')
+  btn.textContent = isFollowing ? '+ Follow' : 'Following ✓'
+  if (isFollowing) {
+    await _sb.from('follows').delete()
+      .eq('follower_id', _session.user.id).eq('following_id', uid)
+  } else {
+    await _sb.from('follows').insert({ follower_id: _session.user.id, following_id: uid })
+  }
+}
+
+// ── COMPOSE: TICKER PICKER ────────────────────────────────────
+function showC() {
+  document.getElementById('c-extras').style.display = 'flex'
+  document.getElementById('c-extras').style.flexDirection = 'column'
+}
+function toggleTickerPicker() {
+  const el = document.getElementById('ticker-picker')
+  const isOpen = el.classList.contains('open')
+  el.classList.toggle('open', !isOpen)
+  document.getElementById('opt-ticker').style.color = !isOpen ? 'var(--p)' : ''
+}
+function togglePerfPicker() {
+  const el = document.getElementById('perf-share')
+  const isOpen = el.classList.contains('open')
+  el.classList.toggle('open', !isOpen)
+  document.getElementById('opt-perf').style.color = !isOpen ? 'var(--green)' : ''
+}
+function addTicker() {
+  const inp = document.getElementById('tp-input')
+  const tk = inp.value.trim().toUpperCase(); if (!tk) return
+  if (_pendingTickers.find(t => t.ticker === tk)) { inp.value=''; return }
+  // Find if I hold this ticker
+  const myH = _myTickers?.find(h => h.ticker === tk)
+  _pendingTickers.push({ ticker: tk, iHold: !!myH, myPct: myH?.pct || 0 })
+  renderTickerChips()
+  inp.value = ''
+}
+function removeTicker(tk) {
+  _pendingTickers = _pendingTickers.filter(t => t.ticker !== tk)
+  renderTickerChips()
+}
+function renderTickerChips() {
+  const c = document.getElementById('tp-chips')
+  c.innerHTML = _pendingTickers.map(t =>
+    `<div class="tp-chip">
+      ${t.ticker}
+      ${t.iHold ? `<span style="font-size:9px;opacity:.7;">(I hold ${t.myPct}%)</span>` : ''}
+      <span class="tp-chip-x" onclick="removeTicker('${t.ticker}')">✕</span>
+    </div>`
+  ).join('')
+}
+
+// ── COMPOSE: PERFORMANCE SHARE ────────────────────────────────
+function togglePerfShare(checkbox) {
+  _sharePerf = checkbox.checked
+  updatePerfPreview()
+}
+function updatePerfPreview() {
+  const preview = document.getElementById('ps-preview')
+  if (!preview) return
+  if (_myPctGain == null) {
+    preview.style.display = 'block'
+    preview.textContent = 'No portfolio data yet — add holdings first'
+    return
+  }
+  const up = _myPctGain >= 0
+  preview.style.display = 'block'
+  preview.innerHTML = `Will show: <strong style="color:${up?'var(--green)':'var(--red)'};">${up?'▲':'▼'} ${Math.abs(_myPctGain).toFixed(1)}%</strong> (₦ value stays hidden)`
+}
+
+// ── DO POST ───────────────────────────────────────────────────
+async function doPost() {
+  const inp = document.getElementById('c-input')
+  const txt = inp.value.trim(); if (!txt) return
+  const btn = document.getElementById('c-post-btn')
+  btn.textContent = '⏳ Posting…'; btn.disabled = true
+
+  // Build ticker_holdings payload — only pct, no ₦ values
+  const tickerHoldingsPayload = _pendingTickers.map(t => ({
+    ticker: t.ticker,
+    i_hold: t.iHold,
+    my_pct: t.iHold ? t.myPct : null
+  }))
+
+  const postData = {
+    user_id:          _session.user.id,
+    body:             txt,
+    ticker_holdings:  tickerHoldingsPayload,
+    portfolio_pct_gain: _sharePerf ? _myPctGain : null,
+    portfolio_period:   _sharePerf ? '1M' : null,
+  }
+
+  // Optimistic UI first
+  const u = JSON.parse(sessionStorage.getItem('gopex_user') || '{}')
+  const feed = document.getElementById('feed-fy')
+  const compose = document.querySelector('.compose')
+  const fakePost = {
+    id: 'tmp-'+Date.now(), user_id: _session.user.id,
+    body: txt, created_at: new Date().toISOString(),
+    likes_count: 0, comments_count: 0,
+    ticker_holdings: tickerHoldingsPayload,
+    portfolio_pct_gain: _sharePerf ? _myPctGain : null,
+    portfolio_period: _sharePerf ? '1M' : null,
+    profiles: { name: u.name||_myFirstName, initials: _myInitials, is_verified: false, share_performance: _sharePerf }
+  }
+  feed.insertBefore(buildPostEl(fakePost), compose.nextSibling)
+
+  // Save to DB
+  if (_sb) await _sb.from('posts').insert(postData)
+
+  // If user wants to share perf publicly, update their profile flag
+  if (_sharePerf && _sb) {
+    await _sb.from('profiles').update({ share_performance: true, portfolio_pct_gain: _myPctGain }).eq('id', _session.user.id)
+  }
+
+  // Reset compose
+  inp.value = ''; inp.style.height = 'auto'
+  _pendingTickers = []; renderTickerChips()
+  _sharePerf = false
+  document.getElementById('ps-toggle-check').checked = false
+  document.getElementById('ticker-picker').classList.remove('open')
+  document.getElementById('perf-share').classList.remove('open')
+  document.getElementById('c-extras').style.display = 'none'
+  btn.textContent = 'Post'; btn.disabled = false
+}
+
+// ── EMOJI REACT ───────────────────────────────────────────────
+function reactEmoji(btn, postId, emoji) {
+  btn.style.transform = 'scale(1.5)'; setTimeout(()=>btn.style.transform='',300)
+  // Future: save reactions to DB
+}
+
+// ── SHARE POST ────────────────────────────────────────────────
+function sharePost(postId) {
+  const url = `${window.location.origin}/home.html?post=${postId}`
+  if (navigator.share) {
+    navigator.share({ title: 'GopexFund post', url })
+  } else {
+    navigator.clipboard?.writeText(url)
+    alert('Link copied to clipboard!')
+  }
+}
+
+// ── FEED TABS ─────────────────────────────────────────────────
+function switchFeed(t, btn) {
+  ['fy','fl','nw'].forEach(id => { const el=document.getElementById('feed-'+id); if(el) el.style.display=id===t?'block':'none' })
+  document.querySelectorAll('.ft').forEach(b => b.classList.remove('on')); btn.classList.add('on')
+  if (t === 'fl' && _sb) loadFollowingFeed()
+}
+
+async function loadFollowingFeed() {
+  if (!_session) return
+  const { data: follows } = await _sb.from('follows').select('following_id').eq('follower_id', _session.user.id)
+  if (!follows?.length) return
+  const ids = follows.map(f => f.following_id)
+  const { data: posts } = await _sb.from('posts')
+    .select('*, profiles(name,initials,is_verified,share_performance,portfolio_pct_gain,portfolio_pct_period)')
+    .in('user_id', ids).order('created_at', { ascending: false }).limit(20)
+  const feed = document.getElementById('feed-fl')
+  feed.innerHTML = ''
+  if (!posts?.length) {
+    feed.innerHTML = '<div style="padding:60px 20px;text-align:center;color:var(--tx3);"><div style="font-size:40px;margin-bottom:14px;">👥</div><div style="font-size:15px;font-weight:700;color:var(--tx2);">No posts yet from people you follow</div></div>'
+    return
+  }
+  posts.forEach(p => feed.appendChild(buildPostEl(p)))
+}
+
+// ── SPARKLINE ─────────────────────────────────────────────────
+;(function(){
+  const ctx = document.getElementById('spark-chart').getContext('2d')
+  new Chart(ctx, {type:'line',data:{labels:[1,2,3,4,5,6,7,8,9,10],datasets:[{data:[4200,4310,4280,4390,4510,4600,4700,4750,4800,4823],borderColor:'#1a6eff',borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:'rgba(26,110,255,.07)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}})
+})()
+
+// ── MISC ──────────────────────────────────────────────────────
+function autoH(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,180)+'px' }
+
+// Fallback nav from sessionStorage while Supabase loads
+;(function(){
+  const raw = sessionStorage.getItem('gopex_user'); if(!raw) return
+  const u = JSON.parse(raw)
+  document.querySelectorAll('#nav-av,#c-av').forEach(el=>{if(el)el.textContent=u.initials||'AO'})
+  const nn=document.getElementById('nav-name'); const pn=document.getElementById('ps-name')
+  if(nn) nn.textContent=u.firstName||'You'; if(pn) pn.textContent=u.firstName||'You'
+})()
+</script>
 
 // Load Supabase then init
 const sbScript = document.createElement('script')
