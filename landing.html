@@ -3,380 +3,261 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Velora — Social Wealth Building for Africans</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<title>GopexFund — Invest Smarter, Together</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
+:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--red:#dc2626;--amber:#d97706;--ambg:#fef3c7;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g600:#475569;--g900:#0f172a;--bg:#f0f4f9;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --g:#00D896;--gd:#00B07A;--gg:rgba(0,216,150,0.15);--gbr:rgba(0,216,150,0.28);
-  --gold:#F5C842;--red:#FF5C5C;--blue:#5B9CF6;
-  --dk:#080C10;--dk2:#0E141C;--dk3:#141E28;--dk4:#1C2A38;
-  --card:#111922;--tx:#EEF2F7;--tx2:#A8B8CC;--tx3:#607080;
-  --br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.13);
-  --fd:'Clash Display',sans-serif;--fb:'Satoshi',sans-serif;
-}
-*{font-family:var(--fb);}
-body{background:var(--dk);color:var(--tx);overflow-x:hidden;min-height:100vh;}
-
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(8,12,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--br);}
-.logo{font-family:var(--fd);font-size:24px;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer;}
-.logo-pulse{width:9px;height:9px;background:var(--g);border-radius:50%;animation:pulse 2.5s infinite;}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,216,150,0.4);}50%{box-shadow:0 0 0 8px rgba(0,216,150,0);}}
-.nav-links{display:flex;gap:32px;}
-.nav-links a{font-size:14px;color:var(--tx2);transition:color 0.2s;cursor:pointer;}
-.nav-links a:hover{color:var(--tx);}
-.nav-btns{display:flex;gap:10px;align-items:center;}
-.btn-ghost{background:transparent;border:1px solid var(--br2);color:var(--tx2);padding:9px 20px;border-radius:8px;font-size:13px;font-weight:500;transition:all 0.2s;}
-.btn-ghost:hover{border-color:var(--g);color:var(--g);}
-.btn-primary{background:var(--g);border:none;color:#080C10;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:700;transition:all 0.2s;}
-.btn-primary:hover{background:var(--gd);transform:translateY(-1px);}
-
-/* ── HERO SPLIT LAYOUT ── */
-.hero-wrap{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;}
-
-/* LEFT — visual side */
-.hero-visual{position:relative;background:var(--dk2);overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,216,150,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,216,150,0.04) 1px,transparent 1px);background-size:40px 40px;}
-.hero-glow{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(0,216,150,0.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-
-/* African investor photo mosaic */
-.photo-mosaic{position:relative;width:460px;height:560px;z-index:2;}
-.mosaic-card{position:absolute;border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.08);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
-.mc-1{width:200px;height:250px;top:20px;left:30px;animation:float1 6s ease-in-out infinite;}
-.mc-2{width:175px;height:210px;top:20px;right:20px;animation:float2 7s ease-in-out infinite;}
-.mc-3{width:190px;height:230px;bottom:30px;left:60px;animation:float1 8s ease-in-out infinite reverse;}
-.mc-4{width:165px;height:200px;bottom:40px;right:30px;animation:float2 5.5s ease-in-out infinite;}
-@keyframes float1{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
-@keyframes float2{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-
-/* Investor photo using gradient avatars with real-feeling faces */
-.photo-face{width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;position:relative;}
-.pf-bg{position:absolute;inset:0;}
-.pf-bg-1{background:linear-gradient(135deg,#1a3a28 0%,#2d6b48 40%,#1a3a28 100%);}
-.pf-bg-2{background:linear-gradient(135deg,#2a1f3a 0%,#5b3d7a 40%,#2a1f3a 100%);}
-.pf-bg-3{background:linear-gradient(135deg,#3a2010 0%,#8b5520 40%,#3a2010 100%);}
-.pf-bg-4{background:linear-gradient(135deg,#0a2a3a 0%,#1a5a7a 40%,#0a2a3a 100%);}
-.pf-silhouette{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:75%;opacity:0.9;}
-/* SVG person silhouettes embedded */
-.person-svg{width:100%;height:auto;}
-
-.pf-info{position:relative;z-index:2;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,0.85));}
-.pf-name{font-size:13px;font-weight:600;font-family:var(--fd);}
-.pf-stat{font-size:10px;color:var(--g);font-weight:500;}
-.pf-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(0,216,150,0.2);border:1px solid var(--gbr);border-radius:20px;padding:2px 7px;font-size:9px;color:var(--g);margin-top:3px;}
-
-/* Floating stat pills */
-.stat-pill{position:absolute;background:rgba(17,25,34,0.92);border:1px solid var(--br2);border-radius:12px;padding:8px 14px;backdrop-filter:blur(10px);z-index:4;animation:float2 4s ease-in-out infinite;}
-.sp-1{top:20%;left:-10px;}
-.sp-2{bottom:25%;right:-20px;animation-delay:1s;}
-.sp-3{top:55%;left:10px;animation-delay:2s;}
-.sp-label{font-size:10px;color:var(--tx3);}
-.sp-val{font-size:14px;font-weight:700;font-family:var(--fd);}
-
-/* Verified ring */
-.verified-ring{position:absolute;top:8px;right:8px;width:24px;height:24px;background:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;z-index:3;}
-
-/* RIGHT — auth side */
-.hero-auth{display:flex;align-items:center;justify-content:center;padding:100px 60px 60px;position:relative;}
-.auth-blob{position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(0,216,150,0.06) 0%,transparent 70%);pointer-events:none;}
-
-.auth-box{width:100%;max-width:420px;}
-.auth-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(0,216,150,0.1);border:1px solid var(--gbr);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--g);font-weight:500;margin-bottom:22px;}
-.auth-eyebrow span{width:5px;height:5px;background:var(--g);border-radius:50%;}
-.auth-h1{font-family:var(--fd);font-size:38px;font-weight:700;line-height:1.1;letter-spacing:-1.5px;margin-bottom:10px;}
-.auth-h1 em{font-style:normal;color:var(--g);}
-.auth-sub{font-size:15px;color:var(--tx2);line-height:1.6;margin-bottom:30px;}
-
-/* Tab switcher */
-.auth-tabs{display:flex;background:var(--dk3);border-radius:10px;padding:4px;margin-bottom:24px;}
-.auth-tab{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--tx2);transition:all 0.2s;}
-.auth-tab.active{background:var(--card);color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,0.3);}
-
-/* Form fields */
-.field{margin-bottom:14px;}
-.field label{display:block;font-size:11px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;}
-.field input{width:100%;background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:12px 16px;border-radius:10px;font-size:14px;outline:none;transition:border-color 0.2s;}
-.field input:focus{border-color:var(--g);}
+html,body{font-family:var(--fb);background:var(--white);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input{font-family:var(--fb);}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);height:60px;display:flex;align-items:center;padding:0 clamp(16px,4vw,48px);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1200px;margin:0 auto;gap:12px;}
+.logo{font-family:var(--fd);font-size:19px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.logo-mark{width:30px;height:30px;background:var(--p);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800;}
+.nav-links{display:flex;gap:2px;}
+.nlink{padding:7px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--tx2);transition:all .15s;}
+.nlink:hover{background:var(--g100);color:var(--tx);}
+.nav-btns{display:flex;gap:8px;}
+.btn-ghost{padding:8px 18px;border:1.5px solid var(--bdr);border-radius:9px;font-size:13px;font-weight:600;color:var(--tx2);background:var(--white);transition:all .15s;}
+.btn-ghost:hover{border-color:var(--p);color:var(--p);}
+.btn-cta{padding:8px 18px;background:var(--p);border:none;border-radius:9px;font-size:13px;font-weight:700;color:#fff;transition:all .15s;box-shadow:0 2px 12px rgba(26,110,255,.25);}
+.btn-cta:hover{background:var(--pdk);transform:translateY(-1px);}
+.burger{display:none;background:none;border:none;font-size:22px;color:var(--tx2);}
+.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px 14px;flex-direction:column;gap:3px;z-index:199;box-shadow:0 8px 24px rgba(0,0,0,.08);}
+.mob-nav.open{display:flex;}
+.mob-link{padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--tx2);}
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;padding:80px clamp(16px,4vw,48px) 60px;max-width:1200px;margin:0 auto;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--plt);border:1px solid var(--pbr);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--p);margin-bottom:20px;}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--p);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(26,110,255,.5);}50%{box-shadow:0 0 0 6px rgba(26,110,255,0);}}
+h1{font-family:var(--fd);font-size:clamp(30px,4.5vw,56px);font-weight:800;line-height:1.1;letter-spacing:-1.5px;color:var(--g900);margin-bottom:16px;}
+h1 span{color:var(--p);}
+.hero-sub{font-size:clamp(14px,1.8vw,17px);color:var(--tx2);line-height:1.7;max-width:480px;margin-bottom:28px;}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+.btn-big{padding:13px 28px;border-radius:10px;font-size:15px;font-weight:700;transition:all .2s;}
+.btn-big-p{background:var(--p);color:#fff;border:none;box-shadow:0 4px 18px rgba(26,110,255,.3);}
+.btn-big-p:hover{background:var(--pdk);transform:translateY(-2px);}
+.btn-big-s{background:var(--white);color:var(--tx);border:1.5px solid var(--bdr);}
+.btn-big-s:hover{border-color:var(--p);color:var(--p);}
+.hero-trust{display:flex;gap:24px;flex-wrap:wrap;}
+.trust-item{display:flex;flex-direction:column;}
+.trust-num{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--g900);}
+.trust-num em{color:var(--p);font-style:normal;}
+.trust-lbl{font-size:11px;color:var(--tx3);margin-top:1px;}
+/* Feature pills floating */
+.hero-visual{position:relative;height:460px;display:flex;align-items:center;justify-content:center;}
+.center-card{background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.10);width:220px;z-index:2;position:relative;}
+.cc-av{width:44px;height:44px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;margin-bottom:10px;}
+.cc-name{font-size:14px;font-weight:700;margin-bottom:2px;}
+.cc-role{font-size:11px;color:var(--tx3);margin-bottom:12px;}
+.cc-stat{background:var(--g50);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;margin-bottom:6px;}
+.cc-sl{font-size:10px;color:var(--tx3);}
+.cc-sv{font-size:13px;font-weight:700;}
+.cc-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-top:6px;}
+.verified{background:var(--gbg);color:var(--green);}
+.float-card{position:absolute;background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.10);z-index:3;}
+.fc1{top:20px;left:-10px;animation:fc 6s ease-in-out infinite;}
+.fc2{top:20px;right:-10px;animation:fc 7s ease-in-out infinite .5s;}
+.fc3{bottom:60px;left:0;animation:fc 5s ease-in-out infinite 1s;}
+.fc4{bottom:40px;right:-5px;animation:fc 6.5s ease-in-out infinite 1.5s;}
+@keyframes fc{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.fc-lbl{font-size:10px;color:var(--tx3);}
+.fc-val{font-size:13px;font-weight:800;margin-top:2px;}
+.fc-val.up{color:var(--green);}
+.fc-val.dn{color:var(--red);}
+/* AUTH CARD */
+.auth-card{background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:28px;box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.auth-tabs{display:flex;background:var(--g100);border-radius:10px;padding:3px;gap:3px;margin-bottom:22px;}
+.atab{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--tx3);transition:all .18s;}
+.atab.on{background:var(--white);color:var(--tx);box-shadow:0 1px 4px rgba(0,0,0,.10);}
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.field input{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:10px 13px;border-radius:9px;font-size:14px;outline:none;transition:border-color .18s;}
+.field input:focus{border-color:var(--p);background:var(--white);}
 .field input::placeholder{color:var(--tx3);}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-
-/* Submit btn */
-.auth-submit{width:100%;background:var(--g);border:none;color:#080C10;padding:14px;border-radius:10px;font-size:15px;font-weight:700;margin-top:6px;transition:all 0.2s;letter-spacing:0.2px;}
-.auth-submit:hover{background:var(--gd);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,216,150,0.3);}
-
-.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--tx3);font-size:12px;}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--br2);}
-
-.oauth-row{display:flex;gap:10px;}
-.oauth-btn{flex:1;background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:11px;border-radius:10px;font-size:13px;font-weight:500;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.oauth-btn:hover{border-color:var(--br2);background:var(--dk4);}
-.oauth-icon{font-size:16px;}
-
-.auth-terms{font-size:11px;color:var(--tx3);text-align:center;margin-top:16px;line-height:1.6;}
-.auth-terms a{color:var(--g);}
-
-/* Stats bar below nav */
-.trust-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(14,20,28,0.85);border-top:1px solid var(--br);backdrop-filter:blur(10px);padding:14px 48px;display:flex;justify-content:center;gap:60px;z-index:3;}
-.tb-item{text-align:center;}
-.tb-num{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--tx);}
-.tb-num span{color:var(--g);}
-.tb-label{font-size:11px;color:var(--tx3);margin-top:1px;}
-
-/* MOBILE */
-@media(max-width:900px){
-  nav{padding:16px 20px;}
-  .nav-links{display:none;}
-  .hero-wrap{grid-template-columns:1fr;}
-  .hero-visual{display:none;}
-  .hero-auth{padding:100px 24px 60px;}
-  .auth-h1{font-size:28px;}
-  .trust-bar{display:none;}
-}
-
-/* Animations */
-.fade-up{opacity:0;transform:translateY(20px);animation:fadeUp 0.6s forwards;}
-@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
-.delay-1{animation-delay:0.15s;}
-.delay-2{animation-delay:0.3s;}
-.delay-3{animation-delay:0.45s;}
-.delay-4{animation-delay:0.6s;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.auth-btn{width:100%;background:var(--p);border:none;color:#fff;padding:13px;border-radius:10px;font-size:15px;font-weight:700;margin-top:4px;transition:all .2s;box-shadow:0 3px 12px rgba(26,110,255,.25);}
+.auth-btn:hover{background:var(--pdk);transform:translateY(-1px);}
+.or-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--tx3);margin:14px 0;}
+.or-row::before,.or-row::after{content:'';flex:1;height:1px;background:var(--bdr);}
+.oauth{display:flex;gap:8px;}
+.oauth-btn{flex:1;background:var(--white);border:1.5px solid var(--bdr);color:var(--tx);padding:9px;border-radius:9px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;}
+.oauth-btn:hover{border-color:var(--p);color:var(--p);}
+.auth-terms{font-size:11px;color:var(--tx3);text-align:center;margin-top:12px;line-height:1.6;}
+.auth-terms a{color:var(--p);}
+/* FEATURES */
+.features{background:var(--g50);padding:72px clamp(16px,4vw,48px);border-top:1px solid var(--bdr);}
+.features-wrap{max-width:1200px;margin:0 auto;}
+.section-label{display:inline-flex;align-items:center;gap:6px;background:var(--plt);color:var(--p);border:1px solid var(--pbr);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;margin-bottom:14px;}
+.section-h{font-family:var(--fd);font-size:clamp(24px,3vw,38px);font-weight:800;letter-spacing:-.8px;color:var(--g900);margin-bottom:10px;}
+.section-sub{font-size:16px;color:var(--tx2);max-width:500px;line-height:1.6;margin-bottom:44px;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.feat{background:var(--white);border:1px solid var(--bdr);border-radius:16px;padding:22px;transition:all .2s;}
+.feat:hover{box-shadow:0 4px 20px rgba(0,0,0,.08);transform:translateY(-3px);border-color:var(--g300);}
+.feat-ico{width:44px;height:44px;border-radius:11px;background:var(--plt);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+.feat-title{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--g900);margin-bottom:6px;}
+.feat-desc{font-size:13px;color:var(--tx2);line-height:1.6;}
+/* FOOTER */
+footer{background:var(--g900);color:var(--g500);padding:40px clamp(16px,4vw,48px);}
+.footer-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+/* RESPONSIVE */
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:80px;gap:32px;}.nav-links,.nav-btns{display:none;}.burger{display:block;}.hero-visual{height:220px;}.fc3,.fc4{display:none;}.center-card{width:180px;padding:14px;}.fc1{top:10px;left:0;}.fc2{top:10px;right:0;}}
+@media(max-width:600px){.hero{padding:80px 16px 40px;}.hero-cta{flex-direction:column;}.btn-big{width:100%;text-align:center;}.hero-trust{gap:16px;}.features{padding:52px 16px;}.feat-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:420px){.feat-grid{grid-template-columns:1fr;}.auth-card{padding:20px;}.row2{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav id="landing-nav">
-  <div class="logo" onclick="goTo('landing')">
-    <div class="logo-pulse"></div>
-    Velora
-  </div>
-  <div class="nav-links">
-    <a onclick="goTo('about')">About us</a>
-    <a onclick="goTo('market')">Market</a>
-    <a onclick="goTo('learn')">Learn</a>
-  </div>
-  <div class="nav-btns">
-    <button class="btn-ghost" onclick="document.getElementById('auth-tab-login').click()">Log in</button>
-    <button class="btn-primary" onclick="document.getElementById('auth-tab-signup').click()">Get started free</button>
+<nav>
+  <div class="nav-in">
+    <div class="logo"><div class="logo-mark">G</div>GopexFund</div>
+    <div class="nav-links">
+      <a href="about.html" class="nlink">About</a>
+      <a href="market.html" class="nlink">Markets</a>
+      <a href="learn.html" class="nlink">Learn</a>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-ghost" onclick="switchTab('login')">Log in</button>
+      <button class="btn-cta" onclick="switchTab('signup');document.getElementById('auth').scrollIntoView({behavior:'smooth'})">Get started free</button>
+    </div>
+    <button class="burger" onclick="document.getElementById('mnav').classList.toggle('open')">☰</button>
   </div>
 </nav>
+<div class="mob-nav" id="mnav">
+  <a href="about.html" class="mob-link">About</a>
+  <a href="market.html" class="mob-link">Markets</a>
+  <a href="learn.html" class="mob-link">Learn</a>
+  <a href="#auth" class="mob-link" style="color:var(--p);font-weight:600;" onclick="document.getElementById('mnav').classList.remove('open')">→ Sign up free</a>
+</div>
 
-<!-- HERO -->
-<div class="hero-wrap">
-
-  <!-- LEFT: Visual -->
-  <div class="hero-visual">
-    <div class="hero-bg-grid"></div>
-    <div class="hero-glow"></div>
-
-    <div class="photo-mosaic">
-      <!-- Card 1 — Female investor, green theme -->
-      <div class="mosaic-card mc-1">
-        <div class="photo-face">
-          <div class="pf-bg pf-bg-1"></div>
-          <svg class="pf-silhouette person-svg" viewBox="0 0 160 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="80" cy="60" rx="34" ry="38" fill="#1a5c3a" opacity="0.9"/>
-            <circle cx="80" cy="55" r="28" fill="#2d7a52"/>
-            <path d="M30 260 Q50 160 80 150 Q110 160 130 260Z" fill="#1a5c3a" opacity="0.95"/>
-            <path d="M50 180 Q80 165 110 180 L115 260 L45 260Z" fill="#245c3e"/>
-            <ellipse cx="80" cy="52" rx="22" ry="26" fill="#c8956a"/>
-            <ellipse cx="73" cy="48" rx="4" ry="5" fill="#8B5E3C"/>
-            <ellipse cx="87" cy="48" rx="4" ry="5" fill="#8B5E3C"/>
-            <path d="M70 60 Q80 67 90 60" stroke="#7a4a2a" stroke-width="1.5" fill="none"/>
-            <path d="M56 35 Q80 20 104 35 Q108 55 104 58 Q80 48 56 58 Q52 55 56 35Z" fill="#1a3a20" opacity="0.85"/>
-          </svg>
-          <div class="verified-ring">✓</div>
-          <div class="pf-info">
-            <div class="pf-name">Amara Osei</div>
-            <div class="pf-stat">+34.2% portfolio return</div>
-            <div class="pf-badge">✓ Verified Investor</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2 — Male investor, purple theme -->
-      <div class="mosaic-card mc-2">
-        <div class="photo-face">
-          <div class="pf-bg pf-bg-2"></div>
-          <svg class="pf-silhouette person-svg" viewBox="0 0 160 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="80" cy="58" rx="32" ry="36" fill="#3a2a5a" opacity="0.9"/>
-            <circle cx="80" cy="53" r="26" fill="#5a3d80"/>
-            <path d="M28 260 Q48 155 80 145 Q112 155 132 260Z" fill="#3a2a5a" opacity="0.95"/>
-            <ellipse cx="80" cy="50" rx="20" ry="24" fill="#a0714a"/>
-            <ellipse cx="73" cy="47" rx="3.5" ry="4.5" fill="#6b4a2a"/>
-            <ellipse cx="87" cy="47" rx="3.5" ry="4.5" fill="#6b4a2a"/>
-            <path d="M72 60 Q80 66 88 60" stroke="#6b4a2a" stroke-width="1.5" fill="none"/>
-            <path d="M58 32 Q80 24 102 32 Q106 36 80 33 Q54 36 58 32Z" fill="#2a1a4a"/>
-          </svg>
-          <div class="verified-ring">✓</div>
-          <div class="pf-info">
-            <div class="pf-name">Kwame Asante</div>
-            <div class="pf-stat">+28.7% YTD</div>
-            <div class="pf-badge">✓ Top Investor</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 — Female investor, brown/amber theme -->
-      <div class="mosaic-card mc-3">
-        <div class="photo-face">
-          <div class="pf-bg pf-bg-3"></div>
-          <svg class="pf-silhouette person-svg" viewBox="0 0 160 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M28 260 Q48 158 80 148 Q112 158 132 260Z" fill="#6b3510" opacity="0.95"/>
-            <circle cx="80" cy="55" r="27" fill="#8b4a18"/>
-            <ellipse cx="80" cy="52" rx="21" ry="25" fill="#b8845a"/>
-            <ellipse cx="73" cy="48" rx="4" ry="5" fill="#7a4a28"/>
-            <ellipse cx="87" cy="48" rx="4" ry="5" fill="#7a4a28"/>
-            <path d="M72 62 Q80 68 88 62" stroke="#7a4a28" stroke-width="1.5" fill="none"/>
-            <path d="M54 30 Q60 24 80 22 Q100 24 106 30 Q110 60 106 62 Q80 54 54 62 Q50 60 54 30Z" fill="#5a2808" opacity="0.9"/>
-          </svg>
-          <div class="verified-ring">✓</div>
-          <div class="pf-info">
-            <div class="pf-name">Ngozi Eze</div>
-            <div class="pf-stat">+41.5% all time</div>
-            <div class="pf-badge">✓ Elite Investor</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4 — Male investor, blue theme -->
-      <div class="mosaic-card mc-4">
-        <div class="photo-face">
-          <div class="pf-bg pf-bg-4"></div>
-          <svg class="pf-silhouette person-svg" viewBox="0 0 160 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="80" cy="55" r="28" fill="#1a4a6a"/>
-            <path d="M30 260 Q50 158 80 148 Q110 158 130 260Z" fill="#0a2a4a" opacity="0.95"/>
-            <ellipse cx="80" cy="52" rx="22" ry="26" fill="#9a6a40"/>
-            <ellipse cx="73" cy="48" rx="4" ry="5" fill="#6a4020"/>
-            <ellipse cx="87" cy="48" rx="4" ry="5" fill="#6a4020"/>
-            <path d="M72 62 Q80 68 88 62" stroke="#6a4020" stroke-width="1.5" fill="none"/>
-            <rect x="56" y="26" width="48" height="28" rx="4" fill="#0a2a4a"/>
-          </svg>
-          <div class="verified-ring">✓</div>
-          <div class="pf-info">
-            <div class="pf-name">Kunle Adeyemi</div>
-            <div class="pf-stat">+22.4% this month</div>
-            <div class="pf-badge">✓ Verified</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Floating stat pills -->
-      <div class="stat-pill sp-1">
-        <div class="sp-label">NGX All-Share</div>
-        <div class="sp-val" style="color:var(--g);">+3.8% ↑</div>
-      </div>
-      <div class="stat-pill sp-2">
-        <div class="sp-label">Active investors</div>
-        <div class="sp-val">47,<span style="color:var(--g);">000+</span></div>
-      </div>
-      <div class="stat-pill sp-3">
-        <div class="sp-label">Assets tracked</div>
-        <div class="sp-val">₦<span style="color:var(--g);">2.3B</span></div>
-      </div>
+<div class="hero">
+  <!-- LEFT -->
+  <div>
+    <div class="hero-eyebrow"><span class="pulse"></span>Africa's #1 Social Investing Platform</div>
+    <h1>Build wealth <span>together</span>, invest smarter.</h1>
+    <p class="hero-sub">Join 47,000+ Africans tracking portfolios, sharing investment insights, and growing real wealth — all in one beautifully simple platform.</p>
+    <div class="hero-cta">
+      <button class="btn-big btn-big-p" onclick="switchTab('signup');document.getElementById('auth').scrollIntoView({behavior:'smooth'})">Create free account →</button>
+      <button class="btn-big btn-big-s" onclick="window.location='market.html'">Explore NGX market</button>
     </div>
-
-    <!-- Trust bar -->
-    <div class="trust-bar">
-      <div class="tb-item"><div class="tb-num"><span>47K+</span></div><div class="tb-label">Active investors</div></div>
-      <div class="tb-item"><div class="tb-num">₦<span>2.3B</span></div><div class="tb-label">Assets tracked</div></div>
-      <div class="tb-item"><div class="tb-num"><span>96%</span></div><div class="tb-label">Satisfaction rate</div></div>
-      <div class="tb-item"><div class="tb-num"><span>4.9</span>★</div><div class="tb-label">App rating</div></div>
+    <div class="hero-trust">
+      <div class="trust-item"><div class="trust-num"><em>47K+</em></div><div class="trust-lbl">Active investors</div></div>
+      <div class="trust-item"><div class="trust-num">₦<em>2.3B</em></div><div class="trust-lbl">Assets tracked</div></div>
+      <div class="trust-item"><div class="trust-num"><em>96%</em></div><div class="trust-lbl">Satisfaction rate</div></div>
+      <div class="trust-item"><div class="trust-num"><em>4.9</em>★</div><div class="trust-lbl">App rating</div></div>
     </div>
   </div>
 
-  <!-- RIGHT: Auth box -->
-  <div class="hero-auth">
-    <div class="auth-blob"></div>
-    <div class="auth-box">
-      <div class="auth-eyebrow fade-up"><span></span> Africa's #1 Social Investing App</div>
-      <h1 class="auth-h1 fade-up delay-1">Build wealth <em>together</em>,<br>invest smarter.</h1>
-      <p class="auth-sub fade-up delay-2">Join 47,000+ Africans tracking portfolios, sharing insights, and growing money — all in one social platform built for you.</p>
-
-      <!-- Tab switcher -->
-      <div class="auth-tabs fade-up delay-3">
-        <button class="auth-tab active" id="auth-tab-signup" onclick="switchTab('signup')">Create account</button>
-        <button class="auth-tab" id="auth-tab-login" onclick="switchTab('login')">Log in</button>
+  <!-- RIGHT: AUTH on mobile; visual + auth stacked on desktop -->
+  <div id="auth">
+    <!-- Floating visual (hidden on small screens, shown above auth on large) -->
+    <div class="hero-visual" style="margin-bottom:24px;display:none;" id="hero-vis">
+      <div class="center-card">
+        <div class="cc-av">KA</div>
+        <div class="cc-name">Kunle Adeyemi</div>
+        <div class="cc-role">NGX investor · +34.2% YTD</div>
+        <div class="cc-stat"><span class="cc-sl">Portfolio</span><span class="cc-sv" style="color:var(--p);">₦5.1M</span></div>
+        <div class="cc-stat"><span class="cc-sl">Return (1Y)</span><span class="cc-sv" style="color:var(--green);">+₦1.4M</span></div>
+        <div class="cc-badge verified">✓ Verified Portfolio</div>
       </div>
+      <div class="float-card fc1"><div class="fc-lbl">MTNN</div><div class="fc-val up">+6.52% ↑</div></div>
+      <div class="float-card fc2"><div class="fc-lbl">NGX ASI</div><div class="fc-val up">252,508 ATH</div></div>
+      <div class="float-card fc3"><div class="fc-lbl">BUA Cement</div><div class="fc-val up">+2.36%</div></div>
+      <div class="float-card fc4"><div class="fc-lbl">ZENITHBANK</div><div class="fc-val dn">-8.66%</div></div>
+    </div>
 
-      <!-- SIGNUP FORM -->
-      <div id="signup-form" class="fade-up delay-4">
-        <div class="field-row">
-          <div class="field"><label>First name</label><input type="text" id="s-fname" placeholder="Adaeze"/></div>
-          <div class="field"><label>Last name</label><input type="text" id="s-lname" placeholder="Okonkwo"/></div>
-        </div>
-        <div class="field"><label>Email address</label><input type="email" id="s-email" placeholder="you@example.com"/></div>
-        <div class="field"><label>Password</label><input type="password" id="s-pass" placeholder="Min. 8 characters"/></div>
-        <button class="auth-submit" onclick="doSignup()">Create my free account →</button>
-        <div class="divider">or sign up with</div>
-        <div class="oauth-row">
-          <button class="oauth-btn"><span class="oauth-icon">G</span> Google</button>
-          <button class="oauth-btn"><span class="oauth-icon">🍎</span> Apple</button>
-        </div>
-        <div class="auth-terms">By creating an account, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</div>
+    <!-- Auth card -->
+    <div class="auth-card">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:3px;">Welcome to GopexFund</div>
+        <div style="font-size:12px;color:var(--tx3);">Free forever · No credit card needed</div>
       </div>
-
-      <!-- LOGIN FORM -->
-      <div id="login-form" class="hidden fade-up delay-4">
-        <div class="field"><label>Email address</label><input type="email" id="l-email" placeholder="you@example.com"/></div>
-        <div class="field"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••"/></div>
-        <div style="text-align:right;margin-bottom:14px;"><a href="#" style="font-size:12px;color:var(--g);">Forgot password?</a></div>
-        <button class="auth-submit" onclick="doLogin()">Log in to my account →</button>
-        <div class="divider">or continue with</div>
-        <div class="oauth-row">
-          <button class="oauth-btn"><span class="oauth-icon">G</span> Google</button>
-          <button class="oauth-btn"><span class="oauth-icon">🍎</span> Apple</button>
+      <div class="auth-tabs">
+        <button class="atab on" id="tab-su" onclick="switchTab('signup')">Create account</button>
+        <button class="atab" id="tab-li" onclick="switchTab('login')">Log in</button>
+      </div>
+      <!-- SIGNUP -->
+      <div id="form-su">
+        <div class="row2">
+          <div class="field"><label>First name</label><input id="su-fn" type="text" placeholder="Adaeze"/></div>
+          <div class="field"><label>Last name</label><input id="su-ln" type="text" placeholder="Obi"/></div>
+        </div>
+        <div class="field"><label>Email</label><input id="su-em" type="email" placeholder="you@example.com"/></div>
+        <div class="field"><label>Password</label><input id="su-pw" type="password" placeholder="Min. 8 characters"/></div>
+        <button class="auth-btn" onclick="doSignup()">Create my account →</button>
+        <div class="or-row">or continue with</div>
+        <div class="oauth">
+          <button class="oauth-btn">G Google</button>
+          <button class="oauth-btn">🍎 Apple</button>
+        </div>
+        <div class="auth-terms">By signing up you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></div>
+      </div>
+      <!-- LOGIN -->
+      <div id="form-li" style="display:none;">
+        <div class="field"><label>Email</label><input id="li-em" type="email" placeholder="you@example.com"/></div>
+        <div class="field"><label>Password</label><input id="li-pw" type="password" placeholder="••••••••"/></div>
+        <div style="text-align:right;margin-bottom:12px;"><a href="#" style="font-size:12px;color:var(--p);">Forgot password?</a></div>
+        <button class="auth-btn" onclick="doLogin()">Log in to GopexFund →</button>
+        <div class="or-row">or continue with</div>
+        <div class="oauth">
+          <button class="oauth-btn">G Google</button>
+          <button class="oauth-btn">🍎 Apple</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<div class="features">
+  <div class="features-wrap">
+    <div class="section-label">✦ Platform Features</div>
+    <div class="section-h">Everything you need to invest smarter</div>
+    <div class="section-sub">Built for African investors — from first-timers to seasoned NGX traders.</div>
+    <div class="feat-grid">
+      <div class="feat"><div class="feat-ico">📈</div><div class="feat-title">Live NGX Market Data</div><div class="feat-desc">Real-time prices, Fear &amp; Greed Index, sector analysis, and top movers from the Nigerian Exchange.</div></div>
+      <div class="feat"><div class="feat-ico">💼</div><div class="feat-title">Portfolio Tracker</div><div class="feat-desc">Track holdings, P&amp;L by day/week/all-time, and connect your brokerage for a Verified portfolio badge.</div></div>
+      <div class="feat"><div class="feat-ico">👥</div><div class="feat-title">Social Investing Feed</div><div class="feat-desc">Follow top investors, share picks, post insights, and react — like Twitter built for African stocks.</div></div>
+      <div class="feat"><div class="feat-ico">🎯</div><div class="feat-title">Wealth Goals</div><div class="feat-desc">Set Japa Fund, House, Car goals and track monthly progress toward each milestone.</div></div>
+      <div class="feat"><div class="feat-ico">📚</div><div class="feat-title">Learn &amp; Earn Points</div><div class="feat-desc">Take bite-sized investing lessons, pass quizzes, and earn GopexFund Points redeemable for rewards.</div></div>
+      <div class="feat"><div class="feat-ico">✓</div><div class="feat-title">Verified Portfolios</div><div class="feat-desc">Connect a licensed Nigerian brokerage to earn a Verified badge — so followers know your returns are real.</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-in">
+    <div>
+      <div style="font-family:var(--fd);font-size:17px;font-weight:800;color:#fff;margin-bottom:4px;">GopexFund</div>
+      <div style="font-size:12px;">Africa's social wealth-building platform · Lagos, Nigeria</div>
+    </div>
+    <div style="font-size:12px;">© 2026 GopexFund · Built for African investors</div>
+  </div>
+</footer>
+
 <script>
-function switchTab(tab){
-  const isSignup = tab === 'signup';
-  document.getElementById('signup-form').classList.toggle('hidden', !isSignup);
-  document.getElementById('login-form').classList.toggle('hidden', isSignup);
-  document.getElementById('auth-tab-signup').classList.toggle('active', isSignup);
-  document.getElementById('auth-tab-login').classList.toggle('active', !isSignup);
-}
+// Show visual only on wide screens
+function checkVis(){document.getElementById('hero-vis').style.display=window.innerWidth>=900?'flex':'none';}
+checkVis();window.addEventListener('resize',checkVis);
 
+function switchTab(t){
+  const su=t==='signup';
+  document.getElementById('form-su').style.display=su?'block':'none';
+  document.getElementById('form-li').style.display=su?'none':'block';
+  document.getElementById('tab-su').classList.toggle('on',su);
+  document.getElementById('tab-li').classList.toggle('on',!su);
+}
 function doSignup(){
-  const fname = document.getElementById('s-fname').value.trim() || 'Adaeze';
-  const lname = document.getElementById('s-lname').value.trim() || 'Okonkwo';
-  sessionStorage.setItem('velora_user', JSON.stringify({
-    name: fname + ' ' + lname,
-    firstName: fname,
-    initials: (fname[0]||'A') + (lname[0]||'O'),
-    email: document.getElementById('s-email').value || 'user@example.com',
-    color: 'green',
-    joined: new Date().toLocaleDateString('en-NG',{month:'long',year:'numeric'})
-  }));
-  window.location.href = 'home.html';
+  const fn=(document.getElementById('su-fn').value.trim()||'Adaeze');
+  const ln=(document.getElementById('su-ln').value.trim()||'Obi');
+  sessionStorage.setItem('gopex_user',JSON.stringify({name:fn+' '+ln,firstName:fn,initials:(fn[0]||'A').toUpperCase()+(ln[0]||'O').toUpperCase(),email:document.getElementById('su-em').value||'user@gopexfund.com',joined:new Date().toLocaleDateString('en-NG',{month:'long',year:'numeric'})}));
+  window.location.href='home.html';
 }
-
 function doLogin(){
-  const email = document.getElementById('l-email').value || 'demo@velora.ng';
-  sessionStorage.setItem('velora_user', JSON.stringify({
-    name: 'Adaeze Okonkwo', firstName:'Adaeze', initials:'AO',
-    email, color:'green',
-    joined:'January 2024'
-  }));
-  window.location.href = 'home.html';
+  sessionStorage.setItem('gopex_user',JSON.stringify({name:'Adaeze Obi',firstName:'Adaeze',initials:'AO',email:document.getElementById('li-em').value||'demo@gopexfund.com',joined:'January 2024'}));
+  window.location.href='home.html';
 }
-
-function goTo(page){ window.location.href = page + '.html'; }
-
-// Enter key support
-document.addEventListener('keydown', e => {
-  if(e.key === 'Enter'){
-    const sf = document.getElementById('signup-form');
-    if(!sf.classList.contains('hidden')) doSignup();
-    else doLogin();
-  }
-});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){document.getElementById('form-su').style.display!=='none'?doSignup():doLogin();}});
 </script>
 </body>
 </html>

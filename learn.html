@@ -2,180 +2,228 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Velora — Learn & Earn</title>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<title>GopexFund — Learn & Earn</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--g:#00D896;--gd:#00B07A;--gg:rgba(0,216,150,0.13);--gbr:rgba(0,216,150,0.28);--gold:#F5C842;--red:#FF5C5C;--blue:#5B9CF6;--dk:#080C10;--dk2:#0E141C;--dk3:#141E28;--dk4:#1C2A38;--card:#111922;--tx:#EEF2F7;--tx2:#A8B8CC;--tx3:#607080;--br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.11);--fd:'Clash Display',sans-serif;--fb:'Satoshi',sans-serif;}
-*{margin:0;padding:0;box-sizing:border-box;font-family:var(--fb);}
-body{background:var(--dk);color:var(--tx);min-height:100vh;}
-a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}
-.pg{padding:84px 32px 48px;max-width:1100px;margin:0 auto;}
-.lcard{background:var(--card);border:1px solid var(--br2);border-radius:14px;padding:20px;margin-bottom:12px;cursor:pointer;transition:border-color 0.18s;}
-.lcard:hover{border-color:rgba(255,255,255,0.18);}
-.lcard.done{border-left:3px solid var(--g);}
-.lcard.active{border-color:var(--gbr);background:rgba(0,216,150,0.03);}
+:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--red:#dc2626;--rbg:#fee2e2;--amber:#d97706;--ambg:#fef3c7;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);}
+*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 24px;gap:12px;}
+.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;}.logo-mark{width:29px;height:29px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
+.nav-links{display:flex;gap:2px;}.nl{padding:7px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;transition:all .15s;}.nl:hover{background:var(--g100);color:var(--tx);}.nl.on{background:var(--plt);color:var(--p);font-weight:600;}
+.nav-r{display:flex;align-items:center;gap:8px;}.nav-prof{display:flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--bdr);border-radius:10px;padding:4px 12px 4px 5px;text-decoration:none;}.nav-av{width:28px;height:28px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.burger{display:none;background:none;border:none;font-size:22px;color:var(--g500);cursor:pointer;padding:4px;}
+.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px 14px;flex-direction:column;gap:4px;z-index:299;box-shadow:var(--shm);}
+.mob-nav.open{display:flex;}.mob-link{padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}.mob-link.on{color:var(--p);background:var(--plt);font-weight:600;}
+/* PAGE */
+.pg{padding:74px clamp(12px,3vw,24px) 60px;max-width:1100px;margin:0 auto;}
+/* Hero strip */
+.hero-strip{background:linear-gradient(135deg,var(--p) 0%,#7c3aed 100%);border-radius:16px;padding:24px 28px;color:#fff;display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:16px;}
+.hs-pts{font-family:var(--fd);font-size:32px;font-weight:800;margin-bottom:3px;}
+.hs-lbl{font-size:11px;opacity:.75;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.hs-sub{font-size:13px;opacity:.8;margin-bottom:6px;}
+.streak-pill{background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;display:inline-block;}
+.hs-right{text-align:right;}
+.goal-lbl{font-size:11px;opacity:.7;margin-bottom:3px;}
+.goal-val{font-family:var(--fd);font-size:20px;font-weight:800;margin-bottom:6px;}
+.goal-bar{background:rgba(255,255,255,.2);border-radius:4px;height:5px;width:130px;overflow:hidden;margin-left:auto;}
+.goal-fill{height:100%;background:#fff;border-radius:4px;}
+/* Layout */
+.layout{display:grid;grid-template-columns:1fr 252px;gap:18px;}
+/* Lesson card */
+.lcard{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:18px;margin-bottom:11px;cursor:pointer;transition:all .18s;box-shadow:var(--sh);}
+.lcard:hover{box-shadow:var(--shm);border-color:var(--g300);}
+.lcard.done{border-left:3px solid var(--green);}
+.lcard.active{border-color:var(--pbr);background:var(--plt);}
+.lc-head{display:flex;align-items:center;gap:12px;margin-bottom:9px;}
+.lc-ico{font-size:22px;}
+.lc-name{font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:2px;}
+.lc-sub{font-size:11px;color:var(--tx3);}
+.lc-pills{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
+.pill{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;}
+.pill-beg{background:var(--gbg);color:var(--green);}
+.pill-int{background:var(--ambg);color:var(--amber);}
+.pill-tag{background:var(--g100);color:var(--g500);}
+.lc-foot{display:flex;justify-content:space-between;align-items:center;}
+.lc-mins{font-size:11px;color:var(--tx3);}
+.lc-pts{font-size:11px;color:var(--amber);font-weight:700;}
+.lc-done{font-size:11px;color:var(--green);font-weight:700;}
+/* Quiz */
+.quiz-wrap{background:var(--g50);border:1px solid var(--bdr);border-radius:11px;padding:16px;margin-top:14px;display:none;}
+.quiz-wrap.open{display:block;}
+.quiz-label{font-size:10px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.quiz-text{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:14px;}
+.quiz-q{font-size:13px;font-weight:700;margin-bottom:12px;}
+.quiz-opts{display:flex;flex-direction:column;gap:7px;}
+.qopt{background:var(--white);border:1.5px solid var(--bdr);color:var(--tx);padding:10px 14px;border-radius:9px;font-size:13px;text-align:left;transition:all .18s;}
+.qopt:hover{border-color:var(--pbr);}
+.qopt.correct{background:var(--gbg);border-color:var(--gbr);color:var(--green);}
+.qopt.wrong{background:var(--rbg);border-color:#fca5a5;color:var(--red);}
+.quiz-fb{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:12px;display:none;}
+/* Section label */
+.sec-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin:20px 0 12px;}
+/* Right sidebar */
+.side-card{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:var(--sh);}
+.sc-title{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+.lb-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bdr);}
+.lb-row:last-child{border:none;}
+.lb-rank{font-size:11px;color:var(--tx3);width:20px;}
+.lb-name{font-size:12px;font-weight:600;flex:1;}
+.lb-pts{font-size:12px;color:var(--amber);font-weight:700;}
+.lb-you{background:var(--plt);border-radius:7px;padding:6px 8px;margin:0 -4px;}
+.bdg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.bdg{text-align:center;padding:8px 3px;border-radius:8px;background:var(--g50);}
+.bdg.earned{background:var(--gbg);border:1px solid var(--gbr);}
+.bdg-ico{font-size:16px;margin-bottom:2px;}
+.bdg-name{font-size:9px;color:var(--tx3);}
+.bdg.earned .bdg-name{color:var(--green);}
+@media(max-width:860px){.layout{grid-template-columns:1fr;}.nav-links{display:none;}.burger{display:block;}}
+@media(max-width:480px){.hero-strip{padding:18px;}.hs-right{display:none;}.pg{padding:74px 12px 60px;}}
 </style>
 </head>
 <body>
-<nav style="position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,12,16,0.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);">
-  <a href="landing.html" style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:7px;color:#EEF2F7;"><div style="width:7px;height:7px;background:#00D896;border-radius:50%;"></div>Velora</a>
-  <div style="display:flex;gap:2px;">
-    <a href="home.html" style="padding:7px 14px;border-radius:8px;font-size:13px;color:#A8B8CC;">🏠 Home</a>
-    <a href="market.html" style="padding:7px 14px;border-radius:8px;font-size:13px;color:#A8B8CC;">📈 Market</a>
-    <a href="portfolio.html" style="padding:7px 14px;border-radius:8px;font-size:13px;color:#A8B8CC;">💼 Portfolio</a>
-    <a href="learn.html" style="padding:7px 14px;border-radius:8px;font-size:13px;background:rgba(0,216,150,0.08);color:#00D896;">📚 Learn</a>
-    <a href="about.html" style="padding:7px 14px;border-radius:8px;font-size:13px;color:#A8B8CC;">ℹ️ About</a>
+<nav class="nav">
+  <div class="nav-in">
+    <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
+    <div class="nav-links">
+      <a href="home.html" class="nl">🏠 Home</a><a href="market.html" class="nl">📈 Market</a>
+      <a href="portfolio.html" class="nl">💼 Portfolio</a><a href="learn.html" class="nl on">📚 Learn</a>
+      <a href="about.html" class="nl">ℹ About</a>
+    </div>
+    <div class="nav-r">
+      <a href="profile.html" class="nav-prof"><div class="nav-av" id="nav-av">AO</div><span style="font-size:12px;font-weight:600;" id="nav-name">Adaeze</span></a>
+      <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
+    </div>
   </div>
-  <a href="profile.html" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:5px 10px 5px 5px;"><div id="nav-av" style="width:28px;height:28px;border-radius:50%;background:rgba(0,216,150,0.2);color:#00D896;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">AO</div><span id="nav-uname" style="font-size:12px;font-weight:500;color:#EEF2F7;">Adaeze</span></a>
 </nav>
-
+<div class="mob-nav" id="mn">
+  <a href="home.html" class="mob-link">🏠 Home</a><a href="market.html" class="mob-link">📈 Market</a>
+  <a href="portfolio.html" class="mob-link">💼 Portfolio</a><a href="learn.html" class="mob-link on">📚 Learn</a>
+</div>
 <div class="pg">
-  <!-- Hero -->
-  <div style="background:linear-gradient(135deg,rgba(0,216,150,0.08),rgba(91,156,246,0.06));border:1px solid var(--gbr);border-radius:20px;padding:28px 32px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;">
+  <div class="hero-strip">
     <div>
-      <div style="font-family:var(--fd);font-size:26px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;">Learn & Earn ⭐</div>
-      <div style="font-size:14px;color:var(--tx2);line-height:1.6;">Complete lessons, pass quizzes, earn Velora Points. Redeem for rewards and platform perks.</div>
+      <div class="hs-lbl">GopexFund Points</div>
+      <div class="hs-pts" id="pts-display">2,450 pts</div>
+      <div class="hs-sub">Your balance · Redeem for rewards</div>
+      <div class="streak-pill">🔥 5-day learning streak</div>
     </div>
-    <div style="text-align:right;">
-      <div style="font-family:var(--fd);font-size:32px;font-weight:700;color:var(--gold);" id="pts-display">2,450 pts</div>
-      <div style="font-size:12px;color:var(--tx3);">Your balance</div>
-      <div style="font-size:12px;color:var(--g);margin-top:4px;">🔥 5-day streak</div>
+    <div class="hs-right">
+      <div class="goal-lbl">Today's goal</div>
+      <div class="goal-val">2 / 3 lessons</div>
+      <div class="goal-bar"><div class="goal-fill" style="width:66%"></div></div>
     </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 280px;gap:20px;">
+  <div class="layout">
+    <!-- MAIN LESSONS -->
     <div>
-      <div style="font-size:12px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;">Continue learning</div>
+      <div class="sec-lbl">📖 Continue learning</div>
 
-      <!-- Lesson 1 — Active with quiz -->
-      <div class="lcard active" onclick="toggleLesson('l1')">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
-          <div style="font-size:26px;">📊</div>
-          <div style="flex:1;">
-            <div style="font-size:15px;font-weight:600;font-family:var(--fd);">What is a P/E ratio and why does it matter?</div>
-            <div style="font-size:12px;color:var(--tx3);">Understanding stock valuation fundamentals</div>
+      <div class="lcard active" onclick="toggleLesson('l1',this)">
+        <div class="lc-head"><div class="lc-ico">📊</div><div><div class="lc-name">What is a P/E ratio and why does it matter?</div><div class="lc-sub">Stock valuation fundamentals for NGX investors</div></div></div>
+        <div class="lc-pills"><span class="pill pill-beg">Beginner</span><span class="pill pill-tag">Stocks</span><span class="pill pill-tag">NGX</span></div>
+        <div class="lc-foot"><span class="lc-mins">⏱ 5 min</span><span class="lc-pts">+100 pts on completion</span></div>
+        <div class="quiz-wrap" id="l1">
+          <div class="quiz-label">📖 Quick lesson</div>
+          <div class="quiz-text">The <strong>Price-to-Earnings (P/E) ratio</strong> tells you how much investors pay for every ₦1 of a company's earnings. Formula: <strong>Share price ÷ Earnings per share</strong>.<br><br>If DANGCEM trades at ₦543 and earns ₦50/share, P/E = 10.86x. Nigerian banking stocks typically trade at 3–6x P/E — much lower than US tech at 20–50x. Always compare within the same sector.</div>
+          <div class="quiz-q">Quick quiz: If DANGCEM trades at ₦543 and earns ₦50 per share, what is the P/E ratio?</div>
+          <div class="quiz-opts">
+            <button class="qopt" onclick="answer(this,false,'l1-fb')">A. 50x — the earnings itself</button>
+            <button class="qopt" onclick="answer(this,true,'l1-fb')">B. 10.86x — price divided by earnings</button>
+            <button class="qopt" onclick="answer(this,false,'l1-fb')">C. 5x — half of share price</button>
+            <button class="qopt" onclick="answer(this,false,'l1-fb')">D. 100x — inverse of yield</button>
           </div>
-          <div style="font-size:11px;color:var(--gold);font-weight:600;white-space:nowrap;">+100 pts</div>
-        </div>
-        <div style="display:flex;gap:6px;margin-bottom:0;">
-          <span style="background:rgba(0,216,150,0.1);color:var(--g);font-size:10px;padding:3px 8px;border-radius:4px;">Beginner</span>
-          <span style="background:var(--dk3);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:4px;">Stocks</span>
-          <span style="background:var(--dk3);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:4px;">5 min</span>
-        </div>
-        <div id="l1" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--br);">
-          <div style="font-size:12px;color:var(--g);font-weight:600;margin-bottom:10px;">📖 Lesson</div>
-          <div style="font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:18px;">The <strong style="color:var(--tx);">Price-to-Earnings (P/E) ratio</strong> tells you how much investors are willing to pay for every ₦1 of a company's earnings. If a stock trades at ₦100 and earns ₦10 per share, its P/E is 10x.<br><br>A lower P/E often means the stock is cheaper relative to its earnings — common in value investing. Nigerian banking stocks like GTCO typically trade at 3–6x P/E, while high-growth US tech stocks can trade at 30–60x. Context matters — always compare P/E within the same sector.</div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Quick Quiz 🧠</div>
-          <div style="font-size:13px;color:var(--tx2);margin-bottom:12px;">If DANGCEM trades at ₦543 and earns ₦50 per share, what is its P/E ratio?</div>
-          <div id="quiz-1" style="display:flex;flex-direction:column;gap:8px;">
-            <button onclick="answerQuiz(1,'A','wrong')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;transition:all 0.18s;" class="qbtn-1">A. 50x</button>
-            <button onclick="answerQuiz(1,'B','correct')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;transition:all 0.18s;" class="qbtn-1">B. 10.86x</button>
-            <button onclick="answerQuiz(1,'C','wrong')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;transition:all 0.18s;" class="qbtn-1">C. 5x</button>
-            <button onclick="answerQuiz(1,'D','wrong')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;transition:all 0.18s;" class="qbtn-1">D. 100x</button>
-          </div>
-          <div id="quiz-feedback-1" style="display:none;margin-top:12px;padding:10px 14px;border-radius:8px;font-size:13px;"></div>
+          <div class="quiz-fb" id="l1-fb"></div>
         </div>
       </div>
 
-      <!-- Lesson 2 — Completed -->
       <div class="lcard done">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div style="font-size:26px;">💵</div>
-          <div style="flex:1;">
-            <div style="font-size:15px;font-weight:600;font-family:var(--fd);">Dollar-cost averaging (DCA) explained</div>
-            <div style="font-size:12px;color:var(--tx3);">The strategy used by Nigeria's top investors</div>
-          </div>
-          <div style="font-size:11px;color:var(--g);font-weight:600;">✓ +100 pts earned</div>
-        </div>
+        <div class="lc-head"><div class="lc-ico">💵</div><div><div class="lc-name">Dollar-cost averaging (DCA) explained</div><div class="lc-sub">The strategy used by top Nigerian investors</div></div></div>
+        <div class="lc-pills"><span class="pill pill-beg">Beginner</span><span class="pill pill-tag">Strategy</span></div>
+        <div class="lc-foot"><span class="lc-mins">⏱ 4 min</span><span class="lc-done">✓ Completed · +100 pts earned</span></div>
       </div>
 
-      <!-- Lesson 3 — Completed -->
       <div class="lcard done">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div style="font-size:26px;">🏦</div>
-          <div style="flex:1;">
-            <div style="font-size:15px;font-weight:600;font-family:var(--fd);">How Nigerian bank stocks pay dividends</div>
-            <div style="font-size:12px;color:var(--tx3);">GTCO, Zenith, Access — dividend investing 101</div>
+        <div class="lc-head"><div class="lc-ico">🏦</div><div><div class="lc-name">How Nigerian bank stocks pay dividends</div><div class="lc-sub">GTCO, Zenith, Access — dividend investing 101</div></div></div>
+        <div class="lc-pills"><span class="pill pill-beg">Beginner</span><span class="pill pill-tag">Dividends</span><span class="pill pill-tag">NGX</span></div>
+        <div class="lc-foot"><span class="lc-mins">⏱ 6 min</span><span class="lc-done">✓ Completed · +100 pts earned</span></div>
+      </div>
+
+      <div class="sec-lbl">🚀 Up next</div>
+
+      <div class="lcard" onclick="toggleLesson('l4',this)">
+        <div class="lc-head"><div class="lc-ico">🌍</div><div><div class="lc-name">Investing in US stocks from Nigeria — full guide</div><div class="lc-sub">Bamboo, Risevest &amp; what the CBN rules mean for you</div></div></div>
+        <div class="lc-pills"><span class="pill pill-int">Intermediate</span><span class="pill pill-tag">US Stocks</span><span class="pill pill-tag">Dollar</span></div>
+        <div class="lc-foot"><span class="lc-mins">⏱ 8 min</span><span class="lc-pts">+150 pts on completion</span></div>
+        <div class="quiz-wrap" id="l4">
+          <div class="quiz-label">📖 Quick lesson</div>
+          <div class="quiz-text">Nigerians can invest in US stocks through SEC-licensed platforms like <strong>Bamboo</strong>, <strong>Risevest</strong>, and <strong>Trove</strong>. You fund in naira; investments are held in USD — giving you a hedge against naira devaluation. The CBN allows individuals to invest up to $10,000/year through approved channels. Always check your platform is SEC-registered.</div>
+          <div class="quiz-q">Which is NOT a SEC-regulated platform for Nigerians investing in US stocks?</div>
+          <div class="quiz-opts">
+            <button class="qopt" onclick="answer(this,false,'l4-fb')">A. Bamboo</button>
+            <button class="qopt" onclick="answer(this,false,'l4-fb')">B. Risevest</button>
+            <button class="qopt" onclick="answer(this,true,'l4-fb')">C. Binance (for stocks)</button>
+            <button class="qopt" onclick="answer(this,false,'l4-fb')">D. Trove</button>
           </div>
-          <div style="font-size:11px;color:var(--g);font-weight:600;">✓ +100 pts earned</div>
+          <div class="quiz-fb" id="l4-fb"></div>
         </div>
       </div>
 
-      <div style="font-size:12px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:0.6px;margin:20px 0 14px;">Up next</div>
-
-      <!-- Lesson 4 -->
-      <div class="lcard" onclick="toggleLesson('l4')">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
-          <div style="font-size:26px;">🌍</div>
-          <div style="flex:1;">
-            <div style="font-size:15px;font-weight:600;font-family:var(--fd);">Investing in US stocks from Nigeria — full guide</div>
-            <div style="font-size:12px;color:var(--tx3);">Bamboo, Risevest & what the CBN rules mean for you</div>
-          </div>
-          <div style="font-size:11px;color:var(--gold);font-weight:600;white-space:nowrap;">+150 pts</div>
-        </div>
-        <div style="display:flex;gap:6px;">
-          <span style="background:rgba(245,200,66,0.1);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:4px;">Intermediate</span>
-          <span style="background:var(--dk3);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:4px;">US Stocks</span>
-          <span style="background:var(--dk3);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:4px;">8 min</span>
-        </div>
-        <div id="l4" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--br);">
-          <div style="font-size:12px;color:var(--g);font-weight:600;margin-bottom:10px;">📖 Lesson</div>
-          <div style="font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:18px;">Nigerians can invest in US stocks through regulated apps like <strong style="color:var(--tx);">Bamboo</strong>, <strong style="color:var(--tx);">Risevest</strong>, and <strong style="color:var(--tx);">Trove</strong>. You can fund in naira and your investments are denominated in USD — giving you a hedge against naira devaluation.<br><br>The CBN allows individuals to invest up to $10,000/year through approved channels. Gains and dividends are returned in USD to your wallet, and you can withdraw in naira at current rates.</div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Quick Quiz 🧠</div>
-          <div style="font-size:13px;color:var(--tx2);margin-bottom:12px;">Which is NOT a regulated platform for Nigerians to invest in US stocks?</div>
-          <div id="quiz-4" style="display:flex;flex-direction:column;gap:8px;">
-            <button onclick="answerQuiz(4,'A','wrong')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;" class="qbtn-4">A. Bamboo</button>
-            <button onclick="answerQuiz(4,'B','wrong')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;" class="qbtn-4">B. Risevest</button>
-            <button onclick="answerQuiz(4,'C','correct')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;" class="qbtn-4">C. Binance (for stocks)</button>
-            <button onclick="answerQuiz(4,'D','wrong')" style="background:var(--dk3);border:1px solid var(--br2);color:var(--tx);padding:10px 16px;border-radius:8px;font-size:13px;text-align:left;" class="qbtn-4">D. Trove</button>
-          </div>
-          <div id="quiz-feedback-4" style="display:none;margin-top:12px;padding:10px 14px;border-radius:8px;font-size:13px;"></div>
-        </div>
+      <div class="lcard">
+        <div class="lc-head"><div class="lc-ico">₿</div><div><div class="lc-name">Crypto for Nigerians — risks &amp; rewards</div><div class="lc-sub">Bitcoin, Ethereum, stablecoins in Nigerian context</div></div></div>
+        <div class="lc-pills"><span class="pill pill-int">Intermediate</span><span class="pill pill-tag">Crypto</span></div>
+        <div class="lc-foot"><span class="lc-mins">⏱ 7 min</span><span class="lc-pts">+150 pts</span></div>
       </div>
     </div>
 
-    <!-- Right sidebar -->
+    <!-- RIGHT SIDEBAR -->
     <div>
-      <!-- Leaderboard -->
-      <div style="background:var(--card);border:1px solid var(--br2);border-radius:14px;padding:16px;margin-bottom:14px;">
-        <div style="font-size:12px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;">🏆 Leaderboard</div>
-        <div id="lb"></div>
+      <div class="side-card">
+        <div class="sc-title">🏆 Leaderboard</div>
+        <div class="lb-row"><div class="lb-rank">🥇</div><div class="lb-name">Kunle A.</div><div class="lb-pts">4,200</div></div>
+        <div class="lb-row"><div class="lb-rank">🥈</div><div class="lb-name">Ngozi E.</div><div class="lb-pts">3,800</div></div>
+        <div class="lb-row lb-you"><div class="lb-rank">🏅</div><div class="lb-name" style="color:var(--p);font-weight:700;">You</div><div class="lb-pts" id="lb-pts">2,450</div></div>
+        <div class="lb-row"><div class="lb-rank">4</div><div class="lb-name">Tunde F.</div><div class="lb-pts">2,100</div></div>
+        <div class="lb-row"><div class="lb-rank">5</div><div class="lb-name">Bola B.</div><div class="lb-pts">1,760</div></div>
       </div>
-      <!-- Badges -->
-      <div style="background:var(--card);border:1px solid var(--br2);border-radius:14px;padding:16px;">
-        <div style="font-size:12px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;">🎖 Your Badges</div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="badges"></div>
+      <div class="side-card">
+        <div class="sc-title">🎖 Your Badges</div>
+        <div class="bdg-grid">
+          <div class="bdg earned"><div class="bdg-ico">🔥</div><div class="bdg-name">5-Day</div></div>
+          <div class="bdg earned"><div class="bdg-ico">📚</div><div class="bdg-name">1st Lesson</div></div>
+          <div class="bdg earned"><div class="bdg-ico">💰</div><div class="bdg-name">1st Goal</div></div>
+          <div class="bdg"><div class="bdg-ico">🏆</div><div class="bdg-name">Top 10</div></div>
+          <div class="bdg"><div class="bdg-ico">📈</div><div class="bdg-name">10 Lessons</div></div>
+          <div class="bdg"><div class="bdg-ico">👥</div><div class="bdg-name">Social</div></div>
+          <div class="bdg"><div class="bdg-ico">✓</div><div class="bdg-name">Verified</div></div>
+          <div class="bdg"><div class="bdg-ico">🌟</div><div class="bdg-name">Pro</div></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 <script>
-const lb=[{init:'KA',col:'var(--g)',n:'Kunle A.',pts:'4,200',rank:'🥇'},{init:'NE',col:'var(--blue)',n:'Ngozi E.',pts:'3,800',rank:'🥈'},{init:'AO',col:'var(--g)',n:'You',pts:'2,450',rank:'🏅',me:true},{init:'TF',col:'var(--red)',n:'Tunde F.',pts:'2,100',rank:'4'},{init:'BB',col:'var(--purple||#9B7BFF)',n:'Bola B.',pts:'1,760',rank:'5'}];
-document.getElementById('lb').innerHTML=lb.map(l=>`<div style="display:flex;align-items:center;gap:8px;padding:8px ${l.me?'6px':'0'};border-bottom:1px solid var(--br);${l.me?'background:rgba(0,216,150,0.06);border-radius:7px;':''}">${l.me?'':''}<div style="font-size:12px;color:var(--tx3);width:20px;">${l.rank}</div><div style="width:28px;height:28px;border-radius:50%;background:rgba(0,216,150,0.15);color:${l.col};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">${l.init}</div><div style="flex:1;font-size:12px;font-weight:${l.me?'600':'500'};color:${l.me?'var(--g)':'var(--tx)'};">${l.n}</div><div style="font-size:12px;color:var(--gold);font-weight:600;">${l.pts}</div></div>`).join('');
-
-const badges=[{icon:'🔥',name:'5-Day Streak',earned:true},{icon:'📚',name:'First Lesson',earned:true},{icon:'💰',name:'First Goal',earned:true},{icon:'🏆',name:'Top 10',earned:false},{icon:'📈',name:'10 Lessons',earned:false},{icon:'👥',name:'10 Follows',earned:false},{icon:'✓',name:'Verified',earned:false},{icon:'🌟',name:'Pro Member',earned:false}];
-document.getElementById('badges').innerHTML=badges.map(b=>`<div style="text-align:center;padding:8px 4px;border-radius:8px;background:${b.earned?'rgba(0,216,150,0.1)':'var(--dk3)'};border:1px solid ${b.earned?'var(--gbr)':'transparent'};"><div style="font-size:18px;margin-bottom:3px;">${b.icon}</div><div style="font-size:9px;color:${b.earned?'var(--g)':'var(--tx3)'};">${b.name}</div></div>`).join('');
-
-function toggleLesson(id){ const el=document.getElementById(id); if(el) el.style.display=el.style.display==='none'?'block':'none'; }
-
 let pts=2450;
-function answerQuiz(lessonId, chosen, result){
-  const btns=document.querySelectorAll('.qbtn-'+lessonId);
-  btns.forEach(b=>b.style.pointerEvents='none');
-  const fb=document.getElementById('quiz-feedback-'+lessonId);
-  if(result==='correct'){
-    btns.forEach(b=>{ if(b.textContent.startsWith(chosen)){ b.style.background='rgba(0,216,150,0.1)'; b.style.borderColor='var(--gbr)'; b.style.color='var(--g)'; }});
-    pts+=100;
-    document.getElementById('pts-display').textContent=pts.toLocaleString()+' pts';
-    fb.style.display='block'; fb.style.background='rgba(0,216,150,0.08)'; fb.style.borderLeft='3px solid var(--g)'; fb.textContent='✓ Correct! +100 Velora Points added to your balance.';
+function toggleLesson(id,card){
+  const el=document.getElementById(id);if(!el)return;
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.quiz-wrap').forEach(q=>q.classList.remove('open'));
+  document.querySelectorAll('.lcard').forEach(c=>c.classList.remove('active'));
+  if(!isOpen){el.classList.add('open');card.classList.add('active');}
+}
+function answer(btn,correct,fbId){
+  btn.closest('.quiz-opts').querySelectorAll('.qopt').forEach(o=>{o.style.pointerEvents='none';});
+  btn.classList.add(correct?'correct':'wrong');
+  const fb=document.getElementById(fbId);fb.style.display='block';
+  if(correct){
+    fb.style.background='var(--gbg)';fb.style.color='var(--green)';fb.textContent='✓ Correct! +100 GopexFund Points added to your balance.';
+    pts+=100;document.getElementById('pts-display').textContent=pts.toLocaleString()+' pts';document.getElementById('lb-pts').textContent=pts.toLocaleString();
   } else {
-    btns.forEach(b=>{ if(b.textContent.startsWith(chosen)){ b.style.background='rgba(255,92,92,0.1)'; b.style.borderColor='rgba(255,92,92,0.3)'; b.style.color='var(--red)'; }});
-    fb.style.display='block'; fb.style.background='rgba(255,92,92,0.07)'; fb.style.borderLeft='3px solid var(--red)'; fb.textContent='✗ Not quite. Review the lesson and try again next time!';
+    fb.style.background='var(--rbg)';fb.style.color='var(--red)';fb.textContent='✗ Not quite — review the lesson and try again!';
   }
 }
-
-(function(){const raw=sessionStorage.getItem('velora_user');if(raw){const u=JSON.parse(raw);const av=document.getElementById('nav-av');const un=document.getElementById('nav-uname');if(av)av.textContent=u.initials||'AO';if(un)un.textContent=u.firstName||u.name.split(' ')[0];}})();
+(function(){const raw=sessionStorage.getItem('gopex_user');if(!raw)return;const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];})();
 </script>
 </body>
 </html>
