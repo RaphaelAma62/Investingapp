@@ -518,7 +518,7 @@ async function loadPosts(tab){
   feed.innerHTML='<div class="empty-feed"><div class="spinner"></div><div style="margin-top:10px;font-size:13px;color:var(--tx3);">Loading posts...</div></div>';
 
   var query=sb.from('posts')
-    .select('id,user_id,body,ticker_holdings,portfolio_pct_gain,portfolio_period,likes_count,comments_count,created_at,profiles(name,initials,role,share_performance,portfolio_pct_gain)')
+    .select('id,user_id,body,ticker_holdings,portfolio_pct_gain,portfolio_period,likes_count,comments_count,created_at,profiles!posts_user_id_fkey(name,initials,role,share_performance,portfolio_pct_gain)')
     .order('created_at',{ascending:false})
     .limit(40);
 
@@ -554,7 +554,7 @@ async function loadPosts(tab){
 
 async function loadNews(){
   var feed=document.getElementById('feed-nw');
-  var r=await sb.from('news_posts').select('*, profiles(name)').order('created_at',{ascending:false}).limit(30);
+  var r=await sb.from('news_posts').select('*, profiles!news_posts_author_id_fkey(name)').order('created_at',{ascending:false}).limit(30);
   if(!r.data||!r.data.length){feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128240;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">No news yet</div><div style="font-size:12px;margin-top:6px;">Admins will post market news here</div></div>';return;}
   feed.innerHTML='';
   r.data.forEach(function(n){
@@ -711,7 +711,7 @@ window.toggleCmts=async function(btn,pid){
   var open=box.classList.contains('open');
   box.classList.toggle('open',!open);
   if(!open){
-    var r=await sb.from('comments').select('*,profiles(name,initials)').eq('post_id',pid).order('created_at',{ascending:true});
+    var r=await sb.from('comments').select('*,profiles!comments_user_id_fkey(name,initials)').eq('post_id',pid).order('created_at',{ascending:true});
     var list=document.getElementById('cmts-list-'+pid);list.innerHTML='';
     (r.data||[]).forEach(function(c){
       var div=document.createElement('div');div.className='cmt';
