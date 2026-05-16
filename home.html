@@ -497,7 +497,7 @@ async function loadPrices(tickers = null) {
     const mu = document.getElementById('prices-updated')
     if (mu && rows[0]?.last_updated) {
       const mins = Math.floor((Date.now() - new Date(rows[0].last_updated).getTime()) / 60000)
-      mu.textContent = mins < 2 ? 'Just updated' : `Updated ${mins}m ago`
+      mu.textContent = mins < 2 ? 'Just updated' : 'Updated ' + mins + 'm ago'
     }
     return rows
   } catch (e) {
@@ -609,75 +609,76 @@ function buildPostEl(p) {
   const isMe    = _session && p.user_id === _session.user.id
 
   // Portfolio performance badge (only if poster opted to share)
-  let perfBadge = ''
-  if (p.portfolio_pct_gain != null && p.profiles?.share_performance) {
-    const pct = p.portfolio_pct_gain
-    const up  = pct >= 0
-    perfBadge = `<div class="post-perf-badge ${up?'ppb-up':'ppb-dn'}">
-      ${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}% portfolio ${p.portfolio_period||'return'}
-      <span style="opacity:.6;font-size:9px;">% only · value hidden</span>
-    </div>`
+  var perfBadge = ''
+  if (p.portfolio_pct_gain != null && p.profiles && p.profiles.share_performance) {
+    var pct = p.portfolio_pct_gain
+    var pctUp = pct >= 0
+    perfBadge = '<div class="post-perf-badge ' + (pctUp?'ppb-up':'ppb-dn') + '">'
+      + (pctUp?'▲':'▼') + ' ' + Math.abs(pct).toFixed(1) + '% portfolio ' + (p.portfolio_period||'return')
+      + ' <span style="opacity:.6;font-size:9px;">% only · value hidden</span></div>'
   }
 
   // Ticker chips with "do I hold this?" context
-  let tickerHtml = ''
-  if (p.ticker_holdings?.length) {
+  var tickerHtml = ''
+  if (p.ticker_holdings && p.ticker_holdings.length) {
     tickerHtml = '<div class="post-tickers">'
-    p.ticker_holdings.forEach(th => {
-      const tk  = th.ticker
-      const mp  = PRICES[tk]
-      const price = mp ? `₦${mp.p.toLocaleString()}` : '—'
-      const chg   = mp ? `<span style="color:${mp.u?'var(--green)':'var(--red)'};font-size:11px;font-weight:700;">${mp.u?'▲':'▼'} ${Math.abs(mp.c).toFixed(2)}%</span>` : ''
-      // Check if viewer holds this ticker
-      const myHolding = _myTickers?.find(h => h.ticker === tk)
-      const heldHtml = myHolding
-        ? `<div class="ptk-held ptk-held-yes">✓ I hold ${myHolding.pct}% of portfolio</div>`
-        : `<div class="ptk-held ptk-held-no">— Not in my portfolio</div>`
-      tickerHtml += `<div class="ptk">
-        <div class="ptk-sym">NGX: ${tk}</div>
-        <div class="ptk-price">${price} ${chg}</div>
-        ${heldHtml}
-      </div>`
+    p.ticker_holdings.forEach(function(th) {
+      var tk  = th.ticker
+      var mp  = PRICES[tk]
+      var price = mp ? '₦' + mp.p.toLocaleString() : '—'
+      var chgColor = mp ? (mp.u ? 'var(--green)' : 'var(--red)') : ''
+      var chgArrow = mp ? (mp.u ? '▲' : '▼') : ''
+      var chg = mp ? '<span style="color:' + chgColor + ';font-size:11px;font-weight:700;">' + chgArrow + ' ' + Math.abs(mp.c).toFixed(2) + '%</span>' : ''
+      var myHolding = _myTickers ? _myTickers.find(function(h){return h.ticker===tk}) : null
+      var heldHtml = myHolding
+        ? '<div class="ptk-held ptk-held-yes">✓ I hold ' + myHolding.pct + '% of portfolio</div>'
+        : '<div class="ptk-held ptk-held-no">— Not in my portfolio</div>'
+      tickerHtml += '<div class="ptk">'
+        + '<div class="ptk-sym">NGX: ' + tk + '</div>'
+        + '<div class="ptk-price">' + price + ' ' + chg + '</div>'
+        + heldHtml
+        + '</div>'
     })
     tickerHtml += '</div>'
   }
 
-  d.innerHTML = `
-    <div class="p-head">
-      <div class="p-av" style="background:var(--plt);color:var(--p);">${inits}</div>
-      <div class="p-meta">
-        <div class="p-name">
-          ${name}
-          ${verified ? '<span class="p-vbadge">✓ Verified</span>' : ''}
-        </div>
-        <div class="p-time">${timeStr}</div>
-      </div>
-      ${!isMe ? `<button class="p-follow" data-uid="${p.user_id}" onclick="toggleFollow(this)">+ Follow</button>` : ''}
-    </div>
-    ${perfBadge}
-    ${tickerHtml}
-    <div class="p-body">${p.body.replace(/\n/g,'<br>')}</div>
-    <div class="p-actions">
-      <button class="p-act like-btn" data-pid="${p.id}" onclick="toggleLike(this)">❤ <span>${p.likes_count||0}</span></button>
-      <button class="p-act" onclick="toggleComments(this,'${p.id}')">💬 <span>${p.comments_count||0}</span></button>
-      <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
-      <button class="p-act" onclick="sharePost('${p.id}')">↗ Share</button>
-    </div>
-    <div class="emo-bar">
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','🔥')">🔥</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','💯')">💯</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','🚀')">🚀</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','📈')">📈</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','💰')">💰</button>
-    </div>
-    <div class="comments" id="cmt-${p.id}" style="display:none;margin-top:10px;">
-      <div id="cml-${p.id}"></div>
-      <div class="cm-input-row">
-        <div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;flex-shrink:0;">${_myInitials}</div>
-        <input placeholder="Write a comment…" id="cmi-${p.id}" onkeydown="if(event.key==='Enter')postComment('${p.id}')"/>
-        <button class="cm-send" onclick="postComment('${p.id}')">→</button>
-      </div>
-    </div>`
+  var followBtn = !isMe ? '<button class="p-follow" data-uid="' + p.user_id + '" onclick="toggleFollow(this)">+ Follow</button>' : ''
+  var verifiedBadge = verified ? '<span class="p-vbadge">✓ Verified</span>' : ''
+  var bodyHtml = p.body.replace(/\n/g,'<br>')
+  var pid = p.id
+
+  d.innerHTML = '<div class="p-head">'
+    + '<div class="p-av" style="background:var(--plt);color:var(--p);">' + inits + '</div>'
+    + '<div class="p-meta">'
+    + '<div class="p-name">' + name + ' ' + verifiedBadge + '</div>'
+    + '<div class="p-time">' + timeStr + '</div>'
+    + '</div>'
+    + followBtn
+    + '</div>'
+    + perfBadge
+    + tickerHtml
+    + '<div class="p-body">' + bodyHtml + '</div>'
+    + '<div class="p-actions">'
+    + '<button class="p-act like-btn" data-pid="' + pid + '" onclick="toggleLike(this)">❤ <span>' + (p.likes_count||0) + '</span></button>'
+    + '<button class="p-act" onclick="toggleComments(this,'' + pid + '')">💬 <span>' + (p.comments_count||0) + '</span></button>'
+    + '<button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>'
+    + '<button class="p-act" onclick="sharePost('' + pid + '')">↗ Share</button>'
+    + '</div>'
+    + '<div class="emo-bar">'
+    + '<button class="emo" onclick="reactEmoji(this,'' + pid + '','🔥')">🔥</button>'
+    + '<button class="emo" onclick="reactEmoji(this,'' + pid + '','💯')">💯</button>'
+    + '<button class="emo" onclick="reactEmoji(this,'' + pid + '','🚀')">🚀</button>'
+    + '<button class="emo" onclick="reactEmoji(this,'' + pid + '','📈')">📈</button>'
+    + '<button class="emo" onclick="reactEmoji(this,'' + pid + '','💰')">💰</button>'
+    + '</div>'
+    + '<div class="comments" id="cmt-' + pid + '" style="display:none;margin-top:10px;">'
+    + '<div id="cml-' + pid + '"></div>'
+    + '<div class="cm-input-row">'
+    + '<div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;flex-shrink:0;">' + _myInitials + '</div>'
+    + '<input placeholder="Write a comment..." id="cmi-' + pid + '" onkeydown="if(event.key==='Enter')postComment('' + pid + '')" />'
+    + '<button class="cm-send" onclick="postComment('' + pid + '')">→</button>'
+    + '</div>'
+    + '</div>'
   return d
 }
 
@@ -688,7 +689,7 @@ function prependPost(p) {
 }
 
 function updatePostLikes(p) {
-  const btn = document.querySelector(`.like-btn[data-pid="${p.id}"] span`)
+  const btn = document.querySelector('.like-btn[data-pid="' + p.id + '"] span')
   if (btn) btn.textContent = p.likes_count || 0
 }
 
@@ -721,9 +722,10 @@ async function toggleComments(btn, postId) {
     list.innerHTML = ''
     cmts?.forEach(c => {
       const d = document.createElement('div'); d.className = 'comment'
-      d.innerHTML = `<div class="cm-av" style="background:var(--plt);color:var(--p);">${c.profiles?.initials||'U'}</div>
-        <div class="cm-body"><div class="cm-name">${c.profiles?.name||'User'}</div>
-        <div class="cm-text">${c.body}</div></div>`
+      d.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + (c.profiles&&c.profiles.initials?c.profiles.initials:'U') + '</div>'
+        + '<div class="cm-body"><div class="cm-name">' + (c.profiles&&c.profiles.name?c.profiles.name:'User') + '</div>'
+        + '<div class="cm-text">' + c.body + '</div></div>'
+
       list.appendChild(d)
     })
   }
@@ -737,8 +739,9 @@ async function postComment(postId) {
   // Optimistic UI
   const list = document.getElementById('cml-'+postId)
   const d = document.createElement('div'); d.className = 'comment'
-  d.innerHTML = `<div class="cm-av" style="background:var(--plt);color:var(--p);">${_myInitials}</div>
-    <div class="cm-body"><div class="cm-name">${_myFirstName}</div><div class="cm-text">${txt}</div></div>`
+  d.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + _myInitials + '</div>'
+    + '<div class="cm-body"><div class="cm-name">' + _myFirstName + '</div><div class="cm-text">' + txt + '</div></div>'
+
   list.appendChild(d)
   // Save to DB
   await _sb.from('comments').insert({ post_id: postId, user_id: _session.user.id, body: txt })
@@ -792,13 +795,13 @@ function removeTicker(tk) {
 }
 function renderTickerChips() {
   const c = document.getElementById('tp-chips')
-  c.innerHTML = _pendingTickers.map(t =>
-    `<div class="tp-chip">
-      ${t.ticker}
-      ${t.iHold ? `<span style="font-size:9px;opacity:.7;">(I hold ${t.myPct}%)</span>` : ''}
-      <span class="tp-chip-x" onclick="removeTicker('${t.ticker}')">✕</span>
-    </div>`
-  ).join('')
+  c.innerHTML = _pendingTickers.map(function(t) {
+    return '<div class="tp-chip">'
+      + t.ticker
+      + (t.iHold ? '<span style="font-size:9px;opacity:.7;">(I hold ' + t.myPct + '%)</span>' : '')
+      + '<span class="tp-chip-x" onclick="removeTicker(\'' + t.ticker + '\')">✕</span>'
+      + '</div>'
+  }).join('')
 }
 
 // ── COMPOSE: PERFORMANCE SHARE ────────────────────────────────
@@ -816,7 +819,7 @@ function updatePerfPreview() {
   }
   const up = _myPctGain >= 0
   preview.style.display = 'block'
-  preview.innerHTML = `Will show: <strong style="color:${up?'var(--green)':'var(--red)'};">${up?'▲':'▼'} ${Math.abs(_myPctGain).toFixed(1)}%</strong> (₦ value stays hidden)`
+  preview.innerHTML = 'Will show: <strong style="color:' + (up?'var(--green)':'var(--red)') + ';">' + (up?'▲':'▼') + ' ' + Math.abs(_myPctGain).toFixed(1) + '%</strong> (₦ value stays hidden)'
 }
 
 // ── DO POST ───────────────────────────────────────────────────
@@ -883,7 +886,7 @@ function reactEmoji(btn, postId, emoji) {
 
 // ── SHARE POST ────────────────────────────────────────────────
 function sharePost(postId) {
-  const url = `${window.location.origin}/home.html?post=${postId}`
+  const url = window.location.origin + '/home.html?post=' + postId
   if (navigator.share) {
     navigator.share({ title: 'GopexFund post', url })
   } else {
@@ -996,29 +999,31 @@ function buildPostEl(p, myId, myInitials) {
   const inits = p.profiles?.initials || name[0].toUpperCase()
   const mins = Math.floor((Date.now() - new Date(p.created_at)) / 60000)
   const timeStr = mins < 1 ? 'Just now' : mins < 60 ? mins+'m ago' : Math.floor(mins/60)+'h ago'
-  d.innerHTML = `
-    <div class="p-head">
-      <div class="p-av" style="background:var(--plt);color:var(--p);">${inits}</div>
-      <div class="p-meta">
-        <div class="p-name">${name}</div>
-        <div class="p-time">${timeStr}</div>
-      </div>
-    </div>
-    <div class="p-body">${p.body.replace(/\n/g,'<br>')}</div>
-    <div class="p-actions">
-      <button class="p-act" onclick="like(this)">❤ <span>${p.likes_count||0}</span></button>
-      <button class="p-act" onclick="toggleC('pc${p.id}')">💬 <span>${p.comments_count||0}</span></button>
-      <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
-      <button class="p-act">↗ Share</button>
-    </div>
-    <div class="comments" id="pc${p.id}">
-      <div id="pcl${p.id}"></div>
-      <div class="cm-input-row">
-        <div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">${myInitials}</div>
-        <input placeholder="Write a comment…" id="pci${p.id}" onkeydown="if(event.key==='Enter')sendC('pcl${p.id}','pci${p.id}')"/>
-        <button class="cm-send" onclick="sendC('pcl${p.id}','pci${p.id}')">→</button>
-      </div>
-    </div>`
+  var pid2 = p.id;
+  d.innerHTML = '<div class="p-head">'
+    + '<div class="p-av" style="background:var(--plt);color:var(--p);">' + inits + '</div>'
+    + '<div class="p-meta">'
+    + '<div class="p-name">' + name + '</div>'
+    + '<div class="p-time">' + timeStr + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="p-body">' + p.body.replace(/
+/g,'<br>') + '</div>'
+    + '<div class="p-actions">'
+    + '<button class="p-act" onclick="like(this)">❤ <span>' + (p.likes_count||0) + '</span></button>'
+    + '<button class="p-act" onclick="toggleC('pc' + pid2 + '')">💬 <span>' + (p.comments_count||0) + '</span></button>'
+    + '<button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>'
+    + '<button class="p-act">↗ Share</button>'
+    + '</div>'
+    + '<div class="comments" id="pc' + pid2 + '">'
+    + '<div id="pcl' + pid2 + '"></div>'
+    + '<div class="cm-input-row">'
+    + '<div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">' + myInitials + '</div>'
+    + '<input placeholder="Write a comment..." id="pci' + pid2 + '" onkeydown="if(event.key==='Enter')sendC('pcl' + pid2 + '','pci' + pid2 + '')" />'
+    + '<button class="cm-send" onclick="sendC('pcl' + pid2 + '','pci' + pid2 + '')">→</button>'
+    + '</div>'
+    + '</div>'
+
   return d
 }
 
@@ -1061,7 +1066,8 @@ function doPost(){
   const raw=sessionStorage.getItem('gopex_user');const u=raw?JSON.parse(raw):{initials:'AO',firstName:'You'};
   const id='p'+Date.now();const feed=document.getElementById('feed-fy');
   const d=document.createElement('div');d.className='post';
-  d.innerHTML=`<div class="p-head"><div class="p-av" style="background:var(--plt);color:var(--p);">${u.initials}</div><div class="p-meta"><div class="p-name">${u.firstName||'You'}</div><div class="p-time">Just now</div></div></div><div class="p-body">${txt.replace(/\n/g,'<br>')}</div><div class="p-actions"><button class="p-act" onclick="like(this)">❤ <span>0</span></button><button class="p-act" onclick="toggleC('${id}')">💬 0</button><button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button></div><div class="comments" id="${id}"><div id="cl${id}"></div><div class="cm-input-row"><div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">${u.initials}</div><input placeholder="Comment…" id="ci${id}" onkeydown="if(event.key==='Enter')sendC('cl${id}','ci${id}')"/><button class="cm-send" onclick="sendC('cl${id}','ci${id}')">→</button></div></div>`;
+  d.innerHTML='<div class="p-head"><div class="p-av" style="background:var(--plt);color:var(--p);">'+u.initials+'</div><div class="p-meta"><div class="p-name">'+(u.firstName||'You')+'</div><div class="p-time">Just now</div></div></div><div class="p-body">'+txt.replace(/
+/g,'<br>')+'</div><div class="p-actions"><button class="p-act" onclick="like(this)">❤ <span>0</span></button><button class="p-act" onclick="toggleC(''+id+'')">💬 0</button><button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button></div><div class="comments" id="'+id+'"><div id="cl'+id+'"></div><div class="cm-input-row"><div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">'+u.initials+'</div><input placeholder="Comment..." id="ci'+id+'" onkeydown="if(event.key==='Enter')sendC('cl'+id+'','ci'+id+'')" /><button class="cm-send" onclick="sendC('cl'+id+'','ci'+id+'')">→</button></div></div>';
   const compose=document.querySelector('.compose');feed.insertBefore(d,compose.nextSibling);
   inp.value='';inp.style.height='auto';document.getElementById('c-actions').style.display='none';
   // Save to database
@@ -1074,7 +1080,7 @@ function sendC(listId,inputId){
   const raw=sessionStorage.getItem('gopex_user');const u=raw?JSON.parse(raw):{initials:'AO',firstName:'You'};
   const list=document.getElementById(listId);
   const d=document.createElement('div');d.className='comment';
-  d.innerHTML=`<div class="cm-av" style="background:var(--plt);color:var(--p);">${u.initials}</div><div class="cm-body"><div class="cm-name">${u.firstName||'You'}</div><div class="cm-text">${txt}</div></div>`;
+  d.innerHTML='<div class="cm-av" style="background:var(--plt);color:var(--p);">'+u.initials+'</div><div class="cm-body"><div class="cm-name">'+(u.firstName||'You')+'</div><div class="cm-text">'+txt+'</div></div>';
   list.appendChild(d);inp.value='';
 }
 
