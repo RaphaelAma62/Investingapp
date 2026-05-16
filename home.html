@@ -793,53 +793,112 @@ window.removeTicker=function(i){_pendingTickers.splice(i,1);renderComposeTickers
 window.submitPost=async function(){
   var txt=document.getElementById('c-text').value.trim();
   if(!txt){document.getElementById('c-text').focus();return;}
-  if(txt.length>500){alert('Post is too long. Maximum 500 characters.');return;}
-  var btn=document.getElementById('post-btn');btn.disabled=true;btn.textContent='Posting...';
+  if(txt.length>500){alert('Post is too long. Max 500 characters.');return;}
 
-  // Build ticker payload (% of portfolio only - no ₦ values)
-  var tkPayload=_pendingTickers.map(function(t){
-    var myH=null;for(var k=0;k<_myHoldings.length;k++){if(_myHoldings[k].ticker===t.ticker){myH=_myHoldings[k];break;}}
-    var myPct=0;
-    if(myH){var tot=0;_myHoldings.forEach(function(h){var mp=_prices[h.ticker]?_prices[h.ticker].p:h.buy_price;tot+=h.shares*mp;});var myVal=(_prices[myH.ticker]?_prices[myH.ticker].p:myH.buy_price)*myH.shares;myPct=tot>0?Math.round(myVal/tot*100):0;}
-    return{ticker:t.ticker,i_hold:!!myH,my_pct:myH?myPct:null};
-  });
+  var btn=document.getElementById('post-btn');
+  btn.disabled=true;btn.textContent='Posting...';
 
-  var postData={user_id:_u.id,body:txt,ticker_holdings:tkPayload,
-    portfolio_pct_gain:_sharePerf?_myPctGain:null,
-    portfolio_period:_sharePerf?'all-time':null};
-
-  var r=await sb.from('posts').insert(postData).select().single();
-  if(r.error){btn.disabled=false;btn.textContent='Post';alert('Error: '+r.error.message);return;}
-
-  // Upload images to Supabase Storage if any
-  if(_pendingImgs.length&&r.data){
-    for(var i=0;i<_pendingImgs.length;i++){
-      var pi=_pendingImgs[i];var path='posts/'+r.data.id+'/'+Date.now()+'-'+i+'.jpg';
-      var up=await sb.storage.from('post-images').upload(path,pi.file,{contentType:pi.file.type});
-      if(!up.error){
-        var pu=sb.storage.from('post-images').getPublicUrl(path);
-        await sb.from('post_images').insert({post_id:r.data.id,image_url:pu.data.publicUrl});
+  try{
+    // Build ticker payload — % only, never ₦
+    var tkPayload=_pendingTickers.map(function(t){
+      var myH=null;
+      for(var k=0;k<_myHoldings.length;k++){if(_myHoldings[k].ticker===t.ticker){myH=_myHoldings[k];break;}}
+      var myPct=0;
+      if(myH){
+        var tot=0;
+        _myHoldings.forEach(function(h){var mp=_prices[h.ticker]?_prices[h.ticker].p:h.buy_price;tot+=h.shares*mp;});
+        var myVal=(_prices[myH.ticker]?_prices[myH.ticker].p:myH.buy_price)*myH.shares;
+        myPct=tot>0?Math.round(myVal/tot*100):0;
       }
+      return{ticker:t.ticker,i_hold:!!myH,my_pct:myH?myPct:null};
+    });
+
+    var postData={
+      user_id:_u.id,
+      body:txt,
+      ticker_holdings:tkPayload,
+      portfolio_pct_gain:_sharePerf&&_myPctGain!=null?_myPctGain:null,
+      portfolio_period:_sharePerf?'all-time':null
+    };
+
+    // Insert post
+    var r=await sb.from('posts').insert(postData).select().single();
+
+    if(r.error){
+      console.error('Post insert error:',r.error);
+      btn.disabled=false;btn.textContent='Post';
+      alert('Could not save post: '+r.error.message);
+      return;
     }
+
+    // ── Reset compose immediately after successful insert ──
+    document.getElementById('c-text').value='';
+    document.getElementById('c-text').style.height='auto';
+    var cc=document.getElementById('char-count');if(cc)cc.textContent='0 / 500';
+    var ipr=document.getElementById('img-preview-row');if(ipr)ipr.innerHTML='';
+    var ct=document.getElementById('compose-tickers');if(ct)ct.innerHTML='';
+    var tks=document.getElementById('tk-search-wrap');if(tks)tks.style.display='none';
+    var pr=document.getElementById('perf-row');if(pr)pr.style.display='none';
+    var pc=document.getElementById('perf-check');if(pc)pc.checked=false;
+    var pp=document.getElementById('perf-preview');if(pp)pp.style.display='none';
+    _pendingImgs=[];_pendingTickers=[];_sharePerf=false;
+    btn.disabled=false;btn.textContent='Post';
+
+    // ── Show post in feed immediately (optimistic UI) ──────
+    var raw=sessionStorage.getItem('gopex_user');
+    var u=raw?JSON.parse(raw):{initials:'?',name:'You',firstName:'You'};
+    var fakePost={
+      id:r.data.id,
+      user_id:_u.id,
+      body:txt,
+      ticker_holdings:tkPayload,
+      portfolio_pct_gain:postData.portfolio_pct_gain,
+      portfolio_period:postData.portfolio_period,
+      likes_count:0,
+      comments_count:0,
+      created_at:new Date().toISOString(),
+      profiles:{
+        name:u.name||u.firstName||'You',
+        initials:u.initials||'?',
+        is_verified:false,
+        share_performance:_sharePerf,
+        portfolio_pct_gain:postData.portfolio_pct_gain
+      }
+    };
+
+    // Remove empty feed message if present
+    var feed=document.getElementById('feed-fy');
+    var empty=feed?feed.querySelector('.empty-feed'):null;
+    if(empty)empty.remove();
+
+    // Build and prepend post element
+    buildPostEl(fakePost,true).then(function(el){
+      if(feed)feed.insertBefore(el,feed.firstElementChild);
+    });
+
+    // Upload images in background (non-blocking)
+    if(_pendingImgs.length&&r.data.id){
+      _pendingImgs.forEach(function(pi,i){
+        var path='posts/'+r.data.id+'/'+Date.now()+'-'+i+'.jpg';
+        sb.storage.from('post-images').upload(path,pi.file,{contentType:pi.file.type}).then(function(up){
+          if(!up.error){
+            var pu=sb.storage.from('post-images').getPublicUrl(path);
+            sb.from('post_images').insert({post_id:r.data.id,image_url:pu.data.publicUrl});
+          }
+        });
+      });
+    }
+
+    // Update performance flag in background
+    if(postData.portfolio_pct_gain!=null){
+      sb.from('profiles').update({share_performance:true,portfolio_pct_gain:postData.portfolio_pct_gain}).eq('id',_u.id);
+    }
+
+  }catch(err){
+    console.error('submitPost exception:',err);
+    btn.disabled=false;btn.textContent='Post';
+    alert('Something went wrong. Please try again.');
   }
-
-  // Reset compose
-  document.getElementById('c-text').value='';
-  document.getElementById('c-text').style.height='auto';
-  var cc=document.getElementById('char-count');if(cc)cc.textContent='0 / 500';
-  document.getElementById('img-preview-row').innerHTML='';document.getElementById('compose-tickers').innerHTML='';
-  document.getElementById('c-expanded').classList.remove('open');
-  document.getElementById('tk-search-wrap').style.display='none';
-  document.getElementById('perf-row').style.display='none';
-  document.getElementById('perf-check').checked=false;
-  _pendingImgs=[];_pendingTickers=[];_sharePerf=false;
-  btn.disabled=false;btn.textContent='Post';
-
-  // If user chose to share performance, update profile flag
-  if(_sharePerf&&_myPctGain!=null)await sb.from('profiles').update({share_performance:true,portfolio_pct_gain:_myPctGain}).eq('id',_u.id);
-
-  // Prepend the new post
-  if(r.data)prependPost(r.data,true);
 };
 
 // ── DELETE / EDIT POST ────────────────────────────────────────
