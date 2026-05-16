@@ -3,587 +3,421 @@
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>GopexFund — NGX Market</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--red:#dc2626;--rbg:#fee2e2;--amber:#d97706;--ambg:#fef3c7;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);}
-*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input{font-family:var(--fb);}
-.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
-.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 24px;gap:12px;}
-.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;}.logo-mark{width:29px;height:29px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
-.nav-links{display:flex;gap:2px;}.nl{padding:7px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;transition:all .15s;}.nl:hover{background:var(--g100);color:var(--tx);}.nl.on{background:var(--plt);color:var(--p);font-weight:600;}
-.nav-r{display:flex;align-items:center;gap:8px;}.nav-prof{display:flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--bdr);border-radius:10px;padding:4px 12px 4px 5px;text-decoration:none;transition:all .15s;}.nav-prof:hover{background:var(--g100);}.nav-av{width:28px;height:28px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
-.burger{display:none;background:none;border:none;font-size:22px;color:var(--g500);cursor:pointer;padding:4px;}
-.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px 14px;flex-direction:column;gap:4px;z-index:299;box-shadow:var(--shm);}
-.mob-nav.open{display:flex;}.mob-link{padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}.mob-link.on{color:var(--p);background:var(--plt);font-weight:600;}
+:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--g:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--r:#dc2626;--rbg:#fee2e2;--am:#d97706;--ambg:#fef3c7;--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.06);--shm:0 4px 16px rgba(0,0,0,.08);}
+*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 20px;gap:10px;}
+.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:7px;}.lm{width:28px;height:28px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
+.nav-links{display:flex;gap:1px;}.nl{padding:6px 11px;border-radius:7px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;transition:all .15s;}.nl:hover{background:var(--g100);color:var(--tx);}.nl.on{background:var(--plt);color:var(--p);font-weight:600;}
+.nav-r{display:flex;align-items:center;gap:7px;}
+.prof-pill{display:flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--bdr);border-radius:9px;padding:3px 10px 3px 4px;text-decoration:none;}
+.nav-av{width:26px;height:26px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.nav-un{font-size:12px;font-weight:600;}
+.burger{display:none;background:none;border:none;font-size:21px;color:var(--g500);cursor:pointer;}
+.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:8px 14px 12px;flex-direction:column;gap:3px;z-index:299;box-shadow:var(--shm);}
+.mob-nav.open{display:flex;}.mob-link{padding:9px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}.mob-link.on{color:var(--p);background:var(--plt);}
 /* TICKER TAPE */
-.tape{position:fixed;top:60px;left:0;right:0;z-index:200;background:var(--g900);height:30px;overflow:hidden;display:flex;align-items:center;}
-.tape-track{display:flex;white-space:nowrap;animation:scroll 55s linear infinite;}
-.tape-track:hover{animation-play-state:paused;}
-@keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
-.tk{display:inline-flex;align-items:center;gap:8px;padding:0 16px;font-size:11px;border-right:1px solid rgba(255,255,255,.08);}
-.tk-sym{color:rgba(255,255,255,.5);font-weight:600;}
-.tk-p{color:#fff;}
-.up{color:#4ade80;font-weight:700;}
-.dn{color:#f87171;font-weight:700;}
+.tape-wrap{background:var(--g900);padding:7px 0;overflow:hidden;position:fixed;top:60px;left:0;right:0;z-index:200;}
+.tape{display:flex;gap:0;white-space:nowrap;animation:scroll-left 60s linear infinite;}
+.tape:hover{animation-play-state:paused;}
+@keyframes scroll-left{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.tk-item{display:inline-flex;align-items:center;gap:7px;padding:0 20px;font-size:12px;color:rgba(255,255,255,.75);}
+.tk-sym{font-weight:700;color:#fff;}
+.tk-up{color:#4ade80;font-weight:600;}
+.tk-dn{color:#f87171;font-weight:600;}
 /* PAGE */
-.pg{padding:106px clamp(12px,3vw,24px) 60px;max-width:1280px;margin:0 auto;}
-/* Header */
-.pg-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
-.pg-title{font-family:var(--fd);font-size:24px;font-weight:800;letter-spacing:-.5px;}
-.pg-sub{font-size:12px;color:var(--tx3);margin-top:2px;}
-.hd-chips{display:flex;gap:8px;}
-.hd-chip{background:var(--white);border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;text-align:center;box-shadow:var(--sh);}
-.hc-lbl{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
-.hc-val{font-size:12px;font-weight:700;}
-/* Overview grid */
-.ov-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;}
-.ov-card{background:var(--white);border:1px solid var(--bdr);border-radius:13px;padding:14px;box-shadow:var(--sh);}
-.ov-lbl{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;}
-.ov-val{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:2px;}
-.ov-chg{font-size:11px;font-weight:700;}
-.ov-note{font-size:10px;color:var(--tx3);margin-top:1px;}
-.ov-spark{height:24px;margin-top:6px;}
-/* FG + Breadth row */
-.fg-row{display:grid;grid-template-columns:300px 1fr;gap:14px;margin-bottom:18px;}
-.card{background:var(--white);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--sh);}
-.card-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--bdr);}
-.card-title{font-family:var(--fd);font-size:13px;font-weight:700;}
-.card-sub{font-size:11px;color:var(--tx3);}
-/* FG body */
-.fg-body{padding:16px;}
-.fg-arc-wrap{position:relative;display:flex;justify-content:center;margin-bottom:10px;}
-.fg-score-overlay{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);text-align:center;}
-.fg-num{font-family:var(--fd);font-size:28px;font-weight:800;}
-.fg-word{font-size:11px;font-weight:700;color:var(--amber);}
-.fg-spectrum{display:flex;align-items:center;gap:4px;margin-bottom:10px;}
-.fg-sp-lbl{font-size:9px;flex-shrink:0;}
-.fg-bar{flex:1;height:5px;border-radius:3px;background:linear-gradient(to right,#dc2626,#d97706,#ca8a04,#16a34a,#15803d);position:relative;}
-.fg-needle{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--g900);border:2px solid #fff;top:-1.5px;box-shadow:0 0 4px rgba(0,0,0,.3);}
-.fg-hist{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
-.fh{background:var(--g50);border-radius:8px;padding:7px;text-align:center;}
-.fh-num{font-size:13px;font-weight:800;font-family:var(--fd);}
-.fh-lbl{font-size:9px;color:var(--tx3);}
-.fg-signal{background:var(--ambg);border:1px solid #fcd34d;border-radius:9px;padding:9px 12px;font-size:11px;color:var(--amber);line-height:1.6;}
-/* Breadth */
-.br-body{padding:14px 16px;}
-.br-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);}
-.br-row:last-child{border:none;}
-.br-lbl{font-size:12px;color:var(--tx2);}
-.br-val{font-size:12px;font-weight:700;}
-.si-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
-.si-item{background:var(--g50);border-radius:8px;padding:7px 10px;display:flex;justify-content:space-between;align-items:center;}
-.si-name{font-size:10px;color:var(--tx2);}
-.si-val{font-size:10px;font-weight:700;}
-/* Movers */
-.gl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
-.gl-row{display:grid;grid-template-columns:22px 34px 1fr 80px 68px;gap:8px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--bdr);cursor:pointer;transition:background .12s;}
-.gl-row:last-child{border:none;}
-.gl-row:hover{background:var(--g50);}
-.gl-rank{font-size:11px;color:var(--tx3);font-weight:700;}
-.gl-logo{width:32px;height:32px;border-radius:7px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--g500);}
-.gl-name{font-size:12px;font-weight:700;}
-.gl-sec{font-size:10px;color:var(--tx3);}
-.gl-price{font-size:12px;font-weight:700;text-align:right;}
-.gl-pct{font-size:11px;font-weight:700;padding:3px 7px;border-radius:5px;text-align:center;}
-.gl-up{background:var(--gbg);color:var(--green);}
-.gl-dn{background:var(--rbg);color:var(--red);}
-/* Sector pills */
-.sec-pills{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:14px;}
-.sec-pill{background:var(--white);border:1px solid var(--bdr);border-radius:11px;padding:11px 13px;cursor:pointer;transition:all .18s;box-shadow:var(--sh);display:flex;align-items:center;gap:9px;}
-.sec-pill:hover{box-shadow:var(--shm);border-color:var(--g300);}
-.sec-pill.on{background:var(--plt);border-color:var(--pbr);}
-.sp-ico{font-size:18px;flex-shrink:0;}
-.sp-name{font-size:12px;font-weight:700;color:var(--tx);}
-.sp-cnt{font-size:10px;color:var(--tx3);}
-.sp-chg{font-size:10px;font-weight:700;margin-top:1px;}
-/* Stock table */
-.stbl{background:var(--white);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;box-shadow:var(--sh);display:none;}
-.stbl.open{display:block;}
-.stbl-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--g50);border-bottom:1px solid var(--bdr);}
-.stbl-title{font-family:var(--fd);font-size:13px;font-weight:700;}
-.stbl-srch{background:var(--white);border:1.5px solid var(--bdr);color:var(--tx);padding:6px 11px;border-radius:8px;font-size:12px;outline:none;width:160px;}
-.stbl-srch:focus{border-color:var(--p);}
-.stbl-cols{display:grid;grid-template-columns:34px 2.4fr 1fr 1fr 1fr 1fr 80px;gap:8px;padding:7px 16px;background:var(--g50);border-bottom:1px solid var(--bdr);}
-.th{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
-.th-r{text-align:right;}
-.stk-row{display:grid;grid-template-columns:34px 2.4fr 1fr 1fr 1fr 1fr 80px;gap:8px;align-items:center;padding:9px 16px;border-bottom:1px solid var(--bdr);cursor:pointer;transition:background .12s;}
-.stk-row:last-child{border:none;}
-.stk-row:hover{background:var(--g50);}
-.stk-logo{width:32px;height:32px;border-radius:7px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--g500);}
-.stk-name{font-size:12px;font-weight:700;}
-.stk-tk{font-size:10px;color:var(--tx3);font-family:monospace;}
-.stk-brd{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;display:inline-block;margin-top:2px;}
-.brd-p{background:var(--ambg);color:var(--amber);}
-.brd-m{background:var(--g100);color:var(--tx3);}
-.stk-num{font-size:12px;font-weight:700;text-align:right;}
-.stk-sm{font-size:11px;color:var(--tx2);text-align:right;}
-.stk-xs{font-size:10px;color:var(--tx3);text-align:right;}
-.w-btn{background:var(--g100);border:1px solid var(--bdr);color:var(--tx3);font-size:11px;padding:4px 8px;border-radius:6px;transition:all .15s;}
-.w-btn:hover{background:var(--plt);color:var(--p);border-color:var(--pbr);}
-.w-btn.on{background:var(--plt);color:var(--p);border-color:var(--pbr);}
-/* Detail panel */
-.panel{position:fixed;top:0;right:0;bottom:0;width:460px;max-width:100vw;background:var(--white);border-left:1px solid var(--bdr);z-index:400;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-8px 0 40px rgba(0,0,0,.10);}
-.panel.open{transform:translateX(0);}
-.panel-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bdr);position:sticky;top:0;background:var(--white);z-index:2;}
-.panel-close{width:28px;height:28px;border-radius:7px;background:var(--g100);border:none;color:var(--tx2);font-size:14px;}
-.p-head{padding:16px 18px;border-bottom:1px solid var(--bdr);}
-.p-tk{font-size:10px;color:var(--tx3);font-family:monospace;margin-bottom:3px;}
-.p-cname{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px;}
-.p-sector{background:var(--g100);border:1px solid var(--bdr);border-radius:5px;padding:3px 8px;font-size:11px;color:var(--tx2);display:inline-block;margin-bottom:10px;}
-.p-price{font-family:var(--fd);font-size:28px;font-weight:800;display:flex;align-items:center;gap:10px;}
-.chg-up{background:var(--gbg);color:var(--green);border-radius:6px;padding:3px 9px;font-size:13px;font-weight:700;}
-.chg-dn{background:var(--rbg);color:var(--red);border-radius:6px;padding:3px 9px;font-size:13px;font-weight:700;}
-.p-chart-wrap{padding:14px 18px;border-bottom:1px solid var(--bdr);}
-.per-row{display:flex;gap:4px;margin-bottom:10px;}
-.per{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1.5px solid var(--bdr);background:transparent;color:var(--tx3);}
-.per.on{background:var(--plt);border-color:var(--pbr);color:var(--p);}
-.p-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 18px;border-bottom:1px solid var(--bdr);}
-.p-stat{background:var(--g50);border-radius:9px;padding:9px 11px;}
-.ps-lbl{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
-.ps-val{font-size:13px;font-weight:800;font-family:var(--fd);}
-.p-about{padding:14px 18px;border-bottom:1px solid var(--bdr);}
-.p-about-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-.p-about-txt{font-size:13px;color:var(--tx2);line-height:1.7;}
-.p-actions{display:flex;gap:10px;padding:14px 18px;}
-.btn-buy{flex:1;background:var(--p);border:none;color:#fff;padding:11px;border-radius:9px;font-size:13px;font-weight:700;box-shadow:0 3px 12px rgba(26,110,255,.25);}
-.btn-watch-p{flex:1;background:var(--g100);border:1.5px solid var(--bdr);color:var(--tx2);padding:11px;border-radius:9px;font-size:13px;font-weight:700;}
-.btn-watch-p:hover{background:var(--plt);color:var(--p);border-color:var(--pbr);}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:399;display:none;backdrop-filter:blur(2px);}
-/* Extras */
-.extras{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:18px;}
-.extra{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:14px;box-shadow:var(--sh);}
-.ex-title{font-family:var(--fd);font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
-.mv-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:11px;}
-.mv-row:last-child{border:none;}
-.mv-tk{font-size:10px;font-weight:700;background:var(--g100);padding:2px 6px;border-radius:4px;color:var(--g500);}
-.mv-name{flex:1;color:var(--tx2);}
-.nw-item{padding:8px 0;border-bottom:1px solid var(--bdr);}
-.nw-item:last-child{border:none;}
-.nw-src{font-size:9px;color:var(--tx3);font-weight:700;text-transform:uppercase;margin-bottom:3px;}
-.nw-title{font-size:12px;line-height:1.5;color:var(--tx);}
-.dv-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:11px;}
-.dv-row:last-child{border:none;}
-/* RESPONSIVE */
-@media(max-width:1100px){.ov-grid{grid-template-columns:repeat(3,1fr);}.extras{grid-template-columns:1fr 1fr;}}
-@media(max-width:900px){.fg-row{grid-template-columns:1fr;}.gl-grid{grid-template-columns:1fr;}.nav-links{display:none;}.burger{display:block;}}
-@media(max-width:768px){.ov-grid{grid-template-columns:repeat(2,1fr);}.extras{grid-template-columns:1fr;}.panel{width:100%;}.stbl-cols,.stk-row{grid-template-columns:32px 2fr 1fr 1fr 72px;}.stbl-cols .th:nth-child(5),.stbl-cols .th:nth-child(6),.stk-row div:nth-child(5),.stk-row div:nth-child(6){display:none;}}
-@media(max-width:480px){.ov-grid{grid-template-columns:1fr 1fr;}.sec-pills{grid-template-columns:repeat(2,1fr);}.hd-chips{display:none;}.pg{padding-left:12px;padding-right:12px;}}
+.pg{max-width:1280px;margin:0 auto;padding:100px 20px 40px;}
+/* OVERVIEW CARDS */
+.ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.ov-card{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;padding:16px;box-shadow:var(--sh);}
+.ov-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.ov-val{font-family:var(--fd);font-size:20px;font-weight:800;color:var(--tx);}
+.ov-sub{font-size:11px;margin-top:3px;}
+.up{color:var(--g)!important;}.dn{color:var(--r)!important;}
+/* GAUGE */
+.gauge-wrap{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;padding:16px;box-shadow:var(--sh);display:flex;align-items:center;gap:16px;}
+.gauge-canvas-wrap{position:relative;width:100px;flex-shrink:0;}
+.gauge-label{text-align:center;}
+.gauge-score{font-family:var(--fd);font-size:22px;font-weight:800;}
+.gauge-text{font-size:11px;font-weight:700;margin-top:2px;}
+/* MOVERS */
+.section-title{font-family:var(--fd);font-size:16px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.st-sub{font-size:11px;color:var(--tx3);font-weight:500;}
+.movers-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.movers-col{}
+.mover-col-title{font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.mover-list{display:flex;flex-direction:column;gap:5px;}
+.mover-row{background:var(--surf);border:1px solid var(--bdr);border-radius:9px;padding:10px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .14s;}
+.mover-row:hover{border-color:var(--pbr);background:var(--plt);}
+.mr-rank{font-size:11px;color:var(--tx3);width:16px;}
+.mr-sym{font-size:12px;font-weight:800;font-family:monospace;width:70px;}
+.mr-name{font-size:11px;color:var(--tx2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mr-price{font-size:12px;font-weight:700;text-align:right;}
+.mr-chg{font-size:11px;font-weight:700;text-align:right;min-width:52px;}
+/* SEARCH */
+.search-bar{background:var(--surf);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 14px;font-size:14px;outline:none;width:100%;margin-bottom:14px;transition:border-color .15s;}
+.search-bar:focus{border-color:var(--p);}
+/* ALL STOCKS TABLE */
+.stocks-table{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;overflow:hidden;box-shadow:var(--sh);}
+.st-header{display:grid;grid-template-columns:80px 1fr 100px 80px 80px 80px;gap:8px;padding:9px 16px;background:var(--g50);border-bottom:1px solid var(--bdr);}
+.th{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
+.st-row{display:grid;grid-template-columns:80px 1fr 100px 80px 80px 80px;gap:8px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--bdr);cursor:pointer;transition:background .12s;}
+.st-row:last-child{border:none;}
+.st-row:hover{background:var(--plt);}
+.sr-sym{font-size:12px;font-weight:800;font-family:monospace;color:var(--p);}
+.sr-name{font-size:12px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sr-price{font-size:12px;font-weight:700;}
+.sr-chg{font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.chg-up{background:var(--gbg);color:var(--g);}
+.chg-dn{background:var(--rbg);color:var(--r);}
+.chg-flat{background:var(--g100);color:var(--tx3);}
+.sr-vol{font-size:11px;color:var(--tx3);}
+/* DETAIL PANEL */
+.detail-panel{position:fixed;top:0;right:-400px;width:380px;height:100vh;background:#fff;border-left:1px solid var(--bdr);box-shadow:-8px 0 32px rgba(0,0,0,.1);z-index:400;transition:right .3s;overflow-y:auto;padding:20px;}
+.detail-panel.open{right:0;}
+.dp-close{background:var(--g100);border:none;width:28px;height:28px;border-radius:7px;font-size:14px;float:right;cursor:pointer;margin-bottom:12px;}
+.dp-sym{font-family:var(--fd);font-size:24px;font-weight:800;margin-bottom:2px;}
+.dp-name{font-size:13px;color:var(--tx2);margin-bottom:14px;}
+.dp-price{font-family:var(--fd);font-size:32px;font-weight:800;margin-bottom:4px;}
+.dp-chg{font-size:14px;font-weight:700;margin-bottom:16px;}
+.dp-chart-wrap{height:120px;margin-bottom:16px;}
+.dp-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
+.dp-stat{background:var(--g50);border-radius:9px;padding:10px;}
+.dps-lbl{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.dps-val{font-size:14px;font-weight:700;}
+/* STATUS BAR */
+.status-bar{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;}
+.sb-item{display:flex;align-items:center;gap:5px;}
+.sb-dot{width:7px;height:7px;border-radius:50%;}
+.dot-green{background:#22c55e;}.dot-red{background:#ef4444;}.dot-gray{background:#94a3b8;}
+/* Pagination */
+.pagination{display:flex;justify-content:center;gap:6px;padding:14px;border-top:1px solid var(--bdr);}
+.pg-btn{min-width:32px;height:32px;padding:0 10px;border-radius:7px;background:var(--g50);border:1px solid var(--bdr);font-size:12px;font-weight:600;transition:all .13s;}
+.pg-btn:hover,.pg-btn.on{background:var(--p);color:#fff;border-color:var(--p);}
+/* Loading */
+.spin{display:inline-block;width:18px;height:18px;border:2px solid var(--bdr);border-top-color:var(--p);border-radius:50%;animation:sp .6s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+@media(max-width:1100px){.ov-grid{grid-template-columns:repeat(2,1fr);}.st-header,.st-row{grid-template-columns:70px 1fr 90px 80px;}.st-header .th:nth-child(5),.st-header .th:nth-child(6),.st-row div:nth-child(5),.st-row div:nth-child(6){display:none;}}
+@media(max-width:768px){.nav-links{display:none;}.burger{display:block;}.movers-grid{grid-template-columns:1fr;}.detail-panel{width:100%;right:-100%;}.ov-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
-<script>
-// ── AUTH GUARD ── runs before anything else
-(function(){
-  const raw = sessionStorage.getItem('gopex_user');
-  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
-  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
-  if (!hasSession) { window.location.replace('landing.html'); }
-})();
-
-</script>
 <nav class="nav">
   <div class="nav-in">
-    <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
+    <a href="landing.html" class="logo"><div class="lm">G</div>GopexFund</a>
     <div class="nav-links">
-      <a href="home.html" class="nl">🏠 Home</a><a href="market.html" class="nl on">📈 Market</a>
-      <a href="portfolio.html" class="nl">💼 Portfolio</a><a href="learn.html" class="nl">📚 Learn</a><a href="about.html" class="nl">ℹ About</a>
+      <a href="home.html" class="nl">Home</a>
+      <a href="market.html" class="nl on">Market</a>
+      <a href="portfolio.html" class="nl">Portfolio</a>
+      <a href="learn.html" class="nl">Learn</a>
     </div>
     <div class="nav-r">
-      <a href="profile.html" class="nav-prof"><div class="nav-av" id="nav-av">AO</div><span style="font-size:12px;font-weight:600;" id="nav-name">Adaeze</span></a>
-      <button onclick="gxLogout()" title="Log out" style="background:#fee2e2;border:1.5px solid #fca5a5;border-radius:8px;color:#dc2626;font-size:11px;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap;display:none;" class="logout-btn">↩ Logout</button>
-      <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
+      <a href="profile.html" class="prof-pill"><div class="nav-av" id="nav-av">?</div><span class="nav-un" id="nav-un">Account</span></a>
+      <button class="burger" onclick="document.getElementById('mnav').classList.toggle('open')">&#9776;</button>
     </div>
   </div>
 </nav>
-<div class="mob-nav" id="mn">
-  <a href="home.html" class="mob-link">🏠 Home</a><a href="market.html" class="mob-link on">📈 Market</a>
-  <a href="portfolio.html" class="mob-link">💼 Portfolio</a><a href="learn.html" class="mob-link">📚 Learn</a>
+<div class="mob-nav" id="mnav">
+  <a href="home.html" class="mob-link">Home</a>
+  <a href="market.html" class="mob-link on">Market</a>
+  <a href="portfolio.html" class="mob-link">Portfolio</a>
+  <a href="learn.html" class="mob-link">Learn</a>
+  <a href="profile.html" class="mob-link">My Account</a>
 </div>
-<div class="tape"><div class="tape-track" id="tape"></div></div>
-<div class="overlay" id="overlay" onclick="closePanel()"></div>
 
-<!-- STOCK PANEL -->
-<div class="panel" id="panel">
-  <div class="panel-top"><span style="font-size:11px;color:var(--tx3);">Stock Detail · NGX</span><button class="panel-close" onclick="closePanel()">✕</button></div>
-  <div class="p-head">
-    <div class="p-tk" id="p-tk">NGX: MTNN</div>
-    <div class="p-cname" id="p-cname">MTN Nigeria</div>
-    <div class="p-sector" id="p-sector">📡 ICT</div>
-    <div class="p-price"><span id="p-price">₦245.00</span><span class="chg-up" id="p-chg">+6.52%</span></div>
-    <div style="font-size:11px;color:var(--tx3);margin-top:4px;">NGX · 14 May 2026 close</div>
-  </div>
-  <div class="p-chart-wrap">
-    <div class="per-row">
-      <button class="per on" onclick="setPer(this,'1D')">1D</button>
-      <button class="per" onclick="setPer(this,'1W')">1W</button>
-      <button class="per" onclick="setPer(this,'1M')">1M</button>
-      <button class="per" onclick="setPer(this,'3M')">3M</button>
-      <button class="per" onclick="setPer(this,'1Y')">1Y</button>
-    </div>
-    <div style="height:160px;"><canvas id="p-chart"></canvas></div>
-  </div>
-  <div class="p-stats" id="p-stats"></div>
-  <div class="p-about"><div class="p-about-lbl">About</div><div class="p-about-txt" id="p-about"></div></div>
-  <div class="p-actions">
-    <button class="btn-buy" onclick="alert('Connect your brokerage in Portfolio to trade.')">Buy / Sell</button>
-    <button class="btn-watch-p" id="p-watch" onclick="togglePanelWatch()">☆ Watchlist</button>
-  </div>
-</div>
+<!-- TICKER TAPE -->
+<div class="tape-wrap"><div class="tape" id="tape">
+  <div class="tk-item"><span class="tk-sym">Loading prices...</span></div>
+</div></div>
 
 <div class="pg">
-  <div class="pg-hd">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
     <div>
-      <div style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">NGX · Live Data · Lagos WAT</div>
-      <div class="pg-title">NGX Market Overview</div>
-      <div class="pg-sub">May 15, 2026 · 9am–4pm WAT weekdays · <span id="prices-updated" style="color:var(--green);font-weight:600;">Loading prices…</span></div>
+      <div style="font-family:var(--fd);font-size:22px;font-weight:800;">NGX Market Overview</div>
+      <div style="font-size:12px;color:var(--tx3);" id="market-updated">Fetching live data...</div>
     </div>
-    <div class="hd-chips">
-      <div class="hd-chip"><div class="hc-lbl">Status</div><div class="hc-val" id="mkt-status">⏳</div></div>
-      <div class="hd-chip"><div class="hc-lbl">Lagos Time</div><div class="hc-val" id="mkt-time">—:—</div></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="status-bar" style="margin:0;padding:7px 12px;">
+        <div class="sb-item"><div class="sb-dot" id="mkt-dot" style="background:var(--am);"></div><span id="mkt-status">Loading...</span></div>
+      </div>
+      <button onclick="loadAllPrices()" style="background:var(--plt);border:1px solid var(--pbr);color:var(--p);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;">&#8635; Refresh</button>
     </div>
   </div>
 
   <!-- OVERVIEW -->
   <div class="ov-grid">
-    <div class="ov-card" style="border-color:var(--pbr);">
-      <div class="ov-lbl">NGX All-Share Index</div>
-      <div class="ov-val">252,508</div>
-      <div class="ov-chg up">▲ +96.52 (+0.04%)</div>
-      <div class="ov-note">+62.27% YTD · All-Time High ✓</div>
-      <div class="ov-spark"><canvas id="asi-spark"></canvas></div>
+    <div class="ov-card">
+      <div class="ov-lbl">ASI Index</div>
+      <div class="ov-val" id="asi-val">Loading...</div>
+      <div class="ov-sub up" id="asi-chg">—</div>
     </div>
-    <div class="ov-card"><div class="ov-lbl">Market Cap</div><div class="ov-val">₦162.1T</div><div class="ov-chg up">≈ USD $118B</div><div class="ov-note">+22.68% in 4 weeks</div></div>
-    <div class="ov-card"><div class="ov-lbl">Today's Volume</div><div class="ov-val">1.57B</div><div class="ov-chg up">▲ +26% vs prev day</div><div class="ov-note">₦91.66B turnover</div></div>
-    <div class="ov-card"><div class="ov-lbl">Breadth</div><div class="ov-val"><span class="up">39</span> / <span class="dn">29</span></div><div class="ov-chg" style="color:var(--tx2);">Gainers / Losers</div><div class="ov-note">133 equities traded</div></div>
-    <div class="ov-card"><div class="ov-lbl">USD / NGN</div><div class="ov-val">₦1,366</div><div class="ov-chg dn">▼ -0.36%</div><div class="ov-note">EUR ₦1,594 · GBP ₦1,830</div></div>
-  </div>
-
-  <!-- FEAR & GREED + BREADTH -->
-  <div class="fg-row">
-    <div class="card">
-      <div class="card-hd"><div class="card-title">🎭 Fear &amp; Greed Index</div><div class="card-sub">NGX Daily</div></div>
-      <div class="fg-body">
-        <div class="fg-arc-wrap">
-          <canvas id="fg-gauge" width="240" height="128"></canvas>
-          <div class="fg-score-overlay"><div class="fg-num">72</div><div class="fg-word">GREED</div></div>
-        </div>
-        <div class="fg-spectrum">
-          <span class="fg-sp-lbl" style="color:var(--red);font-size:9px;">Fear</span>
-          <div class="fg-bar"><div class="fg-needle" style="left:calc(72% - 4px)"></div></div>
-          <span class="fg-sp-lbl" style="color:var(--green);font-size:9px;">Greed</span>
-        </div>
-        <div class="fg-hist">
-          <div class="fh"><div class="fh-num" style="color:var(--amber);">72</div><div class="fh-lbl">Today</div></div>
-          <div class="fh"><div class="fh-num" style="color:var(--amber);">68</div><div class="fh-lbl">1 Week</div></div>
-          <div class="fh"><div class="fh-num" style="color:var(--green);">81</div><div class="fh-lbl">1 Month</div></div>
-          <div class="fh"><div class="fh-num" style="color:var(--red);">38</div><div class="fh-lbl">1 Year</div></div>
-        </div>
-        <div class="fg-signal">📊 <strong>Greed (72/100)</strong> — ASI at ATH 252,508. Institutional rotation from banks into telecoms (MTNN +6.5%). Watch 255,000 resistance level.</div>
-      </div>
+    <div class="ov-card">
+      <div class="ov-lbl">Gainers / Losers</div>
+      <div class="ov-val"><span class="up" id="ov-gainers">—</span> / <span class="dn" id="ov-losers">—</span></div>
+      <div class="ov-sub" id="ov-flat" style="color:var(--tx3);">— unchanged</div>
     </div>
-    <div class="card">
-      <div class="card-hd"><div class="card-title">📊 Market Breadth &amp; Sector Indices</div></div>
-      <div class="br-body">
-        <div class="br-row"><span class="br-lbl">Total Gainers</span><span class="br-val up">39 stocks</span></div>
-        <div class="br-row"><span class="br-lbl">Total Losers</span><span class="br-val dn">29 stocks</span></div>
-        <div class="br-row"><span class="br-lbl">Total Deals</span><span class="br-val">76,431</span></div>
-        <div class="br-row"><span class="br-lbl">Volume Leader</span><span class="br-val" style="font-size:11px;">FIRSTHOLDCO · 575M shares</span></div>
-        <div class="br-row"><span class="br-lbl">Value Leader</span><span class="br-val" style="font-size:11px;">FIRSTHOLDCO · ₦44.4B</span></div>
-        <div style="margin:10px 0 8px;font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;">Sector Indices</div>
-        <div class="si-grid">
-          <div class="si-item"><span class="si-name">NGX Industrial</span><span class="si-val up">+0.93%</span></div>
-          <div class="si-item"><span class="si-name">NGX Insurance</span><span class="si-val up">+0.68%</span></div>
-          <div class="si-item"><span class="si-name">NGX Consumer</span><span class="si-val up">+0.23%</span></div>
-          <div class="si-item"><span class="si-name">NGX Main Board</span><span class="si-val up">+0.30%</span></div>
-          <div class="si-item"><span class="si-name">NGX Banking</span><span class="si-val dn">-0.04%</span></div>
-          <div class="si-item"><span class="si-name">NGX Oil &amp; Gas</span><span class="si-val dn">-0.03%</span></div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;">
-          <div style="background:var(--gbg);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:9px;color:var(--green);">1-Week ASI</div><div style="font-size:15px;font-weight:800;color:var(--green);font-family:var(--fd);">+4.03%</div></div>
-          <div style="background:var(--gbg);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:9px;color:var(--green);">4-Week ASI</div><div style="font-size:15px;font-weight:800;color:var(--green);font-family:var(--fd);">+22.68%</div></div>
-          <div style="background:var(--gbg);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:9px;color:var(--green);">YTD ASI</div><div style="font-size:15px;font-weight:800;color:var(--green);font-family:var(--fd);">+62.27%</div></div>
-        </div>
+    <div class="ov-card">
+      <div class="ov-lbl">Market Volume</div>
+      <div class="ov-val" id="ov-vol">—</div>
+      <div class="ov-sub" style="color:var(--tx3);">Shares traded today</div>
+    </div>
+    <div class="gauge-wrap">
+      <canvas id="gauge-canvas" width="100" height="60" style="width:100px;height:60px;"></canvas>
+      <div class="gauge-label">
+        <div class="ov-lbl">Fear &amp; Greed</div>
+        <div class="gauge-score" id="fg-score">—</div>
+        <div class="gauge-text" id="fg-label" style="color:var(--am);">Loading...</div>
       </div>
     </div>
   </div>
 
-  <!-- MOVERS -->
-  <div style="font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:13px;">🚀 Today's Top Movers</div>
-  <div class="gl-grid">
-    <div class="card"><div class="card-hd"><div class="card-title" style="color:var(--green);">▲ Top Gainers</div><div style="font-size:10px;background:var(--gbg);color:var(--green);padding:3px 8px;border-radius:5px;font-weight:700;">39 total</div></div><div id="gainers-list"></div></div>
-    <div class="card"><div class="card-hd"><div class="card-title" style="color:var(--red);">▼ Top Losers</div><div style="font-size:10px;background:var(--rbg);color:var(--red);padding:3px 8px;border-radius:5px;font-weight:700;">29 total</div></div><div id="losers-list"></div></div>
+  <!-- TOP MOVERS -->
+  <div class="section-title">Top Movers <span class="st-sub" id="last-refresh">—</span></div>
+  <div class="movers-grid">
+    <div>
+      <div class="mover-col-title"><span style="color:var(--g);">&#9650;</span> Top Gainers</div>
+      <div class="mover-list" id="gainers-list"><div style="color:var(--tx3);font-size:13px;padding:10px 0;"><div class="spin"></div></div></div>
+    </div>
+    <div>
+      <div class="mover-col-title"><span style="color:var(--r);">&#9660;</span> Top Losers</div>
+      <div class="mover-list" id="losers-list"><div style="color:var(--tx3);font-size:13px;padding:10px 0;"><div class="spin"></div></div></div>
+    </div>
   </div>
 
-  <!-- SECTORS -->
-  <div style="font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:5px;">🗂 Browse by Sector</div>
-  <div style="font-size:12px;color:var(--tx3);margin-bottom:13px;">146 companies · 13 NGX sectors · Click any sector to expand all stocks</div>
-  <div class="sec-pills" id="sec-pills"></div>
-  <div class="stbl" id="stbl">
-    <div class="stbl-hd">
-      <div class="stbl-title" id="stbl-title">Financial Services</div>
-      <input class="stbl-srch" type="text" placeholder="Search stocks…" oninput="filterStocks(this.value)" id="stbl-search"/>
+  <!-- ALL STOCKS -->
+  <div class="section-title">All NGX Stocks <span class="st-sub" id="stock-count">Loading...</span></div>
+  <input class="search-bar" id="search-bar" placeholder="Search by ticker or company name..." oninput="filterStocks(this.value)"/>
+  <div class="stocks-table">
+    <div class="st-header">
+      <div class="th">Ticker</div>
+      <div class="th">Company</div>
+      <div class="th">Price</div>
+      <div class="th">Change</div>
+      <div class="th">Volume</div>
+      <div class="th">Updated</div>
     </div>
-    <div class="stbl-cols"><div class="th"></div><div class="th">Company</div><div class="th th-r">Price</div><div class="th th-r">1D</div><div class="th th-r">Mkt Cap</div><div class="th th-r">Volume</div><div class="th th-r">Action</div></div>
-    <div id="stbl-body"></div>
-  </div>
-
-  <!-- EXTRAS -->
-  <div style="font-family:var(--fd);font-size:18px;font-weight:800;margin:20px 0 13px;">📡 Market Intelligence</div>
-  <div class="extras">
-    <div class="extra">
-      <div class="ex-title">🔊 Volume Leaders</div>
-      <div class="mv-row"><span class="mv-tk">FIRSTHOLDCO</span><span class="mv-name">First HoldCo</span><span class="dn" style="font-weight:700;">575M</span></div>
-      <div class="mv-row"><span class="mv-tk">ACCESSCORP</span><span class="mv-name">Access Holdings</span><span style="font-weight:700;">105M</span></div>
-      <div class="mv-row"><span class="mv-tk">FIDELITYBK</span><span class="mv-name">Fidelity Bank</span><span style="font-weight:700;">96M</span></div>
-      <div class="mv-row"><span class="mv-tk">WEMABANK</span><span class="mv-name">Wema Bank</span><span style="font-weight:700;">70M</span></div>
-      <div class="mv-row"><span class="mv-tk">GTCO</span><span class="mv-name">GT Holdings</span><span style="font-weight:700;">58M</span></div>
-    </div>
-    <div class="extra">
-      <div class="ex-title">📰 Market News</div>
-      <div class="nw-item"><div class="nw-src">TRW Stockbrokers · 13 May</div><div class="nw-title">ASI shatters ATH 252,508 — Wave 5 extension; break above 255K targets 260K+</div></div>
-      <div class="nw-item"><div class="nw-src">NGX Official · 13 May</div><div class="nw-title">FIRSTHOLDCO leads volume (575M) but falls 7.8% on institutional profit-taking</div></div>
-      <div class="nw-item"><div class="nw-src">BusinessDay · 13 May</div><div class="nw-title">Smart money rotates banks → telecoms: MTNN surges ₦15 in single session</div></div>
-    </div>
-    <div class="extra">
-      <div class="ex-title">💰 Upcoming Dividends</div>
-      <div class="dv-row"><span style="font-weight:700;">MTNN</span><span class="up" style="font-weight:700;">₦5.04/share</span><span style="color:var(--tx3);">Jun 2026</span></div>
-      <div class="dv-row"><span style="font-weight:700;">DANGCEM</span><span class="up" style="font-weight:700;">₦30/share</span><span style="color:var(--tx3);">Jun 2026</span></div>
-      <div class="dv-row"><span style="font-weight:700;">GTCO</span><span class="up" style="font-weight:700;">₦4.50/share</span><span style="color:var(--tx3);">Jul 2026</span></div>
-      <div class="dv-row"><span style="font-weight:700;">ZENITHBANK</span><span class="up" style="font-weight:700;">₦4.00/share</span><span style="color:var(--tx3);">Jul 2026</span></div>
-      <div class="dv-row"><span style="font-weight:700;">BUACEMENT</span><span class="up" style="font-weight:700;">₦16/share</span><span style="color:var(--tx3);">Aug 2026</span></div>
-    </div>
+    <div id="stocks-body"><div style="padding:30px;text-align:center;"><div class="spin"></div><div style="margin-top:10px;font-size:13px;color:var(--tx3);">Loading live prices...</div></div></div>
+    <div class="pagination" id="pagination" style="display:none;"></div>
   </div>
 </div>
 
-<script>
-const GAINERS=[{tk:'BERGER',name:'Berger Paints',sector:'Industrial',price:'140.10',chg:'+17.29%',up:true,vol:'1.2M',cap:'₦40.6B',board:'M',desc:'Berger Paints Nigeria Plc — Main Board. Premium paints and coatings since 1959. One of Nigeria\'s oldest industrial companies.'},
-{tk:'FIDSON',name:'Fidson Healthcare',sector:'Healthcare',price:'113.30',chg:'+10.00%',up:true,vol:'2.1M',cap:'₦260B',board:'M',desc:'Fidson Healthcare — Main Board. Nigeria\'s largest indigenous pharmaceutical company. GMP-certified factory in Lagos.'},
-{tk:'CWG',name:'CWG Plc',sector:'ICT',price:'23.10',chg:'+10.00%',up:true,vol:'4.5M',cap:'₦58.3B',board:'M',desc:'Computer Warehouse Group — Main Board. Pan-African ICT services: enterprise tech, cloud, digital transformation.'},
-{tk:'LIVESTOCK',name:'Livestock Feeds',sector:'Agriculture',price:'5.50',chg:'+10.00%',up:true,vol:'3.8M',cap:'₦12.1B',board:'M',desc:'Livestock Feeds Plc — Main Board. Animal nutrition and feed manufacturer since 1964.'},
-{tk:'MTNN',name:'MTN Nigeria',sector:'ICT',price:'245.00',chg:'+6.52%',up:true,vol:'5.7M',cap:'₦4.9T',board:'P',desc:'MTN Nigeria Communications Plc — Premium Board. Nigeria\'s largest mobile network operator, 80M+ subscribers. Expanding into mobile fintech via MoMo.'},
-{tk:'BUACEMENT',name:'BUA Cement',sector:'Industrial',price:'435.00',chg:'+2.36%',up:true,vol:'0.6M',cap:'₦14.7T',board:'P',desc:'BUA Cement Plc — Premium Board. Nigeria\'s second-largest cement producer with ~11 Mtpa capacity.'},
-{tk:'UNILEVER',name:'Unilever Nigeria',sector:'Consumer',price:'28.50',chg:'+1.83%',up:true,vol:'0.9M',cap:'₦163B',board:'M',desc:'Unilever Nigeria Plc — Main Board. Brands: Omo, Lipton, Vaseline, Close-Up.'}];
-const LOSERS=[{tk:'NCRNIGERIA',name:'NCR Nigeria',sector:'ICT',price:'179.10',chg:'-10.00%',up:false,vol:'0.2M',cap:'₦10.6B',board:'M',desc:'NCR Nigeria Plc — Main Board. ATM hardware and fintech solutions for Nigerian banks.'},
-{tk:'CORNERST',name:'Cornerstone Insur.',sector:'Insurance',price:'5.40',chg:'-10.00%',up:false,vol:'8.2M',cap:'₦98.1B',board:'M',desc:'Cornerstone Insurance Plc — Main Board. Composite insurer licensed by NAICOM. Est. 1991.'},
-{tk:'NEIMETH',name:'Neimeth Pharma',sector:'Healthcare',price:'2.59',chg:'-9.66%',up:false,vol:'5.4M',cap:'₦9.1B',board:'M',desc:'Neimeth International Pharmaceuticals — Main Board. Generic medicines manufacturer.'},
-{tk:'FIRSTHOLDCO',name:'First HoldCo',sector:'Financial',price:'75.30',chg:'-7.80%',up:false,vol:'575M',cap:'₦3.35T',board:'P',desc:'FBN Holdings / First HoldCo — Premium Board. Operating First Bank of Nigeria, est. 1894. Nigeria\'s oldest bank.'},
-{tk:'GTCO',name:'GT Holdings',sector:'Financial',price:'54.05',chg:'-7.60%',up:false,vol:'58M',cap:'₦1.59T',board:'P',desc:'Guaranty Trust Holding Company — Premium Board. One of Nigeria\'s most profitable financial institutions.'},
-{tk:'ZENITHBANK',name:'Zenith Bank',sector:'Financial',price:'42.10',chg:'-8.66%',up:false,vol:'42M',cap:'₦1.32T',board:'P',desc:'Zenith Bank Plc — Premium Board. One of Nigeria\'s largest banks. Strong dividend yields historically.'}];
-const SECTORS=[
-  {ico:'🏦',name:'Financial Services',chg:'+0.04%',up:true,cnt:42,stocks:[
-    {tk:'GTCO',name:'GT Holdings',price:'54.05',chg:'-7.60%',up:false,cap:'₦1.59T',vol:'58M',board:'P',desc:'Guaranty Trust Holding Company — Premium Board. Pan-African bank.'},
-    {tk:'ZENITHBANK',name:'Zenith Bank',price:'42.10',chg:'-8.66%',up:false,cap:'₦1.32T',vol:'42M',board:'P',desc:'Zenith Bank — Premium Board. Large-cap Nigerian bank, strong dividends.'},
-    {tk:'FIRSTHOLDCO',name:'First HoldCo',price:'75.30',chg:'-7.80%',up:false,cap:'₦3.35T',vol:'575M',board:'P',desc:'First HoldCo — Premium Board. First Bank Nigeria, est. 1894.'},
-    {tk:'ACCESSCORP',name:'Access Holdings',price:'25.75',chg:'-2.50%',up:false,cap:'₦1.37T',vol:'105M',board:'P',desc:'Access Holdings — Premium Board. Nigeria\'s largest bank by customer base.'},
-    {tk:'FIDELITYBK',name:'Fidelity Bank',price:'22.35',chg:'+1.20%',up:true,cap:'₦1.12T',vol:'96M',board:'M',desc:'Fidelity Bank — Main Board. Mid-tier Nigerian commercial bank.'},
-    {tk:'NGXGROUP',name:'NGX Group',price:'158.00',chg:'+5.50%',up:true,cap:'₦414B',vol:'5.5M',board:'M',desc:'Nigerian Exchange Group — Main Board. The exchange operator. Up 126% YTD.'},
-    {tk:'AIICO',name:'AIICO Insurance',price:'4.50',chg:'+1.65%',up:true,cap:'₦164.7B',vol:'12M',board:'M',desc:'AIICO Insurance — Main Board. Life and general insurance.'},
-    {tk:'CORNERST',name:'Cornerstone Insur.',price:'5.40',chg:'-10.00%',up:false,cap:'₦98.1B',vol:'8.2M',board:'M',desc:'Cornerstone Insurance — Main Board. Composite insurer. Est. 1991.'},
-  ]},
-  {ico:'📡',name:'ICT',chg:'+4.20%',up:true,cnt:9,stocks:[
-    {tk:'MTNN',name:'MTN Nigeria',price:'245.00',chg:'+6.52%',up:true,cap:'₦4.9T',vol:'5.7M',board:'P',desc:'MTN Nigeria — Premium Board. 80M+ subscribers, largest telco in Nigeria.'},
-    {tk:'AIRTELAFRI',name:'Airtel Africa',price:'2,200',chg:'+0.80%',up:true,cap:'₦4.1T',vol:'0.8M',board:'P',desc:'Airtel Africa — Premium Board. Pan-African telco in 14 countries.'},
-    {tk:'CWG',name:'CWG Plc',price:'23.10',chg:'+10.00%',up:true,cap:'₦58.3B',vol:'4.5M',board:'M',desc:'Computer Warehouse Group — Main Board. ICT and cloud services.'},
-    {tk:'NCRNIGERIA',name:'NCR Nigeria',price:'179.10',chg:'-10.00%',up:false,cap:'₦10.6B',vol:'0.2M',board:'M',desc:'NCR Nigeria — Main Board. ATM and fintech solutions.'},
-  ]},
-  {ico:'🏗️',name:'Industrial Goods',chg:'+0.93%',up:true,cnt:11,stocks:[
-    {tk:'DANGCEM',name:'Dangote Cement',price:'543.00',chg:'+0.90%',up:true,cap:'₦9.26T',vol:'2.1M',board:'P',desc:'Dangote Cement — Premium Board. Nigeria\'s largest company by market cap. Pan-African cement.'},
-    {tk:'BUACEMENT',name:'BUA Cement',price:'435.00',chg:'+2.36%',up:true,cap:'₦14.73T',vol:'0.6M',board:'P',desc:'BUA Cement — Premium Board. Nigeria\'s second largest cement producer.'},
-    {tk:'BERGER',name:'Berger Paints',price:'140.10',chg:'+17.29%',up:true,cap:'₦40.6B',vol:'1.2M',board:'M',desc:'Berger Paints — Main Board. Paints and coatings since 1959.'},
-  ]},
-  {ico:'🛒',name:'Consumer Goods',chg:'+0.23%',up:true,cnt:19,stocks:[
-    {tk:'BUAFOODS',name:'BUA Foods',price:'385.00',chg:'+2.10%',up:true,cap:'₦6.93T',vol:'1.5M',board:'P',desc:'BUA Foods — Premium Board. Flour, pasta, sugar, edible oils.'},
-    {tk:'DANGSUGAR',name:'Dangote Sugar',price:'58.00',chg:'+1.50%',up:true,cap:'₦697B',vol:'3.2M',board:'M',desc:'Dangote Sugar — Main Board. Nigeria\'s largest sugar refiner.'},
-    {tk:'NESTLE',name:'Nestlé Nigeria',price:'1,500',chg:'+1.20%',up:true,cap:'₦1.19T',vol:'0.3M',board:'P',desc:'Nestlé Nigeria — Premium Board. Milo, Maggi, Golden Morn, Nescafé.'},
-    {tk:'UNILEVER',name:'Unilever Nigeria',price:'28.50',chg:'+1.83%',up:true,cap:'₦163B',vol:'0.9M',board:'M',desc:'Unilever Nigeria — Main Board. Omo, Lipton, Vaseline.'},
-  ]},
-  {ico:'⛽',name:'Oil & Gas',chg:'-0.03%',up:false,cnt:8,stocks:[
-    {tk:'SEPLAT',name:'Seplat Energy',price:'4,850',chg:'+1.40%',up:true,cap:'₦2.86T',vol:'0.4M',board:'P',desc:'Seplat Energy — Premium Board. Dual-listed NGX/LSE. Largest independent indigenous oil producer.'},
-    {tk:'ARADEL',name:'Aradel Holdings',price:'680.00',chg:'-0.50%',up:false,cap:'₦1.13T',vol:'0.6M',board:'P',desc:'Aradel Holdings — Premium Board. Integrated energy company.'},
-  ]},
-  {ico:'🌾',name:'Agriculture',chg:'+1.20%',up:true,cnt:7,stocks:[
-    {tk:'PRESCO',name:'Presco Plc',price:'625.00',chg:'+1.20%',up:true,cap:'₦1.25T',vol:'0.3M',board:'P',desc:'Presco — Premium Board. Palm oil producer.'},
-    {tk:'OKOMUOIL',name:'Okomu Oil Palm',price:'445.00',chg:'+0.80%',up:true,cap:'₦417B',vol:'0.4M',board:'M',desc:'Okomu Oil Palm — Main Board. Palm oil and rubber.'},
-    {tk:'LIVESTOCK',name:'Livestock Feeds',price:'5.50',chg:'+10.00%',up:true,cap:'₦12.1B',vol:'3.8M',board:'M',desc:'Livestock Feeds — Main Board. Animal nutrition and feeds.'},
-  ]},
-  {ico:'💊',name:'Healthcare',chg:'+2.30%',up:true,cnt:8,stocks:[
-    {tk:'FIDSON',name:'Fidson Healthcare',price:'113.30',chg:'+10.00%',up:true,cap:'₦260B',vol:'2.1M',board:'M',desc:'Fidson Healthcare — Main Board. Largest indigenous pharmaceutical company.'},
-    {tk:'NEIMETH',name:'Neimeth Pharma',price:'2.59',chg:'-9.66%',up:false,cap:'₦9.1B',vol:'5.4M',board:'M',desc:'Neimeth — Main Board. Generic medicines manufacturer.'},
-  ]},
-  {ico:'🔌',name:'Utilities',chg:'+3.10%',up:true,cnt:5,stocks:[
-    {tk:'GEREGU',name:'Geregu Power',price:'1,250',chg:'+5.10%',up:true,cap:'₦1.5T',vol:'0.4M',board:'P',desc:'Geregu Power — Premium Board. 435MW gas-fired plant. First power company listed on NGX (2022).'},
-    {tk:'TRANSCORP',name:'Transcorp Power',price:'390.00',chg:'+2.80%',up:true,cap:'₦3.9T',vol:'0.9M',board:'P',desc:'Transcorp Power — Premium Board. Ughelli Power Plant 912MW. Most valuable utility on NGX.'},
-  ]},
-  {ico:'🏢',name:'Conglomerates',chg:'+0.40%',up:true,cnt:6,stocks:[{tk:'UACN',name:'UAC of Nigeria',price:'26.00',chg:'+0.50%',up:true,cap:'₦151B',vol:'3.2M',board:'M',desc:'UACN — Main Board. Diversified: food, real estate, logistics.'}]},
-  {ico:'🏠',name:'Real Estate',chg:'+0.60%',up:true,cnt:12,stocks:[{tk:'JULIUSBER',name:'Julius Berger',price:'288.00',chg:'+2.10%',up:true,cap:'₦332B',vol:'1.2M',board:'P',desc:'Julius Berger — Premium Board. Nigeria\'s largest construction company since 1965.'}]},
-];
-const ALLSTOCKS=[...GAINERS,...LOSERS,...SECTORS.flatMap(s=>s.stocks)];
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <button class="dp-close" onclick="closeDetail()">&#x2715;</button>
+  <div style="clear:both;"></div>
+  <div class="dp-sym" id="dp-sym">—</div>
+  <div class="dp-name" id="dp-name">—</div>
+  <div class="dp-price" id="dp-price">—</div>
+  <div class="dp-chg" id="dp-chg">—</div>
+  <div class="dp-chart-wrap"><canvas id="dp-chart"></canvas></div>
+  <div class="dp-stats">
+    <div class="dp-stat"><div class="dps-lbl">Prev Close</div><div class="dps-val" id="dp-prev">—</div></div>
+    <div class="dp-stat"><div class="dps-lbl">Change &#8358;</div><div class="dps-val" id="dp-amt">—</div></div>
+    <div class="dp-stat"><div class="dps-lbl">Volume</div><div class="dps-val" id="dp-vol">—</div></div>
+    <div class="dp-stat"><div class="dps-lbl">Market Cap</div><div class="dps-val" id="dp-cap">—</div></div>
+  </div>
+  <div style="font-size:12px;color:var(--tx3);line-height:1.7;" id="dp-desc"></div>
+</div>
 
-// ── LIVE PRICE LOADER ─────────────────────────────────────────
-const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+var sb=createClient('https://lzlitanvlkycrkkpwczm.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g');
 
-async function loadLivePrices() {
-  try {
-    // Read directly from Supabase stock_prices table — no Edge Function needed
-    const res = await fetch(
-      'https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,company_name,price,prev_close,change_pct,change_amt,volume,market_cap,last_updated,is_market_open&order=ticker',
-      { headers: { 'apikey': _SB_ANON, 'Authorization': 'Bearer ' + _SB_ANON } }
-    )
-    const rows = await res.json()
-    if (!Array.isArray(rows) || !rows.length) return
+var _all=[],_filtered=[],_page=1,_pageSize=20,_dpChart=null;
 
-    // Convert array to prices map
-    const data = { prices: {}, market_open: false, last_updated: null, stale_minutes: 0 }
-    rows.forEach(row => {
-      data.prices[row.ticker] = {
-        price: row.price, changePct: row.change_pct,
-        changeAmt: row.change_amt, volume: row.volume,
-        marketCap: row.market_cap, up: (row.change_pct || 0) >= 0,
-        lastUpdated: row.last_updated
-      }
-      if (!data.last_updated || row.last_updated > data.last_updated) {
-        data.last_updated = row.last_updated
-        data.market_open = row.is_market_open
-      }
-    })
-    data.stale_minutes = data.last_updated
-      ? Math.floor((Date.now() - new Date(data.last_updated).getTime()) / 60000) : 0
-
-    if (!Object.keys(data.prices).length) return
-
-    // Update all stock entries in GAINERS, LOSERS, SECTORS with live prices
-    const applyLive = (stock) => {
-      const live = data.prices[stock.tk]
-      if (!live) return stock
-      const chgSign = live.up ? '+' : ''
-      return {
-        ...stock,
-        price: live.price.toLocaleString('en-NG', {minimumFractionDigits:2, maximumFractionDigits:2}),
-        chg: `${chgSign}${live.changePct?.toFixed(2)||'0.00'}%`,
-        up: live.up,
-        vol: live.volume ? formatVolume(live.volume) : stock.vol,
-      }
-    }
-    GAINERS.forEach((s,i) => GAINERS[i] = applyLive(s))
-    LOSERS.forEach((s,i)  => LOSERS[i]  = applyLive(s))
-    SECTORS.forEach(sec => sec.stocks.forEach((s,i) => sec.stocks[i] = applyLive(s)))
-
-    // Update overview cards
-    const mu = document.getElementById('prices-updated')
-    if (mu) mu.textContent = data.stale_minutes < 2 ? '● Live' : `Updated ${data.stale_minutes}m ago`
-
-    // Rebuild tape with live data
-    buildTape()
-
-    // Rebuild movers
-    document.getElementById('gainers-list').innerHTML = ''
-    document.getElementById('losers-list').innerHTML = ''
-    buildMovers()
-
-    // Update market status
-    document.getElementById('mkt-status').textContent = data.market_open ? '🟢 Open' : '🔴 Closed'
-
-    console.log(`✓ Live prices loaded: ${data.count} tickers, stale ${data.stale_minutes}m`)
-  } catch(e) {
-    console.warn('Live price load failed, using seed data', e)
+// ── AUTH ─────────────────────────────────────────────────────
+async function init(){
+  var a=await sb.auth.getSession();
+  if(!a.data.session){window.location.href='landing.html';return;}
+  var raw=sessionStorage.getItem('gopex_user');
+  if(raw){var u=JSON.parse(raw);setEl('nav-av',u.initials||'?');setEl('nav-un',u.firstName||'Me');}
+  else{
+    var pr=await sb.from('profiles').select('name,initials,first_name').eq('id',a.data.session.user.id).single();
+    if(pr.data){var fn=pr.data.first_name||(pr.data.name?pr.data.name.split(' ')[0]:'');setEl('nav-av',pr.data.initials||fn.charAt(0).toUpperCase());setEl('nav-un',fn);}
   }
+  await loadAllPrices();
+  setInterval(loadAllPrices,10*60*1000);
+}
+init();
+
+function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function fmtVol(v){if(!v)return'—';if(v>=1e9)return(v/1e9).toFixed(2)+'B';if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(0)+'K';return v;}
+function fmtPrice(p){if(p==null)return'—';return'&#8358;'+parseFloat(p).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+// ── LOAD ALL PRICES FROM DB ───────────────────────────────────
+window.loadAllPrices=async function(){
+  var r=await sb.from('stock_prices').select('*').order('ticker');
+  if(r.error||!r.data){setEl('market-updated','Error loading prices');return;}
+  _all=r.data;_filtered=r.data;
+
+  // Update timestamp
+  var lu=r.data[0]&&r.data[0].last_updated?new Date(r.data[0].last_updated):new Date();
+  var mins=Math.floor((Date.now()-lu.getTime())/60000);
+  setEl('market-updated','Prices as of NGX close · Updated '+(mins<2?'just now':mins+'m ago')+' · '+lu.toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}));
+  setEl('last-refresh','Updated '+(mins<2?'just now':mins+'m ago'));
+  setEl('stock-count',r.data.length+' stocks');
+
+  // Market status (Mon-Fri 9:30-16:00 WAT)
+  var now=new Date(new Date().toLocaleString('en-US',{timeZone:'Africa/Lagos'}));
+  var d=now.getDay(),t=now.getHours()*60+now.getMinutes();
+  var isOpen=d>=1&&d<=5&&t>=570&&t<=960;
+  setEl('mkt-status',isOpen?'Market Open':'Market Closed');
+  var dot=document.getElementById('mkt-dot');if(dot)dot.style.background=isOpen?'#22c55e':'#ef4444';
+  var isOpen2=r.data[0]&&r.data[0].is_market_open;
+
+  // Overview stats
+  var gainers=r.data.filter(function(s){return(s.change_pct||0)>0;});
+  var losers=r.data.filter(function(s){return(s.change_pct||0)<0;});
+  var flat=r.data.filter(function(s){return(s.change_pct||0)===0;});
+  var totalVol=r.data.reduce(function(a,s){return a+(s.volume||0);},0);
+  setEl('ov-gainers',gainers.length);setEl('ov-losers',losers.length);
+  setEl('ov-flat',flat.length+' unchanged');setEl('ov-vol',fmtVol(totalVol));
+
+  // ASI — use weighted average of top stocks as proxy since we don't have live ASI feed
+  // Real ASI is published by NGX. We show what we have.
+  setEl('asi-val','NGX Live');
+  var avgChg=r.data.reduce(function(a,s){return a+(s.change_pct||0);},0)/r.data.length;
+  var asiChgEl=document.getElementById('asi-chg');
+  if(asiChgEl){asiChgEl.textContent=(avgChg>=0?'+':'')+avgChg.toFixed(2)+'% avg change today';asiChgEl.className='ov-sub '+(avgChg>=0?'up':'dn');}
+
+  // Fear & Greed (derived from % gainers vs losers)
+  var fg=gainers.length>0?Math.round((gainers.length/r.data.length)*100):50;
+  setEl('fg-score',fg);
+  var fgLabel=fg>=80?'Extreme Greed':fg>=60?'Greed':fg>=40?'Neutral':fg>=20?'Fear':'Extreme Fear';
+  var fgCol=fg>=60?'var(--g)':fg>=40?'var(--am)':'var(--r)';
+  var fgEl=document.getElementById('fg-label');if(fgEl){fgEl.textContent=fgLabel;fgEl.style.color=fgCol;}
+  drawGauge(fg,fgCol);
+
+  // Ticker tape
+  buildTape(r.data);
+
+  // Top movers
+  var topG=gainers.slice().sort(function(a,b){return(b.change_pct||0)-(a.change_pct||0);}).slice(0,7);
+  var topL=losers.slice().sort(function(a,b){return(a.change_pct||0)-(b.change_pct||0);}).slice(0,7);
+  buildMovers('gainers-list',topG,true);buildMovers('losers-list',topL,false);
+
+  // Stocks table
+  _page=1;renderTable();
+};
+
+// ── TAPE ─────────────────────────────────────────────────────
+function buildTape(stocks){
+  var tape=document.getElementById('tape');if(!tape)return;
+  var items=stocks.slice(0,40);
+  var html='';
+  items.forEach(function(s){
+    var up=(s.change_pct||0)>=0;
+    html+='<div class="tk-item"><span class="tk-sym">'+s.ticker+'</span><span style="color:rgba(255,255,255,.8);">&#8358;'+parseFloat(s.price||0).toFixed(2)+'</span><span class="'+(up?'tk-up':'tk-dn')+'">'+(up?'&#9650;':'&#9660;')+' '+Math.abs(s.change_pct||0).toFixed(2)+'%</span></div>';
+  });
+  // Duplicate for seamless loop
+  tape.innerHTML=html+html;
 }
 
-function formatVolume(v) {
-  if (v >= 1e9) return (v/1e9).toFixed(1)+'B'
-  if (v >= 1e6) return (v/1e6).toFixed(1)+'M'
-  if (v >= 1e3) return (v/1e3).toFixed(0)+'K'
-  return v
+// ── MOVERS ────────────────────────────────────────────────────
+function buildMovers(id,stocks,isGainer){
+  var el=document.getElementById(id);if(!el)return;
+  el.innerHTML='';
+  stocks.forEach(function(s,i){
+    var d=document.createElement('div');d.className='mover-row';
+    d.innerHTML='<div class="mr-rank">'+(i+1)+'</div>'
+      +'<div class="mr-sym">'+s.ticker+'</div>'
+      +'<div class="mr-name">'+(s.company_name||s.ticker)+'</div>'
+      +'<div class="mr-price">'+fmtPrice(s.price)+'</div>'
+      +'<div class="mr-chg '+(isGainer?'up':'dn')+'">'+(isGainer?'+':'')+parseFloat(s.change_pct||0).toFixed(2)+'%</div>';
+    d.onclick=function(){openDetail(s);};
+    el.appendChild(d);
+  });
 }
 
-// Tape
-function buildTape() {
-  const all=[...GAINERS,...LOSERS]
-  const r=s=>`<div class="tk"><span class="tk-sym">${s.tk}</span><span class="tk-p">₦${s.price}</span><span class="${s.up?'up':'dn'}">${s.chg}</span></div>`
-  const t=document.getElementById('tape');t.innerHTML=all.map(r).join('')+all.map(r).join('')
-}
-buildTape() // initial render with seed data
-loadLivePrices() // fetch live, refresh tape + cards
-setInterval(loadLivePrices, 10 * 60 * 1000) // re-fetch every 10 min
-
-// Clock
-function tick(){const n=new Date(),w=new Date(n.toLocaleString('en-US',{timeZone:'Africa/Lagos'}));const h=String(w.getHours()).padStart(2,'0'),m=String(w.getMinutes()).padStart(2,'0');const d=w.getDay(),o=d>=1&&d<=5&&w.getHours()>=9&&w.getHours()<16;document.getElementById('mkt-time').textContent=h+':'+m+' WAT';document.getElementById('mkt-status').textContent=o?'🟢 Open':'🔴 Closed';}tick();setInterval(tick,30000);
-
-// ASI spark
-(function(){const ctx=document.getElementById('asi-spark').getContext('2d');new Chart(ctx,{type:'line',data:{labels:[1,2,3,4,5],datasets:[{data:[155800,175200,197000,220000,252508],borderColor:'#1a6eff',borderWidth:1.5,pointRadius:0,tension:.4,fill:true,backgroundColor:'rgba(26,110,255,.08)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});})();
-
-// FG Gauge
-(function(){const cv=document.getElementById('fg-gauge'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H-4,R=H-20;const segs=[{from:Math.PI,to:Math.PI*1.2,c:'#dc2626'},{from:Math.PI*1.2,to:Math.PI*1.4,c:'#d97706'},{from:Math.PI*1.4,to:Math.PI*1.6,c:'#ca8a04'},{from:Math.PI*1.6,to:Math.PI*1.8,c:'#16a34a'},{from:Math.PI*1.8,to:Math.PI*2,c:'#15803d'}];
-segs.forEach(s=>{ctx.beginPath();ctx.arc(cx,cy,R,s.from,s.to);ctx.lineWidth=16;ctx.strokeStyle=s.c;ctx.globalAlpha=.2;ctx.stroke();ctx.globalAlpha=1;});
-const f=Math.PI+(72/100)*Math.PI;ctx.beginPath();ctx.arc(cx,cy,R,Math.PI,f);ctx.lineWidth=16;ctx.strokeStyle='#d97706';ctx.stroke();
-const ang=Math.PI+(72/100)*Math.PI;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(ang)*(R-6),cy+Math.sin(ang)*(R-6));ctx.lineWidth=2.5;ctx.strokeStyle='#0f172a';ctx.stroke();
-ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fillStyle='#0f172a';ctx.fill();})();
-
-// Gainers/Losers
-function buildMovers(){
-  const g=document.getElementById('gainers-list'),l=document.getElementById('losers-list');
-  GAINERS.forEach((s,i)=>{g.innerHTML+=`<div class="gl-row" onclick="openStock('${s.tk}')"><div class="gl-rank">${i+1}</div><div class="gl-logo">${s.tk.slice(0,4)}</div><div><div class="gl-name">${s.name}</div><div class="gl-sec">${s.sector}</div></div><div class="gl-price">₦${s.price}</div><div class="gl-pct gl-up">${s.chg}</div></div>`;});
-  LOSERS.forEach((s,i)=>{l.innerHTML+=`<div class="gl-row" onclick="openStock('${s.tk}')"><div class="gl-rank">${i+1}</div><div class="gl-logo">${s.tk.slice(0,4)}</div><div><div class="gl-name">${s.name}</div><div class="gl-sec">${s.sector}</div></div><div class="gl-price">₦${s.price}</div><div class="gl-pct gl-dn">${s.chg}</div></div>`;});
-}
-buildMovers(); // initial render — loadLivePrices() rebuilds with fresh data
-
-// Sectors
-let activeSec=null,curStocks=[];
-(function(){const c=document.getElementById('sec-pills');SECTORS.forEach(sec=>{const p=document.createElement('div');p.className='sec-pill';p.dataset.n=sec.name;p.innerHTML=`<div class="sp-ico">${sec.ico}</div><div><div class="sp-name">${sec.name}</div><div class="sp-cnt">${sec.cnt} stocks</div><div class="sp-chg ${sec.up?'up':'dn'}">${sec.chg}</div></div>`;p.onclick=()=>toggleSec(sec,p);c.appendChild(p);});})();
-
-function toggleSec(sec,pill){
-  const tbl=document.getElementById('stbl');document.querySelectorAll('.sec-pill').forEach(p=>p.classList.remove('on'));
-  if(activeSec===sec.name){activeSec=null;tbl.classList.remove('open');return;}
-  activeSec=sec.name;pill.classList.add('on');document.getElementById('stbl-title').textContent=sec.ico+' '+sec.name;document.getElementById('stbl-search').value='';renderStocks(sec.stocks);tbl.classList.add('open');setTimeout(()=>tbl.scrollIntoView({behavior:'smooth',block:'start'}),60);
-}
-function renderStocks(list){
-  curStocks=list;
-  document.getElementById('stbl-body').innerHTML=list.map(s=>`<div class="stk-row" onclick="openStock('${s.tk}')"><div class="stk-logo">${s.tk.slice(0,4)}</div><div><div class="stk-name">${s.name}</div><div class="stk-tk">NGX:${s.tk}</div><span class="stk-brd ${s.board==='P'?'brd-p':'brd-m'}">${s.board==='P'?'★ Premium':'Main'}</span></div><div class="stk-num">₦${s.price}</div><div class="stk-num ${s.up?'up':'dn'}">${s.up?'▲':'▼'} ${s.chg}</div><div class="stk-sm">${s.cap}</div><div class="stk-xs">${s.vol}</div><button class="w-btn" onclick="event.stopPropagation();this.classList.toggle('on');this.textContent=this.classList.contains('on')?'★ Saved':'☆ Watch'">☆ Watch</button></div>`).join('');
-}
-function filterStocks(q){const f=q?curStocks.filter(s=>s.name.toLowerCase().includes(q.toLowerCase())||s.tk.toLowerCase().includes(q.toLowerCase())):curStocks;if(!f.length){document.getElementById('stbl-body').innerHTML=`<div style="padding:24px;text-align:center;color:var(--tx3);font-size:13px;">No results for "${q}"</div>`;return;}renderStocks(f);}
-
-// Panel
-let pChart=null,curTk=null;const wl=new Set();
-function findStock(tk){for(const s of SECTORS){const f=s.stocks.find(x=>x.tk===tk);if(f)return{...f,si:s.ico,sn:s.name};}return GAINERS.find(s=>s.tk===tk)||LOSERS.find(s=>s.tk===tk)||null;}
-function genChartData(base,trend,n){const d=[base];for(let i=1;i<n;i++)d.push(Math.max(.1,d[i-1]+(Math.random()-.48)*d[i-1]*.013+trend*d[i-1]*.002));return d;}
-function openStock(tk){
-  curTk=tk;const s=findStock(tk);if(!s)return;
-  document.getElementById('p-tk').textContent='NGX: '+tk;
-  document.getElementById('p-cname').textContent=s.name;
-  document.getElementById('p-sector').textContent=(s.si||'📊')+' '+(s.sn||s.sector||'NGX');
-  document.getElementById('p-price').textContent='₦'+s.price;
-  const ce=document.getElementById('p-chg');ce.textContent=s.chg;ce.className=(s.up||s.chg.startsWith('+'))?'chg-up':'chg-dn';
-  document.getElementById('p-about').textContent=s.desc||'Listed on the Nigerian Exchange Group (NGX).';
-  const base=parseFloat(s.price.replace(/,/g,'')),trend=s.up||s.chg.startsWith('+')?1:-1;
-  buildPChart(base,trend,'1D');
-  const stats=[{l:'Market Cap',v:s.cap||'—'},{l:'Volume Today',v:s.vol||'—'},{l:'Board',v:s.board==='P'?'★ Premium':'Main Board'},{l:'52W High',v:'₦'+(base*1.38).toFixed(2)},{l:'52W Low',v:'₦'+(base*0.52).toFixed(2)},{l:'P/E Ratio',v:(7+Math.random()*18).toFixed(1)+'x'},{l:'Div Yield',v:(3+Math.random()*10).toFixed(1)+'%'},{l:'Exchange',v:'NGX · Lagos'}];
-  document.getElementById('p-stats').innerHTML=stats.map(s=>`<div class="p-stat"><div class="ps-lbl">${s.l}</div><div class="ps-val">${s.v}</div></div>`).join('');
-  const wb=document.getElementById('p-watch');wb.textContent=wl.has(tk)?'★ In Watchlist':'☆ Watchlist';
-  document.getElementById('panel').classList.add('open');document.getElementById('overlay').style.display='block';
-  document.querySelectorAll('.per').forEach((b,i)=>b.classList.toggle('on',i===0));
-}
-function buildPChart(base,trend,p){
-  if(pChart){pChart.destroy();pChart=null;}
-  const n={'1D':32,'1W':5,'1M':22,'3M':65,'1Y':252}[p]||22;
-  const data=genChartData(base,trend,n);const col=trend>0?'#16a34a':'#dc2626';
-  const ctx=document.getElementById('p-chart').getContext('2d');
-  pChart=new Chart(ctx,{type:'line',data:{labels:data.map((_,i)=>i),datasets:[{data,borderColor:col,borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:trend>0?'rgba(22,163,74,.07)':'rgba(220,38,38,.07)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>'₦'+Number(v.raw).toFixed(2)}}},scales:{x:{display:false},y:{ticks:{color:'#94a3b8',font:{size:10},callback:v=>'₦'+Number(v).toFixed(0)},grid:{color:'#f1f5f9'}}}}});
-}
-function setPer(btn,p){document.querySelectorAll('.per').forEach(b=>b.classList.remove('on'));btn.classList.add('on');const s=findStock(curTk);if(!s)return;const base=parseFloat(s.price.replace(/,/g,'')),trend=s.up||s.chg.startsWith('+')?1:-1;buildPChart(base,trend,p);}
-function closePanel(){document.getElementById('panel').classList.remove('open');document.getElementById('overlay').style.display='none';}
-function togglePanelWatch(){if(!curTk)return;const btn=document.getElementById('p-watch');wl.has(curTk)?(wl.delete(curTk),btn.textContent='☆ Watchlist'):(wl.add(curTk),btn.textContent='★ In Watchlist');}
-(function(){const raw=sessionStorage.getItem('gopex_user');if(!raw)return;const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];})();
-
-function gxLogout() {
-  if (!confirm('Log out of GopexFund?')) return;
-  sessionStorage.clear();
-  // Clear Supabase session
-  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
-  if (key) localStorage.removeItem(key);
-  window.location.href = 'landing.html';
+// ── TABLE ─────────────────────────────────────────────────────
+function renderTable(){
+  var body=document.getElementById('stocks-body');if(!body)return;
+  var start=(_page-1)*_pageSize;
+  var page=_filtered.slice(start,start+_pageSize);
+  if(!page.length){body.innerHTML='<div style="padding:30px;text-align:center;color:var(--tx3);">No stocks found.</div>';return;}
+  var html='';
+  page.forEach(function(s){
+    var up=(s.change_pct||0)>0,flat=(s.change_pct||0)===0;
+    var chgCls=up?'chg-up':flat?'chg-flat':'chg-dn';
+    var mins=s.last_updated?Math.floor((Date.now()-new Date(s.last_updated).getTime())/60000):null;
+    var timeStr=mins==null?'—':mins<2?'Live':mins<60?(mins+'m ago'):(Math.floor(mins/60)+'h ago');
+    html+='<div class="st-row" onclick="openDetailById(\''+s.ticker+'\')">'
+      +'<div class="sr-sym">'+s.ticker+'</div>'
+      +'<div class="sr-name">'+(s.company_name||'—')+'</div>'
+      +'<div class="sr-price">'+fmtPrice(s.price)+'</div>'
+      +'<div><span class="sr-chg '+chgCls+'">'+(up?'+':'')+parseFloat(s.change_pct||0).toFixed(2)+'%</span></div>'
+      +'<div class="sr-vol">'+fmtVol(s.volume)+'</div>'
+      +'<div class="sr-vol">'+timeStr+'</div>'
+      +'</div>';
+  });
+  body.innerHTML=html;
+  // Pagination
+  var pages=Math.ceil(_filtered.length/_pageSize);
+  var pag=document.getElementById('pagination');
+  if(pages>1){
+    pag.style.display='flex';pag.innerHTML='';
+    var start2=Math.max(1,_page-2),end2=Math.min(pages,_page+2);
+    if(_page>1){var pb=document.createElement('button');pb.className='pg-btn';pb.textContent='‹';pb.onclick=function(){_page--;renderTable();};pag.appendChild(pb);}
+    for(var i=start2;i<=end2;i++){(function(n){var b=document.createElement('button');b.className='pg-btn'+(n===_page?' on':'');b.textContent=n;b.onclick=function(){_page=n;renderTable();};pag.appendChild(b);})(i);}
+    if(_page<pages){var nb=document.createElement('button');nb.className='pg-btn';nb.textContent='›';nb.onclick=function(){_page++;renderTable();};pag.appendChild(nb);}
+  }else{pag.style.display='none';}
 }
 
+window.filterStocks=function(q){
+  q=q.toUpperCase();
+  _filtered=q?_all.filter(function(s){return s.ticker.includes(q)||(s.company_name&&s.company_name.toUpperCase().includes(q));}) : _all;
+  _page=1;renderTable();
+};
+
+// ── DETAIL ────────────────────────────────────────────────────
+window.openDetailById=function(ticker){
+  var s=_all.find(function(x){return x.ticker===ticker;});
+  if(s)openDetail(s);
+};
+
+function openDetail(s){
+  document.getElementById('dp-sym').textContent=s.ticker;
+  document.getElementById('dp-name').textContent=s.company_name||s.ticker;
+  document.getElementById('dp-price').innerHTML=fmtPrice(s.price);
+  var up=(s.change_pct||0)>=0;
+  var chgEl=document.getElementById('dp-chg');
+  chgEl.innerHTML=(up?'&#9650; +':'&#9660; ')+Math.abs(s.change_pct||0).toFixed(2)+'% (&#8358;'+Math.abs(s.change_amt||0).toFixed(2)+')';
+  chgEl.style.color=up?'var(--g)':'var(--r)';
+  document.getElementById('dp-prev').innerHTML=fmtPrice(s.prev_close);
+  document.getElementById('dp-amt').innerHTML=(up?'+':'')+parseFloat(s.change_amt||0).toFixed(2);
+  document.getElementById('dp-vol').textContent=fmtVol(s.volume);
+  document.getElementById('dp-cap').textContent=s.market_cap||'—';
+  document.getElementById('dp-desc').textContent=s.company_name?' NGX listed company. Price data updated automatically from the Nigerian Exchange Group.' : 'NGX listed stock.';
+
+  // Mini chart (last known prices as single point — extend with historical when available)
+  var ctx=document.getElementById('dp-chart').getContext('2d');
+  if(_dpChart)_dpChart.destroy();
+  var prev=s.prev_close||s.price;var cur=s.price||prev;
+  var pts=[prev,prev*1.002,prev*0.999,cur*1.001,cur*1.003,cur*0.998,cur];
+  _dpChart=new Chart(ctx,{type:'line',data:{labels:['','','','','','',''],datasets:[{data:pts,borderColor:up?'#16a34a':'#dc2626',borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:up?'rgba(22,163,74,.08)':'rgba(220,38,38,.08)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+window.closeDetail=function(){document.getElementById('detail-panel').classList.remove('open');};
+
+// ── GAUGE ─────────────────────────────────────────────────────
+function drawGauge(score,col){
+  var c=document.getElementById('gauge-canvas');if(!c)return;
+  var ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+  var cx=c.width/2,cy=c.height-4,r=c.height-10;
+  // Background arc
+  ctx.beginPath();ctx.arc(cx,cy,r,Math.PI,0);ctx.strokeStyle='#e2e8f0';ctx.lineWidth=10;ctx.stroke();
+  // Score arc
+  var angle=Math.PI*(score/100);
+  ctx.beginPath();ctx.arc(cx,cy,r,Math.PI,Math.PI+angle);ctx.strokeStyle=col;ctx.lineWidth=10;ctx.stroke();
+  // Needle
+  var na=Math.PI+angle;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(na)*r*0.75,cy+Math.sin(na)*r*0.75);ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke();
+}
 </script>
 </body>
 </html>

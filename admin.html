@@ -167,6 +167,8 @@
 
   <div class="sb-section">Content</div>
   <div class="sb-item" onclick="showSection('posts',this)"><span class="ico">📝</span>All Posts <span class="sb-badge" id="sb-post-count">—</span></div>
+  <div class="sb-item" onclick="showSection('news',this)"><span class="ico">📰</span>Post News</div>
+  <div class="sb-item" onclick="showSection('courses',this)"><span class="ico">🎓</span>Manage Courses</div>
   <div class="sb-item" onclick="showSection('reports',this)"><span class="ico">🚨</span>Reports</div>
 
   <div class="sb-section">Finance</div>
@@ -329,6 +331,94 @@
         </div>
         <div id="posts-table-body">
           <div style="text-align:center;padding:40px;color:var(--tx3);">⏳ Loading posts...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWS SECTION -->
+    <div id="sec-news" style="display:none;">
+      <div style="max-width:680px;">
+        <div class="table-card" style="padding:20px;margin-bottom:16px;">
+          <div class="modal-title" style="font-size:16px;margin-bottom:16px;">📰 Post News Article</div>
+          <div class="mfield"><label>Headline</label><input id="news-title" placeholder="NGX All-Share Index hits new high..."/></div>
+          <div class="mfield"><label>Body / Summary</label><textarea id="news-body" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;min-height:120px;resize:none;" placeholder="Write the full news article or summary..."></textarea></div>
+          <div class="mfield"><label>Source (optional)</label><input id="news-source" placeholder="BusinessDay, Reuters, NGX Group..."/></div>
+          <button class="ta-btn primary" onclick="postNews()" style="width:100%;padding:11px;font-size:14px;border-radius:9px;">Publish News</button>
+        </div>
+        <div class="table-card">
+          <div class="table-hd"><div class="table-title">Published News</div></div>
+          <div id="news-list" style="padding:16px;"><div style="color:var(--tx3);font-size:13px;">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSES SECTION -->
+    <div id="sec-courses" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <!-- Create Course -->
+        <div class="table-card" style="padding:20px;">
+          <div class="modal-title" style="font-size:16px;margin-bottom:16px;">🎓 Create New Course</div>
+          <div class="mfield"><label>Course Title</label><input id="co-title" placeholder="Introduction to NGX Investing"/></div>
+          <div class="mfield"><label>Description</label><textarea id="co-desc" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;min-height:80px;resize:none;" placeholder="What will students learn?"></textarea></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="mfield"><label>Category</label>
+              <select id="co-cat" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
+                <option>Investing</option><option>Stock Market</option><option>Personal Finance</option><option>Crypto</option><option>Real Estate</option>
+              </select>
+            </div>
+            <div class="mfield"><label>Difficulty</label>
+              <select id="co-diff" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
+                <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="mfield"><label>Duration (mins)</label><input id="co-dur" type="number" placeholder="30"/></div>
+            <div class="mfield"><label>Points Reward</label><input id="co-pts" type="number" placeholder="100"/></div>
+          </div>
+          <button class="ta-btn primary" onclick="createCourse()" style="width:100%;padding:11px;font-size:14px;border-radius:9px;margin-top:4px;">Create Course</button>
+        </div>
+        <!-- Course List -->
+        <div class="table-card" style="overflow:hidden;">
+          <div class="table-hd"><div class="table-title">All Courses</div></div>
+          <div id="courses-list" style="padding:14px;max-height:500px;overflow-y:auto;"><div style="color:var(--tx3);font-size:13px;">Loading...</div></div>
+        </div>
+      </div>
+      <!-- ADD LESSON PANEL -->
+      <div class="table-card" id="lesson-panel" style="display:none;margin-top:16px;padding:20px;">
+        <div class="table-hd" style="padding:0;margin-bottom:16px;"><div class="table-title">Add Lesson to: <span id="lesson-course-name" style="color:var(--p);"></span></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="mfield"><label>Lesson Title</label><input id="ls-title" placeholder="Understanding P/E Ratios"/></div>
+          <div class="mfield"><label>Type</label>
+            <select id="ls-type" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
+              <option value="text">Text / Article</option>
+              <option value="video">Video</option>
+              <option value="audio">Audio</option>
+            </select>
+          </div>
+        </div>
+        <div class="mfield"><label>Video URL (YouTube or direct link)</label><input id="ls-video" placeholder="https://youtube.com/watch?v=..."/></div>
+        <div class="mfield"><label>Lesson Content</label><textarea id="ls-content" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;min-height:120px;resize:none;" placeholder="Write the full lesson content here. Supports basic HTML."></textarea></div>
+        <div class="mfield"><label>Duration (mins)</label><input id="ls-dur" type="number" placeholder="10" style="width:120px;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;"/></div>
+        <div style="margin-top:10px;padding-top:14px;border-top:1px solid var(--bdr);">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--tx2);">Assessment Question (optional)</div>
+          <div class="mfield"><label>Question</label><input id="as-q" placeholder="What does P/E ratio stand for?"/></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="mfield"><label>Option A</label><input id="as-a" placeholder="Price to Earnings"/></div>
+            <div class="mfield"><label>Option B</label><input id="as-b" placeholder="Profit to Equity"/></div>
+            <div class="mfield"><label>Option C</label><input id="as-c" placeholder="Price to Equity"/></div>
+            <div class="mfield"><label>Option D</label><input id="as-d" placeholder="Portfolio Earnings"/></div>
+          </div>
+          <div class="mfield"><label>Correct Option</label>
+            <select id="as-correct" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
+              <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
+            </select>
+          </div>
+          <div class="mfield"><label>Explanation</label><input id="as-exp" placeholder="P/E ratio = Price to Earnings, a measure of valuation..."/></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+          <button class="ta-btn" onclick="document.getElementById('lesson-panel').style.display='none'">Cancel</button>
+          <button class="ta-btn primary" onclick="addLesson()">Add Lesson</button>
         </div>
       </div>
     </div>
@@ -874,7 +964,7 @@ window.exportUsers = function() {
 
 // ── SECTION NAVIGATION ────────────────────────────────────────
 window.showSection = function(id, btn) {
-  var sections = ['dashboard','users','suspended','admins','posts','reports','portfolios','market','settings','logs'];
+  var sections = ['dashboard','users','suspended','admins','posts','news','courses','reports','portfolios','market','settings','logs'];
   for (var i = 0; i < sections.length; i++) {
     var s = document.getElementById('sec-' + sections[i]);
     if (s) s.style.display = sections[i] === id ? 'block' : 'none';
@@ -883,7 +973,7 @@ window.showSection = function(id, btn) {
   for (var j = 0; j < items.length; j++) items[j].classList.remove('on');
   if (btn) btn.classList.add('on');
 
-  var titles = { dashboard:'Dashboard', users:'All Users', suspended:'Suspended Accounts', admins:'Admins', posts:'All Posts', reports:'Content Reports', portfolios:'Portfolios', market:'Market Data', settings:'Settings', logs:'Activity Logs' };
+  var titles = { dashboard:'Dashboard', users:'All Users', suspended:'Suspended Accounts', admins:'Admins', posts:'All Posts', news:'Post News', courses:'Manage Courses', reports:'Content Reports', portfolios:'Portfolios', market:'Market Data', settings:'Settings', logs:'Activity Logs' };
   var pt = document.getElementById('page-title'); if (pt) pt.textContent = titles[id] || id;
 
   // Lazy load section data
@@ -894,9 +984,138 @@ window.showSection = function(id, btn) {
   else if (id === 'market') loadMarket();
   else if (id === 'portfolios') loadPortfolios();
   else if (id === 'logs') loadLogs();
+  else if (id === 'news') loadNews();
+  else if (id === 'courses') loadCourses();
 };
 
 // ── LOGOUT ────────────────────────────────────────────────────
+
+
+// ── NEWS ──────────────────────────────────────────────────────
+async function loadNews() {
+  var r = await _sb.from('news_posts').select('*, profiles(name)').order('created_at', {ascending:false}).limit(20);
+  var el = document.getElementById('news-list'); if (!el) return;
+  if (!r.data || !r.data.length) { el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">No news posted yet.</div>'; return; }
+  var h = '';
+  r.data.forEach(function(n) {
+    var mins = Math.floor((Date.now() - new Date(n.created_at)) / 60000);
+    var tstr = mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
+    h += '<div style="padding:11px 0;border-bottom:1px solid var(--bdr);">'
+      + '<div style="font-size:13px;font-weight:700;">' + n.title + '</div>'
+      + '<div style="font-size:11px;color:var(--tx3);margin-top:2px;">' + tstr + ' · ' + ((n.profiles && n.profiles.name) || 'Admin') + '</div>'
+      + '<button class="ab danger" onclick="deleteNews('' + n.id + '',this)" style="margin-top:6px;">Delete</button>'
+      + '</div>';
+  });
+  el.innerHTML = h;
+}
+
+window.postNews = async function() {
+  var title = document.getElementById('news-title').value.trim();
+  var body = document.getElementById('news-body').value.trim();
+  var source = document.getElementById('news-source').value.trim();
+  if (!title || !body) { showToast('Title and body are required', 'error'); return; }
+  var r = await _sb.from('news_posts').insert({ title: title, body: body, source: source || null, author_id: _session.user.id });
+  if (r.error) { showToast('Error: ' + r.error.message, 'error'); return; }
+  document.getElementById('news-title').value = '';
+  document.getElementById('news-body').value = '';
+  document.getElementById('news-source').value = '';
+  showToast('News published!', 'success');
+  loadNews();
+};
+
+window.deleteNews = async function(id, el) {
+  if (!confirm('Delete this news post?')) return;
+  await _sb.from('news_posts').delete().eq('id', id);
+  var row = el.closest('div'); if (row) row.remove();
+  showToast('Deleted', 'success');
+};
+
+// ── COURSES ───────────────────────────────────────────────────
+var _activeCourseId = null;
+
+async function loadCourses() {
+  var r = await _sb.from('courses').select('*, profiles(name)').order('created_at', {ascending:false});
+  var el = document.getElementById('courses-list'); if (!el) return;
+  if (!r.data || !r.data.length) { el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">No courses yet. Create one!</div>'; return; }
+  var h = '';
+  r.data.forEach(function(c) {
+    h += '<div style="padding:10px 0;border-bottom:1px solid var(--bdr);">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
+      + '<div><div style="font-size:13px;font-weight:700;">' + c.title + '</div>'
+      + '<div style="font-size:10px;color:var(--tx3);">' + c.category + ' · ' + c.difficulty + ' · ' + (c.points_reward||100) + ' pts</div></div>'
+      + '<div style="display:flex;gap:5px;">'
+      + '<button class="ab" onclick="openLessonPanel('' + c.id + '','' + c.title.replace(/'/g,'') + '')">+ Lesson</button>'
+      + '<button class="ab '+(c.is_published?'':'promote')+'" onclick="togglePublish('' + c.id + '',' + c.is_published + ')">' + (c.is_published ? 'Unpublish' : 'Publish') + '</button>'
+      + '<button class="ab danger" onclick="deleteCourse('' + c.id + '',this)">Delete</button>'
+      + '</div></div></div>';
+  });
+  el.innerHTML = h;
+}
+
+window.createCourse = async function() {
+  var title = document.getElementById('co-title').value.trim();
+  var desc = document.getElementById('co-desc').value.trim();
+  var cat = document.getElementById('co-cat').value;
+  var diff = document.getElementById('co-diff').value;
+  var dur = parseInt(document.getElementById('co-dur').value) || 30;
+  var pts = parseInt(document.getElementById('co-pts').value) || 100;
+  if (!title) { showToast('Course title required', 'error'); return; }
+  var r = await _sb.from('courses').insert({ title:title, description:desc, category:cat, difficulty:diff, duration_mins:dur, points_reward:pts, created_by:_session.user.id, is_published:false });
+  if (r.error) { showToast('Error: ' + r.error.message, 'error'); return; }
+  document.getElementById('co-title').value = '';
+  document.getElementById('co-desc').value = '';
+  showToast('Course created! Now add lessons.', 'success');
+  loadCourses();
+};
+
+window.openLessonPanel = function(courseId, courseName) {
+  _activeCourseId = courseId;
+  document.getElementById('lesson-course-name').textContent = courseName;
+  document.getElementById('lesson-panel').style.display = 'block';
+  document.getElementById('lesson-panel').scrollIntoView({behavior:'smooth'});
+};
+
+window.addLesson = async function() {
+  if (!_activeCourseId) return;
+  var title = document.getElementById('ls-title').value.trim();
+  var type = document.getElementById('ls-type').value;
+  var video = document.getElementById('ls-video').value.trim();
+  var content = document.getElementById('ls-content').value.trim();
+  var dur = parseInt(document.getElementById('ls-dur').value) || 10;
+  if (!title || !content) { showToast('Title and content required', 'error'); return; }
+  // Count existing lessons for order
+  var cnt = await _sb.from('course_lessons').select('id', {count:'exact',head:true}).eq('course_id', _activeCourseId);
+  var order = (cnt.count || 0) + 1;
+  var lr = await _sb.from('course_lessons').insert({ course_id:_activeCourseId, title:title, content:content, video_url:video||null, lesson_type:type, lesson_order:order, duration_mins:dur }).select().single();
+  if (lr.error) { showToast('Error: ' + lr.error.message, 'error'); return; }
+  // Assessment
+  var q = document.getElementById('as-q').value.trim();
+  if (q) {
+    var opts = [document.getElementById('as-a').value, document.getElementById('as-b').value, document.getElementById('as-c').value, document.getElementById('as-d').value];
+    var correct = parseInt(document.getElementById('as-correct').value);
+    var exp = document.getElementById('as-exp').value.trim();
+    await _sb.from('course_assessments').insert({ course_id:_activeCourseId, lesson_id:lr.data.id, question:q, options:JSON.stringify(opts), correct_index:correct, explanation:exp||null });
+  }
+  // Update lesson count on course
+  await _sb.from('courses').update({ lesson_count: order }).eq('id', _activeCourseId);
+  // Clear form
+  ['ls-title','ls-video','ls-content','as-q','as-a','as-b','as-c','as-d','as-exp'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  showToast('Lesson added!', 'success');
+};
+
+window.togglePublish = async function(id, current) {
+  await _sb.from('courses').update({ is_published: !current }).eq('id', id);
+  showToast(!current ? 'Course published!' : 'Course unpublished', 'success');
+  loadCourses();
+};
+
+window.deleteCourse = async function(id, el) {
+  if (!confirm('Delete this course and all its lessons?')) return;
+  await _sb.from('courses').delete().eq('id', id);
+  loadCourses();
+  showToast('Course deleted', 'success');
+};
+
 window.doLogout = async function() {
   if (!confirm('Log out?')) return;
   await _sb.auth.signOut();

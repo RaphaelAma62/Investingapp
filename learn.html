@@ -2,249 +2,428 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GopexFund — Learn & Earn</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<title>GopexFund — Learn &amp; Earn</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--red:#dc2626;--rbg:#fee2e2;--amber:#d97706;--ambg:#fef3c7;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);}
+:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--g:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--r:#dc2626;--rbg:#fee2e2;--am:#d97706;--ambg:#fef3c7;--pu:#7c3aed;--pubg:#ede9fe;--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g400:#94a3b8;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.06);--shm:0 4px 16px rgba(0,0,0,.08);}
 *{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}
-.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
-.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 24px;gap:12px;}
-.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;}.logo-mark{width:29px;height:29px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
-.nav-links{display:flex;gap:2px;}.nl{padding:7px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;transition:all .15s;}.nl:hover{background:var(--g100);color:var(--tx);}.nl.on{background:var(--plt);color:var(--p);font-weight:600;}
-.nav-r{display:flex;align-items:center;gap:8px;}.nav-prof{display:flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--bdr);border-radius:10px;padding:4px 12px 4px 5px;text-decoration:none;}.nav-av{width:28px;height:28px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
-.burger{display:none;background:none;border:none;font-size:22px;color:var(--g500);cursor:pointer;padding:4px;}
-.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px 14px;flex-direction:column;gap:4px;z-index:299;box-shadow:var(--shm);}
-.mob-nav.open{display:flex;}.mob-link{padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}.mob-link.on{color:var(--p);background:var(--plt);font-weight:600;}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 20px;gap:10px;}
+.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:7px;}.lm{width:28px;height:28px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
+.nav-links{display:flex;gap:1px;}.nl{padding:6px 11px;border-radius:7px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;}.nl.on{background:var(--plt);color:var(--p);font-weight:600;}
+.nav-r{display:flex;align-items:center;gap:7px;}
+.prof-pill{display:flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--bdr);border-radius:9px;padding:3px 10px 3px 4px;text-decoration:none;}
+.nav-av{width:26px;height:26px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.nav-un{font-size:12px;font-weight:600;}
+.burger{display:none;background:none;border:none;font-size:21px;color:var(--g500);cursor:pointer;}
+.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:8px 14px 12px;flex-direction:column;gap:3px;z-index:299;box-shadow:var(--shm);}
+.mob-nav.open{display:flex;}.mob-link{padding:9px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}.mob-link.on{color:var(--p);background:var(--plt);}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--pu),var(--p));padding:24px clamp(16px,4vw,40px);margin-top:60px;color:#fff;}
+.hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.h-left h1{font-family:var(--fd);font-size:26px;font-weight:800;margin-bottom:4px;}
+.h-left p{font-size:13px;opacity:.8;}
+.h-stats{display:flex;gap:18px;}
+.hs{text-align:center;background:rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;}
+.hs-v{font-family:var(--fd);font-size:20px;font-weight:800;}
+.hs-l{font-size:9px;opacity:.7;text-transform:uppercase;letter-spacing:.4px;margin-top:1px;}
+/* PROGRESS BAR */
+.progress-strip{background:var(--surf);border-bottom:1px solid var(--bdr);padding:12px 20px;}
+.ps-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px;}
+.ps-label{font-size:12px;font-weight:600;color:var(--tx);white-space:nowrap;}
+.ps-bar-wrap{flex:1;background:var(--g200);border-radius:4px;height:8px;overflow:hidden;}
+.ps-bar{height:100%;background:linear-gradient(90deg,var(--pu),var(--p));border-radius:4px;transition:width .5s;}
+.ps-pct{font-size:12px;font-weight:700;color:var(--p);white-space:nowrap;}
 /* PAGE */
-.pg{padding:74px clamp(12px,3vw,24px) 60px;max-width:1100px;margin:0 auto;}
-/* Hero strip */
-.hero-strip{background:linear-gradient(135deg,var(--p) 0%,#7c3aed 100%);border-radius:16px;padding:24px 28px;color:#fff;display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:16px;}
-.hs-pts{font-family:var(--fd);font-size:32px;font-weight:800;margin-bottom:3px;}
-.hs-lbl{font-size:11px;opacity:.75;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
-.hs-sub{font-size:13px;opacity:.8;margin-bottom:6px;}
-.streak-pill{background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;display:inline-block;}
-.hs-right{text-align:right;}
-.goal-lbl{font-size:11px;opacity:.7;margin-bottom:3px;}
-.goal-val{font-family:var(--fd);font-size:20px;font-weight:800;margin-bottom:6px;}
-.goal-bar{background:rgba(255,255,255,.2);border-radius:4px;height:5px;width:130px;overflow:hidden;margin-left:auto;}
-.goal-fill{height:100%;background:#fff;border-radius:4px;}
-/* Layout */
-.layout{display:grid;grid-template-columns:1fr 252px;gap:18px;}
-/* Lesson card */
-.lcard{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:18px;margin-bottom:11px;cursor:pointer;transition:all .18s;box-shadow:var(--sh);}
-.lcard:hover{box-shadow:var(--shm);border-color:var(--g300);}
-.lcard.done{border-left:3px solid var(--green);}
-.lcard.active{border-color:var(--pbr);background:var(--plt);}
-.lc-head{display:flex;align-items:center;gap:12px;margin-bottom:9px;}
-.lc-ico{font-size:22px;}
-.lc-name{font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:2px;}
-.lc-sub{font-size:11px;color:var(--tx3);}
-.lc-pills{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
-.pill{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;}
-.pill-beg{background:var(--gbg);color:var(--green);}
-.pill-int{background:var(--ambg);color:var(--amber);}
-.pill-tag{background:var(--g100);color:var(--g500);}
-.lc-foot{display:flex;justify-content:space-between;align-items:center;}
-.lc-mins{font-size:11px;color:var(--tx3);}
-.lc-pts{font-size:11px;color:var(--amber);font-weight:700;}
-.lc-done{font-size:11px;color:var(--green);font-weight:700;}
-/* Quiz */
-.quiz-wrap{background:var(--g50);border:1px solid var(--bdr);border-radius:11px;padding:16px;margin-top:14px;display:none;}
-.quiz-wrap.open{display:block;}
-.quiz-label{font-size:10px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-.quiz-text{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:14px;}
-.quiz-q{font-size:13px;font-weight:700;margin-bottom:12px;}
-.quiz-opts{display:flex;flex-direction:column;gap:7px;}
-.qopt{background:var(--white);border:1.5px solid var(--bdr);color:var(--tx);padding:10px 14px;border-radius:9px;font-size:13px;text-align:left;transition:all .18s;}
-.qopt:hover{border-color:var(--pbr);}
-.qopt.correct{background:var(--gbg);border-color:var(--gbr);color:var(--green);}
-.qopt.wrong{background:var(--rbg);border-color:#fca5a5;color:var(--red);}
-.quiz-fb{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:12px;display:none;}
-/* Section label */
-.sec-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin:20px 0 12px;}
-/* Right sidebar */
-.side-card{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:var(--sh);}
-.sc-title{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
-.lb-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bdr);}
+.pg{max-width:1100px;margin:0 auto;padding:20px clamp(12px,3vw,24px) 60px;}
+.layout{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+/* FILTER */
+.filter-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.fb{background:var(--surf);border:1.5px solid var(--bdr);color:var(--tx2);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;transition:all .14s;}
+.fb:hover,.fb.on{background:var(--p);color:#fff;border-color:var(--p);}
+/* COURSE GRID */
+.course-grid{display:flex;flex-direction:column;gap:12px;}
+/* COURSE CARD */
+.course-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;box-shadow:var(--sh);transition:all .15s;cursor:pointer;}
+.course-card:hover{box-shadow:var(--shm);border-color:var(--pbr);}
+.cc-body{padding:16px;}
+.cc-meta{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.cc-cat{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--plt);color:var(--p);}
+.cc-diff{font-size:10px;font-weight:600;color:var(--tx3);}
+.cc-title{font-family:var(--fd);font-size:16px;font-weight:700;margin-bottom:5px;}
+.cc-desc{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px;}
+.cc-footer{display:flex;align-items:center;justify-content:space-between;}
+.cc-info{display:flex;gap:10px;font-size:11px;color:var(--tx3);}
+.cc-pts{font-size:11px;font-weight:700;color:var(--am);}
+/* Progress on card */
+.cc-progress{padding:0 16px 14px;}
+.cp-bar{background:var(--g200);border-radius:4px;height:5px;overflow:hidden;margin-bottom:4px;}
+.cp-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--pu),var(--p));transition:width .4s;}
+.cp-label{font-size:10px;color:var(--tx3);}
+/* Empty */
+.empty-courses{padding:60px 20px;text-align:center;color:var(--tx3);}
+/* LESSON VIEWER */
+.lesson-viewer{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+.lesson-viewer.open{display:flex;}
+.lv-modal{background:#fff;border-radius:18px;width:100%;max-width:700px;max-height:90vh;margin:16px;overflow:hidden;display:flex;flex-direction:column;}
+.lv-header{padding:16px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;}
+.lv-title{font-family:var(--fd);font-size:16px;font-weight:800;}
+.lv-close{background:var(--g100);border:none;width:28px;height:28px;border-radius:7px;font-size:14px;cursor:pointer;}
+.lv-body{flex:1;overflow-y:auto;padding:20px;}
+.lv-video{width:100%;border-radius:10px;margin-bottom:16px;aspect-ratio:16/9;background:#000;}
+.lv-content{font-size:14px;color:var(--tx2);line-height:1.8;}
+/* Assessment */
+.quiz-wrap{background:var(--g50);border:1px solid var(--bdr);border-radius:12px;padding:16px;margin-top:16px;}
+.q-title{font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:12px;}
+.q-opts{display:flex;flex-direction:column;gap:7px;}
+.q-opt{background:#fff;border:1.5px solid var(--bdr);border-radius:9px;padding:10px 13px;font-size:13px;text-align:left;transition:all .14s;}
+.q-opt:hover{border-color:var(--p);background:var(--plt);}
+.q-opt.correct{border-color:var(--g);background:var(--gbg);color:var(--g);}
+.q-opt.wrong{border-color:var(--r);background:var(--rbg);color:var(--r);}
+.q-explanation{margin-top:10px;font-size:12px;color:var(--tx2);background:var(--ambg);border-radius:8px;padding:10px;}
+.lv-footer{padding:14px 20px;border-top:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.lv-btn{padding:9px 22px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;}
+.lv-btn-p{background:var(--p);color:#fff;}
+.lv-btn-s{background:var(--g100);color:var(--tx2);}
+.complete-btn{background:var(--g);color:#fff;padding:9px 22px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;}
+/* RIGHT SIDEBAR */
+.r-col{display:flex;flex-direction:column;gap:14px;}
+.r-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:16px;box-shadow:var(--sh);}
+.rc-title{font-family:var(--fd);font-size:13px;font-weight:800;margin-bottom:12px;}
+/* Leaderboard */
+.lb-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bdr);}
 .lb-row:last-child{border:none;}
-.lb-rank{font-size:11px;color:var(--tx3);width:20px;}
+.lb-rank{font-size:12px;font-weight:800;width:18px;color:var(--tx3);}
+.lb-rank.top{color:var(--am);}
+.lb-av{width:28px;height:28px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
 .lb-name{font-size:12px;font-weight:600;flex:1;}
-.lb-pts{font-size:12px;color:var(--amber);font-weight:700;}
-.lb-you{background:var(--plt);border-radius:7px;padding:6px 8px;margin:0 -4px;}
+.lb-pts{font-size:12px;font-weight:700;color:var(--am);}
+/* Badges */
 .bdg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-.bdg{text-align:center;padding:8px 3px;border-radius:8px;background:var(--g50);}
+.bdg{text-align:center;padding:9px 4px;border-radius:9px;background:var(--g50);}
 .bdg.earned{background:var(--gbg);border:1px solid var(--gbr);}
-.bdg-ico{font-size:16px;margin-bottom:2px;}
+.bdg-ico{font-size:18px;margin-bottom:2px;}
 .bdg-name{font-size:9px;color:var(--tx3);}
-.bdg.earned .bdg-name{color:var(--green);}
-@media(max-width:860px){.layout{grid-template-columns:1fr;}.nav-links{display:none;}.burger{display:block;}}
-@media(max-width:480px){.hero-strip{padding:18px;}.hs-right{display:none;}.pg{padding:74px 12px 60px;}}
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--g900);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.ok{background:var(--g);}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}.r-col{order:-1;}.nav-links{display:none;}.burger{display:block;}}
 </style>
 </head>
 <body>
-<script>
-// ── AUTH GUARD ── runs before anything else
-(function(){
-  const raw = sessionStorage.getItem('gopex_user');
-  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
-  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
-  if (!hasSession) { window.location.replace('landing.html'); }
-})();
-
-</script>
 <nav class="nav">
   <div class="nav-in">
-    <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
+    <a href="landing.html" class="logo"><div class="lm">G</div>GopexFund</a>
     <div class="nav-links">
-      <a href="home.html" class="nl">🏠 Home</a><a href="market.html" class="nl">📈 Market</a>
-      <a href="portfolio.html" class="nl">💼 Portfolio</a><a href="learn.html" class="nl on">📚 Learn</a>
-      <a href="about.html" class="nl">ℹ About</a>
+      <a href="home.html" class="nl">Home</a>
+      <a href="market.html" class="nl">Market</a>
+      <a href="portfolio.html" class="nl">Portfolio</a>
+      <a href="learn.html" class="nl on">Learn</a>
     </div>
     <div class="nav-r">
-      <a href="profile.html" class="nav-prof"><div class="nav-av" id="nav-av">AO</div><span style="font-size:12px;font-weight:600;" id="nav-name">Adaeze</span></a>
-      <button onclick="gxLogout()" title="Log out" style="background:#fee2e2;border:1.5px solid #fca5a5;border-radius:8px;color:#dc2626;font-size:11px;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap;display:none;" class="logout-btn">↩ Logout</button>
-      <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
+      <a href="profile.html" class="prof-pill"><div class="nav-av" id="nav-av">?</div><span class="nav-un" id="nav-un">Account</span></a>
+      <button class="burger" onclick="document.getElementById('mnav').classList.toggle('open')">&#9776;</button>
     </div>
   </div>
 </nav>
-<div class="mob-nav" id="mn">
-  <a href="home.html" class="mob-link">🏠 Home</a><a href="market.html" class="mob-link">📈 Market</a>
-  <a href="portfolio.html" class="mob-link">💼 Portfolio</a><a href="learn.html" class="mob-link on">📚 Learn</a>
+<div class="mob-nav" id="mnav">
+  <a href="home.html" class="mob-link">Home</a>
+  <a href="market.html" class="mob-link">Market</a>
+  <a href="portfolio.html" class="mob-link">Portfolio</a>
+  <a href="learn.html" class="mob-link on">Learn</a>
+  <a href="profile.html" class="mob-link">My Account</a>
 </div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="h-left">
+      <h1>&#128218; Learn &amp; Earn</h1>
+      <p>Master investing with courses built by GopexFund. Earn points for every lesson completed.</p>
+    </div>
+    <div class="h-stats">
+      <div class="hs"><div class="hs-v" id="h-pts">0</div><div class="hs-l">My Points</div></div>
+      <div class="hs"><div class="hs-v" id="h-done">0</div><div class="hs-l">Completed</div></div>
+      <div class="hs"><div class="hs-v" id="h-streak">&#128293; 0</div><div class="hs-l">Day Streak</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS STRIP -->
+<div class="progress-strip">
+  <div class="ps-inner">
+    <div class="ps-label">&#127919; Today's Goal</div>
+    <div class="ps-bar-wrap"><div class="ps-bar" id="daily-bar" style="width:0%"></div></div>
+    <div class="ps-pct" id="daily-pct">0 / 1 lessons</div>
+  </div>
+</div>
+
 <div class="pg">
-  <div class="hero-strip">
-    <div>
-      <div class="hs-lbl">GopexFund Points</div>
-      <div class="hs-pts" id="pts-display">2,450 pts</div>
-      <div class="hs-sub">Your balance · Redeem for rewards</div>
-      <div class="streak-pill">🔥 5-day learning streak</div>
-    </div>
-    <div class="hs-right">
-      <div class="goal-lbl">Today's goal</div>
-      <div class="goal-val">2 / 3 lessons</div>
-      <div class="goal-bar"><div class="goal-fill" style="width:66%"></div></div>
-    </div>
-  </div>
-
   <div class="layout">
-    <!-- MAIN LESSONS -->
     <div>
-      <div class="sec-lbl">📖 Continue learning</div>
-
-      <div class="lcard active" onclick="toggleLesson('l1',this)">
-        <div class="lc-head"><div class="lc-ico">📊</div><div><div class="lc-name">What is a P/E ratio and why does it matter?</div><div class="lc-sub">Stock valuation fundamentals for NGX investors</div></div></div>
-        <div class="lc-pills"><span class="pill pill-beg">Beginner</span><span class="pill pill-tag">Stocks</span><span class="pill pill-tag">NGX</span></div>
-        <div class="lc-foot"><span class="lc-mins">⏱ 5 min</span><span class="lc-pts">+100 pts on completion</span></div>
-        <div class="quiz-wrap" id="l1">
-          <div class="quiz-label">📖 Quick lesson</div>
-          <div class="quiz-text">The <strong>Price-to-Earnings (P/E) ratio</strong> tells you how much investors pay for every ₦1 of a company's earnings. Formula: <strong>Share price ÷ Earnings per share</strong>.<br><br>If DANGCEM trades at ₦543 and earns ₦50/share, P/E = 10.86x. Nigerian banking stocks typically trade at 3–6x P/E — much lower than US tech at 20–50x. Always compare within the same sector.</div>
-          <div class="quiz-q">Quick quiz: If DANGCEM trades at ₦543 and earns ₦50 per share, what is the P/E ratio?</div>
-          <div class="quiz-opts">
-            <button class="qopt" onclick="answer(this,false,'l1-fb')">A. 50x — the earnings itself</button>
-            <button class="qopt" onclick="answer(this,true,'l1-fb')">B. 10.86x — price divided by earnings</button>
-            <button class="qopt" onclick="answer(this,false,'l1-fb')">C. 5x — half of share price</button>
-            <button class="qopt" onclick="answer(this,false,'l1-fb')">D. 100x — inverse of yield</button>
-          </div>
-          <div class="quiz-fb" id="l1-fb"></div>
-        </div>
+      <div class="filter-row" id="filter-row">
+        <button class="fb on" onclick="filterCourses('all',this)">All Courses</button>
+        <button class="fb" onclick="filterCourses('Investing',this)">Investing</button>
+        <button class="fb" onclick="filterCourses('Stock Market',this)">Stock Market</button>
+        <button class="fb" onclick="filterCourses('Personal Finance',this)">Personal Finance</button>
+        <button class="fb" onclick="filterCourses('Beginner',this)">Beginner</button>
       </div>
-
-      <div class="lcard done">
-        <div class="lc-head"><div class="lc-ico">💵</div><div><div class="lc-name">Dollar-cost averaging (DCA) explained</div><div class="lc-sub">The strategy used by top Nigerian investors</div></div></div>
-        <div class="lc-pills"><span class="pill pill-beg">Beginner</span><span class="pill pill-tag">Strategy</span></div>
-        <div class="lc-foot"><span class="lc-mins">⏱ 4 min</span><span class="lc-done">✓ Completed · +100 pts earned</span></div>
-      </div>
-
-      <div class="lcard done">
-        <div class="lc-head"><div class="lc-ico">🏦</div><div><div class="lc-name">How Nigerian bank stocks pay dividends</div><div class="lc-sub">GTCO, Zenith, Access — dividend investing 101</div></div></div>
-        <div class="lc-pills"><span class="pill pill-beg">Beginner</span><span class="pill pill-tag">Dividends</span><span class="pill pill-tag">NGX</span></div>
-        <div class="lc-foot"><span class="lc-mins">⏱ 6 min</span><span class="lc-done">✓ Completed · +100 pts earned</span></div>
-      </div>
-
-      <div class="sec-lbl">🚀 Up next</div>
-
-      <div class="lcard" onclick="toggleLesson('l4',this)">
-        <div class="lc-head"><div class="lc-ico">🌍</div><div><div class="lc-name">Investing in US stocks from Nigeria — full guide</div><div class="lc-sub">Bamboo, Risevest &amp; what the CBN rules mean for you</div></div></div>
-        <div class="lc-pills"><span class="pill pill-int">Intermediate</span><span class="pill pill-tag">US Stocks</span><span class="pill pill-tag">Dollar</span></div>
-        <div class="lc-foot"><span class="lc-mins">⏱ 8 min</span><span class="lc-pts">+150 pts on completion</span></div>
-        <div class="quiz-wrap" id="l4">
-          <div class="quiz-label">📖 Quick lesson</div>
-          <div class="quiz-text">Nigerians can invest in US stocks through SEC-licensed platforms like <strong>Bamboo</strong>, <strong>Risevest</strong>, and <strong>Trove</strong>. You fund in naira; investments are held in USD — giving you a hedge against naira devaluation. The CBN allows individuals to invest up to $10,000/year through approved channels. Always check your platform is SEC-registered.</div>
-          <div class="quiz-q">Which is NOT a SEC-regulated platform for Nigerians investing in US stocks?</div>
-          <div class="quiz-opts">
-            <button class="qopt" onclick="answer(this,false,'l4-fb')">A. Bamboo</button>
-            <button class="qopt" onclick="answer(this,false,'l4-fb')">B. Risevest</button>
-            <button class="qopt" onclick="answer(this,true,'l4-fb')">C. Binance (for stocks)</button>
-            <button class="qopt" onclick="answer(this,false,'l4-fb')">D. Trove</button>
-          </div>
-          <div class="quiz-fb" id="l4-fb"></div>
-        </div>
-      </div>
-
-      <div class="lcard">
-        <div class="lc-head"><div class="lc-ico">₿</div><div><div class="lc-name">Crypto for Nigerians — risks &amp; rewards</div><div class="lc-sub">Bitcoin, Ethereum, stablecoins in Nigerian context</div></div></div>
-        <div class="lc-pills"><span class="pill pill-int">Intermediate</span><span class="pill pill-tag">Crypto</span></div>
-        <div class="lc-foot"><span class="lc-mins">⏱ 7 min</span><span class="lc-pts">+150 pts</span></div>
+      <div class="course-grid" id="course-grid">
+        <div class="empty-courses"><div style="font-size:36px;margin-bottom:10px;">&#9200;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">Loading courses...</div></div>
       </div>
     </div>
-
-    <!-- RIGHT SIDEBAR -->
-    <div>
-      <div class="side-card">
-        <div class="sc-title">🏆 Leaderboard</div>
-        <div class="lb-row"><div class="lb-rank">🥇</div><div class="lb-name">Kunle A.</div><div class="lb-pts">4,200</div></div>
-        <div class="lb-row"><div class="lb-rank">🥈</div><div class="lb-name">Ngozi E.</div><div class="lb-pts">3,800</div></div>
-        <div class="lb-row lb-you"><div class="lb-rank">🏅</div><div class="lb-name" style="color:var(--p);font-weight:700;">You</div><div class="lb-pts" id="lb-pts">2,450</div></div>
-        <div class="lb-row"><div class="lb-rank">4</div><div class="lb-name">Tunde F.</div><div class="lb-pts">2,100</div></div>
-        <div class="lb-row"><div class="lb-rank">5</div><div class="lb-name">Bola B.</div><div class="lb-pts">1,760</div></div>
+    <div class="r-col">
+      <div class="r-card">
+        <div class="rc-title">&#127941; Leaderboard</div>
+        <div id="leaderboard"><div style="font-size:12px;color:var(--tx3);">Loading...</div></div>
       </div>
-      <div class="side-card">
-        <div class="sc-title">🎖 Your Badges</div>
+      <div class="r-card">
+        <div class="rc-title">&#127942; My Badges</div>
         <div class="bdg-grid">
-          <div class="bdg earned"><div class="bdg-ico">🔥</div><div class="bdg-name">5-Day</div></div>
-          <div class="bdg earned"><div class="bdg-ico">📚</div><div class="bdg-name">1st Lesson</div></div>
-          <div class="bdg earned"><div class="bdg-ico">💰</div><div class="bdg-name">1st Goal</div></div>
-          <div class="bdg"><div class="bdg-ico">🏆</div><div class="bdg-name">Top 10</div></div>
-          <div class="bdg"><div class="bdg-ico">📈</div><div class="bdg-name">10 Lessons</div></div>
-          <div class="bdg"><div class="bdg-ico">👥</div><div class="bdg-name">Social</div></div>
-          <div class="bdg"><div class="bdg-ico">✓</div><div class="bdg-name">Verified</div></div>
-          <div class="bdg"><div class="bdg-ico">🌟</div><div class="bdg-name">Pro</div></div>
+          <div class="bdg earned"><div class="bdg-ico">&#127968;</div><div class="bdg-name">Member</div></div>
+          <div class="bdg" id="bdg-first"><div class="bdg-ico">&#128218;</div><div class="bdg-name">First Lesson</div></div>
+          <div class="bdg" id="bdg-streak"><div class="bdg-ico">&#128293;</div><div class="bdg-name">5 Day Streak</div></div>
+          <div class="bdg" id="bdg-100"><div class="bdg-ico">&#127775;</div><div class="bdg-name">100 Points</div></div>
+          <div class="bdg" id="bdg-course"><div class="bdg-ico">&#127891;</div><div class="bdg-name">Graduate</div></div>
+          <div class="bdg"><div class="bdg-ico">&#128176;</div><div class="bdg-name">Investor</div></div>
+          <div class="bdg"><div class="bdg-ico">&#128200;</div><div class="bdg-name">Trader</div></div>
+          <div class="bdg"><div class="bdg-ico">&#129351;</div><div class="bdg-name">Top 10</div></div>
         </div>
+      </div>
+      <div class="r-card">
+        <div class="rc-title">&#128206; My Progress</div>
+        <div id="my-progress"><div style="font-size:12px;color:var(--tx3);">Start a course to track progress.</div></div>
       </div>
     </div>
   </div>
 </div>
-<script>
-let pts=2450;
-function toggleLesson(id,card){
-  const el=document.getElementById(id);if(!el)return;
-  const isOpen=el.classList.contains('open');
-  document.querySelectorAll('.quiz-wrap').forEach(q=>q.classList.remove('open'));
-  document.querySelectorAll('.lcard').forEach(c=>c.classList.remove('active'));
-  if(!isOpen){el.classList.add('open');card.classList.add('active');}
+
+<!-- LESSON VIEWER -->
+<div class="lesson-viewer" id="lesson-viewer">
+  <div class="lv-modal">
+    <div class="lv-header">
+      <div class="lv-title" id="lv-title">Lesson</div>
+      <button class="lv-close" onclick="closeLessonViewer()">&#x2715;</button>
+    </div>
+    <div class="lv-body" id="lv-body"></div>
+    <div class="lv-footer">
+      <div style="font-size:12px;color:var(--tx3);" id="lv-lesson-info">Lesson 1</div>
+      <div style="display:flex;gap:8px;">
+        <button class="lv-btn lv-btn-s" id="lv-prev" onclick="navLesson(-1)">&#8592; Prev</button>
+        <button class="lv-btn lv-btn-p" id="lv-next" onclick="navLesson(1)">Next &#8594;</button>
+        <button class="complete-btn" id="lv-complete" onclick="markComplete()" style="display:none;">&#10003; Mark Complete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+var sb=createClient('https://lzlitanvlkycrkkpwczm.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g');
+
+var _uid=null,_profile=null,_allCourses=[],_filteredCourses=[],_progress={};
+var _activeCourse=null,_activeLessons=[],_activeLessonIdx=0,_activeAssessments={};
+var _quizAnswered=false;
+
+async function init(){
+  var a=await sb.auth.getSession();
+  if(!a.data.session){window.location.href='landing.html';return;}
+  _uid=a.data.session.user.id;
+  var raw=sessionStorage.getItem('gopex_user');
+  if(raw){var u=JSON.parse(raw);setEl('nav-av',u.initials||'?');setEl('nav-un',u.firstName||'Me');}
+  else{var pr=await sb.from('profiles').select('*').eq('id',_uid).single();if(pr.data){_profile=pr.data;var fn=pr.data.first_name||(pr.data.name?pr.data.name.split(' ')[0]:'');setEl('nav-av',pr.data.initials||fn.charAt(0).toUpperCase());setEl('nav-un',fn);}}
+  var pr2=await sb.from('profiles').select('points,streak').eq('id',_uid).single();
+  if(pr2.data){setEl('h-pts',(pr2.data.points||0).toLocaleString());setEl('h-streak','&#128293; '+(pr2.data.streak||0));_profile=pr2.data;}
+  await loadProgress();
+  await loadCourses();
+  await loadLeaderboard();
 }
-function answer(btn,correct,fbId){
-  btn.closest('.quiz-opts').querySelectorAll('.qopt').forEach(o=>{o.style.pointerEvents='none';});
-  btn.classList.add(correct?'correct':'wrong');
-  const fb=document.getElementById(fbId);fb.style.display='block';
-  if(correct){
-    fb.style.background='var(--gbg)';fb.style.color='var(--green)';fb.textContent='✓ Correct! +100 GopexFund Points added to your balance.';
-    pts+=100;document.getElementById('pts-display').textContent=pts.toLocaleString()+' pts';document.getElementById('lb-pts').textContent=pts.toLocaleString();
-  } else {
-    fb.style.background='var(--rbg)';fb.style.color='var(--red)';fb.textContent='✗ Not quite — review the lesson and try again!';
+init();
+
+function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+
+async function loadProgress(){
+  var r=await sb.from('course_progress').select('*').eq('user_id',_uid);
+  _progress={};
+  (r.data||[]).forEach(function(p){if(!_progress[p.course_id])_progress[p.course_id]=[];_progress[p.course_id].push(p.lesson_id);});
+  var total=Object.values(_progress).reduce(function(a,v){return a+v.length;},0);
+  setEl('h-done',total);
+  // Daily progress (lessons done today)
+  var today=(r.data||[]).filter(function(p){return p.completed_at&&new Date(p.completed_at).toDateString()===new Date().toDateString();});
+  var pct=Math.min(today.length*100,100);
+  var bar=document.getElementById('daily-bar');if(bar)bar.style.width=pct+'%';
+  setEl('daily-pct',today.length+' / 1 lessons today');
+  if(total>0){var b=document.getElementById('bdg-first');if(b)b.classList.add('earned');}
+  if(_profile&&_profile.points>=100){var b2=document.getElementById('bdg-100');if(b2)b2.classList.add('earned');}
+}
+
+async function loadCourses(){
+  var r=await sb.from('courses').select('*, profiles(name)').eq('is_published',true).order('created_at',{ascending:false});
+  _allCourses=r.data||[];_filteredCourses=_allCourses;
+  renderCourses();
+  renderMyProgress();
+}
+
+function renderCourses(){
+  var grid=document.getElementById('course-grid');if(!grid)return;
+  if(!_filteredCourses.length){
+    grid.innerHTML='<div class="empty-courses"><div style="font-size:36px;margin-bottom:10px;">&#128218;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">No courses yet</div><div style="font-size:12px;margin-top:5px;">The admin will publish courses here soon. Check back!</div></div>';
+    return;
+  }
+  grid.innerHTML='';
+  _filteredCourses.forEach(function(c){
+    var completed=(_progress[c.id]||[]).length;
+    var total_lessons=c.lesson_count||0;
+    var pct=total_lessons>0?Math.round(completed/total_lessons*100):0;
+    var card=document.createElement('div');card.className='course-card';
+    card.innerHTML='<div class="cc-body">'
+      +'<div class="cc-meta"><span class="cc-cat">'+(c.category||'Investing')+'</span><span class="cc-diff">'+c.difficulty+'</span>'+(c.duration_mins?'<span class="cc-diff">'+c.duration_mins+' min</span>':'')+'</div>'
+      +'<div class="cc-title">'+c.title+'</div>'
+      +'<div class="cc-desc">'+(c.description||'').substring(0,100)+(c.description&&c.description.length>100?'...':'')+'</div>'
+      +'<div class="cc-footer"><div class="cc-info">'+(c.profiles&&c.profiles.name?'<span>By '+c.profiles.name+'</span>':'')+'</div>'
+      +'<div class="cc-pts">&#127941; '+(c.points_reward||100)+' pts</div></div>'
+      +'</div>'
+      +(total_lessons>0?'<div class="cc-progress"><div class="cp-bar"><div class="cp-fill" style="width:'+pct+'%"></div></div><div class="cp-label">'+completed+'/'+total_lessons+' lessons'+( pct===100?' &middot; &#10003; Completed':'')+'</div></div>':'');
+    card.onclick=function(){openCourse(c);};
+    grid.appendChild(card);
+  });
+}
+
+function renderMyProgress(){
+  var el=document.getElementById('my-progress');if(!el)return;
+  var courses=_allCourses.filter(function(c){return _progress[c.id]&&_progress[c.id].length>0;});
+  if(!courses.length){el.innerHTML='<div style="font-size:12px;color:var(--tx3);">Start a course to track progress.</div>';return;}
+  var h='';
+  courses.forEach(function(c){
+    var done=(_progress[c.id]||[]).length;var tot=c.lesson_count||1;var pct=Math.round(done/tot*100);
+    h+='<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">'+c.title.substring(0,25)+'</span><span style="color:var(--p);font-weight:700;">'+pct+'%</span></div>'
+      +'<div style="background:var(--g200);border-radius:3px;height:5px;overflow:hidden;"><div style="height:100%;background:var(--p);border-radius:3px;width:'+pct+'%"></div></div></div>';
+  });
+  el.innerHTML=h;
+}
+
+window.filterCourses=function(f,btn){
+  document.querySelectorAll('.fb').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');
+  if(f==='all')_filteredCourses=_allCourses;
+  else _filteredCourses=_allCourses.filter(function(c){return c.category===f||c.difficulty===f;});
+  renderCourses();
+};
+
+// ── OPEN COURSE ───────────────────────────────────────────────
+async function openCourse(course){
+  _activeCourse=course;
+  var r=await sb.from('course_lessons').select('*').eq('course_id',course.id).order('lesson_order',{ascending:true});
+  _activeLessons=r.data||[];
+  if(!_activeLessons.length){showToast('No lessons available yet','');return;}
+  _activeLessonIdx=0;
+  document.getElementById('lesson-viewer').classList.add('open');
+  renderLesson();
+}
+
+async function renderLesson(){
+  var lesson=_activeLessons[_activeLessonIdx];if(!lesson)return;
+  setEl('lv-title',_activeCourse.title+' — '+lesson.title);
+  var info=document.getElementById('lv-lesson-info');
+  if(info)info.textContent='Lesson '+(_activeLessonIdx+1)+' of '+_activeLessons.length;
+  // Nav buttons
+  var prev=document.getElementById('lv-prev');var next=document.getElementById('lv-next');var comp=document.getElementById('lv-complete');
+  if(prev)prev.style.display=_activeLessonIdx===0?'none':'inline-block';
+  var isLast=_activeLessonIdx===_activeLessons.length-1;
+  if(next)next.style.display=isLast?'none':'inline-block';
+  if(comp)comp.style.display=isLast?'inline-block':'none';
+  // Body
+  var body=document.getElementById('lv-body');body.innerHTML='';
+  // Video
+  if(lesson.video_url){
+    var vw=document.createElement('div');
+    if(lesson.video_url.includes('youtube')||lesson.video_url.includes('youtu.be')){
+      var vid=lesson.video_url.replace('watch?v=','embed/').replace('youtu.be/','www.youtube.com/embed/');
+      vw.innerHTML='<iframe class="lv-video" src="'+vid+'" frameborder="0" allowfullscreen></iframe>';
+    }else{vw.innerHTML='<video class="lv-video" controls src="'+lesson.video_url+'"></video>';}
+    body.appendChild(vw);
+  }
+  // Content
+  if(lesson.content){var ct=document.createElement('div');ct.className='lv-content';ct.innerHTML=lesson.content.replace(/\n/g,'<br>');body.appendChild(ct);}
+  // Assessment
+  var ar=await sb.from('course_assessments').select('*').eq('lesson_id',lesson.id);
+  _activeAssessments={};_quizAnswered=false;
+  if(ar.data&&ar.data.length){
+    ar.data.forEach(function(q){_activeAssessments[q.id]=q;});
+    var qw=document.createElement('div');qw.className='quiz-wrap';
+    ar.data.forEach(function(q){
+      var opts=Array.isArray(q.options)?q.options:JSON.parse(q.options||'[]');
+      var qEl=document.createElement('div');
+      qEl.innerHTML='<div class="q-title">&#127922; '+q.question+'</div><div class="q-opts" id="opts-'+q.id+'">'
+        +opts.map(function(opt,i){return'<button class="q-opt" onclick="answerQ(\''+q.id+'\','+i+','+q.correct_index+',\''+q.id+'-'+i+'\')">'+opt+'</button>';}).join('')
+        +'</div>';
+      qw.appendChild(qEl);
+    });
+    body.appendChild(qw);
   }
 }
-(function(){const raw=sessionStorage.getItem('gopex_user');if(!raw)return;const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];})();
 
-function gxLogout() {
-  if (!confirm('Log out of GopexFund?')) return;
-  sessionStorage.clear();
-  // Clear Supabase session
-  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
-  if (key) localStorage.removeItem(key);
-  window.location.href = 'landing.html';
+window.answerQ=function(qid,chosen,correct,btnKey){
+  if(_quizAnswered)return;
+  _quizAnswered=true;
+  var opts=document.querySelectorAll('#opts-'+qid+' .q-opt');
+  opts.forEach(function(b,i){b.disabled=true;if(i===correct)b.classList.add('correct');else if(i===chosen&&chosen!==correct)b.classList.add('wrong');});
+  var q=_activeAssessments[qid];
+  if(q&&q.explanation){var ex=document.createElement('div');ex.className='q-explanation';ex.textContent=q.explanation;opts[opts.length-1].parentElement.appendChild(ex);}
+  if(chosen===correct){showToast('+10 points! Correct answer!','ok');awardPoints(10);}
+};
+
+window.navLesson=function(dir){
+  _activeLessonIdx=Math.max(0,Math.min(_activeLessonIdx+dir,_activeLessons.length-1));
+  renderLesson();
+};
+
+window.markComplete=async function(){
+  var lesson=_activeLessons[_activeLessonIdx];if(!lesson)return;
+  await sb.from('course_progress').upsert({user_id:_uid,course_id:_activeCourse.id,lesson_id:lesson.id,completed:true,completed_at:new Date().toISOString()},{onConflict:'user_id,lesson_id'});
+  if(!_progress[_activeCourse.id])_progress[_activeCourse.id]=[];
+  if(!_progress[_activeCourse.id].includes(lesson.id))_progress[_activeCourse.id].push(lesson.id);
+  var pts=_activeCourse.points_reward||100;
+  await awardPoints(pts);
+  showToast('Course complete! +'+pts+' points earned!','ok');
+  closeLessonViewer();
+  await loadCourses();
+  renderMyProgress();
+};
+
+async function awardPoints(pts){
+  var cur=(_profile&&_profile.points)||0;
+  await sb.from('profiles').update({points:cur+pts}).eq('id',_uid);
+  if(_profile)_profile.points=(cur+pts);
+  setEl('h-pts',(cur+pts).toLocaleString());
 }
 
+window.closeLessonViewer=function(){document.getElementById('lesson-viewer').classList.remove('open');};
+
+async function loadLeaderboard(){
+  var r=await sb.from('profiles').select('name,initials,points').order('points',{ascending:false}).limit(5);
+  var el=document.getElementById('leaderboard');if(!el)return;
+  if(!r.data||!r.data.length){el.innerHTML='<div style="font-size:12px;color:var(--tx3);">No data yet.</div>';return;}
+  var h='';
+  r.data.forEach(function(u,i){
+    var ini=u.initials||(u.name?u.name.charAt(0):'U');
+    var isMe=(u.id===_uid);
+    h+='<div class="lb-row'+(isMe?' on':'')+'">'
+      +'<div class="lb-rank'+(i<3?' top':'')+'">'+['&#129351;','&#129352;','&#129353;'][i]||('&#8226;')+'</div>'
+      +'<div class="lb-av">'+ini+'</div>'
+      +'<div class="lb-name">'+u.name+(isMe?' (You)':'')+'</div>'
+      +'<div class="lb-pts">'+((u.points||0).toLocaleString())+' pts</div>'
+      +'</div>';
+  });
+  el.innerHTML=h;
+}
+
+function showToast(msg,type){
+  var t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type==='ok'?'ok':'');t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
 </script>
 </body>
 </html>

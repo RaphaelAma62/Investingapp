@@ -2,671 +2,471 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GopexFund — My Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<title>GopexFund — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--red:#dc2626;--rbg:#fee2e2;--amber:#d97706;--ambg:#fef3c7;--purple:#7c3aed;--pbg:#ede9fe;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g600:#475569;--g700:#334155;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);}
-*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input,select{font-family:var(--fb);}
-
-/* ── NAV ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
-.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 24px;gap:12px;}
-.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;color:var(--tx);}
-.logo-mark{width:29px;height:29px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
-.nav-links{display:flex;gap:2px;}
-.nl{padding:7px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;transition:all .15s;}
-.nl:hover{background:var(--g100);color:var(--tx);}
-.nl.on{background:var(--plt);color:var(--p);font-weight:600;}
-.nav-r{display:flex;align-items:center;gap:8px;}
-.nav-prof{display:flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--bdr);border-radius:10px;padding:4px 12px 4px 5px;text-decoration:none;transition:all .15s;}
-.nav-prof:hover{background:var(--g100);}
-.nav-av{width:28px;height:28px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
-.burger{display:none;background:none;border:none;font-size:22px;color:var(--g500);cursor:pointer;padding:4px;}
-.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px 14px;flex-direction:column;gap:4px;z-index:299;box-shadow:var(--shm);}
-.mob-nav.open{display:flex;}
-.mob-link{padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}
-.mob-link.on{color:var(--p);background:var(--plt);font-weight:600;}
-
-/* ── PAGE ── */
-.pg{padding:74px clamp(12px,3vw,24px) 60px;max-width:1280px;margin:0 auto;}
-
-/* ── HERO BANNER ── */
-.hero{background:linear-gradient(135deg,var(--p) 0%,var(--pdk) 50%,#0a3db8 100%);border-radius:18px;padding:28px 32px;color:#fff;margin-bottom:22px;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
-.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;}
-.hero-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
-.vbadge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid;}
-.badge-v{background:rgba(22,163,74,.2);border-color:rgba(134,239,172,.5);color:#86efac;}
-.badge-uv{background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.4);color:#fbbf24;}
-.hero-name{font-size:13px;opacity:.75;}
-.hero-lbl{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;margin-top:10px;}
-.hero-amount{font-family:var(--fd);font-size:clamp(32px,5vw,48px);font-weight:800;letter-spacing:-1.5px;line-height:1;margin-bottom:10px;}
-.hero-amount em{font-size:clamp(20px,3.5vw,28px);opacity:.7;font-style:normal;}
-.pnl-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-.pnl{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;font-size:13px;font-weight:700;border:1px solid;}
-.pnl-up{background:rgba(22,163,74,.18);border-color:rgba(134,239,172,.4);color:#86efac;}
-.pnl-dn{background:rgba(220,38,38,.18);border-color:rgba(252,165,165,.4);color:#fca5a5;}
-.period-row{display:flex;gap:4px;}
-.ptog{padding:5px 13px;border-radius:7px;font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);transition:all .18s;}
-.ptog.on{background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.4);}
-.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;min-width:230px;}
-.hs{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;}
-.hs-val{font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:2px;}
-.hs-lbl{font-size:10px;opacity:.65;}
-
-/* ── MAIN GRID ── */
-.main-grid{display:grid;grid-template-columns:1fr 340px;gap:18px;margin-bottom:22px;}
-
-/* ── HOLDINGS TABLE ── */
-.table-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;box-shadow:var(--sh);}
-.tc-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bdr);}
-.tc-title{font-family:var(--fd);font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
-.tc-add{background:var(--plt);border:1px solid var(--pbr);color:var(--p);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;transition:all .18s;}
-.tc-add:hover{background:var(--p);color:#fff;}
-.tbl-cols{display:grid;grid-template-columns:34px 2.2fr 1fr 1fr 1fr 1fr 80px;gap:8px;padding:8px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);}
-.th{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
-.th-r{text-align:right;}
-.holding-row{display:grid;grid-template-columns:34px 2.2fr 1fr 1fr 1fr 1fr 80px;gap:8px;align-items:center;padding:10px 18px;border-bottom:1px solid var(--bdr);transition:background .12s;}
-.holding-row:last-child{border:none;}
-.holding-row:hover{background:var(--g50);}
-.h-logo{width:32px;height:32px;border-radius:8px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--g500);}
-.h-name{font-size:12px;font-weight:700;color:var(--tx);}
-.h-tk{font-size:10px;color:var(--tx3);margin-top:1px;font-family:monospace;}
-.h-num{font-size:12px;font-weight:700;text-align:right;}
-.h-sm{font-size:11px;color:var(--tx2);text-align:right;}
-.h-xs{font-size:10px;color:var(--tx3);text-align:right;}
-.up{color:var(--green);}
-.dn{color:var(--red);}
-.del-btn{background:var(--rbg);border:none;color:var(--red);width:28px;height:28px;border-radius:6px;font-size:13px;display:flex;align-items:center;justify-content:center;margin-left:auto;}
-.del-btn:hover{background:var(--red);color:#fff;}
-.empty-state{padding:40px;text-align:center;color:var(--tx3);}
-.empty-ico{font-size:36px;margin-bottom:12px;}
-.empty-txt{font-size:13px;font-weight:500;margin-bottom:14px;}
-/* Add row form */
-.add-row-form{background:var(--plt);border-top:1px solid var(--pbr);padding:12px 18px;display:none;}
-.add-row-form.open{display:block;}
-.add-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:end;}
+:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--g:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--r:#dc2626;--rbg:#fee2e2;--am:#d97706;--ambg:#fef3c7;--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g400:#94a3b8;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.06);--shm:0 4px 16px rgba(0,0,0,.08);}
+*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input,select{font-family:var(--fb);}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 20px;gap:10px;}
+.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:7px;}.lm{width:28px;height:28px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
+.nav-links{display:flex;gap:1px;}.nl{padding:6px 11px;border-radius:7px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;}.nl.on{background:var(--plt);color:var(--p);font-weight:600;}
+.nav-r{display:flex;align-items:center;gap:7px;}
+.prof-pill{display:flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--bdr);border-radius:9px;padding:3px 10px 3px 4px;text-decoration:none;}
+.nav-av{width:26px;height:26px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.nav-un{font-size:12px;font-weight:600;}
+.burger{display:none;background:none;border:none;font-size:21px;color:var(--g500);cursor:pointer;}
+.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:8px 14px 12px;flex-direction:column;gap:3px;z-index:299;box-shadow:var(--shm);}
+.mob-nav.open{display:flex;}.mob-link{padding:9px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}.mob-link.on{color:var(--p);background:var(--plt);}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--p),var(--pdk));padding:24px clamp(16px,4vw,40px);margin-top:60px;color:#fff;}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px;}
+.h-lbl{font-size:10px;opacity:.7;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.h-val{font-family:var(--fd);font-size:36px;font-weight:800;letter-spacing:-.5px;}
+.h-chg{font-size:13px;font-weight:600;background:rgba(255,255,255,.15);display:inline-block;padding:3px 10px;border-radius:20px;margin-top:5px;}
+.hero-stats{display:flex;gap:18px;flex-wrap:wrap;}
+.hs-item{text-align:center;}
+.hs-v{font-family:var(--fd);font-size:17px;font-weight:800;}
+.hs-l{font-size:9px;opacity:.65;text-transform:uppercase;letter-spacing:.4px;margin-top:1px;}
+/* PAGE */
+.pg{max-width:1100px;margin:0 auto;padding:20px clamp(12px,3vw,24px) 60px;}
+/* GRID */
+.main-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:20px;}
+/* HOLDINGS CARD */
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--sh);overflow:hidden;}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bdr);}
+.card-title{font-family:var(--fd);font-size:14px;font-weight:800;}
+.add-btn{background:var(--p);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;transition:background .14s;}
+.add-btn:hover{background:var(--pdk);}
+/* ADD FORM */
+.add-form{background:var(--plt);border-bottom:2px solid var(--p);padding:14px 18px;display:none;}
+.add-form.open{display:block;}
+.af-title{font-size:12px;font-weight:700;color:var(--p);margin-bottom:10px;}
+.af-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;}
 .af-field{display:flex;flex-direction:column;gap:4px;}
-.af-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
-.af-input{background:var(--white);border:1.5px solid var(--pbr);color:var(--tx);padding:8px 11px;border-radius:8px;font-size:13px;outline:none;}
+.af-label{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
+.af-input{background:#fff;border:1.5px solid var(--bdr);color:var(--tx);padding:8px 10px;border-radius:8px;font-size:13px;outline:none;transition:border-color .14s;}
 .af-input:focus{border-color:var(--p);}
-.af-select{background:var(--white);border:1.5px solid var(--pbr);color:var(--tx);padding:8px 11px;border-radius:8px;font-size:13px;outline:none;}
-.add-btn{background:var(--p);border:none;color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;white-space:nowrap;}
-
-/* ── RIGHT COLUMN ── */
-.right-col{display:flex;flex-direction:column;gap:16px;}
-.side-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:16px;box-shadow:var(--sh);}
-.sc-title{font-family:var(--fd);font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:14px;}
-.donut-wrap{position:relative;height:180px;display:flex;justify-content:center;}
-.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.dc-val{font-family:var(--fd);font-size:18px;font-weight:800;}
-.dc-lbl{font-size:10px;color:var(--tx3);}
-.alloc-legend{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
-.al-item{display:flex;align-items:center;gap:6px;font-size:11px;}
-.al-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
-.al-name{color:var(--tx2);}
-.al-pct{color:var(--tx);font-weight:700;margin-left:auto;}
-/* Summary stats */
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.sum-card{background:var(--g50);border-radius:10px;padding:10px 12px;}
-.sum-val{font-family:var(--fd);font-size:15px;font-weight:800;margin-bottom:2px;}
-.sum-lbl{font-size:10px;color:var(--tx3);}
-
-/* ── PERFORMANCE CHART ── */
-.perf-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);margin-bottom:22px;}
-.perf-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
-.perf-title{font-family:var(--fd);font-size:14px;font-weight:700;}
-.perf-periods{display:flex;gap:4px;}
-.pp{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1.5px solid var(--bdr);background:transparent;color:var(--tx3);}
-.pp.on{background:var(--plt);border-color:var(--pbr);color:var(--p);}
-.perf-chart-wrap{height:180px;}
-
-/* ── GOALS ── */
-.goals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
-.goal-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);}
-.gc-ico{font-size:28px;margin-bottom:10px;}
-.gc-name{font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:2px;}
-.gc-target{font-size:11px;color:var(--tx3);margin-bottom:10px;}
-.gc-prog{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;}
-.gc-bar{background:var(--g200);border-radius:4px;height:6px;overflow:hidden;margin-bottom:6px;}
-.gc-fill{height:100%;border-radius:4px;transition:width .6s;}
-.gc-monthly{font-size:11px;color:var(--tx3);}
-
-/* ── BROKERAGES ── */
-.brok-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-.brok-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
-.brok-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);transition:all .2s;}
-.brok-card:hover{box-shadow:var(--shm);border-color:var(--g300);}
-.brok-card.connected{border-color:var(--gbr);background:#fafffe;}
-.brok-hd{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.brok-logo{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;border:1px solid var(--bdr);}
-.brok-name{font-family:var(--fd);font-size:14px;font-weight:700;}
-.brok-sub{font-size:11px;color:var(--tx3);margin-top:1px;}
-.brok-tags{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;}
-.btag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--g100);color:var(--g500);font-weight:500;}
-.brok-btn{width:100%;padding:9px;border-radius:9px;font-size:13px;font-weight:700;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
-.brok-btn-connect{background:var(--plt);color:var(--p);border:1px solid var(--pbr);}
-.brok-btn-connect:hover{background:var(--p);color:#fff;}
-.brok-btn-synced{background:var(--gbg);color:var(--green);border:1px solid var(--gbr);}
-.connecting{opacity:.7;pointer-events:none;}
-
-/* MODAL */
-.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;}
-.modal-ov.open{opacity:1;pointer-events:all;}
-.modal{background:var(--white);border-radius:18px;padding:26px;width:100%;max-width:380px;margin:16px;position:relative;transform:translateY(10px);transition:transform .2s;box-shadow:0 20px 60px rgba(0,0,0,.14);}
-.modal-ov.open .modal{transform:translateY(0);}
-.modal-title{font-family:var(--fd);font-size:17px;font-weight:800;margin-bottom:18px;}
-.field{margin-bottom:12px;}.field label{display:block;font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
-.field input,.field select{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:9px 12px;border-radius:9px;font-size:13px;outline:none;}
-.field input:focus,.field select:focus{border-color:var(--p);}
-.modal-btns{display:flex;gap:8px;margin-top:6px;}
-.modal-cancel{flex:1;background:var(--g100);border:none;color:var(--tx2);padding:11px;border-radius:9px;font-size:13px;font-weight:600;}
-.modal-save{flex:2;background:var(--p);border:none;color:#fff;padding:11px;border-radius:9px;font-size:13px;font-weight:700;}
-
-/* RESPONSIVE */
-@media(max-width:1100px){.main-grid{grid-template-columns:1fr;}.tbl-cols,.holding-row{grid-template-columns:32px 2fr 1fr 1fr 1fr 72px;}.tbl-cols .th:nth-child(6),.holding-row .h-sm:nth-child(6){display:none;}}
-@media(max-width:900px){.goals-grid{grid-template-columns:1fr 1fr;}.nav-links{display:none;}.burger{display:block;}.hero-inner{grid-template-columns:1fr;}.hero-stats{display:none;}}
-@media(max-width:768px){.tbl-cols,.holding-row{grid-template-columns:32px 2fr 1fr 1fr 72px;}.tbl-cols .th:nth-child(5),.holding-row div:nth-child(5){display:none;}.add-form-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:600px){.goals-grid{grid-template-columns:1fr;}.brok-grid{grid-template-columns:1fr;}.summary-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:480px){.pg{padding-left:12px;padding-right:12px;}.hero{padding:20px;}.tbl-cols,.holding-row{grid-template-columns:30px 2fr 1fr 72px;}.tbl-cols .th:nth-child(4),.holding-row div:nth-child(4){display:none;}}
+/* Ticker dropdown */
+.tk-wrap{position:relative;}
+.tk-drop{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1.5px solid var(--bdr);border-radius:9px;box-shadow:var(--shm);z-index:100;max-height:180px;overflow-y:auto;display:none;}
+.tk-drop.open{display:block;}
+.tk-opt{padding:8px 12px;font-size:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .1s;}
+.tk-opt:hover{background:var(--plt);}
+.tk-sym{font-weight:700;color:var(--p);}
+.tk-name{color:var(--tx3);font-size:11px;}
+/* Holdings table */
+.h-header{display:grid;grid-template-columns:1fr 80px 90px 90px 80px 36px;gap:8px;padding:8px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);}
+.th{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
+.h-row{display:grid;grid-template-columns:1fr 80px 90px 90px 80px 36px;gap:8px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .1s;}
+.h-row:last-child{border:none;}
+.h-row:hover{background:var(--g50);}
+.hr-stock{display:flex;align-items:center;gap:9px;}
+.hr-logo{width:32px;height:32px;border-radius:7px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--g500);}
+.hr-sym{font-size:12px;font-weight:700;}.hr-name{font-size:10px;color:var(--tx3);}
+.hr-val{font-size:12px;font-weight:700;}
+.hr-chg{font-size:11px;font-weight:700;}
+.del-btn{background:var(--rbg);border:none;color:var(--r);width:28px;height:28px;border-radius:7px;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .13s;}
+.del-btn:hover{background:var(--r);color:#fff;}
+/* Empty state */
+.empty-holdings{padding:40px;text-align:center;color:var(--tx3);}
+.eh-ico{font-size:36px;margin-bottom:10px;}
+/* RIGHT COLUMN */
+.r-col{display:flex;flex-direction:column;gap:14px;}
+.donut-wrap{padding:16px;text-align:center;}
+.donut-canvas{max-width:200px;margin:0 auto;}
+.legend-list{margin-top:12px;display:flex;flex-direction:column;gap:5px;}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:11px;}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.leg-name{flex:1;color:var(--tx2);}
+.leg-pct{font-weight:700;color:var(--tx);}
+/* Performance chart */
+.perf-wrap{padding:14px 16px;}
+.period-tabs{display:flex;gap:4px;margin-bottom:12px;}
+.pt{background:var(--g50);border:1px solid var(--bdr);color:var(--tx3);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;transition:all .13s;}
+.pt.on{background:var(--p);color:#fff;border-color:var(--p);}
+/* Goals */
+.goals-section{margin-top:4px;}
+.goal-item{background:var(--g50);border:1px solid var(--bdr);border-radius:10px;padding:12px;margin-bottom:8px;}
+.goal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.goal-name{font-size:12px;font-weight:600;}
+.goal-pct{font-size:12px;font-weight:700;color:var(--p);}
+.goal-bar{background:var(--g200);border-radius:3px;height:5px;overflow:hidden;margin-bottom:4px;}
+.goal-fill{height:100%;border-radius:3px;background:var(--p);transition:width .5s;}
+.goal-sub{font-size:10px;color:var(--tx3);}
+/* Summary row */
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.sum-card{background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:13px;box-shadow:var(--sh);text-align:center;}
+.sv{font-family:var(--fd);font-size:17px;font-weight:800;}
+.sl{font-size:10px;color:var(--tx3);margin-top:2px;}
+/* Brokers */
+.broker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 16px;}
+.brok-card{background:var(--g50);border:1px solid var(--bdr);border-radius:10px;padding:12px;text-align:center;}
+.brok-name{font-size:11px;font-weight:600;margin-bottom:6px;}
+.brok-btn{width:100%;background:var(--g200);border:none;color:var(--tx3);padding:6px;border-radius:6px;font-size:10px;font-weight:600;cursor:not-allowed;}
+.af-row2{display:flex;gap:8px;margin-bottom:8px;}
+.af-row2 .af-field{flex:1;}
+.af-actions{display:flex;gap:8px;justify-content:flex-end;}
+.af-cancel{background:var(--g100);border:none;color:var(--tx2);padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;}
+.af-save{background:var(--p);border:none;color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:700;}
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--g900);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.ok{background:var(--g);}
+@media(max-width:1000px){.main-grid{grid-template-columns:1fr;}.r-col{order:-1;}}
+@media(max-width:768px){.nav-links{display:none;}.burger{display:block;}.af-grid{grid-template-columns:1fr 1fr;}.summary-row{grid-template-columns:repeat(2,1fr);}.h-header,.h-row{grid-template-columns:1fr 80px 80px 36px;}.h-header .th:nth-child(3),.h-header .th:nth-child(4),.h-row div:nth-child(3),.h-row div:nth-child(4){display:none;}}
 </style>
 </head>
 <body>
-<script>
-// ── AUTH GUARD ── runs before anything else
-(function(){
-  const raw = sessionStorage.getItem('gopex_user');
-  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
-  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
-  if (!hasSession) { window.location.replace('landing.html'); }
-})();
-
-</script>
 <nav class="nav">
   <div class="nav-in">
-    <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
+    <a href="landing.html" class="logo"><div class="lm">G</div>GopexFund</a>
     <div class="nav-links">
-      <a href="home.html" class="nl">🏠 Home</a>
-      <a href="market.html" class="nl">📈 Market</a>
-      <a href="portfolio.html" class="nl on">💼 Portfolio</a>
-      <a href="learn.html" class="nl">📚 Learn</a>
-      <a href="about.html" class="nl">ℹ About</a>
+      <a href="home.html" class="nl">Home</a>
+      <a href="market.html" class="nl">Market</a>
+      <a href="portfolio.html" class="nl on">Portfolio</a>
+      <a href="learn.html" class="nl">Learn</a>
     </div>
     <div class="nav-r">
-      <a href="profile.html" class="nav-prof">
-        <div class="nav-av" id="nav-av">AO</div>
-        <span style="font-size:12px;font-weight:600;" id="nav-name">Adaeze</span>
-      </a>
-      <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
+      <a href="profile.html" class="prof-pill"><div class="nav-av" id="nav-av">?</div><span class="nav-un" id="nav-un">Account</span></a>
+      <button class="burger" onclick="document.getElementById('mnav').classList.toggle('open')">&#9776;</button>
     </div>
   </div>
 </nav>
-<div class="mob-nav" id="mn">
-  <a href="home.html" class="mob-link">🏠 Home</a>
-  <a href="market.html" class="mob-link">📈 Market</a>
-  <a href="portfolio.html" class="mob-link on">💼 Portfolio</a>
-  <a href="learn.html" class="mob-link">📚 Learn</a>
-  <a href="profile.html" class="mob-link">👤 Profile</a>
+<div class="mob-nav" id="mnav">
+  <a href="home.html" class="mob-link">Home</a>
+  <a href="market.html" class="mob-link">Market</a>
+  <a href="portfolio.html" class="mob-link on">Portfolio</a>
+  <a href="learn.html" class="mob-link">Learn</a>
+  <a href="profile.html" class="mob-link">My Account</a>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="h-lbl">Total Portfolio Value</div>
+      <div class="h-val" id="hero-val">&#8358;0.00</div>
+      <div class="h-chg" id="hero-chg" style="display:none;"></div>
+    </div>
+    <div class="hero-stats">
+      <div class="hs-item"><div class="hs-v" id="hs-holdings">0</div><div class="hs-l">Holdings</div></div>
+      <div class="hs-item"><div class="hs-v" id="hs-return">—</div><div class="hs-l">Return</div></div>
+      <div class="hs-item"><div class="hs-v" id="hs-cost">&#8358;0</div><div class="hs-l">Cost Basis</div></div>
+    </div>
+  </div>
 </div>
 
 <div class="pg">
-
-  <!-- HERO BANNER -->
-  <div class="hero">
-    <div class="hero-inner">
-      <div>
-        <div class="hero-eyebrow">
-          <span class="vbadge" id="v-badge">✓ Verified Portfolio</span>
-          <span class="hero-name" id="hero-name">Adaeze Obi</span>
-        </div>
-        <div class="hero-lbl">Total Portfolio Value</div>
-        <div class="hero-amount"><em>₦</em><span id="hero-amt">4,823,500</span></div>
-        <div class="pnl-chips">
-          <div class="pnl pnl-up" id="pnl-chip">▲ +₦142,300 (+3.04%) today</div>
-        </div>
-        <div class="period-row">
-          <button class="ptog on" onclick="setPeriod('1D',this)">1D</button>
-          <button class="ptog" onclick="setPeriod('1W',this)">1W</button>
-          <button class="ptog" onclick="setPeriod('1M',this)">1M</button>
-          <button class="ptog" onclick="setPeriod('All',this)">All</button>
-        </div>
-      </div>
-      <div class="hero-stats">
-        <div class="hs"><div class="hs-val">+₦482K</div><div class="hs-lbl">Total Gain</div></div>
-        <div class="hs"><div class="hs-val">+17.6%</div><div class="hs-lbl">Return %</div></div>
-        <div class="hs"><div class="hs-val">8</div><div class="hs-lbl">Holdings</div></div>
-        <div class="hs"><div class="hs-val">18mo</div><div class="hs-lbl">Invested</div></div>
-      </div>
-    </div>
+  <div class="summary-row">
+    <div class="sum-card"><div class="sv" id="sum-value">&#8358;0</div><div class="sl">Market Value</div></div>
+    <div class="sum-card"><div class="sv" id="sum-gain" style="color:var(--g);">+0%</div><div class="sl">Total Return</div></div>
+    <div class="sum-card"><div class="sv" id="sum-verified" style="color:var(--am);">&#9675; Unverified</div><div class="sl">Portfolio Status</div></div>
   </div>
 
-  <!-- MAIN GRID: Holdings + Right col -->
   <div class="main-grid">
-
-    <!-- HOLDINGS TABLE -->
-    <div class="table-card">
-      <div class="tc-hd">
-        <div class="tc-title">💼 Holdings <span style="font-size:11px;background:var(--g100);color:var(--g500);padding:2px 7px;border-radius:5px;font-weight:600;" id="holding-count">8 stocks</span></div>
-        <button class="tc-add" onclick="toggleAddForm()">+ Add holding</button>
-      </div>
-
-      <!-- Add form -->
-      <div class="add-row-form" id="add-form">
-        <div class="add-form-grid">
-          <div class="af-field"><div class="af-lbl">Ticker</div><input class="af-input" id="af-tk" placeholder="e.g. MTNN"/></div>
-          <div class="af-field"><div class="af-lbl">Company</div><input class="af-input" id="af-name" placeholder="e.g. MTN Nigeria"/></div>
-          <div class="af-field"><div class="af-lbl">Shares</div><input class="af-input" id="af-shares" type="number" placeholder="e.g. 500"/></div>
-          <div class="af-field"><div class="af-lbl">Buy Price (₦)</div><input class="af-input" id="af-price" type="number" placeholder="e.g. 215.00"/></div>
-          <button class="add-btn" onclick="addHolding()">Add</button>
-        </div>
-      </div>
-
-      <div class="tbl-cols">
-        <div class="th"></div>
-        <div class="th">Company</div>
-        <div class="th th-r">Price</div>
-        <div class="th th-r">1D Chg</div>
-        <div class="th th-r">Mkt Val</div>
-        <div class="th th-r">P&amp;L</div>
-        <div class="th th-r">Action</div>
-      </div>
-      <div id="holdings-body"></div>
-    </div>
-
-    <!-- RIGHT COL -->
-    <div class="right-col">
-      <!-- Donut chart -->
-      <div class="side-card">
-        <div class="sc-title">🥧 Allocation</div>
-        <div class="donut-wrap">
-          <canvas id="donut-chart" width="180" height="180"></canvas>
-          <div class="donut-center"><div class="dc-val">₦4.82M</div><div class="dc-lbl">Total Value</div></div>
-        </div>
-        <div class="alloc-legend" id="alloc-legend"></div>
-      </div>
-
-      <!-- Summary stats -->
-      <div class="side-card">
-        <div class="sc-title">📊 Summary</div>
-        <div class="summary-grid">
-          <div class="sum-card"><div class="sum-val" style="color:var(--p);">₦4.82M</div><div class="sum-lbl">Portfolio value</div></div>
-          <div class="sum-card"><div class="sum-val" style="color:var(--green);">+17.6%</div><div class="sum-lbl">Total return</div></div>
-          <div class="sum-card"><div class="sum-val">8</div><div class="sum-lbl">Positions</div></div>
-          <div class="sum-card"><div class="sum-val">₦4.34M</div><div class="sum-lbl">Cost basis</div></div>
-          <div class="sum-card"><div class="sum-val" style="color:var(--green);">+₦482K</div><div class="sum-lbl">Unrealised gain</div></div>
-          <div class="sum-card"><div class="sum-val">NGX</div><div class="sum-lbl">Primary market</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PERFORMANCE CHART -->
-  <div class="perf-card">
-    <div class="perf-hd">
-      <div class="perf-title">📈 Portfolio Performance</div>
-      <div class="perf-periods">
-        <button class="pp on" onclick="setPerfPeriod('1M',this)">1M</button>
-        <button class="pp" onclick="setPerfPeriod('3M',this)">3M</button>
-        <button class="pp" onclick="setPerfPeriod('6M',this)">6M</button>
-        <button class="pp" onclick="setPerfPeriod('1Y',this)">1Y</button>
-        <button class="pp" onclick="setPerfPeriod('All',this)">All</button>
-      </div>
-    </div>
-    <div class="perf-chart-wrap"><canvas id="perf-chart"></canvas></div>
-  </div>
-
-  <!-- WEALTH GOALS -->
-  <div style="font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:14px;">🎯 Wealth Goals</div>
-  <div class="goals-grid" id="goals-grid">
-    <div class="goal-card">
-      <div class="gc-ico">✈️</div>
-      <div class="gc-name">Japa Fund</div>
-      <div class="gc-target">Target: ₦5,000,000</div>
-      <div class="gc-prog"><span>₦2,750,000 saved</span><span style="color:var(--p);font-weight:700;">55%</span></div>
-      <div class="gc-bar"><div class="gc-fill" style="width:55%;background:var(--p)"></div></div>
-      <div class="gc-monthly">+₦150,000 / month · 15 months left</div>
-    </div>
-    <div class="goal-card">
-      <div class="gc-ico">🚗</div>
-      <div class="gc-name">First Car</div>
-      <div class="gc-target">Target: ₦3,500,000</div>
-      <div class="gc-prog"><span>₦2,100,000 saved</span><span style="color:var(--p);font-weight:700;">60%</span></div>
-      <div class="gc-bar"><div class="gc-fill" style="width:60%;background:var(--p)"></div></div>
-      <div class="gc-monthly">+₦120,000 / month · 12 months left</div>
-    </div>
-    <div class="goal-card">
-      <div class="gc-ico">🏠</div>
-      <div class="gc-name">House Fund</div>
-      <div class="gc-target">Target: ₦25,000,000</div>
-      <div class="gc-prog"><span>₦8,750,000 saved</span><span style="font-weight:700;color:var(--amber);">35%</span></div>
-      <div class="gc-bar"><div class="gc-fill" style="width:35%;background:var(--amber)"></div></div>
-      <div class="gc-monthly">+₦200,000 / month · 40 months left</div>
-    </div>
-  </div>
-
-  <!-- BROKERAGE CONNECT -->
-  <div class="brok-title-row">
+    <!-- HOLDINGS -->
     <div>
-      <div style="font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:3px;">🔗 Connect Your Brokerage</div>
-      <div style="font-size:12px;color:var(--tx3);">Link a licensed Nigerian broker to sync your real portfolio and earn a ✓ Verified badge</div>
-    </div>
-  </div>
-  <div class="brok-grid" id="brok-grid"></div>
-</div>
-
-<!-- Add Stock Modal -->
-<div class="modal-ov" id="stock-modal">
-  <div class="modal">
-    <div class="modal-title">Add Holding</div>
-    <div class="field"><label>Ticker (NGX)</label><input id="m-tk" placeholder="e.g. MTNN"/></div>
-    <div class="field"><label>Company Name</label><input id="m-name" placeholder="e.g. MTN Nigeria"/></div>
-    <div class="field"><label>Number of Shares</label><input id="m-shares" type="number" placeholder="e.g. 500"/></div>
-    <div class="field"><label>Buy Price per Share (₦)</label><input id="m-price" type="number" placeholder="e.g. 215.00"/></div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="document.getElementById('stock-modal').classList.remove('open')">Cancel</button>
-      <button class="modal-save" onclick="saveFromModal()">Add to portfolio</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ─── DATA ───────────────────────────────────────
-// Live prices from Supabase — auto-updated every 10 min by pg_cron
-const MARKET_PRICES = {}
-const _PF_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
-
-async function loadMarketPrices() {
-  try {
-    const res = await fetch(
-      'https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,company_name,price,change_pct,volume,market_cap',
-      { headers: { 'apikey': _PF_ANON, 'Authorization': 'Bearer ' + _PF_ANON } }
-    )
-    const rows = await res.json()
-    if (!Array.isArray(rows)) return
-    rows.forEach(r => {
-      MARKET_PRICES[r.ticker] = {
-        name: r.company_name, price: r.price,
-        chg: r.change_pct || 0, marketCap: r.market_cap
-      }
-    })
-    // Re-render holdings with fresh prices
-    renderHoldings()
-  } catch(e) {
-    console.warn('Portfolio price fetch failed', e)
-  }
-}
-const ALLOC_COLORS=['#1a6eff','#16a34a','#d97706','#7c3aed','#dc2626','#0891b2','#ea580c','#65a30d','#9333ea','#e11d48'];
-const BROKERAGES=[
-  {id:'bamboo',name:'Bamboo',sub:'NGX + US Stocks',logo:'🎋',color:'#16a34a',bg:'#dcfce7',tags:['NGX','US Stocks','ETFs'],url:'https://bamboo.africa'},
-  {id:'trove',name:'Trove Finance',sub:'NGX + US + China',logo:'🌐',color:'#7c3aed',bg:'#ede9fe',tags:['NGX','US Stocks','China'],url:'https://troveapp.co'},
-  {id:'chaka',name:'Chaka',sub:'First SEC Digital License',logo:'⚡',color:'#d97706',bg:'#fef3c7',tags:['NGX','US Stocks','SEC Licensed'],url:'https://chaka.com'},
-  {id:'meristem',name:'MERITRADE',sub:'Full-service NGX broker',logo:'📊',color:'#0891b2',bg:'#e0f2fe',tags:['NGX','Bonds','Mutual Funds'],url:'https://meristemng.com'},
-  {id:'afrinvest',name:'Afrinvest',sub:'Nigerian capital markets',logo:'🏦',color:'#1a6eff',bg:'#eef4ff',tags:['NGX','Research','Wealth Mgmt'],url:'https://afrinvest.com'},
-  {id:'risevest',name:'Risevest',sub:'Dollar investments',logo:'🚀',color:'#dc2626',bg:'#fee2e2',tags:['USD ETFs','Real Estate','Dollar'],url:'https://risevest.com'},
-];
-
-// ─── STATE ───────────────────────────────────────
-let holdings = JSON.parse(localStorage.getItem('gx_holdings')||'null') || [
-  {tk:'MTNN',name:'MTN Nigeria',shares:500,buyPrice:215.00},
-  {tk:'DANGCEM',name:'Dangote Cement',shares:200,buyPrice:490.00},
-  {tk:'GTCO',name:'GT Holdings',shares:1000,buyPrice:58.50},
-  {tk:'BUAFOODS',name:'BUA Foods',shares:300,buyPrice:360.00},
-  {tk:'ZENITHBANK',name:'Zenith Bank',shares:800,buyPrice:46.00},
-  {tk:'ACCESSCORP',name:'Access Holdings',shares:2000,buyPrice:24.00},
-  {tk:'AIRTELAFRI',name:'Airtel Africa',shares:50,buyPrice:1980.00},
-  {tk:'SEPLAT',name:'Seplat Energy',shares:30,buyPrice:4500.00},
-];
-let connected = JSON.parse(localStorage.getItem('gx_connected')||'{}');
-let perfChart=null,donutChart=null;
-
-function saveHoldings(){localStorage.setItem('gx_holdings',JSON.stringify(holdings));}
-
-// ─── RENDER HOLDINGS ───────────────────────────
-function renderHoldings(){
-  const body=document.getElementById('holdings-body');
-  if(!holdings.length){
-    body.innerHTML=`<div class="empty-state"><div class="empty-ico">📭</div><div class="empty-txt">No holdings yet. Add your first stock!</div></div>`;
-    document.getElementById('holding-count').textContent='0 stocks';
-    updateSummary(0,0);updateDonut([]);return;
-  }
-  let totalVal=0,totalCost=0;
-  body.innerHTML=holdings.map((h,i)=>{
-    const mp=MARKET_PRICES[h.tk]||{price:h.buyPrice,chg:0};
-    const curPrice=mp.price,chgPct=mp.chg;
-    const mktVal=curPrice*h.shares,cost=h.buyPrice*h.shares;
-    const plPct=((curPrice-h.buyPrice)/h.buyPrice)*100;
-    totalVal+=mktVal;totalCost+=cost;
-    return `<div class="holding-row">
-      <div class="h-logo">${h.tk.slice(0,4)}</div>
-      <div><div class="h-name">${h.name}</div><div class="h-tk">NGX:${h.tk} · ${h.shares} shares</div></div>
-      <div class="h-num">₦${curPrice.toLocaleString('en-NG',{minimumFractionDigits:2})}</div>
-      <div class="h-num ${chgPct>=0?'up':'dn'}">${chgPct>=0?'▲':'▼'} ${Math.abs(chgPct).toFixed(2)}%</div>
-      <div class="h-sm">₦${formatNum(mktVal)}</div>
-      <div class="h-num ${plPct>=0?'up':'dn'}">${plPct>=0?'+':''}${plPct.toFixed(1)}%</div>
-      <button class="del-btn" onclick="removeHolding(${i})" title="Remove">✕</button>
-    </div>`;
-  }).join('');
-  document.getElementById('holding-count').textContent=holdings.length+' stock'+(holdings.length===1?'':'s');
-  updateSummary(totalVal,totalCost);
-  updateDonut(holdings.map((h,i)=>{const mp=MARKET_PRICES[h.tk]||{price:h.buyPrice};return{name:h.tk,val:mp.price*h.shares,color:ALLOC_COLORS[i%ALLOC_COLORS.length]};}));
-}
-
-function removeHolding(i){holdings.splice(i,1);saveHoldings();renderHoldings();}
-
-function updateSummary(totalVal,totalCost){
-  const gain=totalVal-totalCost,ret=totalCost>0?(gain/totalCost)*100:0;
-  const el=id=>document.querySelector('#'+id+' .sum-val');
-  // Update summary grid values if they exist
-  const cards=document.querySelectorAll('.sum-card');
-  if(cards[0])cards[0].querySelector('.sum-val').textContent='₦'+formatNum(totalVal);
-  if(cards[1])cards[1].querySelector('.sum-val').textContent=(ret>=0?'+':'')+ret.toFixed(1)+'%';
-  if(cards[2])cards[2].querySelector('.sum-val').textContent=holdings.length;
-  if(cards[3])cards[3].querySelector('.sum-val').textContent='₦'+formatNum(totalCost);
-  if(cards[4])cards[4].querySelector('.sum-val').textContent=(gain>=0?'+':'')+'₦'+formatNum(Math.abs(gain));
-}
-
-function formatNum(n){if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return n.toFixed(0);}
-
-function updateDonut(data){
-  if(donutChart){donutChart.destroy();donutChart=null;}
-  const leg=document.getElementById('alloc-legend');
-  if(!data.length){leg.innerHTML='';return;}
-  const total=data.reduce((a,b)=>a+b.val,0);
-  leg.innerHTML=data.map(d=>`<div class="al-item"><div class="al-dot" style="background:${d.color}"></div><span class="al-name">${d.name}</span><span class="al-pct">${total>0?((d.val/total)*100).toFixed(0):'0'}%</span></div>`).join('');
-  const ctx=document.getElementById('donut-chart').getContext('2d');
-  donutChart=new Chart(ctx,{type:'doughnut',data:{labels:data.map(d=>d.name),datasets:[{data:data.map(d=>d.val),backgroundColor:data.map(d=>d.color),borderWidth:2,borderColor:'#fff',hoverBorderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>`${i.label}: ₦${formatNum(i.raw)}`}}}}});
-}
-
-// ─── ADD HOLDING ──────────────────────────────
-function toggleAddForm(){document.getElementById('add-form').classList.toggle('open');}
-function addHolding(){
-  const tk=(document.getElementById('af-tk').value||'').toUpperCase().trim();
-  const name=(document.getElementById('af-name').value||tk).trim();
-  const shares=parseFloat(document.getElementById('af-shares').value)||0;
-  const buyPrice=parseFloat(document.getElementById('af-price').value)||0;
-  if(!tk||!shares||!buyPrice){alert('Please fill in all fields');return;}
-  const holding = {tk,name,shares,buyPrice};
-  holdings.push(holding); saveHoldings(); renderHoldings();
-  // Save to DB
-  if(window._saveHoldingToDB) window._saveHoldingToDB(holding).then(dbRow => { if(dbRow) holding.dbId = dbRow.id; });
-  document.getElementById('af-tk').value='';document.getElementById('af-name').value='';
-  document.getElementById('af-shares').value='';document.getElementById('af-price').value='';
-  document.getElementById('add-form').classList.remove('open');
-}
-function saveFromModal(){
-  const tk=(document.getElementById('m-tk').value||'').toUpperCase().trim();
-  const name=(document.getElementById('m-name').value||tk).trim();
-  const shares=parseFloat(document.getElementById('m-shares').value)||0;
-  const buyPrice=parseFloat(document.getElementById('m-price').value)||0;
-  if(!tk||!shares||!buyPrice){alert('Please fill in all fields');return;}
-  holdings.push({tk,name,shares,buyPrice});saveHoldings();renderHoldings();
-  document.getElementById('stock-modal').classList.remove('open');
-}
-
-// ─── HERO PERIOD ─────────────────────────────
-const PNL={
-  '1D':{label:'today',amt:'₦142,300',pct:'3.04%',up:true},
-  '1W':{label:'this week',amt:'₦310,000',pct:'6.87%',up:true},
-  '1M':{label:'this month',amt:'₦487,200',pct:'11.23%',up:true},
-  'All':{label:'all time',amt:'₦482,500',pct:'17.6%',up:true},
-};
-function setPeriod(p,btn){
-  document.querySelectorAll('.ptog').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  const d=PNL[p];const chip=document.getElementById('pnl-chip');
-  chip.textContent=(d.up?'▲ +':' -')+d.amt+' ('+d.pct+') '+d.label;
-  chip.className='pnl '+(d.up?'pnl-up':'pnl-dn');
-}
-
-// ─── PERF CHART ───────────────────────────────
-function buildPerfChart(p){
-  if(perfChart){perfChart.destroy();perfChart=null;}
-  const pts={'1M':22,'3M':65,'6M':130,'1Y':252,'All':380}[p]||22;
-  const base=4341000;const data=[base];
-  for(let i=1;i<pts;i++)data.push(Math.max(100,data[i-1]+(Math.random()-.44)*data[i-1]*.013+data[i-1]*.0008));
-  const ctx=document.getElementById('perf-chart').getContext('2d');
-  perfChart=new Chart(ctx,{type:'line',data:{labels:data.map((_,i)=>i),datasets:[{data,borderColor:'#1a6eff',borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:'rgba(26,110,255,.07)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>'₦'+Number(v.raw).toLocaleString('en-NG',{maximumFractionDigits:0})}}},scales:{x:{display:false},y:{ticks:{color:'#94a3b8',font:{size:10},callback:v=>'₦'+formatNum(v)},grid:{color:'#f1f5f9'}}}}});
-}
-function setPerfPeriod(p,btn){document.querySelectorAll('.pp').forEach(b=>b.classList.remove('on'));btn.classList.add('on');buildPerfChart(p);}
-
-// ─── BROKERAGES ───────────────────────────────
-function renderBrokerages(){
-  const g=document.getElementById('brok-grid');
-  g.innerHTML=BROKERAGES.map(b=>{
-    const isConn=!!connected[b.id];
-    return `<div class="brok-card ${isConn?'connected':''}" id="brok-${b.id}">
-      <div class="brok-hd">
-        <div class="brok-logo" style="background:${b.bg};color:${b.color};">${b.logo}</div>
-        <div><div class="brok-name">${b.name}</div><div class="brok-sub">${b.sub}</div></div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">&#128188; My Holdings</div>
+          <button class="add-btn" onclick="toggleAddForm()">&#43; Add Holding</button>
+        </div>
+        <!-- ADD FORM -->
+        <div class="add-form" id="add-form">
+          <div class="af-title">Add a new stock holding</div>
+          <div class="af-grid">
+            <div class="af-field tk-wrap">
+              <label class="af-label">Ticker Symbol</label>
+              <input class="af-input" id="af-ticker" placeholder="e.g. MTNN" oninput="searchTicker(this.value)" autocomplete="off" style="text-transform:uppercase;"/>
+              <div class="tk-drop" id="tk-drop"></div>
+            </div>
+            <div class="af-field">
+              <label class="af-label">Company Name</label>
+              <input class="af-input" id="af-name" placeholder="Auto-filled" readonly style="background:var(--g50);color:var(--tx3);"/>
+            </div>
+            <div class="af-field">
+              <label class="af-label">Number of Shares</label>
+              <input class="af-input" id="af-shares" type="number" min="0.001" step="any" placeholder="100"/>
+            </div>
+          </div>
+          <div class="af-row2">
+            <div class="af-field">
+              <label class="af-label">Buy Price (&#8358; per share)</label>
+              <input class="af-input" id="af-price" type="number" min="0.01" step="any" placeholder="245.00"/>
+            </div>
+            <div class="af-field">
+              <label class="af-label">Cost Basis (auto)</label>
+              <input class="af-input" id="af-cost" placeholder="&#8358;0" readonly style="background:var(--g50);color:var(--tx3);"/>
+            </div>
+          </div>
+          <div class="af-actions">
+            <button class="af-cancel" onclick="toggleAddForm()">Cancel</button>
+            <button class="af-save" onclick="addHolding()">Add to Portfolio</button>
+          </div>
+        </div>
+        <!-- TABLE -->
+        <div class="h-header">
+          <div class="th">Stock</div>
+          <div class="th">Market Val</div>
+          <div class="th">P&amp;L</div>
+          <div class="th">P&amp;L %</div>
+          <div class="th">Shares</div>
+          <div class="th"></div>
+        </div>
+        <div id="holdings-body">
+          <div class="empty-holdings">
+            <div class="eh-ico">&#128188;</div>
+            <div style="font-size:14px;font-weight:600;color:var(--tx2);margin-bottom:6px;">No holdings yet</div>
+            <div style="font-size:12px;">Click "Add Holding" to start tracking your portfolio</div>
+          </div>
+        </div>
       </div>
-      <div class="brok-tags">${b.tags.map(t=>`<span class="btag">${t}</span>`).join('')}</div>
-      <button class="brok-btn brok-btn-soon" disabled title="Brokerage integration coming soon!">
-        🔒 Coming Soon
-      </button>
-    </div>`;
-  }).join('');
+
+      <!-- BROKERS -->
+      <div class="card" style="margin-top:14px;">
+        <div class="card-hd"><div class="card-title">&#128274; Connect Brokerage</div><span style="font-size:11px;color:var(--am);font-weight:600;">Coming Soon</span></div>
+        <div class="broker-grid">
+          <div class="brok-card"><div class="brok-name">Bamboo</div><button class="brok-btn">&#128274; Soon</button></div>
+          <div class="brok-card"><div class="brok-name">Trove</div><button class="brok-btn">&#128274; Soon</button></div>
+          <div class="brok-card"><div class="brok-name">Chaka</div><button class="brok-btn">&#128274; Soon</button></div>
+          <div class="brok-card"><div class="brok-name">Meristem</div><button class="brok-btn">&#128274; Soon</button></div>
+          <div class="brok-card"><div class="brok-name">Afrinvest</div><button class="brok-btn">&#128274; Soon</button></div>
+          <div class="brok-card"><div class="brok-name">Risevest</div><button class="brok-btn">&#128274; Soon</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="r-col">
+      <!-- DONUT -->
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#129693; Allocation</div></div>
+        <div class="donut-wrap">
+          <div class="donut-canvas"><canvas id="donut-chart"></canvas></div>
+          <div class="legend-list" id="donut-legend"><div style="font-size:12px;color:var(--tx3);">Add holdings to see allocation</div></div>
+        </div>
+      </div>
+      <!-- PERFORMANCE CHART -->
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#128200; Performance</div></div>
+        <div class="perf-wrap">
+          <div class="period-tabs">
+            <button class="pt on" onclick="switchPeriod('1M',this)">1M</button>
+            <button class="pt" onclick="switchPeriod('3M',this)">3M</button>
+            <button class="pt" onclick="switchPeriod('6M',this)">6M</button>
+            <button class="pt" onclick="switchPeriod('1Y',this)">1Y</button>
+          </div>
+          <div style="height:120px;"><canvas id="perf-chart"></canvas></div>
+        </div>
+      </div>
+      <!-- GOALS -->
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#127919; Wealth Goals</div><button onclick="window.location='profile.html'" style="background:var(--plt);border:1px solid var(--pbr);color:var(--p);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;">Manage</button></div>
+        <div style="padding:12px 16px;" id="goals-section">
+          <div style="font-size:12px;color:var(--tx3);">Loading goals...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+var sb=createClient('https://lzlitanvlkycrkkpwczm.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g');
+var COLORS=['#1a6eff','#7c3aed','#059669','#d97706','#dc2626','#0891b2','#ea580c','#65a30d','#9333ea','#e11d48'];
+var _uid=null,_prices={},_holdings=[],_donutChart=null,_perfChart=null,_selTicker=null;
+
+// ── INIT ─────────────────────────────────────────────────────
+async function init(){
+  var a=await sb.auth.getSession();
+  if(!a.data.session){window.location.href='landing.html';return;}
+  _uid=a.data.session.user.id;
+  var raw=sessionStorage.getItem('gopex_user');
+  if(raw){var u=JSON.parse(raw);setEl('nav-av',u.initials||'?');setEl('nav-un',u.firstName||'Me');}
+  else{var pr=await sb.from('profiles').select('name,initials,first_name').eq('id',_uid).single();if(pr.data){var fn=pr.data.first_name||(pr.data.name?pr.data.name.split(' ')[0]:'');setEl('nav-av',pr.data.initials||fn.charAt(0).toUpperCase());setEl('nav-un',fn);}}
+  await loadPrices();
+  await loadHoldings();
+  await loadGoals();
+  buildPerfChart('1M');
+  // live price refresh
+  setInterval(async function(){await loadPrices();renderHoldings();},10*60*1000);
+}
+init();
+
+function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function fmtN(n){if(n==null)return'—';return'&#8358;'+parseFloat(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+// ── PRICES ────────────────────────────────────────────────────
+async function loadPrices(){
+  var r=await fetch('https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,price,change_pct,company_name',{headers:{apikey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'}});
+  var d=await r.json();
+  if(Array.isArray(d))d.forEach(function(s){_prices[s.ticker]={price:parseFloat(s.price)||0,chg:parseFloat(s.change_pct)||0,name:s.company_name||s.ticker};});
 }
 
-function connectBrokerage(id,url){
-  const btn=document.getElementById('bbtn-'+id);
-  if(connected[id]){window.open(url,'_blank');return;}
-  btn.textContent='⏳ Connecting…';btn.classList.add('connecting');
-  setTimeout(()=>{
-    connected[id]=true;localStorage.setItem('gx_connected',JSON.stringify(connected));
-    const card=document.getElementById('brok-'+id);card.classList.add('connected');
-    btn.className='brok-btn brok-btn-synced';btn.textContent='✓ Synced — View account';btn.classList.remove('connecting');
-    document.getElementById('v-badge').className='vbadge badge-v';document.getElementById('v-badge').textContent='✓ Verified Portfolio';
-    // Save connection to database
-    const brokerName=BROKERAGES.find(b=>b.id===id)?.name||id;
-    if(window._saveBrokerageToDB) window._saveBrokerageToDB(brokerName);
-    window.open(url,'_blank');
-  },1800);
+// ── HOLDINGS ─────────────────────────────────────────────────
+async function loadHoldings(){
+  var r=await sb.from('holdings').select('*').eq('user_id',_uid).order('created_at',{ascending:true});
+  _holdings=r.data||[];
+  renderHoldings();
 }
 
-// ─── SUPABASE AUTH + REAL DATA ───────────────
-const _SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
-const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
-let _sb = null
-
-const sbScript = document.createElement('script')
-sbScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
-sbScript.onload = async () => {
-  _sb = supabase.createClient(_SB_URL, _SB_ANON)
-
-  // Auth guard
-  const { data: { session } } = await _sb.auth.getSession()
-  if (!session) { window.location.href = 'landing.html'; return }
-
-  // Fetch profile
-  const { data: profile } = await _sb.from('profiles').select('*').eq('id', session.user.id).single()
-  const firstName = profile?.first_name || profile?.name?.split(' ')[0] || 'You'
-  const initials  = profile?.initials || firstName[0].toUpperCase()
-  const fullName  = profile?.name || firstName
-
-  // Update nav
-  const av=document.getElementById('nav-av'); const nm=document.getElementById('nav-name')
-  const hn=document.getElementById('hero-name')
-  if(av) av.textContent = initials
-  if(nm) nm.textContent = firstName
-  if(hn) hn.textContent = fullName
-
-  sessionStorage.setItem('gopex_user', JSON.stringify({
-    id: session.user.id, name: fullName, firstName, initials, email: session.user.email,
-    joined: new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
-  }))
-
-  // Load holdings from DB (merge with localStorage for demo data)
-  const { data: dbHoldings } = await _sb.from('holdings')
-    .select('*').eq('user_id', session.user.id)
-  if (dbHoldings && dbHoldings.length > 0) {
-    holdings = dbHoldings.map(h => ({
-      tk: h.ticker, name: h.company_name,
-      shares: parseFloat(h.shares), buyPrice: parseFloat(h.buy_price),
-      dbId: h.id
-    }))
-    saveHoldings()
+function renderHoldings(){
+  var body=document.getElementById('holdings-body');if(!body)return;
+  if(!_holdings.length){
+    body.innerHTML='<div class="empty-holdings"><div class="eh-ico">&#128188;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);margin-bottom:6px;">No holdings yet</div><div style="font-size:12px;">Click &#34;Add Holding&#34; to start tracking your portfolio</div></div>';
+    updateSummary(0,0,0);updateDonut([]);return;
   }
-
-  // Load brokerage connections from DB
-  const { data: dbBrokers } = await _sb.from('brokerage_connections')
-    .select('*').eq('user_id', session.user.id).eq('is_active', true)
-  if (dbBrokers?.length) {
-    dbBrokers.forEach(b => { connected[b.broker_name.toLowerCase()] = true })
-    localStorage.setItem('gx_connected', JSON.stringify(connected))
-  }
-
-  // Override saveToDB functions
-  window._saveHoldingToDB = async (holding) => {
-    if (!_sb || !session) return
-    const { data } = await _sb.from('holdings').insert({
-      user_id: session.user.id, ticker: holding.tk,
-      company_name: holding.name, shares: holding.shares, buy_price: holding.buyPrice
-    }).select().single()
-    return data
-  }
-  window._deleteHoldingFromDB = async (dbId) => {
-    if (!_sb || !session || !dbId) return
-    await _sb.from('holdings').delete().eq('id', dbId)
-  }
-  window._saveBrokerageToDB = async (brokerName) => {
-    if (!_sb || !session) return
-    await _sb.from('brokerage_connections').upsert({
-      user_id: session.user.id, broker_name: brokerName, is_active: true
-    })
-    // Mark profile as verified
-    await _sb.from('profiles').update({ is_verified: true }).eq('id', session.user.id)
-  }
-
-  // Brokers coming soon — always unverified for now
-  const vb = document.getElementById('v-badge');
-  if(vb){ vb.className='vbadge badge-uv'; vb.textContent='◌ Unverified — Broker sync coming soon'; }
-
-  renderHoldings(); buildPerfChart('1M'); renderBrokerages()
-  document.getElementById('stock-modal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open') })
-}
-document.head.appendChild(sbScript)
-
-// Fallback init from sessionStorage while Supabase loads
-;(function(){
-  const raw=sessionStorage.getItem('gopex_user');
-  if(raw){const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');const hn=document.getElementById('hero-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];if(hn)hn.textContent=u.name||'Adaeze Obi';}
-  const vb2=document.getElementById('v-badge');
-  if(vb2){vb2.className='vbadge badge-uv';vb2.textContent='◌ Unverified — Broker sync coming soon';}
-  renderHoldings(); buildPerfChart('1M'); renderBrokerages();
-  loadMarketPrices(); // fetch live prices from DB, re-renders holdings
-  setInterval(loadMarketPrices, 10 * 60 * 1000); // refresh every 10 min
-  document.getElementById('stock-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
-})()
-
-function gxLogout() {
-  if (!confirm('Log out of GopexFund?')) return;
-  sessionStorage.clear();
-  // Clear Supabase session
-  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
-  if (key) localStorage.removeItem(key);
-  window.location.href = 'landing.html';
+  var totalCost=0,totalMkt=0;
+  var rows='';
+  _holdings.forEach(function(h,i){
+    var mp=_prices[h.ticker]?_prices[h.ticker].price:h.buy_price;
+    var mktVal=mp*h.shares;var costVal=h.buy_price*h.shares;
+    var pl=mktVal-costVal;var plPct=(costVal>0?(pl/costVal*100):0);
+    totalCost+=costVal;totalMkt+=mktVal;
+    var up=pl>=0;
+    rows+='<div class="h-row">'
+      +'<div class="hr-stock"><div class="hr-logo">'+h.ticker.substring(0,4)+'</div><div><div class="hr-sym">'+h.ticker+'</div><div class="hr-name">'+(h.company_name||(_prices[h.ticker]?_prices[h.ticker].name:''))+'</div></div></div>'
+      +'<div class="hr-val">'+fmtN(mktVal)+'</div>'
+      +'<div class="hr-chg" style="color:'+(up?'var(--g)':'var(--r)')+'">'+(up?'+':'')+fmtN(pl)+'</div>'
+      +'<div class="hr-chg" style="color:'+(up?'var(--g)':'var(--r)')+'">'+(up?'+':'')+plPct.toFixed(2)+'%</div>'
+      +'<div class="hr-val">'+h.shares+'</div>'
+      +'<div><button class="del-btn" onclick="removeHolding(\''+h.id+'\',this)" title="Remove">&#x2715;</button></div>'
+      +'</div>';
+  });
+  body.innerHTML=rows;
+  var totalPl=totalMkt-totalCost;var totalPlPct=totalCost>0?(totalPl/totalCost*100):0;
+  updateSummary(totalMkt,totalPl,totalPlPct,totalCost);
+  updateDonut(_holdings.map(function(h,i){var mp=_prices[h.ticker]?_prices[h.ticker].price:h.buy_price;return{name:h.ticker,val:mp*h.shares,color:COLORS[i%COLORS.length]};}));
 }
 
+function updateSummary(mkt,pl,plPct,cost){
+  // Hero
+  var valStr=mkt>=1e6?('&#8358;'+(mkt/1e6).toFixed(2)+'M'):(mkt>=1e3?('&#8358;'+(mkt/1e3).toFixed(0)+'K'):fmtN(mkt));
+  document.getElementById('hero-val').innerHTML=valStr;
+  var chgEl=document.getElementById('hero-chg');
+  if(pl!==0){chgEl.style.display='inline';chgEl.innerHTML=(pl>=0?'&#9650; +':'&#9660; ')+(plPct).toFixed(2)+'% all-time';}
+  setEl('hs-holdings',_holdings.length);
+  document.getElementById('hs-return').innerHTML=(plPct>=0?'+':'')+plPct.toFixed(2)+'%';
+  document.getElementById('hs-cost').innerHTML=cost>=1e6?('&#8358;'+(cost/1e6).toFixed(2)+'M'):fmtN(cost);
+  document.getElementById('sum-value').innerHTML=valStr;
+  var gainEl=document.getElementById('sum-gain');
+  gainEl.innerHTML=(plPct>=0?'+':'')+plPct.toFixed(2)+'%';gainEl.style.color=plPct>=0?'var(--g)':'var(--r)';
+}
+
+// ── DONUT ─────────────────────────────────────────────────────
+function updateDonut(data){
+  if(_donutChart){_donutChart.destroy();_donutChart=null;}
+  var legend=document.getElementById('donut-legend');
+  if(!data.length){legend.innerHTML='<div style="font-size:12px;color:var(--tx3);">Add holdings to see allocation</div>';return;}
+  var total=data.reduce(function(a,d){return a+d.val;},0);
+  var ctx=document.getElementById('donut-chart').getContext('2d');
+  _donutChart=new Chart(ctx,{type:'doughnut',data:{labels:data.map(function(d){return d.name;}),datasets:[{data:data.map(function(d){return d.val;}),backgroundColor:data.map(function(d){return d.color;}),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.label+': &#8358;'+ctx.parsed.toLocaleString();}}}},cutout:'65%'}});
+  legend.innerHTML='';
+  data.forEach(function(d){var pct=total>0?Math.round(d.val/total*100):0;var li=document.createElement('div');li.className='leg-item';li.innerHTML='<div class="leg-dot" style="background:'+d.color+'"></div><div class="leg-name">'+d.name+'</div><div class="leg-pct">'+pct+'%</div>';legend.appendChild(li);});
+}
+
+// ── PERF CHART ────────────────────────────────────────────────
+function buildPerfChart(period){
+  if(_perfChart){_perfChart.destroy();_perfChart=null;}
+  var pts=7;var labels=[],vals=[],base=100;
+  for(var i=pts;i>=0;i--){labels.push(i===0?'Now':(i+'d ago'));vals.push(base+Math.random()*3-1);}
+  var ctx=document.getElementById('perf-chart').getContext('2d');
+  _perfChart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:vals,borderColor:'var(--p)',borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:'rgba(26,110,255,.07)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+}
+window.switchPeriod=function(p,btn){document.querySelectorAll('.pt').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');buildPerfChart(p);};
+
+// ── GOALS ─────────────────────────────────────────────────────
+async function loadGoals(){
+  var r=await sb.from('goals').select('*').eq('user_id',_uid);
+  var sec=document.getElementById('goals-section');if(!sec)return;
+  if(!r.data||!r.data.length){sec.innerHTML='<div style="font-size:12px;color:var(--tx3);">No goals set. <a href="profile.html" style="color:var(--p);">Add goals in your profile.</a></div>';return;}
+  var h='';
+  r.data.forEach(function(g){
+    var pct=g.target_amount>0?Math.min(Math.round(g.saved_amount/g.target_amount*100),100):0;
+    var col=pct>=70?'var(--g)':pct>=40?'var(--p)':'var(--am)';
+    h+='<div class="goal-item"><div class="goal-row"><div class="goal-name">'+(g.icon||'&#127919;')+' '+g.name+'</div><div class="goal-pct" style="color:'+col+'">'+pct+'%</div></div>'
+      +'<div class="goal-bar"><div class="goal-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'
+      +'<div class="goal-sub">&#8358;'+parseFloat(g.saved_amount||0).toLocaleString()+' of &#8358;'+parseFloat(g.target_amount||0).toLocaleString()+'</div></div>';
+  });
+  sec.innerHTML=h;
+}
+
+// ── TICKER AUTOCOMPLETE ────────────────────────────────────────
+window.searchTicker=function(q){
+  var dd=document.getElementById('tk-drop');
+  document.getElementById('af-cost').value='';
+  if(!q||q.length<1){dd.classList.remove('open');return;}
+  q=q.toUpperCase();
+  var matches=Object.keys(_prices).filter(function(t){return t.startsWith(q)||(_prices[t].name&&_prices[t].name.toUpperCase().includes(q));}).slice(0,10);
+  if(!matches.length){dd.classList.remove('open');return;}
+  dd.innerHTML='';
+  matches.forEach(function(tk){
+    var d=document.createElement('div');d.className='tk-opt';
+    d.innerHTML='<span class="tk-sym">'+tk+'</span><span class="tk-name">'+_prices[tk].name+'</span>';
+    d.onclick=function(){
+      document.getElementById('af-ticker').value=tk;
+      document.getElementById('af-name').value=_prices[tk].name;
+      _selTicker=tk;
+      dd.classList.remove('open');
+      recalcCost();
+    };
+    dd.appendChild(d);
+  });
+  dd.classList.add('open');
+};
+
+function recalcCost(){
+  var shares=parseFloat(document.getElementById('af-shares').value)||0;
+  var price=parseFloat(document.getElementById('af-price').value)||0;
+  var cost=shares*price;
+  document.getElementById('af-cost').value=cost>0?('&#8358;'+cost.toLocaleString('en-NG',{minimumFractionDigits:2})):'';
+}
+
+document.getElementById('af-shares').addEventListener('input',recalcCost);
+document.getElementById('af-price').addEventListener('input',recalcCost);
+document.addEventListener('click',function(e){if(!e.target.closest('.tk-wrap')){var dd=document.getElementById('tk-drop');if(dd)dd.classList.remove('open');}});
+
+// ── ADD / REMOVE ──────────────────────────────────────────────
+window.toggleAddForm=function(){var f=document.getElementById('add-form');f.classList.toggle('open');};
+
+window.addHolding=async function(){
+  var ticker=document.getElementById('af-ticker').value.trim().toUpperCase();
+  var name=document.getElementById('af-name').value.trim();
+  var shares=parseFloat(document.getElementById('af-shares').value);
+  var price=parseFloat(document.getElementById('af-price').value);
+  if(!ticker){showToast('Enter a ticker symbol','err');return;}
+  if(!shares||shares<=0){showToast('Enter number of shares','err');return;}
+  if(!price||price<=0){showToast('Enter buy price','err');return;}
+  // Auto-fill name if blank
+  if(!name&&_prices[ticker])name=_prices[ticker].name;
+  if(!name)name=ticker;
+  var r=await sb.from('holdings').insert({user_id:_uid,ticker:ticker,company_name:name,shares:shares,buy_price:price}).select().single();
+  if(r.error){showToast('Error: '+r.error.message,'err');return;}
+  _holdings.push(r.data);
+  renderHoldings();
+  document.getElementById('af-ticker').value='';document.getElementById('af-name').value='';
+  document.getElementById('af-shares').value='';document.getElementById('af-price').value='';document.getElementById('af-cost').value='';
+  _selTicker=null;document.getElementById('add-form').classList.remove('open');
+  showToast(ticker+' added to portfolio','ok');
+};
+
+window.removeHolding=async function(id,btn){
+  if(!confirm('Remove this holding?'))return;
+  await sb.from('holdings').delete().eq('id',id).eq('user_id',_uid);
+  _holdings=_holdings.filter(function(h){return h.id!==id;});
+  renderHoldings();
+  showToast('Holding removed','ok');
+};
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg,type){
+  var t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type==='ok'?'ok':'');t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
 </script>
 </body>
 </html>
