@@ -193,6 +193,17 @@
 </style>
 </head>
 <body>
+<script>
+// ── AUTH GUARD ── runs before anything else
+(function(){
+  const raw = sessionStorage.getItem('gopex_user');
+  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
+  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
+  if (!hasSession) { window.location.replace('landing.html'); }
+})();
+
+</script>
+<script>
 <nav class="nav">
   <div class="nav-in">
     <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
@@ -206,6 +217,7 @@
     <div class="nav-r">
       <div class="nav-notif">🔔<div class="n-dot"></div></div>
       <a href="profile.html" class="nav-prof"><div class="nav-av" id="nav-av">AO</div><span class="nav-name" id="nav-name">Adaeze</span></a>
+      <button onclick="gxLogout()" title="Log out" style="background:#fee2e2;border:1.5px solid #fca5a5;border-radius:8px;color:#dc2626;font-size:11px;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap;display:none;" class="logout-btn">↩ Logout</button>
       <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
     </div>
   </div>
@@ -464,32 +476,33 @@ let _marketOpen = false
 
 async function loadPrices(tickers = null) {
   try {
-    const url = tickers?.length
-      ? `https://lzlitanvlkycrkkpwczm.supabase.co/functions/v1/get-prices?tickers=${tickers.join(',')}`
-      : `https://lzlitanvlkycrkkpwczm.supabase.co/functions/v1/get-prices`
+    // Read directly from Supabase stock_prices table — fully automated, updates every 10 min
+    let url = 'https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,price,prev_close,change_pct,change_amt,is_market_open,last_updated'
+    if (tickers?.length) url += '&ticker=in.(' + tickers.join(',') + ')'
     const res = await fetch(url, {
-      headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g' }
+      headers: { 'apikey': _SB_ANON, 'Authorization': 'Bearer ' + _SB_ANON }
     })
-    const data = await res.json()
-    if (data.prices) {
-      // Normalize to same shape as old static PRICES object
-      Object.entries(data.prices).forEach(([tk, d]) => {
-        PRICES[tk] = { p: d.price, c: Math.abs(d.changePct || 0), u: d.up }
-      })
-      _pricesLoaded = true
-      _marketOpen = data.market_open
-      // Update market status indicator if it exists
-      const ms = document.getElementById('mkt-status')
-      if (ms) ms.textContent = _marketOpen ? '🟢 Open' : '🔴 Closed'
-      const mu = document.getElementById('prices-updated')
-      if (mu && data.last_updated) {
-        const mins = data.stale_minutes
-        mu.textContent = mins < 2 ? 'Just updated' : `Updated ${mins}m ago`
+    const rows = await res.json()
+    if (!Array.isArray(rows)) return null
+
+    rows.forEach(row => {
+      PRICES[row.ticker] = {
+        p: row.price,
+        c: Math.abs(row.change_pct || 0),
+        u: (row.change_pct || 0) >= 0
       }
+    })
+    _pricesLoaded = true
+    _marketOpen = rows[0]?.is_market_open || false
+
+    const mu = document.getElementById('prices-updated')
+    if (mu && rows[0]?.last_updated) {
+      const mins = Math.floor((Date.now() - new Date(rows[0].last_updated).getTime()) / 60000)
+      mu.textContent = mins < 2 ? 'Just updated' : `Updated ${mins}m ago`
     }
-    return data
+    return rows
   } catch (e) {
-    console.warn('Price fetch failed, using cached values', e)
+    console.warn('Price fetch failed', e)
     return null
   }
 }
@@ -1065,6 +1078,16 @@ function sendC(listId,inputId){
   d.innerHTML=`<div class="cm-av" style="background:var(--plt);color:var(--p);">${u.initials}</div><div class="cm-body"><div class="cm-name">${u.firstName||'You'}</div><div class="cm-text">${txt}</div></div>`;
   list.appendChild(d);inp.value='';
 }
+
+function gxLogout() {
+  if (!confirm('Log out of GopexFund?')) return;
+  sessionStorage.clear();
+  // Clear Supabase session
+  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
+  if (key) localStorage.removeItem(key);
+  window.location.href = 'landing.html';
+}
+
 </script>
 </body>
 </html>

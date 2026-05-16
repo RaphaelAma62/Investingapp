@@ -81,6 +81,17 @@
 </style>
 </head>
 <body>
+<script>
+// ── AUTH GUARD ── runs before anything else
+(function(){
+  const raw = sessionStorage.getItem('gopex_user');
+  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
+  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
+  if (!hasSession) { window.location.replace('landing.html'); }
+})();
+
+</script>
+<script>
 <nav class="nav">
   <div class="nav-in">
     <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
@@ -260,6 +271,16 @@ document.getElementById('edit-modal').addEventListener('click',function(e){if(e.
   if(el('prof-name'))el('prof-name').textContent=u.name||'You';
   if(el('prof-join')&&u.joined)el('prof-join').textContent='Member since '+u.joined;
 })()
+
+function gxLogout() {
+  if (!confirm('Log out of GopexFund?')) return;
+  sessionStorage.clear();
+  // Clear Supabase session
+  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
+  if (key) localStorage.removeItem(key);
+  window.location.href = 'landing.html';
+}
+
 </script>
 </body>
 </html>

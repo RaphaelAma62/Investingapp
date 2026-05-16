@@ -82,6 +82,17 @@
 </style>
 </head>
 <body>
+<script>
+// ── AUTH GUARD ── runs before anything else
+(function(){
+  const raw = sessionStorage.getItem('gopex_user');
+  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
+  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
+  if (!hasSession) { window.location.replace('landing.html'); }
+})();
+
+</script>
+<script>
 <nav class="nav">
   <div class="nav-in">
     <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
@@ -92,6 +103,7 @@
     </div>
     <div class="nav-r">
       <a href="profile.html" class="nav-prof"><div class="nav-av" id="nav-av">AO</div><span style="font-size:12px;font-weight:600;" id="nav-name">Adaeze</span></a>
+      <button onclick="gxLogout()" title="Log out" style="background:#fee2e2;border:1.5px solid #fca5a5;border-radius:8px;color:#dc2626;font-size:11px;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap;display:none;" class="logout-btn">↩ Logout</button>
       <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
     </div>
   </div>
@@ -224,6 +236,16 @@ function answer(btn,correct,fbId){
   }
 }
 (function(){const raw=sessionStorage.getItem('gopex_user');if(!raw)return;const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];})();
+
+function gxLogout() {
+  if (!confirm('Log out of GopexFund?')) return;
+  sessionStorage.clear();
+  // Clear Supabase session
+  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
+  if (key) localStorage.removeItem(key);
+  window.location.href = 'landing.html';
+}
+
 </script>
 </body>
 </html>

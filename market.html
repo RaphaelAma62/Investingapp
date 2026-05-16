@@ -172,6 +172,17 @@
 </style>
 </head>
 <body>
+<script>
+// ── AUTH GUARD ── runs before anything else
+(function(){
+  const raw = sessionStorage.getItem('gopex_user');
+  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
+  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
+  if (!hasSession) { window.location.replace('landing.html'); }
+})();
+
+</script>
+<script>
 <nav class="nav">
   <div class="nav-in">
     <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
@@ -181,6 +192,7 @@
     </div>
     <div class="nav-r">
       <a href="profile.html" class="nav-prof"><div class="nav-av" id="nav-av">AO</div><span style="font-size:12px;font-weight:600;" id="nav-name">Adaeze</span></a>
+      <button onclick="gxLogout()" title="Log out" style="background:#fee2e2;border:1.5px solid #fca5a5;border-radius:8px;color:#dc2626;font-size:11px;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap;display:none;" class="logout-btn">↩ Logout</button>
       <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
     </div>
   </div>
@@ -414,12 +426,32 @@ const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 
 async function loadLivePrices() {
   try {
+    // Read directly from Supabase stock_prices table — no Edge Function needed
     const res = await fetch(
-      'https://lzlitanvlkycrkkpwczm.supabase.co/functions/v1/get-prices',
-      { headers: { 'apikey': _SB_ANON } }
+      'https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,company_name,price,prev_close,change_pct,change_amt,volume,market_cap,last_updated,is_market_open&order=ticker',
+      { headers: { 'apikey': _SB_ANON, 'Authorization': 'Bearer ' + _SB_ANON } }
     )
-    const data = await res.json()
-    if (!data.prices) return
+    const rows = await res.json()
+    if (!Array.isArray(rows) || !rows.length) return
+
+    // Convert array to prices map
+    const data = { prices: {}, market_open: false, last_updated: null, stale_minutes: 0 }
+    rows.forEach(row => {
+      data.prices[row.ticker] = {
+        price: row.price, changePct: row.change_pct,
+        changeAmt: row.change_amt, volume: row.volume,
+        marketCap: row.market_cap, up: (row.change_pct || 0) >= 0,
+        lastUpdated: row.last_updated
+      }
+      if (!data.last_updated || row.last_updated > data.last_updated) {
+        data.last_updated = row.last_updated
+        data.market_open = row.is_market_open
+      }
+    })
+    data.stale_minutes = data.last_updated
+      ? Math.floor((Date.now() - new Date(data.last_updated).getTime()) / 60000) : 0
+
+    if (!Object.keys(data.prices).length) return
 
     // Update all stock entries in GAINERS, LOSERS, SECTORS with live prices
     const applyLive = (stock) => {
@@ -543,6 +575,16 @@ function setPer(btn,p){document.querySelectorAll('.per').forEach(b=>b.classList.
 function closePanel(){document.getElementById('panel').classList.remove('open');document.getElementById('overlay').style.display='none';}
 function togglePanelWatch(){if(!curTk)return;const btn=document.getElementById('p-watch');wl.has(curTk)?(wl.delete(curTk),btn.textContent='☆ Watchlist'):(wl.add(curTk),btn.textContent='★ In Watchlist');}
 (function(){const raw=sessionStorage.getItem('gopex_user');if(!raw)return;const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];})();
+
+function gxLogout() {
+  if (!confirm('Log out of GopexFund?')) return;
+  sessionStorage.clear();
+  // Clear Supabase session
+  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
+  if (key) localStorage.removeItem(key);
+  window.location.href = 'landing.html';
+}
+
 </script>
 </body>
 </html>

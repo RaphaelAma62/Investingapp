@@ -46,6 +46,17 @@ footer{background:var(--g900);color:var(--g500);padding:36px clamp(16px,4vw,48px
 </style>
 </head>
 <body>
+<script>
+// ── AUTH GUARD ── runs before anything else
+(function(){
+  const raw = sessionStorage.getItem('gopex_user');
+  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
+  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
+  if (!hasSession) { window.location.replace('landing.html'); }
+})();
+
+</script>
+<script>
 <nav class="nav">
   <div class="nav-in">
     <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>

@@ -173,6 +173,17 @@
 </style>
 </head>
 <body>
+<script>
+// ── AUTH GUARD ── runs before anything else
+(function(){
+  const raw = sessionStorage.getItem('gopex_user');
+  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
+  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
+  if (!hasSession) { window.location.replace('landing.html'); }
+})();
+
+</script>
+<script>
 <nav class="nav">
   <div class="nav-in">
     <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
@@ -362,20 +373,30 @@
 
 <script>
 // ─── DATA ───────────────────────────────────────
-const MARKET_PRICES = {
-  MTNN:{name:'MTN Nigeria',price:245.00,chg:6.52},
-  DANGCEM:{name:'Dangote Cement',price:543.00,chg:0.90},
-  GTCO:{name:'GT Holdings',price:54.05,chg:-7.60},
-  ZENITHBANK:{name:'Zenith Bank',price:42.10,chg:-8.66},
-  BUAFOODS:{name:'BUA Foods',price:385.00,chg:2.10},
-  ACCESSCORP:{name:'Access Holdings',price:25.75,chg:-2.50},
-  AIRTELAFRI:{name:'Airtel Africa',price:2200.00,chg:0.80},
-  SEPLAT:{name:'Seplat Energy',price:4850.00,chg:1.40},
-  FIRSTHOLDCO:{name:'First HoldCo',price:75.30,chg:-7.80},
-  GEREGU:{name:'Geregu Power',price:1250.00,chg:5.10},
-  BUACEMENT:{name:'BUA Cement',price:435.00,chg:2.36},
-  NGXGROUP:{name:'NGX Group',price:158.00,chg:5.50},
-};
+// Live prices from Supabase — auto-updated every 10 min by pg_cron
+const MARKET_PRICES = {}
+const _PF_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+
+async function loadMarketPrices() {
+  try {
+    const res = await fetch(
+      'https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,company_name,price,change_pct,volume,market_cap',
+      { headers: { 'apikey': _PF_ANON, 'Authorization': 'Bearer ' + _PF_ANON } }
+    )
+    const rows = await res.json()
+    if (!Array.isArray(rows)) return
+    rows.forEach(r => {
+      MARKET_PRICES[r.ticker] = {
+        name: r.company_name, price: r.price,
+        chg: r.change_pct || 0, marketCap: r.market_cap
+      }
+    })
+    // Re-render holdings with fresh prices
+    renderHoldings()
+  } catch(e) {
+    console.warn('Portfolio price fetch failed', e)
+  }
+}
 const ALLOC_COLORS=['#1a6eff','#16a34a','#d97706','#7c3aed','#dc2626','#0891b2','#ea580c','#65a30d','#9333ea','#e11d48'];
 const BROKERAGES=[
   {id:'bamboo',name:'Bamboo',sub:'NGX + US Stocks',logo:'🎋',color:'#16a34a',bg:'#dcfce7',tags:['NGX','US Stocks','ETFs'],url:'https://bamboo.africa'},
@@ -520,8 +541,8 @@ function renderBrokerages(){
         <div><div class="brok-name">${b.name}</div><div class="brok-sub">${b.sub}</div></div>
       </div>
       <div class="brok-tags">${b.tags.map(t=>`<span class="btag">${t}</span>`).join('')}</div>
-      <button class="brok-btn ${isConn?'brok-btn-synced':'brok-btn-connect'}" id="bbtn-${b.id}" onclick="connectBrokerage('${b.id}','${b.url}')">
-        ${isConn?'✓ Synced — View account':'Connect '+b.name}
+      <button class="brok-btn brok-btn-soon" disabled title="Brokerage integration coming soon!">
+        🔒 Coming Soon
       </button>
     </div>`;
   }).join('');
@@ -617,8 +638,9 @@ sbScript.onload = async () => {
     await _sb.from('profiles').update({ is_verified: true }).eq('id', session.user.id)
   }
 
-  const anyConn = Object.keys(connected).length > 0
-  if (!anyConn) { document.getElementById('v-badge').className='vbadge badge-uv'; document.getElementById('v-badge').textContent='◌ Unverified — Connect a broker' }
+  // Brokers coming soon — always unverified for now
+  const vb = document.getElementById('v-badge');
+  if(vb){ vb.className='vbadge badge-uv'; vb.textContent='◌ Unverified — Broker sync coming soon'; }
 
   renderHoldings(); buildPerfChart('1M'); renderBrokerages()
   document.getElementById('stock-modal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open') })
@@ -629,11 +651,23 @@ document.head.appendChild(sbScript)
 ;(function(){
   const raw=sessionStorage.getItem('gopex_user');
   if(raw){const u=JSON.parse(raw);const av=document.getElementById('nav-av');const nm=document.getElementById('nav-name');const hn=document.getElementById('hero-name');if(av)av.textContent=u.initials||'AO';if(nm)nm.textContent=u.firstName||(u.name||'').split(' ')[0];if(hn)hn.textContent=u.name||'Adaeze Obi';}
-  const anyConn=Object.keys(connected).length>0;
-  if(!anyConn){const vb=document.getElementById('v-badge');if(vb){vb.className='vbadge badge-uv';vb.textContent='◌ Unverified — Connect a broker';}}
+  const vb2=document.getElementById('v-badge');
+  if(vb2){vb2.className='vbadge badge-uv';vb2.textContent='◌ Unverified — Broker sync coming soon';}
   renderHoldings(); buildPerfChart('1M'); renderBrokerages();
+  loadMarketPrices(); // fetch live prices from DB, re-renders holdings
+  setInterval(loadMarketPrices, 10 * 60 * 1000); // refresh every 10 min
   document.getElementById('stock-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 })()
+
+function gxLogout() {
+  if (!confirm('Log out of GopexFund?')) return;
+  sessionStorage.clear();
+  // Clear Supabase session
+  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
+  if (key) localStorage.removeItem(key);
+  window.location.href = 'landing.html';
+}
+
 </script>
 </body>
 </html>
