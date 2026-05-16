@@ -507,6 +507,28 @@
 </main>
 </div>
 
+<!-- DELETE USER MODAL -->
+<div class="modal-ov" id="modal-delete-user">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('delete-user')">&#x2715;</button>
+    <div class="modal-title" style="color:var(--red);">&#128465; Delete User Account</div>
+    <div id="delete-user-info" style="background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#991b1b;line-height:1.6;">
+      This will permanently delete all of this user's data including posts, holdings, comments, goals, and their account. <strong>This cannot be undone.</strong>
+    </div>
+    <div style="background:var(--g50);border-radius:9px;padding:12px;margin-bottom:16px;font-size:13px;">
+      <strong id="delete-user-name" style="color:var(--tx);">User</strong> will be completely removed from GopexFund. They can sign up again with the same email if they want.
+    </div>
+    <div class="mfield">
+      <label>Type <strong>DELETE</strong> to confirm</label>
+      <input id="delete-user-confirm" placeholder="DELETE" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px 13px;font-size:14px;outline:none;"/>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('delete-user')">Cancel</button>
+      <button class="modal-danger" onclick="confirmDeleteUser()">&#128465; Permanently Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADD USER MODAL -->
 <div class="modal-ov" id="modal-add-user">
   <div class="modal">
@@ -691,6 +713,7 @@ function renderUsersTable() {
       + '<div class="action-btns">'
       + '<button class="ab" onclick="viewUser(\'' + u.id + '\')">View</button>'
       + (!u.is_suspended ? '<button class="ab danger" onclick="initSuspend(\'' + u.id + '\',\'' + (u.name||'User').replace(/'/g,'') + '\')">Suspend</button>' : '<button class="ab" onclick="unsuspendUser(\'' + u.id + '\')">Unsuspend</button>')
+      + '<button class="ab danger" onclick="initDeleteUser(\'' + u.id + '\',\'' + (u.name||'User').replace(/'/g,'\\\'') + '\')" title="Delete all data and account" style="background:#fee2e2;">&#128465;</button>'
       + '</div>'
       + '</div>';
   }
@@ -729,16 +752,69 @@ window.viewUser = async function(uid) {
   var content = document.getElementById('view-user-content');
   content.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">'
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">NAME</div><div style="font-size:14px;font-weight:700;">' + (user.name||'—') + '</div></div>'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">COUNTRY</div><div style="font-size:14px;font-weight:700;">' + (user.country||'Nigeria') + '</div></div>'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">USERNAME</div><div style="font-size:14px;font-weight:700;">@' + (user.username||'—') + '</div></div>'
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">POSTS</div><div style="font-size:20px;font-weight:800;color:var(--p);">' + (pRes.count||0) + '</div></div>'
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">HOLDINGS</div><div style="font-size:20px;font-weight:800;color:var(--green);">' + (hRes.count||0) + '</div></div>'
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">FOLLOWERS</div><div style="font-size:20px;font-weight:800;color:var(--amber);">' + (fRes.count||0) + '</div></div>'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">STATUS</div><div style="font-size:14px;font-weight:700;">' + (user.is_suspended ? '🚫 Suspended' : (user.is_verified ? '✓ Verified' : '◌ Unverified')) + '</div></div>'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">STATUS</div><div style="font-size:14px;font-weight:700;">' + (user.is_suspended ? '&#128683; Suspended' : (user.is_verified ? '&#10003; Verified' : '&#9675; Unverified')) + '</div></div>'
     + '</div>'
-    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:8px;">Bio: ' + (user.bio||'None') + '</div>'
-    + '<div style="font-size:12px;color:var(--tx3);">User ID: <code style="background:var(--g100);padding:2px 6px;border-radius:4px;">' + user.id + '</code></div>';
+    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:8px;">Phone: ' + (user.phone||'Not set') + '</div>'
+    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:14px;">User ID: <code style="background:var(--g100);padding:2px 6px;border-radius:4px;">' + user.id + '</code></div>'
+    + '<div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--bdr);">'
+    + (!user.is_suspended
+        ? '<button class="ta-btn" style="background:#fef3c7;border-color:#fcd34d;color:#92400e;" onclick="closeModal(\'view-user\');initSuspend(\'' + user.id + '\',\'' + (user.name||'User').replace(/'/g,'') + '\')">&#128683; Suspend</button>'
+        : '<button class="ta-btn" onclick="closeModal(\'view-user\');unsuspendUser(\'' + user.id + '\')">&#10003; Unsuspend</button>'
+      )
+    + '<button class="ta-btn" style="background:#fee2e2;border-color:#fca5a5;color:#991b1b;" onclick="closeModal(\'view-user\');initDeleteUser(\'' + user.id + '\',\'' + (user.name||'User').replace(/'/g,'') + '\')">&#128465; Delete Account</button>'
+    + '</div>';
 
   openModal('view-user');
+};
+
+// ── DELETE USER ───────────────────────────────────────────────
+var _deleteTargetId = null;
+
+window.initDeleteUser = function(uid, name) {
+  _deleteTargetId = uid;
+  var nameEl = document.getElementById('delete-user-name');
+  if (nameEl) nameEl.textContent = name || 'This user';
+  var confirmEl = document.getElementById('delete-user-confirm');
+  if (confirmEl) confirmEl.value = '';
+  openModal('delete-user');
+};
+
+window.confirmDeleteUser = async function() {
+  var conf = document.getElementById('delete-user-confirm').value.trim();
+  if (conf !== 'DELETE') {
+    showToast('Type DELETE in caps to confirm', 'error');
+    return;
+  }
+  if (!_deleteTargetId) return;
+
+  showToast('Deleting user data...', '');
+
+  // Call the database function that clears all user data
+  var r = await _sb.rpc('delete_user_completely', { target_user_id: _deleteTargetId });
+
+  if (r.error) {
+    showToast('Error: ' + r.error.message, 'error');
+    return;
+  }
+
+  var result = r.data;
+  if (result && result.success) {
+    var d = result.deleted;
+    showToast(
+      'User deleted: ' + (d.posts||0) + ' posts, ' + (d.holdings||0) + ' holdings, ' + (d.comments||0) + ' comments removed',
+      'success'
+    );
+    closeModal('delete-user');
+    _deleteTargetId = null;
+    // Refresh user list
+    loadUsers('all');
+  } else {
+    showToast('Failed: ' + (result && result.error ? result.error : 'Unknown error'), 'error');
+  }
 };
 
 // ── SUSPEND ───────────────────────────────────────────────────
