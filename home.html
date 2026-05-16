@@ -457,8 +457,42 @@
 const _SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
 const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
 
-// NGX prices for ticker chips (static snapshot — replace with live API later)
-const PRICES = {MTNN:{p:245.00,c:6.52,u:true},DANGCEM:{p:543.00,c:0.90,u:true},GTCO:{p:54.05,c:-7.60,u:false},ZENITHBANK:{p:42.10,c:-8.66,u:false},BUAFOODS:{p:385.00,c:2.10,u:true},ACCESSCORP:{p:25.75,c:-2.50,u:false},AIRTELAFRI:{p:2200,c:0.80,u:true},SEPLAT:{p:4850,c:1.40,u:true},GEREGU:{p:1250,c:5.10,u:true},FIRSTHOLDCO:{p:75.30,c:-7.80,u:false},BUACEMENT:{p:435,c:2.36,u:true},NGXGROUP:{p:158,c:5.50,u:true},TRANSCORP:{p:390,c:2.80,u:true},FIDSON:{p:113.30,c:10.00,u:true},BERGER:{p:140.10,c:17.29,u:true}}
+// NGX prices — loaded live from DB via Edge Function
+const PRICES = {}
+let _pricesLoaded = false
+let _marketOpen = false
+
+async function loadPrices(tickers = null) {
+  try {
+    const url = tickers?.length
+      ? `https://lzlitanvlkycrkkpwczm.supabase.co/functions/v1/get-prices?tickers=${tickers.join(',')}`
+      : `https://lzlitanvlkycrkkpwczm.supabase.co/functions/v1/get-prices`
+    const res = await fetch(url, {
+      headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g' }
+    })
+    const data = await res.json()
+    if (data.prices) {
+      // Normalize to same shape as old static PRICES object
+      Object.entries(data.prices).forEach(([tk, d]) => {
+        PRICES[tk] = { p: d.price, c: Math.abs(d.changePct || 0), u: d.up }
+      })
+      _pricesLoaded = true
+      _marketOpen = data.market_open
+      // Update market status indicator if it exists
+      const ms = document.getElementById('mkt-status')
+      if (ms) ms.textContent = _marketOpen ? '🟢 Open' : '🔴 Closed'
+      const mu = document.getElementById('prices-updated')
+      if (mu && data.last_updated) {
+        const mins = data.stale_minutes
+        mu.textContent = mins < 2 ? 'Just updated' : `Updated ${mins}m ago`
+      }
+    }
+    return data
+  } catch (e) {
+    console.warn('Price fetch failed, using cached values', e)
+    return null
+  }
+}
 
 // ── STATE ─────────────────────────────────────────────────────
 let _sb = null, _session = null, _myInitials = 'AO', _myFirstName = 'You'
@@ -493,6 +527,9 @@ sbScript.onload = async () => {
     firstName: _myFirstName, initials: _myInitials, email: session.user.email,
     joined: new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
   }))
+
+  // Load live prices from DB
+  await loadPrices()
 
   // Load my ticker holdings (% only, no ₦ values)
   try {

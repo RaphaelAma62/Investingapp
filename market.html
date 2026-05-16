@@ -225,7 +225,7 @@
     <div>
       <div style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">NGX · Live Data · Lagos WAT</div>
       <div class="pg-title">NGX Market Overview</div>
-      <div class="pg-sub">May 13, 2026 close · 9am–4pm WAT weekdays</div>
+      <div class="pg-sub">May 15, 2026 · 9am–4pm WAT weekdays · <span id="prices-updated" style="color:var(--green);font-weight:600;">Loading prices…</span></div>
     </div>
     <div class="hd-chips">
       <div class="hd-chip"><div class="hc-lbl">Status</div><div class="hc-val" id="mkt-status">⏳</div></div>
@@ -409,12 +409,72 @@ const SECTORS=[
 ];
 const ALLSTOCKS=[...GAINERS,...LOSERS,...SECTORS.flatMap(s=>s.stocks)];
 
+// ── LIVE PRICE LOADER ─────────────────────────────────────────
+const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+
+async function loadLivePrices() {
+  try {
+    const res = await fetch(
+      'https://lzlitanvlkycrkkpwczm.supabase.co/functions/v1/get-prices',
+      { headers: { 'apikey': _SB_ANON } }
+    )
+    const data = await res.json()
+    if (!data.prices) return
+
+    // Update all stock entries in GAINERS, LOSERS, SECTORS with live prices
+    const applyLive = (stock) => {
+      const live = data.prices[stock.tk]
+      if (!live) return stock
+      const chgSign = live.up ? '+' : ''
+      return {
+        ...stock,
+        price: live.price.toLocaleString('en-NG', {minimumFractionDigits:2, maximumFractionDigits:2}),
+        chg: `${chgSign}${live.changePct?.toFixed(2)||'0.00'}%`,
+        up: live.up,
+        vol: live.volume ? formatVolume(live.volume) : stock.vol,
+      }
+    }
+    GAINERS.forEach((s,i) => GAINERS[i] = applyLive(s))
+    LOSERS.forEach((s,i)  => LOSERS[i]  = applyLive(s))
+    SECTORS.forEach(sec => sec.stocks.forEach((s,i) => sec.stocks[i] = applyLive(s)))
+
+    // Update overview cards
+    const mu = document.getElementById('prices-updated')
+    if (mu) mu.textContent = data.stale_minutes < 2 ? '● Live' : `Updated ${data.stale_minutes}m ago`
+
+    // Rebuild tape with live data
+    buildTape()
+
+    // Rebuild movers
+    document.getElementById('gainers-list').innerHTML = ''
+    document.getElementById('losers-list').innerHTML = ''
+    buildMovers()
+
+    // Update market status
+    document.getElementById('mkt-status').textContent = data.market_open ? '🟢 Open' : '🔴 Closed'
+
+    console.log(`✓ Live prices loaded: ${data.count} tickers, stale ${data.stale_minutes}m`)
+  } catch(e) {
+    console.warn('Live price load failed, using seed data', e)
+  }
+}
+
+function formatVolume(v) {
+  if (v >= 1e9) return (v/1e9).toFixed(1)+'B'
+  if (v >= 1e6) return (v/1e6).toFixed(1)+'M'
+  if (v >= 1e3) return (v/1e3).toFixed(0)+'K'
+  return v
+}
+
 // Tape
-(function(){
-  const all=[...GAINERS,...LOSERS,{tk:'DANGCEM',chg:'+0.90%',up:true,price:'543.00'},{tk:'SEPLAT',chg:'+1.40%',up:true,price:'4,850'},{tk:'TRANSCORP',chg:'+2.80%',up:true,price:'390.00'},{tk:'NGXGROUP',chg:'+5.50%',up:true,price:'158.00'}];
-  const r=s=>`<div class="tk"><span class="tk-sym">${s.tk}</span><span class="tk-p">₦${s.price}</span><span class="${s.up||s.chg.startsWith('+')?'up':'dn'}">${s.chg}</span></div>`;
-  const t=document.getElementById('tape');t.innerHTML=all.map(r).join('')+all.map(r).join('');
-})();
+function buildTape() {
+  const all=[...GAINERS,...LOSERS]
+  const r=s=>`<div class="tk"><span class="tk-sym">${s.tk}</span><span class="tk-p">₦${s.price}</span><span class="${s.up?'up':'dn'}">${s.chg}</span></div>`
+  const t=document.getElementById('tape');t.innerHTML=all.map(r).join('')+all.map(r).join('')
+}
+buildTape() // initial render with seed data
+loadLivePrices() // fetch live, refresh tape + cards
+setInterval(loadLivePrices, 10 * 60 * 1000) // re-fetch every 10 min
 
 // Clock
 function tick(){const n=new Date(),w=new Date(n.toLocaleString('en-US',{timeZone:'Africa/Lagos'}));const h=String(w.getHours()).padStart(2,'0'),m=String(w.getMinutes()).padStart(2,'0');const d=w.getDay(),o=d>=1&&d<=5&&w.getHours()>=9&&w.getHours()<16;document.getElementById('mkt-time').textContent=h+':'+m+' WAT';document.getElementById('mkt-status').textContent=o?'🟢 Open':'🔴 Closed';}tick();setInterval(tick,30000);
@@ -434,7 +494,8 @@ function buildMovers(){
   const g=document.getElementById('gainers-list'),l=document.getElementById('losers-list');
   GAINERS.forEach((s,i)=>{g.innerHTML+=`<div class="gl-row" onclick="openStock('${s.tk}')"><div class="gl-rank">${i+1}</div><div class="gl-logo">${s.tk.slice(0,4)}</div><div><div class="gl-name">${s.name}</div><div class="gl-sec">${s.sector}</div></div><div class="gl-price">₦${s.price}</div><div class="gl-pct gl-up">${s.chg}</div></div>`;});
   LOSERS.forEach((s,i)=>{l.innerHTML+=`<div class="gl-row" onclick="openStock('${s.tk}')"><div class="gl-rank">${i+1}</div><div class="gl-logo">${s.tk.slice(0,4)}</div><div><div class="gl-name">${s.name}</div><div class="gl-sec">${s.sector}</div></div><div class="gl-price">₦${s.price}</div><div class="gl-pct gl-dn">${s.chg}</div></div>`;});
-}buildMovers();
+}
+buildMovers(); // initial render — loadLivePrices() rebuilds with fresh data
 
 // Sectors
 let activeSec=null,curStocks=[];
