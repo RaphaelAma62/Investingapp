@@ -575,7 +575,7 @@ function renderProfile() {
   var pn = document.getElementById('prof-name'); if (pn) pn.textContent = p.name || fn || 'New User';
   var vb = document.getElementById('verif-badge');
   if (vb) {
-    if (p.role === 'admin') {
+    if (p.role === 'admin' || p.role === 'editor') {
       vb.className = 'badge-admin'; vb.textContent = '🛡 Admin';
       var adminBtn = document.getElementById('admin-btn'); if (adminBtn) adminBtn.style.display = 'flex';
     } else if (p.is_verified) {

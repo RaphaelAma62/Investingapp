@@ -337,17 +337,55 @@
 
     <!-- NEWS SECTION -->
     <div id="sec-news" style="display:none;">
-      <div style="max-width:680px;">
-        <div class="table-card" style="padding:20px;margin-bottom:16px;">
-          <div class="modal-title" style="font-size:16px;margin-bottom:16px;">📰 Post News Article</div>
-          <div class="mfield"><label>Headline</label><input id="news-title" placeholder="NGX All-Share Index hits new high..."/></div>
-          <div class="mfield"><label>Body / Summary</label><textarea id="news-body" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;min-height:120px;resize:none;" placeholder="Write the full news article or summary..."></textarea></div>
-          <div class="mfield"><label>Source (optional)</label><input id="news-source" placeholder="BusinessDay, Reuters, NGX Group..."/></div>
-          <button class="ta-btn primary" onclick="postNews()" style="width:100%;padding:11px;font-size:14px;border-radius:9px;">Publish News</button>
+      <div style="max-width:780px;">
+        <div class="table-card" style="padding:24px;margin-bottom:16px;">
+          <div style="font-family:var(--fd);font-size:17px;font-weight:800;margin-bottom:4px;">&#128240; Post News Article</div>
+          <div style="font-size:12px;color:var(--tx3);margin-bottom:20px;">Published news appears in both the <strong>News tab</strong> on the home feed and the <strong>For You feed</strong> so all users see it.</div>
+
+          <div class="mfield"><label>Headline *</label>
+            <input id="news-title" placeholder="NGX All-Share Index hits new high today..." style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:11px 13px;font-size:14px;outline:none;font-family:var(--fb);"/>
+          </div>
+
+          <div class="mfield"><label>Full Article Content *</label>
+            <textarea id="news-body" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:12px 13px;font-size:13px;outline:none;min-height:160px;resize:vertical;font-family:var(--fb);line-height:1.7;" placeholder="Write the full news article here. This will appear in the news section. A short excerpt will show in the main feed..."></textarea>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="mfield"><label>Source (optional)</label>
+              <input id="news-source" placeholder="BusinessDay, Reuters, NGX Group..." style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px 13px;font-size:13px;outline:none;"/>
+            </div>
+            <div class="mfield"><label>Featured Image (optional)</label>
+              <div style="position:relative;">
+                <input type="file" id="news-img-input" accept="image/*" onchange="previewNewsImage(this)" style="width:100%;background:var(--g50);border:1.5px dashed var(--bdr);border-radius:9px;padding:8px 13px;font-size:12px;cursor:pointer;"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image preview -->
+          <div id="news-img-preview" style="display:none;margin-bottom:14px;">
+            <div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Image Preview</div>
+            <div style="position:relative;display:inline-block;">
+              <img id="news-img-thumb" src="" style="max-height:140px;border-radius:9px;border:1px solid var(--bdr);"/>
+              <button onclick="clearNewsImage()" style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;background:var(--red);border:none;border-radius:50%;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;background:var(--plt);border-radius:9px;padding:10px 13px;margin-bottom:16px;font-size:12px;color:var(--p);">
+            &#9432; This news post will appear in the <strong style="margin:0 3px;">News tab</strong> AND as a pinned post in the <strong style="margin:0 3px;">For You feed</strong> so all users see it immediately.
+          </div>
+
+          <button class="ta-btn primary" onclick="postNews()" style="width:100%;padding:12px;font-size:14px;border-radius:9px;font-weight:700;">&#128240; Publish News to All Users</button>
         </div>
+
+        <!-- Published news list -->
         <div class="table-card">
-          <div class="table-hd"><div class="table-title">Published News</div></div>
-          <div id="news-list" style="padding:16px;"><div style="color:var(--tx3);font-size:13px;">Loading...</div></div>
+          <div class="table-hd">
+            <div class="table-title">Published Articles</div>
+            <div id="news-count" style="font-size:12px;color:var(--tx3);"></div>
+          </div>
+          <div id="news-list" style="padding:16px;max-height:500px;overflow-y:auto;">
+            <div style="color:var(--tx3);font-size:13px);">Loading...</div>
+          </div>
         </div>
       </div>
     </div>
@@ -591,11 +629,14 @@ var SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co';
 var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g';
 var _sb = createClient(SB_URL, SB_ANON);
 var _session = null;
-var _allUsers = [];
-var _filteredUsers = [];
-var _currentPage = 1;
-var _pageSize = 15;
-var _suspendTarget = null;
+var _allUsers = [], _filteredUsers = [];
+var _currentPage = 1, _pageSize = 15;
+var _suspendTarget = null, _deleteTargetId = null;
+var _activeCourseId = null;
+
+function setEl(id, v) { var e = document.getElementById(id); if (e) e.textContent = v; }
+function setHTML(id, v) { var e = document.getElementById(id); if (e) e.innerHTML = v; }
+function setBar(id, pct) { var e = document.getElementById(id); if (e) e.style.width = Math.min(pct, 100) + '%'; }
 
 // ── INIT ──────────────────────────────────────────────────────
 async function init() {
@@ -603,18 +644,41 @@ async function init() {
   if (!authRes.data.session) { window.location.href = 'landing.html'; return; }
   _session = authRes.data.session;
 
-  // Check admin role
   var profRes = await _sb.from('profiles').select('role,name,initials').eq('id', _session.user.id).single();
-  if (!profRes.data || profRes.data.role !== 'admin') {
-    alert('Access denied. Admin only.');
+  if (!profRes.data || !['admin','editor'].includes(profRes.data.role)) {
+    alert('Access denied. Admin or Editor accounts only.');
     window.location.href = 'home.html';
     return;
   }
 
+  var isAdmin  = profRes.data.role === 'admin';
+  var isEditor = profRes.data.role === 'editor';
+
+  // Hide admin-only sections for editors
+  if (isEditor) {
+    var adminOnly = ['sec-users','sec-suspended','sec-admins','sec-portfolios','sec-settings'];
+    adminOnly.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    // Hide sidebar items editors can't use
+    document.querySelectorAll('.sb-item').forEach(function(item) {
+      var text = item.textContent.trim();
+      if (['All Users','Suspended','Admins','Portfolios','Settings'].some(function(t){ return text.includes(t); })) {
+        item.style.display = 'none';
+      }
+    });
+    // Show editor notice
+    var notice = document.createElement('div');
+    notice.style.cssText = 'background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:8px 12px;font-size:11px;color:#6d28d9;font-weight:600;margin:8px;';
+    notice.textContent = '&#9997; Editor — limited access';
+    var footer = document.querySelector('.sb-footer');
+    if (footer) footer.parentNode.insertBefore(notice, footer);
+  }
+
   var initials = profRes.data.initials || _session.user.email.charAt(0).toUpperCase();
-  var avsb = document.getElementById('sb-av'); if (avsb) avsb.textContent = initials;
-  var avt = document.getElementById('top-av'); if (avt) avt.textContent = initials;
-  var un = document.getElementById('sb-uname'); if (un) un.textContent = profRes.data.name || 'Admin';
+  setEl('sb-av', initials); setEl('top-av', initials);
+  setEl('sb-uname', profRes.data.name || 'Admin');
 
   await loadDashboard();
 }
@@ -622,55 +686,95 @@ init();
 
 // ── DASHBOARD ─────────────────────────────────────────────────
 async function loadDashboard() {
-  // User count
-  var uRes = await _sb.from('profiles').select('id', {count:'exact', head:true});
+  var [uRes, pRes, hRes, vRes, sRes] = await Promise.all([
+    _sb.from('profiles').select('id', {count:'exact', head:true}),
+    _sb.from('posts').select('id', {count:'exact', head:true}),
+    _sb.from('holdings').select('id', {count:'exact', head:true}),
+    _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_verified', true),
+    _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_suspended', true)
+  ]);
+
   var uCount = uRes.count || 0;
-  var du = document.getElementById('dash-users'); if (du) du.textContent = uCount.toLocaleString();
-  var sbu = document.getElementById('sb-user-count'); if (sbu) sbu.textContent = uCount;
-
-  // Posts count
-  var pRes = await _sb.from('posts').select('id', {count:'exact', head:true});
   var pCount = pRes.count || 0;
-  var dp = document.getElementById('dash-posts'); if (dp) dp.textContent = pCount.toLocaleString();
-  var sbp = document.getElementById('sb-post-count'); if (sbp) sbp.textContent = pCount;
+  var hCount = hRes.count || 0;
+  var vCount = vRes.count || 0;
+  var sCount = sRes.count || 0;
+  var activeCount = Math.max(0, uCount - sCount);
 
-  // Holdings count
-  var hRes = await _sb.from('holdings').select('id', {count:'exact', head:true});
-  var dh = document.getElementById('dash-holdings'); if (dh) dh.textContent = (hRes.count || 0).toLocaleString();
+  // Stat cards
+  setEl('dash-users', uCount.toLocaleString());
+  setEl('dash-posts', pCount.toLocaleString());
+  setEl('dash-holdings', hCount.toLocaleString());
+  setEl('sb-user-count', uCount);
+  setEl('sb-post-count', pCount);
 
-  // Verified count
-  var vRes = await _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_verified', true);
-  var phv = document.getElementById('ph-verified'); if (phv) phv.textContent = vRes.count || 0;
+  // Platform health bars
+  setEl('ph-active', activeCount);
+  setEl('ph-suspended', sCount);
+  setEl('ph-verified', vCount);
 
-  // Suspended count
-  var sRes = await _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_suspended', true);
-  var phs = document.getElementById('ph-suspended'); if (phs) phs.textContent = sRes.count || 0;
-
-  var phactive = document.getElementById('ph-active'); if (phactive) phactive.textContent = Math.max(0, uCount - (sRes.count || 0));
+  // Update bar fills dynamically
+  var activeBar = document.querySelector('#sec-dashboard .bar-item:nth-child(1) .bar-fill');
+  var suspBar   = document.querySelector('#sec-dashboard .bar-item:nth-child(2) .bar-fill');
+  var verBar    = document.querySelector('#sec-dashboard .bar-item:nth-child(3) .bar-fill');
+  if (activeBar && uCount > 0) activeBar.style.width = Math.round(activeCount/uCount*100) + '%';
+  if (suspBar && uCount > 0)   suspBar.style.width   = Math.round(sCount/uCount*100) + '%';
+  if (verBar && uCount > 0)    verBar.style.width    = Math.round(vCount/uCount*100) + '%';
 
   // Investors with holdings
   var ihRes = await _sb.from('holdings').select('user_id');
-  var uniqueInvestors = new Set();
-  if (ihRes.data) { for (var i = 0; i < ihRes.data.length; i++) uniqueInvestors.add(ihRes.data[i].user_id); }
-  var phhold = document.getElementById('ph-holdings'); if (phhold) phhold.textContent = uniqueInvestors.size;
-  var piv = document.getElementById('port-investors'); if (piv) piv.textContent = uniqueInvestors.size;
-  var ptv = document.getElementById('port-total'); if (ptv) ptv.textContent = (hRes.count || 0);
+  var unique = new Set();
+  if (ihRes.data) ihRes.data.forEach(function(r) { unique.add(r.user_id); });
+  setEl('ph-holdings', unique.size);
+  var holdBar = document.querySelector('#sec-dashboard .bar-item:nth-child(4) .bar-fill');
+  if (holdBar && uCount > 0) holdBar.style.width = Math.round(unique.size/uCount*100) + '%';
+  setEl('port-investors', unique.size);
+  setEl('port-total', hCount);
 
   // Last price update
   var priceRes = await _sb.from('stock_prices').select('last_updated').order('last_updated', {ascending:false}).limit(1).single();
-  var lpu = document.getElementById('last-price-update');
-  if (lpu && priceRes.data) {
-    var mins = Math.floor((Date.now() - new Date(priceRes.data.last_updated)) / 60000);
-    lpu.textContent = mins < 2 ? 'Just now' : (mins + ' min ago');
+  if (priceRes.data) {
+    var mins = Math.floor((Date.now() - new Date(priceRes.data.last_updated).getTime()) / 60000);
+    setEl('last-price-update', mins < 2 ? 'Just now' : (mins + ' min ago'));
   }
+
+  // Country breakdown — fetch all profiles and group
+  var countryRes = await _sb.from('profiles').select('country');
+  var countries = {};
+  if (countryRes.data) {
+    countryRes.data.forEach(function(p) {
+      var c = (p.country || 'Nigeria').trim();
+      countries[c] = (countries[c] || 0) + 1;
+    });
+  }
+  var total = countryRes.data ? countryRes.data.length : 1;
+  var ngCount = countries['Nigeria'] || 0;
+  var ghCount = countries['Ghana'] || 0;
+  var keCount = countries['Kenya'] || 0;
+  var other = total - ngCount - ghCount - keCount;
+
+  // Update country bar fills
+  var bars = document.querySelectorAll('#country-chart .bar-fill');
+  var vals = document.querySelectorAll('#country-chart .bar-val');
+  if (bars[0]) bars[0].style.width = (total > 0 ? Math.round(ngCount/total*100) : 0) + '%';
+  if (bars[1]) bars[1].style.width = (total > 0 ? Math.round(ghCount/total*100) : 0) + '%';
+  if (bars[2]) bars[2].style.width = (total > 0 ? Math.round(keCount/total*100) : 0) + '%';
+  if (bars[3]) bars[3].style.width = (total > 0 ? Math.round(other/total*100) : 0) + '%';
+  if (vals[0]) vals[0].textContent = ngCount;
+  if (vals[1]) vals[1].textContent = ghCount;
+  if (vals[2]) vals[2].textContent = keCount;
+  if (vals[3]) vals[3].textContent = other;
 }
 
-// ── LOAD USERS ────────────────────────────────────────────────
+// ── USERS ─────────────────────────────────────────────────────
 async function loadUsers(filter) {
+  var body = document.getElementById('users-table-body');
+  if (body) body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading users...</div>';
+
   var res = await _sb.from('profiles').select('*').order('joined_at', {ascending:false});
   _allUsers = res.data || [];
 
-  if (filter === 'active') _filteredUsers = _allUsers.filter(function(u) { return !u.is_suspended; });
+  if (filter === 'active')      _filteredUsers = _allUsers.filter(function(u) { return !u.is_suspended; });
   else if (filter === 'verified') _filteredUsers = _allUsers.filter(function(u) { return u.is_verified; });
   else if (filter === 'unverified') _filteredUsers = _allUsers.filter(function(u) { return !u.is_verified && !u.is_suspended; });
   else if (filter === 'suspended') _filteredUsers = _allUsers.filter(function(u) { return u.is_suspended; });
@@ -683,44 +787,37 @@ async function loadUsers(filter) {
 function renderUsersTable() {
   var body = document.getElementById('users-table-body');
   if (!body) return;
-
   var start = (_currentPage - 1) * _pageSize;
   var page = _filteredUsers.slice(start, start + _pageSize);
-
-  if (!page.length) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No users found.</div>';
-    return;
-  }
+  if (!page.length) { body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No users found.</div>'; return; }
 
   var html = '';
-  for (var i = 0; i < page.length; i++) {
-    var u = page[i];
-    var initials = u.initials || (u.name ? u.name.charAt(0).toUpperCase() : 'U');
+  page.forEach(function(u) {
+    var ini = u.initials || (u.name ? u.name.charAt(0).toUpperCase() : 'U');
     var joined = u.joined_at ? new Date(u.joined_at).toLocaleDateString('en-NG', {day:'numeric', month:'short', year:'numeric'}) : '—';
     var statusClass = u.is_suspended ? 'sp-suspended' : (u.role === 'admin' ? 'sp-admin' : (u.is_verified ? 'sp-active' : 'sp-unverified'));
-    var statusText = u.is_suspended ? 'Suspended' : (u.role === 'admin' ? 'Admin' : (u.is_verified ? 'Verified' : 'Unverified'));
-
+    var statusText  = u.is_suspended ? 'Suspended' : (u.role === 'admin' ? 'Admin' : (u.is_verified ? 'Verified' : 'Unverified'));
+    var safeName = (u.name||'User').replace(/'/g,'');
     html += '<div class="user-row">'
-      + '<div class="ur-user">'
-      + '<div class="ur-av" style="background:var(--plt);color:var(--p);">' + initials + '</div>'
-      + '<div><div class="ur-name">' + (u.name || 'No Name') + '</div><div class="ur-email">' + (u.bio ? u.bio.substring(0,30) : 'No bio') + '</div></div>'
-      + '</div>'
-      + '<div class="ur-text" style="font-size:11px;">' + (u.location || '—') + '</div>'
-      + '<div class="ur-text">' + (u.country || 'Nigeria') + '</div>'
-      + '<div class="ur-text">' + (u.total_posts || 0) + '</div>'
+      + '<div class="ur-user"><div class="ur-av">' + ini + '</div>'
+      + '<div><div class="ur-name">' + (u.name||'No Name') + '</div>'
+      + '<div class="ur-email">@' + (u.username||'—') + '</div></div></div>'
+      + '<div class="ur-text" style="font-size:11px;">' + (u.location||'—') + '</div>'
+      + '<div class="ur-text">' + (u.country||'Nigeria') + '</div>'
+      + '<div class="ur-text">' + (u.total_posts||0) + '</div>'
       + '<div><span class="status-pill ' + statusClass + '">' + statusText + '</span></div>'
       + '<div class="ur-text" style="font-size:11px;">' + joined + '</div>'
       + '<div class="action-btns">'
-      + '<button class="ab" onclick="viewUser(\'' + u.id + '\')">View</button>'
-      + (!u.is_suspended ? '<button class="ab danger" onclick="initSuspend(\'' + u.id + '\',\'' + (u.name||'User').replace(/'/g,'') + '\')">Suspend</button>' : '<button class="ab" onclick="unsuspendUser(\'' + u.id + '\')">Unsuspend</button>')
-      + '<button class="ab danger" onclick="initDeleteUser(\'' + u.id + '\',\'' + (u.name||'User').replace(/'/g,'\\\'') + '\')" title="Delete all data and account" style="background:#fee2e2;">&#128465;</button>'
-      + '</div>'
-      + '</div>';
-  }
+      + '<button class="ab" onclick="viewUser('' + u.id + '')">View</button>'
+      + (!u.is_suspended
+          ? '<button class="ab danger" onclick="initSuspend('' + u.id + '','' + safeName + '')">Suspend</button>'
+          : '<button class="ab" onclick="unsuspendUser('' + u.id + '')">Unsuspend</button>')
+      + '<button class="ab danger" onclick="initDeleteUser('' + u.id + '','' + safeName + '')" style="background:#fee2e2;">&#128465;</button>'
+      + '</div></div>';
+  });
   body.innerHTML = html;
 
-  var pi = document.getElementById('page-info');
-  if (pi) pi.textContent = 'Page ' + _currentPage + ' of ' + Math.ceil(_filteredUsers.length / _pageSize) + ' (' + _filteredUsers.length + ' users)';
+  setEl('page-info', 'Page ' + _currentPage + ' of ' + Math.ceil(_filteredUsers.length / _pageSize) + ' (' + _filteredUsers.length + ' users)');
   var pag = document.getElementById('users-pagination');
   if (pag) pag.style.display = _filteredUsers.length > _pageSize ? 'flex' : 'none';
 }
@@ -729,27 +826,26 @@ window.changePage = function(dir) {
   var max = Math.ceil(_filteredUsers.length / _pageSize);
   _currentPage = Math.max(1, Math.min(_currentPage + dir, max));
   renderUsersTable();
-  document.getElementById('sec-users').scrollIntoView({behavior:'smooth'});
 };
 
 window.filterUsers = function(f, btn) {
-  var btns = document.querySelectorAll('.filter-btn');
-  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('on');
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('on'); });
   btn.classList.add('on');
   loadUsers(f);
 };
 
 // ── VIEW USER ─────────────────────────────────────────────────
 window.viewUser = async function(uid) {
-  var user = null;
-  for (var i = 0; i < _allUsers.length; i++) { if (_allUsers[i].id === uid) { user = _allUsers[i]; break; } }
+  var user = _allUsers.find(function(u) { return u.id === uid; });
   if (!user) return;
-
-  var pRes = await _sb.from('posts').select('id', {count:'exact', head:true}).eq('user_id', uid);
-  var hRes = await _sb.from('holdings').select('id', {count:'exact', head:true}).eq('user_id', uid);
-  var fRes = await _sb.from('follows').select('id', {count:'exact', head:true}).eq('following_id', uid);
-
+  var [pRes, hRes, fRes] = await Promise.all([
+    _sb.from('posts').select('id', {count:'exact', head:true}).eq('user_id', uid),
+    _sb.from('holdings').select('id', {count:'exact', head:true}).eq('user_id', uid),
+    _sb.from('follows').select('id', {count:'exact', head:true}).eq('following_id', uid)
+  ]);
   var content = document.getElementById('view-user-content');
+  if (!content) return;
+  var safeName = (user.name||'User').replace(/'/g,'');
   content.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">'
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">NAME</div><div style="font-size:14px;font-weight:700;">' + (user.name||'—') + '</div></div>'
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">USERNAME</div><div style="font-size:14px;font-weight:700;">@' + (user.username||'—') + '</div></div>'
@@ -758,149 +854,165 @@ window.viewUser = async function(uid) {
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">FOLLOWERS</div><div style="font-size:20px;font-weight:800;color:var(--amber);">' + (fRes.count||0) + '</div></div>'
     + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">STATUS</div><div style="font-size:14px;font-weight:700;">' + (user.is_suspended ? '&#128683; Suspended' : (user.is_verified ? '&#10003; Verified' : '&#9675; Unverified')) + '</div></div>'
     + '</div>'
-    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:8px;">Phone: ' + (user.phone||'Not set') + '</div>'
-    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:14px;">User ID: <code style="background:var(--g100);padding:2px 6px;border-radius:4px;">' + user.id + '</code></div>'
+    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:6px;">Phone: ' + (user.phone||'Not set') + '</div>'
+    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:14px;">Email: ' + (user.location||'—') + '</div>'
+    + '<div style="font-size:11px;color:var(--tx3);margin-bottom:14px;">ID: <code style="background:var(--g100);padding:2px 6px;border-radius:4px;">' + user.id + '</code></div>'
     + '<div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--bdr);">'
     + (!user.is_suspended
-        ? '<button class="ta-btn" style="background:#fef3c7;border-color:#fcd34d;color:#92400e;" onclick="closeModal(\'view-user\');initSuspend(\'' + user.id + '\',\'' + (user.name||'User').replace(/'/g,'') + '\')">&#128683; Suspend</button>'
-        : '<button class="ta-btn" onclick="closeModal(\'view-user\');unsuspendUser(\'' + user.id + '\')">&#10003; Unsuspend</button>'
-      )
-    + '<button class="ta-btn" style="background:#fee2e2;border-color:#fca5a5;color:#991b1b;" onclick="closeModal(\'view-user\');initDeleteUser(\'' + user.id + '\',\'' + (user.name||'User').replace(/'/g,'') + '\')">&#128465; Delete Account</button>'
+        ? '<button class="ta-btn" style="background:#fef3c7;border-color:#fcd34d;color:#92400e;" onclick="closeModal('view-user');initSuspend('' + uid + '','' + safeName + '')">&#128683; Suspend</button>'
+        : '<button class="ta-btn" onclick="closeModal('view-user');unsuspendUser('' + uid + '')">&#10003; Unsuspend</button>')
+    + '<button class="ta-btn" onclick="makeAdmin('' + uid + '')">&#128737; Make Admin</button>'
+    + '<button class="ta-btn" style="background:#fee2e2;border-color:#fca5a5;color:#991b1b;" onclick="closeModal('view-user');initDeleteUser('' + uid + '','' + safeName + '')">&#128465; Delete Account</button>'
     + '</div>';
-
   openModal('view-user');
 };
 
-// ── DELETE USER ───────────────────────────────────────────────
-var _deleteTargetId = null;
-
-window.initDeleteUser = function(uid, name) {
-  _deleteTargetId = uid;
-  var nameEl = document.getElementById('delete-user-name');
-  if (nameEl) nameEl.textContent = name || 'This user';
-  var confirmEl = document.getElementById('delete-user-confirm');
-  if (confirmEl) confirmEl.value = '';
-  openModal('delete-user');
+window.makeAdmin = async function(uid) {
+  if (!confirm('Give this user admin privileges?')) return;
+  await _sb.from('profiles').update({role:'admin'}).eq('id', uid);
+  showToast('User promoted to admin!', 'success');
+  closeModal('view-user');
+  loadUsers('all');
 };
 
-window.confirmDeleteUser = async function() {
-  var conf = document.getElementById('delete-user-confirm').value.trim();
-  if (conf !== 'DELETE') {
-    showToast('Type DELETE in caps to confirm', 'error');
-    return;
-  }
-  if (!_deleteTargetId) return;
-
-  showToast('Deleting user data...', '');
-
-  // Call the database function that clears all user data
-  var r = await _sb.rpc('delete_user_completely', { target_user_id: _deleteTargetId });
-
-  if (r.error) {
-    showToast('Error: ' + r.error.message, 'error');
-    return;
-  }
-
-  var result = r.data;
-  if (result && result.success) {
-    var d = result.deleted;
-    showToast(
-      'User deleted: ' + (d.posts||0) + ' posts, ' + (d.holdings||0) + ' holdings, ' + (d.comments||0) + ' comments removed',
-      'success'
-    );
-    closeModal('delete-user');
-    _deleteTargetId = null;
-    // Refresh user list
-    loadUsers('all');
-  } else {
-    showToast('Failed: ' + (result && result.error ? result.error : 'Unknown error'), 'error');
-  }
-};
-
-// ── SUSPEND ───────────────────────────────────────────────────
+// ── SUSPEND / DELETE USER ─────────────────────────────────────
 window.initSuspend = function(uid, name) {
   _suspendTarget = uid;
   var info = document.getElementById('suspend-user-info');
   if (info) info.innerHTML = '<strong>' + name + '</strong> will lose access to GopexFund.';
   openModal('suspend');
 };
+
 window.confirmSuspend = async function() {
   if (!_suspendTarget) return;
   var reason = document.getElementById('suspend-reason').value.trim() || 'No reason given';
-  var res = await _sb.from('profiles').update({ is_suspended: true, suspension_reason: reason }).eq('id', _suspendTarget);
-  if (res.error) { showToast('Error: ' + res.error.message, 'error'); return; }
+  await _sb.from('profiles').update({is_suspended:true, suspension_reason:reason}).eq('id', _suspendTarget);
   closeModal('suspend'); _suspendTarget = null;
   showToast('User suspended', 'success');
   loadUsers('all');
 };
+
 window.unsuspendUser = async function(uid) {
   if (!confirm('Unsuspend this user?')) return;
-  await _sb.from('profiles').update({ is_suspended: false, suspension_reason: null }).eq('id', uid);
-  showToast('User unsuspended', 'success'); loadUsers('all');
+  await _sb.from('profiles').update({is_suspended:false, suspension_reason:null}).eq('id', uid);
+  showToast('User unsuspended', 'success');
+  loadUsers('all');
 };
 
-// ── PROMOTE ───────────────────────────────────────────────────
-window.promoteUser = async function() {
-  var em = document.getElementById('promote-email').value.trim();
-  if (!em) { showToast('Enter an email', 'error'); return; }
-  // Find user by finding profile where we can match (limited by RLS, show SQL instructions instead)
-  showToast('Run the SQL in Settings tab to promote: UPDATE public.profiles SET role = \'admin\' WHERE id = (SELECT id FROM auth.users WHERE email = \'' + em + '\');', 'info');
-  closeModal('promote');
+window.initDeleteUser = function(uid, name) {
+  _deleteTargetId = uid;
+  var nameEl = document.getElementById('delete-user-name');
+  if (nameEl) nameEl.textContent = name || 'This user';
+  var confEl = document.getElementById('delete-user-confirm');
+  if (confEl) confEl.value = '';
+  openModal('delete-user');
 };
 
-// ── CREATE USER ───────────────────────────────────────────────
-window.createUser = async function() {
-  var name = document.getElementById('au-name').value.trim();
-  var email = document.getElementById('au-email').value.trim();
-  var pass = document.getElementById('au-pass').value;
-  if (!name || !email || !pass) { showToast('Please fill all fields', 'error'); return; }
-  if (pass.length < 8) { showToast('Password must be 8+ characters', 'error'); return; }
-  // Admin cannot create users via anon key (needs service role) — show instructions
-  showToast('To create users, use Supabase Auth dashboard → Users → Invite User', 'info');
-  closeModal('add-user');
+window.confirmDeleteUser = async function() {
+  var conf = document.getElementById('delete-user-confirm').value.trim();
+  if (conf !== 'DELETE') { showToast('Type DELETE in caps to confirm', 'error'); return; }
+  if (!_deleteTargetId) return;
+  showToast('Deleting all user data...', '');
+  var r = await _sb.rpc('delete_user_completely', {target_user_id: _deleteTargetId});
+  if (r.error) { showToast('Error: ' + r.error.message, 'error'); return; }
+  if (r.data && r.data.success) {
+    showToast('User and all data deleted successfully', 'success');
+    closeModal('delete-user');
+    _deleteTargetId = null;
+    loadUsers('all');
+    loadDashboard();
+  } else {
+    showToast('Failed: ' + (r.data && r.data.error ? r.data.error : 'Unknown error'), 'error');
+  }
 };
+
+// ── ADMINS ────────────────────────────────────────────────────
+async function loadAdmins() {
+  var res = await _sb.from('profiles').select('*').eq('role','admin');
+  var body = document.getElementById('admins-body');
+  if (!body) return;
+  if (!res.data || !res.data.length) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No admins found.</div>';
+    return;
+  }
+  var html = '';
+  res.data.forEach(function(u) {
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
+      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'Admin') + '</div>'
+      + '<div style="font-size:11px;color:var(--purple);">&#128737; Administrator · @' + (u.username||'—') + '</div></div>'
+      + (u.id !== _session.user.id
+          ? '<button class="ab danger" onclick="demoteAdmin('' + u.id + '')">Remove Admin</button>'
+          : '<span style="font-size:11px;color:var(--tx3);">You</span>')
+      + '</div>';
+  });
+  body.innerHTML = html;
+}
+
+window.demoteAdmin = async function(uid) {
+  if (!confirm('Remove admin privileges from this user?')) return;
+  await _sb.from('profiles').update({role:'user'}).eq('id', uid);
+  showToast('Admin privileges removed', 'success');
+  loadAdmins();
+};
+
+// ── SUSPENDED ─────────────────────────────────────────────────
+async function loadSuspended() {
+  var res = await _sb.from('profiles').select('*').eq('is_suspended', true);
+  var body = document.getElementById('suspended-body');
+  if (!body) return;
+  if (!res.data || !res.data.length) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);"><div style="font-size:32px;margin-bottom:10px;">&#10003;</div><div>No suspended accounts</div></div>';
+    return;
+  }
+  var html = '';
+  res.data.forEach(function(u) {
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--bdr);">'
+      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'No Name') + ' <span style="font-size:11px;color:var(--tx3);">@' + (u.username||'—') + '</span></div>'
+      + '<div style="font-size:11px;color:var(--red);margin-top:2px;">Reason: ' + (u.suspension_reason||'None given') + '</div></div>'
+      + '<div style="display:flex;gap:6px;">'
+      + '<button class="ab" onclick="unsuspendUser('' + u.id + '')">Unsuspend</button>'
+      + '<button class="ab danger" onclick="initDeleteUser('' + u.id + '','' + (u.name||'User').replace(/'/g,'') + '')">&#128465;</button>'
+      + '</div></div>';
+  });
+  body.innerHTML = html;
+}
 
 // ── POSTS ─────────────────────────────────────────────────────
 async function loadPosts(filter) {
-  var query = _sb.from('posts').select('*, profiles(name,initials)');
+  var body = document.getElementById('posts-table-body');
+  if (body) body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">&#9203; Loading...</div>';
+  var query = _sb.from('posts')
+    .select('id,body,created_at,likes_count,comments_count,user_id,profiles!posts_user_id_fkey(name,initials)');
   if (filter === 'popular') query = query.order('likes_count', {ascending:false});
   else query = query.order('created_at', {ascending:false});
-  query = query.limit(50);
-
-  var res = await query;
-  var body = document.getElementById('posts-table-body');
+  var res = await query.limit(50);
   if (!body) return;
-
-  if (!res.data || !res.data.length) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No posts found.</div>'; return;
-  }
-
+  if (!res.data || !res.data.length) { body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No posts yet.</div>'; return; }
   var html = '';
-  for (var i = 0; i < res.data.length; i++) {
-    var p = res.data[i];
+  res.data.forEach(function(p) {
     var author = (p.profiles && p.profiles.name) ? p.profiles.name : 'Unknown';
-    var mins = Math.floor((Date.now() - new Date(p.created_at)) / 60000);
+    var mins = Math.max(0, Math.floor((Date.now() - new Date(p.created_at).getTime()) / 60000));
     var tstr = mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
     html += '<div class="post-row">'
-      + '<div><div class="pr-body">' + p.body.substring(0,90) + (p.body.length>90?'...':'') + '</div><div class="pr-author">' + tstr + '</div></div>'
+      + '<div><div class="pr-body">' + p.body.substring(0,100) + (p.body.length>100?'...':'') + '</div>'
+      + '<div class="pr-author">' + tstr + '</div></div>'
       + '<div class="pr-author">' + author + '</div>'
       + '<div style="font-size:12px;font-weight:700;">&#10084; ' + (p.likes_count||0) + '</div>'
       + '<div style="font-size:12px;font-weight:700;">&#128172; ' + (p.comments_count||0) + '</div>'
-      + '<div><button class="ab danger" onclick="deletePost(\'' + p.id + '\',this)">Delete</button></div>'
+      + '<div><button class="ab danger" onclick="deletePost('' + p.id + '',this)">Delete</button></div>'
       + '</div>';
-  }
+  });
   body.innerHTML = html;
 }
 
 window.filterPosts = function(f, btn) {
-  var btns = document.querySelectorAll('.filter-btn');
-  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('on');
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('on'); });
   btn.classList.add('on');
   loadPosts(f);
 };
 
 window.deletePost = async function(id, el) {
-  if (!confirm('Delete this post permanently?')) return;
+  if (!confirm('Delete this post?')) return;
   await _sb.from('posts').delete().eq('id', id);
   var row = el.closest('.post-row');
   if (row) row.remove();
@@ -909,82 +1021,57 @@ window.deletePost = async function(id, el) {
 
 // ── MARKET DATA ───────────────────────────────────────────────
 async function loadMarket() {
-  var res = await _sb.from('stock_prices').select('ticker,company_name,price,change_pct,volume,last_updated').order('ticker');
   var body = document.getElementById('market-body');
+  if (body) body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--tx3);">&#9203; Loading prices...</div>';
+  var res = await _sb.from('stock_prices').select('ticker,company_name,price,change_pct,volume,last_updated').order('ticker');
   if (!body || !res.data) return;
-
   var html = '';
-  for (var i = 0; i < res.data.length; i++) {
-    var s = res.data[i];
+  res.data.forEach(function(s) {
     var up = (s.change_pct || 0) >= 0;
-    var mins = Math.floor((Date.now() - new Date(s.last_updated)) / 60000);
+    var mins = s.last_updated ? Math.floor((Date.now() - new Date(s.last_updated).getTime()) / 60000) : null;
+    var timeStr = mins == null ? '—' : mins < 2 ? 'Live' : mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
     html += '<div style="display:grid;grid-template-columns:80px 1fr 90px 80px 90px;gap:8px;padding:9px 18px;border-bottom:1px solid var(--bdr);font-size:12px;">'
       + '<div style="font-weight:700;font-family:monospace;">' + s.ticker + '</div>'
       + '<div style="color:var(--tx2);">' + (s.company_name||'—') + '</div>'
-      + '<div style="font-weight:700;">&#8358;' + (s.price||0).toLocaleString() + '</div>'
-      + '<div style="font-weight:700;color:' + (up?'var(--green)':'var(--red)') + ';">' + (up?'▲':'▼') + ' ' + Math.abs(s.change_pct||0).toFixed(2) + '%</div>'
-      + '<div style="color:var(--tx3);">' + (mins < 2 ? 'Just now' : mins + 'm ago') + '</div>'
+      + '<div style="font-weight:700;">&#8358;' + parseFloat(s.price||0).toLocaleString() + '</div>'
+      + '<div style="font-weight:700;color:' + (up?'var(--green)':'var(--red)') + ';">' + (up?'&#9650;':'&#9660;') + ' ' + Math.abs(s.change_pct||0).toFixed(2) + '%</div>'
+      + '<div style="color:var(--tx3);">' + timeStr + '</div>'
       + '</div>';
-  }
-  body.innerHTML = html || '<div style="text-align:center;padding:30px;color:var(--tx3);">No data yet. Run load-all-ngx-stocks.sql</div>';
+  });
+  body.innerHTML = html || '<div style="text-align:center;padding:30px;color:var(--tx3);">No prices yet. Run load-all-ngx-stocks.sql</div>';
 }
 
-// ── SUSPENDED / ADMINS ────────────────────────────────────────
-async function loadSuspended() {
-  var res = await _sb.from('profiles').select('*').eq('is_suspended', true);
-  var body = document.getElementById('suspended-body');
-  if (!body) return;
-  if (!res.data || !res.data.length) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);"><div style="font-size:32px;margin-bottom:10px;">✅</div><div>No suspended accounts</div></div>';
-    return;
+window.refreshPrices = async function() {
+  showToast('Triggering price refresh...', '');
+  try {
+    var r = await _sb.rpc('fetch_all_ngx_prices');
+    showToast('Prices refreshed successfully!', 'success');
+    if (document.getElementById('sec-market').style.display !== 'none') loadMarket();
+    loadDashboard();
+  } catch(e) {
+    showToast('Queued — pg_cron will refresh in next cycle', '');
   }
-  var html = '';
-  for (var i = 0; i < res.data.length; i++) {
-    var u = res.data[i];
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
-      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'No Name') + '</div>'
-      + '<div style="font-size:11px;color:var(--red);">Reason: ' + (u.suspension_reason||'None given') + '</div></div>'
-      + '<button class="ab" onclick="unsuspendUser(\'' + u.id + '\')">Unsuspend</button></div>';
-  }
-  body.innerHTML = html;
-}
-
-async function loadAdmins() {
-  var res = await _sb.from('profiles').select('*').eq('role', 'admin');
-  var body = document.getElementById('admins-body');
-  if (!body) return;
-  if (!res.data || !res.data.length) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No admins found. Promote a user in Settings.</div>';
-    return;
-  }
-  var html = '';
-  for (var i = 0; i < res.data.length; i++) {
-    var u = res.data[i];
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
-      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'Admin') + '</div>'
-      + '<div style="font-size:11px;color:var(--purple);">🛡 Administrator</div></div>'
-      + (u.id !== _session.user.id ? '<button class="ab danger" onclick="demoteAdmin(\'' + u.id + '\')">Remove Admin</button>' : '<span style="font-size:11px;color:var(--tx3);">That\'s you</span>') + '</div>';
-  }
-  body.innerHTML = html;
-}
-
-window.demoteAdmin = async function(uid) {
-  if (!confirm('Remove admin privileges from this user?')) return;
-  await _sb.from('profiles').update({ role: 'user' }).eq('id', uid);
-  showToast('Admin privileges removed', 'success'); loadAdmins();
 };
 
 // ── PORTFOLIOS ────────────────────────────────────────────────
 async function loadPortfolios() {
-  var res = await _sb.from('holdings').select('*, profiles(name)').order('created_at', {ascending:false}).limit(30);
+  var res = await _sb.from('holdings').select('*, profiles!holdings_user_id_fkey(name)').order('created_at', {ascending:false}).limit(30);
   var body = document.getElementById('portfolios-body');
   if (!body || !res.data) return;
-  var html = '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:8px 0;margin-bottom:8px;"><div style="font-size:10px;font-weight:700;color:var(--tx3);">USER / TICKER</div><div style="font-size:10px;font-weight:700;color:var(--tx3);">SHARES</div><div style="font-size:10px;font-weight:700;color:var(--tx3);">BUY PRICE</div><div style="font-size:10px;font-weight:700;color:var(--tx3);">COST BASIS</div></div>';
-  for (var i = 0; i < res.data.length; i++) {
-    var h = res.data[i];
+  var html = '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--bdr);">'
+    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">USER / TICKER</div>'
+    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">SHARES</div>'
+    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">BUY PRICE</div>'
+    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">COST BASIS</div></div>';
+  res.data.forEach(function(h) {
     var cost = h.shares * h.buy_price;
-    html += '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:12px;"><div><div style="font-weight:700;">' + h.ticker + ' <span style="color:var(--tx3);font-weight:400;">· ' + (h.profiles&&h.profiles.name?h.profiles.name:'Unknown') + '</span></div><div style="color:var(--tx3);font-size:11px;">' + (h.company_name||'') + '</div></div><div style="font-weight:700;">' + h.shares + '</div><div>&#8358;' + h.buy_price + '</div><div style="font-weight:700;">&#8358;' + cost.toLocaleString('en-NG',{maximumFractionDigits:0}) + '</div></div>';
-  }
+    html += '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:12px;">'
+      + '<div><div style="font-weight:700;">' + h.ticker + ' <span style="color:var(--tx3);font-weight:400;">&#183; ' + ((h.profiles&&h.profiles.name)||'Unknown') + '</span></div>'
+      + '<div style="color:var(--tx3);font-size:11px;">' + (h.company_name||'') + '</div></div>'
+      + '<div style="font-weight:700;">' + h.shares + '</div>'
+      + '<div>&#8358;' + parseFloat(h.buy_price).toLocaleString() + '</div>'
+      + '<div style="font-weight:700;">&#8358;' + cost.toLocaleString('en-NG',{maximumFractionDigits:0}) + '</div></div>';
+  });
   body.innerHTML = html;
 }
 
@@ -992,136 +1079,132 @@ async function loadPortfolios() {
 async function loadLogs() {
   var body = document.getElementById('logs-body');
   if (!body) return;
-  var pRes = await _sb.from('posts').select('body,created_at,user_id,profiles(name)').order('created_at',{ascending:false}).limit(20);
-  if (!pRes.data || !pRes.data.length) { body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">No logs yet.</div>'; return; }
+  body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--tx3);">&#9203; Loading...</div>';
+  var res = await _sb.from('posts')
+    .select('body,created_at,user_id,profiles!posts_user_id_fkey(name)')
+    .order('created_at',{ascending:false}).limit(30);
+  if (!res.data || !res.data.length) { body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">No activity yet.</div>'; return; }
   var html = '';
-  for (var i = 0; i < pRes.data.length; i++) {
-    var p = pRes.data[i];
-    var mins = Math.floor((Date.now() - new Date(p.created_at)) / 60000);
-    var tstr = mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
-    html += '<div style="display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--bdr);font-size:12px;"><span style="font-size:16px;">📝</span><div style="flex:1;"><strong>' + ((p.profiles&&p.profiles.name)||'User') + '</strong> posted: ' + p.body.substring(0,60) + '</div><div style="color:var(--tx3);white-space:nowrap;">' + tstr + '</div></div>';
-  }
+  res.data.forEach(function(p) {
+    var mins = Math.max(0, Math.floor((Date.now() - new Date(p.created_at).getTime()) / 60000));
+    var tstr = mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
+    html += '<div style="display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--bdr);font-size:12px;">'
+      + '<span style="font-size:16px;">&#128203;</span>'
+      + '<div style="flex:1;"><strong>' + ((p.profiles&&p.profiles.name)||'User') + '</strong> posted: ' + p.body.substring(0,60) + (p.body.length>60?'...':'') + '</div>'
+      + '<div style="color:var(--tx3);white-space:nowrap;">' + tstr + '</div></div>';
+  });
   body.innerHTML = html;
 }
 
-// ── REFRESH PRICES ────────────────────────────────────────────
-window.refreshPrices = async function() {
-  showToast('Triggering price refresh... check stock_prices table in 30s', 'info');
-  try {
-    await _sb.rpc('fetch_all_ngx_prices');
-    showToast('Prices refreshed!', 'success');
-  } catch(e) {
-    showToast('Prices refresh queued (pg_cron will run in 10min)', 'info');
-  }
-};
-
-// ── GLOBAL SEARCH ─────────────────────────────────────────────
-window.globalSearch = function(q) {
-  if (!q || q.length < 2) { renderUsersTable(); return; }
-  q = q.toLowerCase();
-  _filteredUsers = _allUsers.filter(function(u) {
-    return (u.name && u.name.toLowerCase().includes(q)) || (u.location && u.location.toLowerCase().includes(q));
-  });
-  _currentPage = 1;
-  renderUsersTable();
-};
-
-// ── EXPORT ────────────────────────────────────────────────────
-window.exportUsers = function() {
-  var csv = 'Name,Country,Location,Verified,Role,Joined\n';
-  for (var i = 0; i < _allUsers.length; i++) {
-    var u = _allUsers[i];
-    csv += '"' + (u.name||'') + '","' + (u.country||'') + '","' + (u.location||'') + '","' + (u.is_verified?'Yes':'No') + '","' + (u.role||'user') + '","' + (u.joined_at||'') + '"\n';
-  }
-  var blob = new Blob([csv], {type:'text/csv'});
-  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'gopexfund-users.csv'; a.click();
-  showToast('CSV exported!', 'success');
-};
-
-// ── SECTION NAVIGATION ────────────────────────────────────────
-window.showSection = function(id, btn) {
-  var sections = ['dashboard','users','suspended','admins','posts','news','courses','reports','portfolios','market','settings','logs'];
-  for (var i = 0; i < sections.length; i++) {
-    var s = document.getElementById('sec-' + sections[i]);
-    if (s) s.style.display = sections[i] === id ? 'block' : 'none';
-  }
-  var items = document.querySelectorAll('.sb-item');
-  for (var j = 0; j < items.length; j++) items[j].classList.remove('on');
-  if (btn) btn.classList.add('on');
-
-  var titles = { dashboard:'Dashboard', users:'All Users', suspended:'Suspended Accounts', admins:'Admins', posts:'All Posts', news:'Post News', courses:'Manage Courses', reports:'Content Reports', portfolios:'Portfolios', market:'Market Data', settings:'Settings', logs:'Activity Logs' };
-  var pt = document.getElementById('page-title'); if (pt) pt.textContent = titles[id] || id;
-
-  // Lazy load section data
-  if (id === 'users') loadUsers('all');
-  else if (id === 'posts') loadPosts('recent');
-  else if (id === 'suspended') loadSuspended();
-  else if (id === 'admins') loadAdmins();
-  else if (id === 'market') loadMarket();
-  else if (id === 'portfolios') loadPortfolios();
-  else if (id === 'logs') loadLogs();
-  else if (id === 'news') loadNews();
-  else if (id === 'courses') loadCourses();
-};
-
-// ── LOGOUT ────────────────────────────────────────────────────
-
-
 // ── NEWS ──────────────────────────────────────────────────────
 async function loadNews() {
-  var r = await _sb.from('news_posts').select('*, profiles(name)').order('created_at', {ascending:false}).limit(20);
-  var el = document.getElementById('news-list'); if (!el) return;
-  if (!r.data || !r.data.length) { el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">No news posted yet.</div>'; return; }
+  var el = document.getElementById('news-list');
+  if (!el) return;
+  el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">&#9203; Loading...</div>';
+  var r = await _sb.from('news_posts').select('*, profiles!news_posts_author_id_fkey(name)').order('created_at',{ascending:false}).limit(20);
+  var countEl = document.getElementById('news-count');
+  if (countEl) countEl.textContent = (r.data ? r.data.length : 0) + ' articles';
+  if (!r.data || !r.data.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">No news posted yet. Write your first article above.</div>'; return; }
   var h = '';
   r.data.forEach(function(n) {
-    var mins = Math.floor((Date.now() - new Date(n.created_at)) / 60000);
-    var tstr = mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
-    h += '<div style="padding:11px 0;border-bottom:1px solid var(--bdr);">'
-      + '<div style="font-size:13px;font-weight:700;">' + n.title + '</div>'
-      + '<div style="font-size:11px;color:var(--tx3);margin-top:2px;">' + tstr + ' · ' + ((n.profiles && n.profiles.name) || 'Admin') + '</div>'
-      + '<button class="ab danger" onclick="deleteNews('' + n.id + '',this)" style="margin-top:6px;">Delete</button>'
-      + '</div>';
+    var mins = Math.max(0, Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000));
+    var tstr = mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
+    h += '<div style="padding:14px 0;border-bottom:1px solid var(--bdr);display:flex;gap:12px;align-items:flex-start;">'
+      + (n.image_url ? '<img src="' + n.image_url + '" style="width:72px;height:54px;object-fit:cover;border-radius:7px;border:1px solid var(--bdr);flex-shrink:0;"/>' : '')
+      + '<div style="flex:1;min-width:0;">'
+      + '<div style="font-size:13px;font-weight:700;margin-bottom:3px;">' + n.title + '</div>'
+      + '<div style="font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:5px;">' + n.body.substring(0,120) + (n.body.length>120?'...':'') + '</div>'
+      + '<div style="font-size:10px;color:var(--tx3);">' + tstr + ' &#183; ' + ((n.profiles&&n.profiles.name)||'Admin') + (n.source?' &#183; '+n.source:'') + '</div>'
+      + '<button class="ab danger" onclick="deleteNews(\'' + n.id + '\',this)" style="margin-top:6px;">&#128465; Delete</button>'
+      + '</div></div>';
   });
   el.innerHTML = h;
 }
 
+var _newsImageFile = null;
+
+window.previewNewsImage = function(inp) {
+  var file = inp.files[0]; if (!file) return;
+  _newsImageFile = file;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var thumb = document.getElementById('news-img-thumb');
+    var prev  = document.getElementById('news-img-preview');
+    if (thumb) thumb.src = e.target.result;
+    if (prev)  prev.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+};
+
+window.clearNewsImage = function() {
+  _newsImageFile = null;
+  var inp = document.getElementById('news-img-input');
+  var prev = document.getElementById('news-img-preview');
+  if (inp) inp.value = '';
+  if (prev) prev.style.display = 'none';
+};
+
 window.postNews = async function() {
-  var title = document.getElementById('news-title').value.trim();
-  var body = document.getElementById('news-body').value.trim();
+  var title  = document.getElementById('news-title').value.trim();
+  var body   = document.getElementById('news-body').value.trim();
   var source = document.getElementById('news-source').value.trim();
-  if (!title || !body) { showToast('Title and body are required', 'error'); return; }
-  var r = await _sb.from('news_posts').insert({ title: title, body: body, source: source || null, author_id: _session.user.id });
-  if (r.error) { showToast('Error: ' + r.error.message, 'error'); return; }
+  if (!title) { showToast('Headline is required', 'error'); return; }
+  if (!body)  { showToast('Article content is required', 'error'); return; }
+  var btn = document.querySelector('#sec-news .ta-btn.primary');
+  if (btn) { btn.textContent = 'Publishing...'; btn.disabled = true; }
+  // Upload image if provided
+  var imageUrl = null;
+  if (_newsImageFile) {
+    var path = 'news/' + Date.now() + '-' + _newsImageFile.name.replace(/\s/g,'_');
+    var upRes = await _sb.storage.from('post-images').upload(path, _newsImageFile, {contentType:_newsImageFile.type});
+    if (!upRes.error) { imageUrl = _sb.storage.from('post-images').getPublicUrl(path).data.publicUrl; }
+  }
+  // Save to news_posts
+  var r = await _sb.from('news_posts').insert({title:title, body:body, source:source||null, image_url:imageUrl, author_id:_session.user.id}).select().single();
+  if (r.error) {
+    if (btn) { btn.innerHTML = '&#128240; Publish News to All Users'; btn.disabled = false; }
+    showToast('Error: ' + r.error.message, 'error'); return;
+  }
+  // Also post to main feed so users see it while scrolling
+  var excerpt = body.length > 200 ? body.substring(0, 200) + '...' : body;
+  var feedBody = '&#128240; [NEWS] ' + title + '\n\n' + excerpt + (source ? '\n\nSource: ' + source : '');
+  await _sb.from('posts').insert({user_id:_session.user.id, body:feedBody, ticker_holdings:[]});
+  // Reset
   document.getElementById('news-title').value = '';
   document.getElementById('news-body').value = '';
   document.getElementById('news-source').value = '';
-  showToast('News published!', 'success');
+  clearNewsImage();
+  if (btn) { btn.innerHTML = '&#128240; Publish News to All Users'; btn.disabled = false; }
+  showToast('News published! Visible in News tab + main feed.', 'success');
   loadNews();
 };
 
 window.deleteNews = async function(id, el) {
-  if (!confirm('Delete this news post?')) return;
+  if (!confirm('Delete this news article?')) return;
   await _sb.from('news_posts').delete().eq('id', id);
-  var row = el.closest('div'); if (row) row.remove();
-  showToast('Deleted', 'success');
+  var row = el.closest('div[style*="border-bottom"]');
+  if (row) row.remove();
+  showToast('News article deleted', 'success');
 };
 
-// ── COURSES ───────────────────────────────────────────────────
-var _activeCourseId = null;
 
+// ── COURSES ───────────────────────────────────────────────────
 async function loadCourses() {
-  var r = await _sb.from('courses').select('*, profiles(name)').order('created_at', {ascending:false});
-  var el = document.getElementById('courses-list'); if (!el) return;
+  var el = document.getElementById('courses-list');
+  if (!el) return;
+  el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">&#9203; Loading courses...</div>';
+  var r = await _sb.from('courses').select('*, profiles!courses_created_by_fkey(name)').order('created_at',{ascending:false});
   if (!r.data || !r.data.length) { el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">No courses yet. Create one!</div>'; return; }
   var h = '';
   r.data.forEach(function(c) {
     h += '<div style="padding:10px 0;border-bottom:1px solid var(--bdr);">'
       + '<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
       + '<div><div style="font-size:13px;font-weight:700;">' + c.title + '</div>'
-      + '<div style="font-size:10px;color:var(--tx3);">' + c.category + ' · ' + c.difficulty + ' · ' + (c.points_reward||100) + ' pts</div></div>'
-      + '<div style="display:flex;gap:5px;">'
+      + '<div style="font-size:10px;color:var(--tx3);margin-top:2px;">' + c.category + ' &#183; ' + c.difficulty + ' &#183; ' + (c.points_reward||100) + ' pts &#183; ' + (c.lesson_count||0) + ' lessons</div>'
+      + '<div style="font-size:10px;margin-top:2px;"><span style="background:' + (c.is_published?'var(--gbg)':'var(--ambg)') + ';color:' + (c.is_published?'var(--green)':'var(--am)') + ';padding:2px 7px;border-radius:10px;font-weight:700;">' + (c.is_published?'&#9679; Published':'&#9675; Draft') + '</span></div></div>'
+      + '<div style="display:flex;gap:5px;flex-wrap:wrap;">'
       + '<button class="ab" onclick="openLessonPanel('' + c.id + '','' + c.title.replace(/'/g,'') + '')">+ Lesson</button>'
-      + '<button class="ab '+(c.is_published?'':'promote')+'" onclick="togglePublish('' + c.id + '',' + c.is_published + ')">' + (c.is_published ? 'Unpublish' : 'Publish') + '</button>'
+      + '<button class="ab ' + (c.is_published?'':'promote') + '" onclick="togglePublish('' + c.id + '',' + c.is_published + ')">' + (c.is_published?'Unpublish':'Publish') + '</button>'
       + '<button class="ab danger" onclick="deleteCourse('' + c.id + '',this)">Delete</button>'
       + '</div></div></div>';
   });
@@ -1130,68 +1213,129 @@ async function loadCourses() {
 
 window.createCourse = async function() {
   var title = document.getElementById('co-title').value.trim();
-  var desc = document.getElementById('co-desc').value.trim();
-  var cat = document.getElementById('co-cat').value;
-  var diff = document.getElementById('co-diff').value;
-  var dur = parseInt(document.getElementById('co-dur').value) || 30;
-  var pts = parseInt(document.getElementById('co-pts').value) || 100;
+  var desc  = document.getElementById('co-desc').value.trim();
+  var cat   = document.getElementById('co-cat').value;
+  var diff  = document.getElementById('co-diff').value;
+  var dur   = parseInt(document.getElementById('co-dur').value) || 30;
+  var pts   = parseInt(document.getElementById('co-pts').value) || 100;
   if (!title) { showToast('Course title required', 'error'); return; }
-  var r = await _sb.from('courses').insert({ title:title, description:desc, category:cat, difficulty:diff, duration_mins:dur, points_reward:pts, created_by:_session.user.id, is_published:false });
+  var r = await _sb.from('courses').insert({title:title, description:desc, category:cat, difficulty:diff, duration_mins:dur, points_reward:pts, created_by:_session.user.id, is_published:false});
   if (r.error) { showToast('Error: ' + r.error.message, 'error'); return; }
   document.getElementById('co-title').value = '';
   document.getElementById('co-desc').value = '';
-  showToast('Course created! Now add lessons.', 'success');
+  showToast('Course created! Now add lessons and publish it.', 'success');
   loadCourses();
 };
 
 window.openLessonPanel = function(courseId, courseName) {
   _activeCourseId = courseId;
-  document.getElementById('lesson-course-name').textContent = courseName;
-  document.getElementById('lesson-panel').style.display = 'block';
-  document.getElementById('lesson-panel').scrollIntoView({behavior:'smooth'});
+  setEl('lesson-course-name', courseName);
+  var lp = document.getElementById('lesson-panel');
+  if (lp) { lp.style.display = 'block'; lp.scrollIntoView({behavior:'smooth'}); }
 };
 
 window.addLesson = async function() {
   if (!_activeCourseId) return;
-  var title = document.getElementById('ls-title').value.trim();
-  var type = document.getElementById('ls-type').value;
-  var video = document.getElementById('ls-video').value.trim();
+  var title   = document.getElementById('ls-title').value.trim();
+  var type    = document.getElementById('ls-type').value;
+  var video   = document.getElementById('ls-video').value.trim();
   var content = document.getElementById('ls-content').value.trim();
-  var dur = parseInt(document.getElementById('ls-dur').value) || 10;
+  var dur     = parseInt(document.getElementById('ls-dur').value) || 10;
   if (!title || !content) { showToast('Title and content required', 'error'); return; }
-  // Count existing lessons for order
-  var cnt = await _sb.from('course_lessons').select('id', {count:'exact',head:true}).eq('course_id', _activeCourseId);
+  var cnt = await _sb.from('course_lessons').select('id', {count:'exact', head:true}).eq('course_id', _activeCourseId);
   var order = (cnt.count || 0) + 1;
-  var lr = await _sb.from('course_lessons').insert({ course_id:_activeCourseId, title:title, content:content, video_url:video||null, lesson_type:type, lesson_order:order, duration_mins:dur }).select().single();
+  var lr = await _sb.from('course_lessons').insert({course_id:_activeCourseId, title:title, content:content, video_url:video||null, lesson_type:type, lesson_order:order, duration_mins:dur}).select().single();
   if (lr.error) { showToast('Error: ' + lr.error.message, 'error'); return; }
-  // Assessment
   var q = document.getElementById('as-q').value.trim();
   if (q) {
     var opts = [document.getElementById('as-a').value, document.getElementById('as-b').value, document.getElementById('as-c').value, document.getElementById('as-d').value];
     var correct = parseInt(document.getElementById('as-correct').value);
     var exp = document.getElementById('as-exp').value.trim();
-    await _sb.from('course_assessments').insert({ course_id:_activeCourseId, lesson_id:lr.data.id, question:q, options:JSON.stringify(opts), correct_index:correct, explanation:exp||null });
+    await _sb.from('course_assessments').insert({course_id:_activeCourseId, lesson_id:lr.data.id, question:q, options:JSON.stringify(opts), correct_index:correct, explanation:exp||null});
   }
-  // Update lesson count on course
-  await _sb.from('courses').update({ lesson_count: order }).eq('id', _activeCourseId);
-  // Clear form
+  await _sb.from('courses').update({lesson_count:order}).eq('id', _activeCourseId);
   ['ls-title','ls-video','ls-content','as-q','as-a','as-b','as-c','as-d','as-exp'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
-  showToast('Lesson added!', 'success');
+  showToast('Lesson ' + order + ' added!', 'success');
+  loadCourses();
 };
 
 window.togglePublish = async function(id, current) {
-  await _sb.from('courses').update({ is_published: !current }).eq('id', id);
-  showToast(!current ? 'Course published!' : 'Course unpublished', 'success');
+  await _sb.from('courses').update({is_published:!current}).eq('id', id);
+  showToast(!current ? '&#9679; Course published and visible to users!' : 'Course unpublished', 'success');
   loadCourses();
 };
 
 window.deleteCourse = async function(id, el) {
   if (!confirm('Delete this course and all its lessons?')) return;
   await _sb.from('courses').delete().eq('id', id);
-  loadCourses();
   showToast('Course deleted', 'success');
+  loadCourses();
 };
 
+// ── SEARCH ────────────────────────────────────────────────────
+window.globalSearch = function(q) {
+  if (!q || q.length < 2) { renderUsersTable(); return; }
+  q = q.toLowerCase();
+  _filteredUsers = _allUsers.filter(function(u) {
+    return (u.name && u.name.toLowerCase().includes(q))
+      || (u.username && u.username.toLowerCase().includes(q))
+      || (u.location && u.location.toLowerCase().includes(q));
+  });
+  _currentPage = 1;
+  renderUsersTable();
+};
+
+// ── EXPORT ────────────────────────────────────────────────────
+window.exportUsers = function() {
+  var csv = 'Name,Username,Country,Location,Role,Verified,Posts,Joined\n';
+  _allUsers.forEach(function(u) {
+    csv += '"' + (u.name||'') + '","@' + (u.username||'') + '","' + (u.country||'') + '","' + (u.location||'') + '","' + (u.role||'user') + '","' + (u.is_verified?'Yes':'No') + '","' + (u.total_posts||0) + '","' + (u.joined_at||'') + '"\n';
+  });
+  var blob = new Blob([csv], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'gopexfund-users-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  showToast('CSV exported!', 'success');
+};
+
+window.promoteUser = async function() {
+  var em = document.getElementById('promote-email').value.trim();
+  if (!em) { showToast('Enter an email address', 'error'); return; }
+  showToast('Run in SQL: UPDATE public.profiles SET role = \'admin\' WHERE id = (SELECT id FROM auth.users WHERE email = \'' + em + '\');', '');
+  closeModal('promote');
+};
+
+window.createUser = async function() {
+  showToast('To create users, go to Supabase Dashboard → Authentication → Users → Invite User', '');
+  closeModal('add-user');
+};
+
+// ── SECTION NAV ───────────────────────────────────────────────
+window.showSection = function(id, btn) {
+  var sections = ['dashboard','users','suspended','admins','posts','news','courses','reports','portfolios','market','settings','logs'];
+  sections.forEach(function(s) {
+    var el = document.getElementById('sec-' + s);
+    if (el) el.style.display = s === id ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sb-item').forEach(function(b) { b.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+
+  var titles = {dashboard:'Dashboard',users:'All Users',suspended:'Suspended',admins:'Admins',posts:'All Posts',news:'Post News',courses:'Manage Courses',reports:'Reports',portfolios:'Portfolios',market:'Market Data',settings:'Settings',logs:'Activity Logs'};
+  setEl('page-title', titles[id] || id);
+
+  if (id === 'users')      loadUsers('all');
+  else if (id === 'posts') loadPosts('recent');
+  else if (id === 'suspended') loadSuspended();
+  else if (id === 'admins')    loadAdmins();
+  else if (id === 'market')    loadMarket();
+  else if (id === 'portfolios') loadPortfolios();
+  else if (id === 'logs')   loadLogs();
+  else if (id === 'news')   loadNews();
+  else if (id === 'courses') loadCourses();
+};
+
+// ── LOGOUT ────────────────────────────────────────────────────
 window.doLogout = async function() {
   if (!confirm('Log out?')) return;
   await _sb.auth.signOut();
@@ -1200,8 +1344,8 @@ window.doLogout = async function() {
 };
 
 // ── MODALS ────────────────────────────────────────────────────
-window.openModal = function(id) { var el = document.getElementById('modal-' + id); if (el) el.classList.add('open'); };
-window.closeModal = function(id) { var el = document.getElementById('modal-' + id); if (el) el.classList.remove('open'); };
+window.openModal  = function(id) { var e = document.getElementById('modal-'+id); if (e) e.classList.add('open'); };
+window.closeModal = function(id) { var e = document.getElementById('modal-'+id); if (e) e.classList.remove('open'); };
 document.querySelectorAll('.modal-ov').forEach(function(el) {
   el.addEventListener('click', function(e) { if (e.target === el) el.classList.remove('open'); });
 });
@@ -1209,7 +1353,10 @@ document.querySelectorAll('.modal-ov').forEach(function(el) {
 // ── TOAST ─────────────────────────────────────────────────────
 window.showToast = function(msg, type) {
   var t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast ' + (type||''); t.classList.add('show');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast ' + (type||'');
+  t.classList.add('show');
   setTimeout(function() { t.classList.remove('show'); }, 4000);
 };
 </script>
