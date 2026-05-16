@@ -1,1383 +1,1069 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GopexFund — Admin Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GopexFund — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--red:#dc2626;--rbg:#fee2e2;--amber:#d97706;--ambg:#fef3c7;--purple:#7c3aed;--pbg:#ede9fe;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--admin:#312e81;--admin-lt:#eef2ff;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);}
-*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input,select,textarea{font-family:var(--fb);}
+:root{--p:#1a6eff;--plt:#eef4ff;--pdk:#0f4dd4;--g:#16a34a;--gbg:#dcfce7;--r:#dc2626;--rbg:#fee2e2;--am:#d97706;--ambg:#fef3c7;--pu:#7c3aed;--pubg:#ede9fe;--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--sb:#1e1b4b;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 4px rgba(0,0,0,.07);--shm:0 4px 20px rgba(0,0,0,.1);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);height:100%;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input,select,textarea{font-family:var(--fb);}
 
-/* SIDEBAR NAV */
-.admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh;}
-.sidebar{background:var(--admin);color:#fff;padding:0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
-.sb-brand{display:flex;align-items:center;gap:10px;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
-.sb-logo{width:34px;height:34px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;}
-.sb-brand-name{font-family:var(--fd);font-size:16px;font-weight:800;}
-.sb-brand-sub{font-size:10px;opacity:.55;margin-top:1px;}
-.sb-section{padding:8px 12px 4px;font-size:9px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.7px;margin-top:8px;}
-.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:9px;margin:1px 8px;font-size:13px;font-weight:500;color:rgba(255,255,255,.65);cursor:pointer;transition:all .15s;}
+/* LAYOUT */
+.wrap{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:240px;flex-shrink:0;background:var(--sb);color:#fff;display:flex;flex-direction:column;overflow-y:auto;}
+.sb-top{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.1);}
+.sb-logo-row{display:flex;align-items:center;gap:9px;margin-bottom:0;}
+.sb-logo{width:32px;height:32px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;}
+.sb-brand{font-family:var(--fd);font-size:15px;font-weight:800;}
+.sb-sub{font-size:10px;opacity:.4;margin-top:1px;}
+.sb-nav{flex:1;padding:10px 8px;}
+.sb-sec{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.7px;padding:10px 8px 4px;margin-top:6px;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;margin-bottom:1px;}
 .sb-item:hover{background:rgba(255,255,255,.08);color:#fff;}
-.sb-item.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600;}
-.sb-item .ico{font-size:15px;width:18px;text-align:center;}
-.sb-badge{background:rgba(255,255,255,.2);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:auto;}
-.sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);}
-.sb-user{display:flex;align-items:center;gap:9px;}
-.sb-av{width:32px;height:32px;border-radius:50%;background:#6366f1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
-.sb-uname{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);}
-.sb-urole{font-size:10px;color:rgba(255,255,255,.35);}
+.sb-item.on{background:rgba(255,255,255,.15);color:#fff;font-weight:600;}
+.sb-item .ico{font-size:14px;width:16px;text-align:center;flex-shrink:0;}
+.sb-badge{background:rgba(255,255,255,.2);font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:auto;}
+.sb-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,.1);}
+.sb-user{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.sb-av{width:30px;height:30px;border-radius:50%;background:#6366f1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.sb-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);}
+.sb-role{font-size:10px;color:rgba(255,255,255,.35);}
+.sb-logout{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:8px;border-radius:7px;font-size:11px;font-weight:600;transition:all .15s;}
+.sb-logout:hover{background:rgba(255,255,255,.12);color:#fff;}
 
 /* MAIN */
-.admin-main{padding:0;overflow-y:auto;}
-/* Top bar */
-.top-bar{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.tb-title{font-family:var(--fd);font-size:17px;font-weight:800;color:var(--tx);}
-.tb-right{display:flex;align-items:center;gap:10px;}
-.tb-search{background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:7px 13px;border-radius:9px;font-size:13px;outline:none;width:220px;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{height:56px;background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;}
+.tb-left{display:flex;align-items:center;gap:12px;}
+.tb-title{font-family:var(--fd);font-size:16px;font-weight:800;}
+.tb-search{background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:7px 12px;border-radius:8px;font-size:13px;outline:none;width:200px;}
 .tb-search:focus{border-color:var(--p);}
+.tb-av{width:30px;height:30px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.content{flex:1;overflow-y:auto;padding:22px 24px;}
 
-/* CONTENT */
-.content{padding:24px 28px;}
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;box-shadow:var(--sh);}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bdr);}
+.card-title{font-family:var(--fd);font-size:14px;font-weight:800;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;padding:16px;box-shadow:var(--sh);}
+.sc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.sc-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.sc-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+.sc-up{background:var(--gbg);color:var(--g);}
+.sc-val{font-family:var(--fd);font-size:26px;font-weight:800;margin-bottom:2px;}
+.sc-lbl{font-size:11px;color:var(--tx3);}
 
-/* STAT CARDS */
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
-.stat-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:8px;}
-.sc-top{display:flex;align-items:center;justify-content:space-between;}
-.sc-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-.sc-trend{font-size:11px;font-weight:700;}
-.sc-trend.up{color:var(--green);}.sc-trend.dn{color:var(--red);}
-.sc-val{font-family:var(--fd);font-size:26px;font-weight:800;color:var(--tx);}
-.sc-lbl{font-size:12px;color:var(--tx3);}
+/* TABLES */
+.tbl-wrap{overflow-x:auto;}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;background:var(--g50);border-bottom:1px solid var(--bdr);}
+.tbl td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--bdr);vertical-align:middle;}
+.tbl tr:last-child td{border:none;}
+.tbl tr:hover td{background:var(--g50);}
+.av{width:30px;height:30px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+.pill-ok{background:var(--gbg);color:var(--g);}
+.pill-sus{background:var(--rbg);color:var(--r);}
+.pill-adm{background:var(--pubg);color:var(--pu);}
+.pill-unv{background:var(--g100);color:var(--tx3);}
 
-/* CHARTS ROW */
-.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
-.chart-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);}
-.cc-title{font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
-.bar-wrap{display:flex;flex-direction:column;gap:8px;}
-.bar-item{display:flex;align-items:center;gap:10px;}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;border:none;transition:all .14s;}
+.btn-p{background:var(--p);color:#fff;} .btn-p:hover{background:var(--pdk);}
+.btn-r{background:var(--rbg);color:var(--r);} .btn-r:hover{background:var(--r);color:#fff;}
+.btn-g{background:var(--gbg);color:var(--g);}
+.btn-s{background:var(--g100);color:var(--tx2);} .btn-s:hover{background:var(--g200);}
+.btn-am{background:var(--ambg);color:var(--am);}
+
+/* FILTERS */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.fb{background:var(--surf);border:1.5px solid var(--bdr);color:var(--tx2);padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;transition:all .14s;}
+.fb:hover{border-color:var(--p);color:var(--p);}
+.fb.on{background:var(--p);color:#fff;border-color:var(--p);}
+
+/* BAR CHART */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .bar-lbl{font-size:11px;color:var(--tx2);width:80px;flex-shrink:0;}
-.bar-track{flex:1;background:var(--g100);border-radius:4px;height:8px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:4px;background:var(--p);transition:width .6s;}
-.bar-val{font-size:11px;font-weight:700;color:var(--tx);width:40px;text-align:right;}
+.bar-track{flex:1;background:var(--g200);border-radius:3px;height:6px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s;}
+.bar-val{font-size:11px;font-weight:700;color:var(--tx);width:30px;text-align:right;flex-shrink:0;}
 
-/* USERS TABLE */
-.table-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--sh);overflow:hidden;margin-bottom:24px;}
-.table-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bdr);}
-.table-title{font-family:var(--fd);font-size:14px;font-weight:700;}
-.table-actions{display:flex;gap:8px;}
-.ta-btn{background:var(--g50);border:1px solid var(--bdr);color:var(--tx2);padding:6px 13px;border-radius:7px;font-size:12px;font-weight:600;transition:all .15s;}
-.ta-btn:hover{background:var(--g100);}
-.ta-btn.primary{background:var(--p);color:#fff;border-color:var(--p);}
-.ta-btn.primary:hover{background:var(--pdk);}
-.tbl-cols{display:grid;grid-template-columns:200px 180px 100px 80px 90px 90px 120px;gap:8px;padding:9px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);}
-.th{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
-.user-row{display:grid;grid-template-columns:200px 180px 100px 80px 90px 90px 120px;gap:8px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .12s;}
-.user-row:last-child{border:none;}
-.user-row:hover{background:var(--g50);}
-.ur-user{display:flex;align-items:center;gap:9px;}
-.ur-av{width:30px;height:30px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
-.ur-name{font-size:12px;font-weight:700;color:var(--tx);}
-.ur-email{font-size:10px;color:var(--tx3);}
-.ur-text{font-size:12px;color:var(--tx2);}
-.status-pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;}
-.sp-active{background:var(--gbg);color:var(--green);}
-.sp-suspended{background:var(--rbg);color:var(--red);}
-.sp-unverified{background:var(--ambg);color:var(--amber);}
-.sp-admin{background:#ede9fe;color:#7c3aed;}
-.action-btns{display:flex;gap:5px;}
-.ab{background:var(--g100);border:1px solid var(--bdr);color:var(--tx2);font-size:10px;font-weight:600;padding:4px 9px;border-radius:6px;transition:all .15s;white-space:nowrap;}
-.ab:hover{background:var(--g200);}
-.ab.danger{color:var(--red);}
-.ab.promote{color:var(--purple);}
-
-/* POSTS TABLE */
-.post-row{display:grid;grid-template-columns:1fr 120px 80px 80px 100px;gap:8px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--bdr);transition:background .12s;}
-.post-row:last-child{border:none;}
-.post-row:hover{background:var(--g50);}
-.pr-body{font-size:12px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.pr-author{font-size:11px;color:var(--tx3);}
-
-/* SYSTEM STATS */
-.system-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
-.sys-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);}
-.sys-title{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:13px;}
-.sys-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px;}
-.sys-row:last-child{border:none;}
-.sys-key{color:var(--tx2);}
-.sys-val{font-weight:700;color:var(--tx);}
-.sys-val.green{color:var(--green);}
-.sys-val.red{color:var(--red);}
-.sys-val.blue{color:var(--p);}
+/* FORMS */
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
+.inp{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:9px 12px;border-radius:9px;font-size:13px;outline:none;transition:border-color .15s;}
+.inp:focus{border-color:var(--p);background:#fff;}
+.textarea{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:9px 12px;border-radius:9px;font-size:13px;outline:none;resize:vertical;min-height:100px;line-height:1.6;transition:border-color .15s;}
+.textarea:focus{border-color:var(--p);background:#fff;}
+.sel{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:9px 12px;border-radius:9px;font-size:13px;outline:none;}
 
 /* MODAL */
-.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s;}
-.modal-ov.open{opacity:1;pointer-events:all;}
-.modal{background:#fff;border-radius:18px;padding:28px;width:100%;max-width:440px;margin:16px;position:relative;transform:translateY(12px);transition:transform .2s;box-shadow:0 20px 60px rgba(0,0,0,.14);}
-.modal-ov.open .modal{transform:translateY(0);}
-.modal-close{position:absolute;top:14px;right:14px;background:var(--g100);border:none;width:28px;height:28px;border-radius:7px;font-size:14px;color:var(--tx2);}
-.modal-title{font-family:var(--fd);font-size:17px;font-weight:800;margin-bottom:18px;}
-.mfield{margin-bottom:13px;}
-.mfield label{display:block;font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
-.mfield input,.mfield select,.mfield textarea{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:10px 13px;border-radius:9px;font-size:13px;outline:none;}
-.mfield input:focus,.mfield select:focus{border-color:var(--p);}
-.modal-btns{display:flex;gap:10px;margin-top:6px;}
-.modal-cancel{flex:1;background:var(--g100);border:none;color:var(--tx2);padding:11px;border-radius:9px;font-size:13px;font-weight:600;}
-.modal-save{flex:2;background:var(--p);border:none;color:#fff;padding:11px;border-radius:9px;font-size:13px;font-weight:700;}
-.modal-danger{flex:2;background:var(--red);border:none;color:#fff;padding:11px;border-radius:9px;font-size:13px;font-weight:700;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-bg.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:480px;margin:16px;box-shadow:0 20px 60px rgba(0,0,0,.15);transform:translateY(12px);transition:transform .2s;}
+.modal-bg.open .modal{transform:translateY(0);}
+.modal-title{font-family:var(--fd);font-size:16px;font-weight:800;margin-bottom:16px;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--g100);border:none;width:26px;height:26px;border-radius:7px;font-size:12px;}
+.modal-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:1px solid var(--bdr);}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--g900);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--g900);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px;}
 .toast.show{transform:translateY(0);opacity:1;}
-.toast.success{background:var(--green);}
-.toast.error{background:var(--red);}
+.toast.ok{background:var(--g);}
+.toast.err{background:var(--r);}
 
-/* FILTER BAR */
-.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
-.filter-btn{background:var(--surf);border:1.5px solid var(--bdr);color:var(--tx2);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;transition:all .15s;}
-.filter-btn:hover,.filter-btn.on{background:var(--p);color:#fff;border-color:var(--p);}
-.filter-count{background:var(--g100);color:var(--tx3);font-size:10px;padding:2px 6px;border-radius:10px;margin-left:4px;}
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--sb);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+.load-logo{width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;}
+.load-text{font-size:13px;color:rgba(255,255,255,.5);}
+.load-bar{width:160px;height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
+.load-prog{height:100%;background:#6366f1;border-radius:3px;animation:lb 1.4s ease-in-out infinite;}
+@keyframes lb{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
 
-/* Pagination */
-.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;border-top:1px solid var(--bdr);}
-.page-btn{width:32px;height:32px;border-radius:7px;background:var(--g50);border:1px solid var(--bdr);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.page-btn:hover,.page-btn.on{background:var(--p);color:#fff;border-color:var(--p);}
-.page-info{font-size:12px;color:var(--tx3);}
+/* 2-col grid helper */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 
-@media(max-width:1100px){.tbl-cols,.user-row{grid-template-columns:180px 1fr 90px 100px;}.tbl-cols .th:nth-child(3),.tbl-cols .th:nth-child(4),.user-row div:nth-child(3),.user-row div:nth-child(4){display:none;}}
-@media(max-width:768px){.admin-layout{grid-template-columns:1fr;}.sidebar{display:none;}.stat-grid{grid-template-columns:repeat(2,1fr);}.charts-row{grid-template-columns:1fr;}}
+/* Charts row */
+.charts-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+
+@media(max-width:1000px){.stat-grid{grid-template-columns:repeat(2,1fr);}.charts-row{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.sidebar{display:none;}.stat-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
-<!-- LOADING OVERLAY -->
-<div id="admin-loading" style="position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;">
-  <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;">G</div>
-  <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,.5);">Loading admin panel...</div>
-  <div style="width:180px;height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;">
-    <div style="height:100%;background:#6366f1;border-radius:3px;animation:loadbar 1.5s ease-in-out infinite;"></div>
-  </div>
-  <style>@keyframes loadbar{0%{width:0;margin-left:0;}50%{width:60%;margin-left:20%;}100%{width:0;margin-left:100%;}}</style>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="load-logo">G</div>
+  <div class="load-text">Loading admin panel...</div>
+  <div class="load-bar"><div class="load-prog"></div></div>
 </div>
 
-<div class="admin-layout">
-
+<div class="wrap">
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sb-brand">
-    <div class="sb-logo">G</div>
-    <div><div class="sb-brand-name">GopexFund</div><div class="sb-brand-sub">Admin Panel</div></div>
+  <div class="sb-top">
+    <div class="sb-logo-row">
+      <div class="sb-logo">G</div>
+      <div><div class="sb-brand">GopexFund</div><div class="sb-sub">Admin Panel</div></div>
+    </div>
   </div>
-
-  <div class="sb-section">Overview</div>
-  <div class="sb-item on" onclick="showSection('dashboard',this)"><span class="ico">🏠</span>Dashboard</div>
-
-  <div class="sb-section">Users</div>
-  <div class="sb-item" onclick="showSection('users',this)"><span class="ico">👥</span>All Users <span class="sb-badge" id="sb-user-count">—</span></div>
-  <div class="sb-item" onclick="showSection('suspended',this)"><span class="ico">🚫</span>Suspended</div>
-  <div class="sb-item" onclick="showSection('admins',this)"><span class="ico">🛡</span>Admins</div>
-
-  <div class="sb-section">Content</div>
-  <div class="sb-item" onclick="showSection('posts',this)"><span class="ico">📝</span>All Posts <span class="sb-badge" id="sb-post-count">—</span></div>
-  <div class="sb-item" onclick="showSection('news',this)"><span class="ico">📰</span>Post News</div>
-  <div class="sb-item" onclick="showSection('courses',this)"><span class="ico">🎓</span>Manage Courses</div>
-  <div class="sb-item" onclick="showSection('reports',this)"><span class="ico">🚨</span>Reports</div>
-
-  <div class="sb-section">Finance</div>
-  <div class="sb-item" onclick="showSection('portfolios',this)"><span class="ico">💼</span>Portfolios</div>
-  <div class="sb-item" onclick="showSection('market',this)"><span class="ico">📈</span>Market Data</div>
-
-  <div class="sb-section">System</div>
-  <div class="sb-item" onclick="showSection('settings',this)"><span class="ico">⚙</span>Settings</div>
-  <div class="sb-item" onclick="showSection('logs',this)"><span class="ico">📋</span>Activity Logs</div>
-
-  <div class="sb-footer">
+  <nav class="sb-nav">
+    <div class="sb-sec">Overview</div>
+    <div class="sb-item on" id="nav-dashboard" onclick="go('dashboard',this)"><span class="ico">&#127968;</span>Dashboard</div>
+    <div class="sb-sec">Users</div>
+    <div class="sb-item" id="nav-users" onclick="go('users',this)"><span class="ico">&#128101;</span>All Users <span class="sb-badge" id="badge-users">—</span></div>
+    <div class="sb-item" id="nav-suspended" onclick="go('suspended',this)"><span class="ico">&#128683;</span>Suspended</div>
+    <div class="sb-item" id="nav-admins" onclick="go('admins',this)"><span class="ico">&#128737;</span>Admins</div>
+    <div class="sb-sec">Content</div>
+    <div class="sb-item" id="nav-posts" onclick="go('posts',this)"><span class="ico">&#128203;</span>All Posts <span class="sb-badge" id="badge-posts">—</span></div>
+    <div class="sb-item" id="nav-news" onclick="go('news',this)"><span class="ico">&#128240;</span>Post News</div>
+    <div class="sb-item" id="nav-courses" onclick="go('courses',this)"><span class="ico">&#127891;</span>Courses</div>
+    <div class="sb-sec">Finance</div>
+    <div class="sb-item" id="nav-portfolios" onclick="go('portfolios',this)"><span class="ico">&#128188;</span>Portfolios</div>
+    <div class="sb-item" id="nav-market" onclick="go('market',this)"><span class="ico">&#128200;</span>Market Data</div>
+    <div class="sb-sec">System</div>
+    <div class="sb-item" id="nav-settings" onclick="go('settings',this)"><span class="ico">&#9881;</span>Settings</div>
+    <div class="sb-item" id="nav-logs" onclick="go('logs',this)"><span class="ico">&#128221;</span>Activity Logs</div>
+  </nav>
+  <div class="sb-foot">
     <div class="sb-user">
       <div class="sb-av" id="sb-av">A</div>
-      <div><div class="sb-uname" id="sb-uname">Admin</div><div class="sb-urole">🛡 Administrator</div></div>
+      <div><div class="sb-name" id="sb-name">Admin</div><div class="sb-role">&#128737; Administrator</div></div>
     </div>
-    <button onclick="doLogout()" style="width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:8px;border-radius:8px;font-size:12px;font-weight:600;margin-top:10px;cursor:pointer;">↩ Log Out</button>
-    <a href="home.html" style="display:block;text-align:center;font-size:11px;color:rgba(255,255,255,.4);margin-top:8px;">← Back to App</a>
+    <button class="sb-logout" onclick="doLogout()">&#8617; Log Out</button>
+    <a href="home.html" style="display:block;text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin-top:8px;">&#8592; Back to App</a>
   </div>
 </aside>
 
 <!-- MAIN -->
-<main class="admin-main">
-  <div class="top-bar">
-    <div class="tb-title" id="page-title">Dashboard</div>
-    <div class="tb-right">
-      <input class="tb-search" id="global-search" type="text" placeholder="Search users, posts..." oninput="globalSearch(this.value)"/>
-      <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;" id="top-av">A</div>
+<div class="main">
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="tb-title" id="page-title">Dashboard</div>
     </div>
-  </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <input class="tb-search" id="search-inp" placeholder="&#128269; Search users..." oninput="searchUsers(this.value)"/>
+      <div class="tb-av" id="top-av">A</div>
+    </div>
+  </header>
 
   <div class="content">
 
-    <!-- DASHBOARD SECTION -->
-    <div id="sec-dashboard">
+    <!-- DASHBOARD -->
+    <div id="pg-dashboard">
       <div class="stat-grid">
-        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#eef4ff;">👥</div><div class="sc-trend up" id="user-trend">↑ —</div></div><div class="sc-val" id="dash-users">—</div><div class="sc-lbl">Total Users</div></div>
-        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#dcfce7;">📝</div><div class="sc-trend up" id="post-trend">↑ —</div></div><div class="sc-val" id="dash-posts">—</div><div class="sc-lbl">Total Posts</div></div>
-        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#ede9fe;">💼</div><div class="sc-trend up">↑ active</div></div><div class="sc-val" id="dash-holdings">—</div><div class="sc-lbl">Holdings Tracked</div></div>
-        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#fef3c7;">📈</div><div class="sc-trend up">↑ live</div></div><div class="sc-val" id="dash-stocks">124</div><div class="sc-lbl">NGX Stocks Live</div></div>
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#eef4ff;">&#128101;</div><span class="sc-badge sc-up">&#8593; live</span></div><div class="sc-val" id="d-users">—</div><div class="sc-lbl">Total Users</div></div>
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#dcfce7;">&#128203;</div><span class="sc-badge sc-up">&#8593; live</span></div><div class="sc-val" id="d-posts">—</div><div class="sc-lbl">Total Posts</div></div>
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#ede9fe;">&#128188;</div><span class="sc-badge sc-up">active</span></div><div class="sc-val" id="d-holdings">—</div><div class="sc-lbl">Holdings Tracked</div></div>
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#fef3c7;">&#128308;</div><span class="sc-badge sc-up">live</span></div><div class="sc-val">124</div><div class="sc-lbl">NGX Stocks Live</div></div>
       </div>
-
       <div class="charts-row">
-        <div class="chart-card">
-          <div class="cc-title">User Registrations <span style="font-size:11px;color:var(--tx3);font-weight:500;">by country</span></div>
-          <div class="bar-wrap" id="country-chart">
-            <div class="bar-item"><div class="bar-lbl">Nigeria</div><div class="bar-track"><div class="bar-fill" style="width:78%;background:#1a6eff;"></div></div><div class="bar-val" id="bc-ng">—</div></div>
-            <div class="bar-item"><div class="bar-lbl">Ghana</div><div class="bar-track"><div class="bar-fill" style="width:12%;background:#7c3aed;"></div></div><div class="bar-val">—</div></div>
-            <div class="bar-item"><div class="bar-lbl">Kenya</div><div class="bar-track"><div class="bar-fill" style="width:6%;background:#059669;"></div></div><div class="bar-val">—</div></div>
-            <div class="bar-item"><div class="bar-lbl">Other</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:#d97706;"></div></div><div class="bar-val">—</div></div>
-          </div>
+        <div class="card" style="padding:18px;">
+          <div style="font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">User Registrations</div>
+          <div id="country-bars"></div>
         </div>
-        <div class="chart-card">
-          <div class="cc-title">Platform Health</div>
-          <div class="bar-wrap">
-            <div class="bar-item"><div class="bar-lbl">Active Users</div><div class="bar-track"><div class="bar-fill" style="width:85%;background:#16a34a;"></div></div><div class="bar-val" id="ph-active">—</div></div>
-            <div class="bar-item"><div class="bar-lbl">Suspended</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:#dc2626;"></div></div><div class="bar-val" id="ph-suspended">0</div></div>
-            <div class="bar-item"><div class="bar-lbl">Verified</div><div class="bar-track"><div class="bar-fill" style="width:15%;background:#1a6eff;"></div></div><div class="bar-val" id="ph-verified">—</div></div>
-            <div class="bar-item"><div class="bar-lbl">With Holdings</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#7c3aed;"></div></div><div class="bar-val" id="ph-holdings">—</div></div>
+        <div class="card" style="padding:18px;">
+          <div style="font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">Platform Health</div>
+          <div id="health-bars"></div>
+        </div>
+        <div class="card" style="padding:18px;">
+          <div style="font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">Market Data</div>
+          <div style="font-size:12px;line-height:2;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">Stock Prices</span><span style="color:var(--g);font-weight:700;">&#9679; Auto-refresh</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">Refresh Rate</span><span style="font-weight:700;">Every 10 min</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">Stocks Tracked</span><span style="font-weight:700;">124 NGX</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">Last Update</span><span style="font-weight:700;" id="d-lastprice">—</span></div>
           </div>
+          <button class="btn btn-p" onclick="doRefreshPrices()" style="width:100%;margin-top:12px;justify-content:center;">&#8635; Refresh Prices</button>
         </div>
       </div>
-
-      <div class="system-grid">
-        <div class="sys-card">
-          <div class="sys-title">Database</div>
-          <div class="sys-row"><span class="sys-key">Supabase Status</span><span class="sys-val green">● Healthy</span></div>
-          <div class="sys-row"><span class="sys-key">Region</span><span class="sys-val blue">US East (N. Virginia)</span></div>
-          <div class="sys-row"><span class="sys-key">Compute</span><span class="sys-val">NANO (Free Tier)</span></div>
-          <div class="sys-row"><span class="sys-key">RLS</span><span class="sys-val green">● Enabled</span></div>
+      <div class="grid2">
+        <div class="card" style="padding:18px;">
+          <div style="font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">Quick Actions</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn btn-s" onclick="go('users',document.getElementById('nav-users'))" style="justify-content:flex-start;">&#128101; Manage Users</button>
+            <button class="btn btn-s" onclick="go('posts',document.getElementById('nav-posts'))" style="justify-content:flex-start;">&#128203; Review Posts</button>
+            <button class="btn btn-s" onclick="go('news',document.getElementById('nav-news'))" style="justify-content:flex-start;">&#128240; Post News</button>
+            <button class="btn btn-s" onclick="go('courses',document.getElementById('nav-courses'))" style="justify-content:flex-start;">&#127891; Manage Courses</button>
+          </div>
         </div>
-        <div class="sys-card">
-          <div class="sys-title">Market Data</div>
-          <div class="sys-row"><span class="sys-key">Stock Prices</span><span class="sys-val green">● Auto-refreshing</span></div>
-          <div class="sys-row"><span class="sys-key">Refresh Rate</span><span class="sys-val">Every 10 minutes</span></div>
-          <div class="sys-row"><span class="sys-key">Stocks Tracked</span><span class="sys-val">124 NGX stocks</span></div>
-          <div class="sys-row"><span class="sys-key">Last Update</span><span class="sys-val" id="last-price-update">—</span></div>
-        </div>
-        <div class="sys-card">
-          <div class="sys-title">Quick Actions</div>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
-            <button class="ta-btn primary" onclick="refreshPrices()" style="width:100%;text-align:center;padding:9px;">🔄 Refresh Stock Prices Now</button>
-            <button class="ta-btn" onclick="showSection('users',document.querySelector('.sb-item:nth-child(5)'))" style="width:100%;text-align:center;padding:9px;">👥 Manage Users</button>
-            <button class="ta-btn" onclick="showSection('posts',document.querySelector('.sb-item:nth-child(8)'))" style="width:100%;text-align:center;padding:9px;">📝 Review Posts</button>
+        <div class="card" style="padding:18px;">
+          <div style="font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">System Info</div>
+          <div style="font-size:12px;line-height:2.2;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">Supabase Status</span><span style="color:var(--g);font-weight:700;">&#9679; Healthy</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">RLS</span><span style="color:var(--g);font-weight:700;">&#10003; Enabled</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">Plan</span><span style="font-weight:700;">Free Tier</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--tx2);">Region</span><span style="font-weight:700;">US East (N. Virginia)</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- USERS SECTION -->
-    <div id="sec-users" style="display:none;">
-      <div class="filter-bar">
-        <button class="filter-btn on" onclick="filterUsers('all',this)">All Users</button>
-        <button class="filter-btn" onclick="filterUsers('active',this)">Active</button>
-        <button class="filter-btn" onclick="filterUsers('verified',this)">Verified</button>
-        <button class="filter-btn" onclick="filterUsers('unverified',this)">Unverified</button>
-        <button class="filter-btn" onclick="filterUsers('suspended',this)">Suspended</button>
-        <button class="ta-btn primary" onclick="openModal('add-user')" style="margin-left:auto;">+ Add User</button>
+    <!-- USERS -->
+    <div id="pg-users" style="display:none;">
+      <div class="filters" id="user-filters">
+        <button class="fb on" onclick="filterUsers('all',this)">All</button>
+        <button class="fb" onclick="filterUsers('active',this)">Active</button>
+        <button class="fb" onclick="filterUsers('suspended',this)">Suspended</button>
+        <button class="fb" onclick="filterUsers('verified',this)">Verified</button>
       </div>
-      <div class="table-card">
-        <div class="table-hd">
-          <div class="table-title">All Users</div>
-          <div class="table-actions">
-            <button class="ta-btn" onclick="exportUsers()">⬇ Export CSV</button>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Users</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="font-size:12px;color:var(--tx3);" id="users-info"></span>
+            <button class="btn btn-s" onclick="exportUsers()">&#11015; Export CSV</button>
           </div>
         </div>
-        <div class="tbl-cols">
-          <div class="th">User</div>
-          <div class="th">Email</div>
-          <div class="th">Country</div>
-          <div class="th">Posts</div>
-          <div class="th">Status</div>
-          <div class="th">Joined</div>
-          <div class="th">Actions</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>User</th><th>Username</th><th>Country</th><th>Posts</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody id="users-body"><tr><td colspan="7" style="text-align:center;padding:40px;color:var(--tx3);">Loading...</td></tr></tbody>
+          </table>
         </div>
-        <div id="users-table-body">
-          <div style="text-align:center;padding:40px;color:var(--tx3);">⏳ Loading users...</div>
-        </div>
-        <div class="pagination" id="users-pagination" style="display:none;">
-          <button class="page-btn" onclick="changePage(-1)">‹</button>
-          <span class="page-info" id="page-info">Page 1</span>
-          <button class="page-btn" onclick="changePage(1)">›</button>
-        </div>
+        <div id="users-pag" style="display:flex;gap:6px;padding:12px 16px;border-top:1px solid var(--bdr);"></div>
       </div>
     </div>
 
     <!-- SUSPENDED -->
-    <div id="sec-suspended" style="display:none;">
-      <div class="table-card">
-        <div class="table-hd"><div class="table-title">Suspended Accounts</div></div>
-        <div id="suspended-body" style="padding:20px;">
-          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading...</div>
-        </div>
+    <div id="pg-suspended" style="display:none;">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#128683; Suspended Accounts</div></div>
+        <div id="suspended-list" style="padding:16px;"></div>
       </div>
     </div>
 
     <!-- ADMINS -->
-    <div id="sec-admins" style="display:none;">
-      <div class="table-card">
-        <div class="table-hd">
-          <div class="table-title">Admin Accounts</div>
-          <div class="table-actions"><button class="ta-btn primary" onclick="openModal('promote')">+ Promote User to Admin</button></div>
-        </div>
-        <div id="admins-body" style="padding:20px;">
-          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading...</div>
+    <div id="pg-admins" style="display:none;">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#128737; Admin Accounts</div></div>
+        <div id="admins-list" style="padding:16px;"></div>
+      </div>
+    </div>
+
+    <!-- POSTS -->
+    <div id="pg-posts" style="display:none;">
+      <div class="filters">
+        <button class="fb on" onclick="filterPosts('recent',this)">Most Recent</button>
+        <button class="fb" onclick="filterPosts('popular',this)">Most Liked</button>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">All Posts</div></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Content</th><th>Author</th><th>Likes</th><th>Comments</th><th>Time</th><th>Action</th></tr></thead>
+            <tbody id="posts-body"></tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- POSTS SECTION -->
-    <div id="sec-posts" style="display:none;">
-      <div class="filter-bar">
-        <button class="filter-btn on" onclick="filterPosts('all',this)">All Posts</button>
-        <button class="filter-btn" onclick="filterPosts('recent',this)">Recent</button>
-        <button class="filter-btn" onclick="filterPosts('popular',this)">Most Liked</button>
-      </div>
-      <div class="table-card">
-        <div class="table-hd"><div class="table-title">All Posts</div></div>
-        <div style="display:grid;grid-template-columns:1fr 120px 80px 80px 100px;gap:8px;padding:8px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);">
-          <div class="th">Post</div><div class="th">Author</div><div class="th">Likes</div><div class="th">Comments</div><div class="th">Actions</div>
+    <!-- NEWS -->
+    <div id="pg-news" style="display:none;">
+      <div class="grid2" style="align-items:start;">
+        <div class="card" style="padding:20px;">
+          <div style="font-family:var(--fd);font-size:15px;font-weight:800;margin-bottom:4px;">&#128240; Post News Article</div>
+          <div style="font-size:11px;color:var(--tx3);margin-bottom:16px;">Appears in News tab AND main feed for all users.</div>
+          <div class="field"><label>Headline *</label><input class="inp" id="news-title" placeholder="NGX All-Share Index hits new high..."/></div>
+          <div class="field"><label>Article Content *</label><textarea class="textarea" id="news-body" style="min-height:140px;" placeholder="Write the full article here..."></textarea></div>
+          <div class="grid2">
+            <div class="field"><label>Source (optional)</label><input class="inp" id="news-source" placeholder="BusinessDay, Reuters..."/></div>
+            <div class="field"><label>Featured Image</label><input type="file" id="news-img" accept="image/*" onchange="previewNewsImg(this)" style="width:100%;padding:7px;background:var(--g50);border:1.5px dashed var(--bdr);border-radius:9px;font-size:12px;cursor:pointer;"/></div>
+          </div>
+          <div id="news-img-prev" style="display:none;margin-bottom:12px;"><img id="news-img-thumb" style="max-height:100px;border-radius:8px;border:1px solid var(--bdr);"/><button onclick="clearNewsImg()" style="margin-left:8px;background:var(--rbg);border:none;color:var(--r);padding:4px 9px;border-radius:6px;font-size:11px;font-weight:700;">Remove</button></div>
+          <button class="btn btn-p" id="news-post-btn" onclick="postNews()" style="width:100%;justify-content:center;padding:11px;font-size:13px;">&#128240; Publish to All Users</button>
         </div>
-        <div id="posts-table-body">
-          <div style="text-align:center;padding:40px;color:var(--tx3);">⏳ Loading posts...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- NEWS SECTION -->
-    <div id="sec-news" style="display:none;">
-      <div style="max-width:780px;">
-        <div class="table-card" style="padding:24px;margin-bottom:16px;">
-          <div style="font-family:var(--fd);font-size:17px;font-weight:800;margin-bottom:4px;">&#128240; Post News Article</div>
-          <div style="font-size:12px;color:var(--tx3);margin-bottom:20px;">Published news appears in both the <strong>News tab</strong> on the home feed and the <strong>For You feed</strong> so all users see it.</div>
-
-          <div class="mfield"><label>Headline *</label>
-            <input id="news-title" placeholder="NGX All-Share Index hits new high today..." style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:11px 13px;font-size:14px;outline:none;font-family:var(--fb);"/>
-          </div>
-
-          <div class="mfield"><label>Full Article Content *</label>
-            <textarea id="news-body" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:12px 13px;font-size:13px;outline:none;min-height:160px;resize:vertical;font-family:var(--fb);line-height:1.7;" placeholder="Write the full news article here. This will appear in the news section. A short excerpt will show in the main feed..."></textarea>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div class="mfield"><label>Source (optional)</label>
-              <input id="news-source" placeholder="BusinessDay, Reuters, NGX Group..." style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px 13px;font-size:13px;outline:none;"/>
-            </div>
-            <div class="mfield"><label>Featured Image (optional)</label>
-              <div style="position:relative;">
-                <input type="file" id="news-img-input" accept="image/*" onchange="previewNewsImage(this)" style="width:100%;background:var(--g50);border:1.5px dashed var(--bdr);border-radius:9px;padding:8px 13px;font-size:12px;cursor:pointer;"/>
-              </div>
-            </div>
-          </div>
-
-          <!-- Image preview -->
-          <div id="news-img-preview" style="display:none;margin-bottom:14px;">
-            <div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Image Preview</div>
-            <div style="position:relative;display:inline-block;">
-              <img id="news-img-thumb" src="" style="max-height:140px;border-radius:9px;border:1px solid var(--bdr);"/>
-              <button onclick="clearNewsImage()" style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;background:var(--red);border:none;border-radius:50%;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
-            </div>
-          </div>
-
-          <div style="display:flex;align-items:center;gap:10px;background:var(--plt);border-radius:9px;padding:10px 13px;margin-bottom:16px;font-size:12px;color:var(--p);">
-            &#9432; This news post will appear in the <strong style="margin:0 3px;">News tab</strong> AND as a pinned post in the <strong style="margin:0 3px;">For You feed</strong> so all users see it immediately.
-          </div>
-
-          <button class="ta-btn primary" onclick="postNews()" style="width:100%;padding:12px;font-size:14px;border-radius:9px;font-weight:700;">&#128240; Publish News to All Users</button>
-        </div>
-
-        <!-- Published news list -->
-        <div class="table-card">
-          <div class="table-hd">
-            <div class="table-title">Published Articles</div>
-            <div id="news-count" style="font-size:12px;color:var(--tx3);"></div>
-          </div>
-          <div id="news-list" style="padding:16px;max-height:500px;overflow-y:auto;">
-            <div style="color:var(--tx3);font-size:13px);">Loading...</div>
-          </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Published Articles</div><span id="news-count" style="font-size:12px;color:var(--tx3);"></span></div>
+          <div id="news-list" style="padding:16px;max-height:600px;overflow-y:auto;"></div>
         </div>
       </div>
     </div>
 
-    <!-- COURSES SECTION -->
-    <div id="sec-courses" style="display:none;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <!-- Create Course -->
-        <div class="table-card" style="padding:20px;">
-          <div class="modal-title" style="font-size:16px;margin-bottom:16px;">🎓 Create New Course</div>
-          <div class="mfield"><label>Course Title</label><input id="co-title" placeholder="Introduction to NGX Investing"/></div>
-          <div class="mfield"><label>Description</label><textarea id="co-desc" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;min-height:80px;resize:none;" placeholder="What will students learn?"></textarea></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div class="mfield"><label>Category</label>
-              <select id="co-cat" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
-                <option>Investing</option><option>Stock Market</option><option>Personal Finance</option><option>Crypto</option><option>Real Estate</option>
-              </select>
-            </div>
-            <div class="mfield"><label>Difficulty</label>
-              <select id="co-diff" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
-                <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
-              </select>
-            </div>
+    <!-- COURSES -->
+    <div id="pg-courses" style="display:none;">
+      <div class="grid2" style="align-items:start;margin-bottom:16px;">
+        <div class="card" style="padding:20px;">
+          <div style="font-family:var(--fd);font-size:15px;font-weight:800;margin-bottom:16px;">&#127891; Create New Course</div>
+          <div class="field"><label>Course Title *</label><input class="inp" id="co-title" placeholder="Introduction to NGX Investing"/></div>
+          <div class="field"><label>Description</label><textarea class="textarea" id="co-desc" style="min-height:70px;" placeholder="What will students learn?"></textarea></div>
+          <div class="grid2">
+            <div class="field"><label>Category</label><select class="sel" id="co-cat"><option>Investing</option><option>Stock Market</option><option>Personal Finance</option><option>Crypto</option></select></div>
+            <div class="field"><label>Difficulty</label><select class="sel" id="co-diff"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div class="mfield"><label>Duration (mins)</label><input id="co-dur" type="number" placeholder="30"/></div>
-            <div class="mfield"><label>Points Reward</label><input id="co-pts" type="number" placeholder="100"/></div>
+          <div class="grid2">
+            <div class="field"><label>Duration (mins)</label><input class="inp" id="co-dur" type="number" placeholder="30"/></div>
+            <div class="field"><label>Points Reward</label><input class="inp" id="co-pts" type="number" placeholder="100"/></div>
           </div>
-          <button class="ta-btn primary" onclick="createCourse()" style="width:100%;padding:11px;font-size:14px;border-radius:9px;margin-top:4px;">Create Course</button>
+          <button class="btn btn-p" onclick="createCourse()" style="width:100%;justify-content:center;padding:11px;">Create Course</button>
         </div>
-        <!-- Course List -->
-        <div class="table-card" style="overflow:hidden;">
-          <div class="table-hd"><div class="table-title">All Courses</div></div>
-          <div id="courses-list" style="padding:14px;max-height:500px;overflow-y:auto;"><div style="color:var(--tx3);font-size:13px;">Loading...</div></div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">All Courses</div></div>
+          <div id="courses-list" style="padding:14px;"></div>
         </div>
       </div>
-      <!-- ADD LESSON PANEL -->
-      <div class="table-card" id="lesson-panel" style="display:none;margin-top:16px;padding:20px;">
-        <div class="table-hd" style="padding:0;margin-bottom:16px;"><div class="table-title">Add Lesson to: <span id="lesson-course-name" style="color:var(--p);"></span></div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div class="mfield"><label>Lesson Title</label><input id="ls-title" placeholder="Understanding P/E Ratios"/></div>
-          <div class="mfield"><label>Type</label>
-            <select id="ls-type" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
-              <option value="text">Text / Article</option>
-              <option value="video">Video</option>
-              <option value="audio">Audio</option>
-            </select>
+      <!-- Add Lesson -->
+      <div class="card" id="lesson-panel" style="display:none;padding:20px;">
+        <div style="font-family:var(--fd);font-size:15px;font-weight:800;margin-bottom:4px;">Add Lesson to: <span id="lesson-course-name" style="color:var(--p);"></span></div>
+        <div style="font-size:11px;color:var(--tx3);margin-bottom:16px;">Add video, text content, and a quiz question.</div>
+        <div class="grid2">
+          <div class="field"><label>Lesson Title *</label><input class="inp" id="ls-title" placeholder="Understanding P/E Ratios"/></div>
+          <div class="field"><label>Type</label><select class="sel" id="ls-type"><option value="text">Text / Article</option><option value="video">Video</option><option value="audio">Audio</option></select></div>
+        </div>
+        <div class="field"><label>Video URL (YouTube or direct link)</label><input class="inp" id="ls-video" placeholder="https://youtube.com/watch?v=..."/></div>
+        <div class="field"><label>Lesson Content *</label><textarea class="textarea" id="ls-content" style="min-height:120px;" placeholder="Write the full lesson content here..."></textarea></div>
+        <div class="field"><label>Duration (mins)</label><input class="inp" id="ls-dur" type="number" placeholder="10" style="width:100px;"/></div>
+        <div style="background:var(--g50);border-radius:10px;padding:14px;margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:10px;">Quiz Question (optional)</div>
+          <div class="field"><label>Question</label><input class="inp" id="as-q" placeholder="What does P/E ratio stand for?"/></div>
+          <div class="grid2">
+            <div class="field"><label>Option A</label><input class="inp" id="as-a" placeholder="Price to Earnings"/></div>
+            <div class="field"><label>Option B</label><input class="inp" id="as-b" placeholder="Profit to Equity"/></div>
+            <div class="field"><label>Option C</label><input class="inp" id="as-c" placeholder="Price to Equity"/></div>
+            <div class="field"><label>Option D</label><input class="inp" id="as-d" placeholder="Portfolio Earnings"/></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>Correct Answer</label><select class="sel" id="as-correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>
+            <div class="field"><label>Explanation</label><input class="inp" id="as-exp" placeholder="Because P/E means..."/></div>
           </div>
         </div>
-        <div class="mfield"><label>Video URL (YouTube or direct link)</label><input id="ls-video" placeholder="https://youtube.com/watch?v=..."/></div>
-        <div class="mfield"><label>Lesson Content</label><textarea id="ls-content" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;min-height:120px;resize:none;" placeholder="Write the full lesson content here. Supports basic HTML."></textarea></div>
-        <div class="mfield"><label>Duration (mins)</label><input id="ls-dur" type="number" placeholder="10" style="width:120px;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;"/></div>
-        <div style="margin-top:10px;padding-top:14px;border-top:1px solid var(--bdr);">
-          <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--tx2);">Assessment Question (optional)</div>
-          <div class="mfield"><label>Question</label><input id="as-q" placeholder="What does P/E ratio stand for?"/></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div class="mfield"><label>Option A</label><input id="as-a" placeholder="Price to Earnings"/></div>
-            <div class="mfield"><label>Option B</label><input id="as-b" placeholder="Profit to Equity"/></div>
-            <div class="mfield"><label>Option C</label><input id="as-c" placeholder="Price to Equity"/></div>
-            <div class="mfield"><label>Option D</label><input id="as-d" placeholder="Portfolio Earnings"/></div>
-          </div>
-          <div class="mfield"><label>Correct Option</label>
-            <select id="as-correct" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px;font-size:13px;outline:none;">
-              <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
-            </select>
-          </div>
-          <div class="mfield"><label>Explanation</label><input id="as-exp" placeholder="P/E ratio = Price to Earnings, a measure of valuation..."/></div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:8px;">
-          <button class="ta-btn" onclick="document.getElementById('lesson-panel').style.display='none'">Cancel</button>
-          <button class="ta-btn primary" onclick="addLesson()">Add Lesson</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- REPORTS -->
-    <div id="sec-reports" style="display:none;">
-      <div class="table-card">
-        <div class="table-hd"><div class="table-title">Content Reports</div></div>
-        <div style="padding:60px;text-align:center;color:var(--tx3);">
-          <div style="font-size:36px;margin-bottom:12px;">✅</div>
-          <div style="font-size:14px;font-weight:600;color:var(--tx2);">No reports yet</div>
-          <div style="font-size:13px;margin-top:6px;">All content appears clean. Reports from users will appear here.</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-s" onclick="document.getElementById('lesson-panel').style.display='none'">Cancel</button>
+          <button class="btn btn-p" onclick="addLesson()">Add Lesson</button>
         </div>
       </div>
     </div>
 
     <!-- PORTFOLIOS -->
-    <div id="sec-portfolios" style="display:none;">
-      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="sc-ico" style="background:var(--plt);margin-bottom:8px;">💼</div><div class="sc-val" id="port-total">—</div><div class="sc-lbl">Total Holdings</div></div>
-        <div class="stat-card"><div class="sc-ico" style="background:var(--gbg);margin-bottom:8px;">📊</div><div class="sc-val" id="port-investors">—</div><div class="sc-lbl">Investors with Holdings</div></div>
-        <div class="stat-card"><div class="sc-ico" style="background:var(--ambg);margin-bottom:8px;">💰</div><div class="sc-val">MTNN</div><div class="sc-lbl">Most Held Stock</div></div>
-      </div>
-      <div class="table-card">
-        <div class="table-hd"><div class="table-title">Holdings Overview</div></div>
-        <div id="portfolios-body" style="padding:20px;">
-          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading...</div>
+    <div id="pg-portfolios" style="display:none;">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#128188; User Holdings (Cost Basis Only)</div></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>User</th><th>Ticker</th><th>Shares</th><th>Buy Price</th><th>Cost Basis</th></tr></thead>
+            <tbody id="port-body"></tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- MARKET DATA -->
-    <div id="sec-market" style="display:none;">
-      <div class="table-card">
-        <div class="table-hd">
-          <div class="table-title">Live NGX Stock Prices</div>
-          <button class="ta-btn primary" onclick="refreshPrices()">🔄 Refresh Now</button>
-        </div>
-        <div style="display:grid;grid-template-columns:80px 1fr 90px 80px 90px;gap:8px;padding:8px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);">
-          <div class="th">Ticker</div><div class="th">Company</div><div class="th">Price</div><div class="th">Change</div><div class="th">Updated</div>
-        </div>
-        <div id="market-body" style="max-height:400px;overflow-y:auto;">
-          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading market data...</div>
+    <!-- MARKET -->
+    <div id="pg-market" style="display:none;">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#128200; NGX Live Prices</div><button class="btn btn-p" onclick="doRefreshPrices()">&#8635; Refresh Now</button></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Ticker</th><th>Company</th><th>Price</th><th>Change</th><th>Volume</th><th>Updated</th></tr></thead>
+            <tbody id="market-body"></tbody>
+          </table>
         </div>
       </div>
     </div>
 
     <!-- SETTINGS -->
-    <div id="sec-settings" style="display:none;">
-      <div style="max-width:600px;">
-        <div class="sys-card" style="margin-bottom:16px;">
-          <div class="sys-title">Platform Settings</div>
-          <div class="sys-row"><span class="sys-key">Platform Name</span><input value="GopexFund" style="background:var(--g50);border:1px solid var(--bdr);border-radius:7px;padding:5px 10px;font-size:12px;width:160px;"></div>
-          <div class="sys-row"><span class="sys-key">New Registrations</span><span class="sys-val green">● Open</span></div>
-          <div class="sys-row"><span class="sys-key">Maintenance Mode</span><span class="sys-val red">● Off</span></div>
-          <div class="sys-row"><span class="sys-key">Email Verification</span><span class="sys-val green">● Enabled</span></div>
-        </div>
-        <div class="sys-card">
-          <div class="sys-title">Make a User Admin</div>
-          <div style="margin-top:8px;">
-            <div style="font-size:13px;color:var(--tx2);margin-bottom:12px;">Enter the email of the user you want to promote to admin. Run the SQL below in your Supabase SQL Editor.</div>
-            <div style="background:var(--g900);color:#4ade80;padding:14px;border-radius:10px;font-size:12px;font-family:monospace;line-height:1.8;">
-              UPDATE public.profiles<br>
-              SET role = 'admin'<br>
-              WHERE id = (<br>
-              &nbsp;&nbsp;SELECT id FROM auth.users<br>
-              &nbsp;&nbsp;WHERE email = 'YOUR_EMAIL_HERE'<br>
-              );
-            </div>
-          </div>
-        </div>
+    <div id="pg-settings" style="display:none;">
+      <div class="card" style="padding:20px;max-width:500px;">
+        <div style="font-family:var(--fd);font-size:15px;font-weight:800;margin-bottom:16px;">&#9881; Admin Settings</div>
+        <div class="field"><label>Promote User to Admin</label><input class="inp" id="promote-email" placeholder="user@email.com"/></div>
+        <div style="background:var(--ambg);border-radius:9px;padding:12px;font-size:12px;color:var(--am);margin-bottom:12px;">Or run this SQL in Supabase: <code>UPDATE public.profiles SET role = 'admin' WHERE id = (SELECT id FROM auth.users WHERE email = 'email');</code></div>
+        <button class="btn btn-p" onclick="promoteAdmin()">Promote to Admin</button>
       </div>
     </div>
 
     <!-- LOGS -->
-    <div id="sec-logs" style="display:none;">
-      <div class="table-card">
-        <div class="table-hd"><div class="table-title">Activity Logs</div></div>
-        <div id="logs-body" style="max-height:500px;overflow-y:auto;">
-          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading logs...</div>
-        </div>
+    <div id="pg-logs" style="display:none;">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">&#128221; Recent Activity</div></div>
+        <div id="logs-list" style="padding:16px;"></div>
       </div>
     </div>
 
-  </div>
-</main>
-</div>
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /wrap -->
 
-<!-- DELETE USER MODAL -->
-<div class="modal-ov" id="modal-delete-user">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('delete-user')">&#x2715;</button>
-    <div class="modal-title" style="color:var(--red);">&#128465; Delete User Account</div>
-    <div id="delete-user-info" style="background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#991b1b;line-height:1.6;">
-      This will permanently delete all of this user's data including posts, holdings, comments, goals, and their account. <strong>This cannot be undone.</strong>
-    </div>
-    <div style="background:var(--g50);border-radius:9px;padding:12px;margin-bottom:16px;font-size:13px;">
-      <strong id="delete-user-name" style="color:var(--tx);">User</strong> will be completely removed from GopexFund. They can sign up again with the same email if they want.
-    </div>
-    <div class="mfield">
-      <label>Type <strong>DELETE</strong> to confirm</label>
-      <input id="delete-user-confirm" placeholder="DELETE" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px 13px;font-size:14px;outline:none;"/>
-    </div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('delete-user')">Cancel</button>
-      <button class="modal-danger" onclick="confirmDeleteUser()">&#128465; Permanently Delete</button>
-    </div>
-  </div>
-</div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-<!-- ADD USER MODAL -->
-<div class="modal-ov" id="modal-add-user">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('add-user')">✕</button>
-    <div class="modal-title">Add New User</div>
-    <div class="mfield"><label>Full Name</label><input id="au-name" placeholder="Adaeze Obi"/></div>
-    <div class="mfield"><label>Email</label><input id="au-email" type="email" placeholder="user@example.com"/></div>
-    <div class="mfield"><label>Temporary Password</label><input id="au-pass" type="password" placeholder="Min. 8 characters"/></div>
-    <div class="mfield"><label>Role</label><select id="au-role"><option value="user">User</option><option value="admin">Admin</option></select></div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('add-user')">Cancel</button>
-      <button class="modal-save" onclick="createUser()">Create User</button>
-    </div>
+<!-- VIEW USER MODAL -->
+<div class="modal-bg" id="modal-view">
+  <div class="modal" style="position:relative;max-width:520px;">
+    <div class="modal-title">User Details</div>
+    <div id="view-content"></div>
+    <button class="modal-close" onclick="closeModal('view')">&#x2715;</button>
   </div>
 </div>
 
 <!-- SUSPEND MODAL -->
-<div class="modal-ov" id="modal-suspend">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('suspend')">✕</button>
-    <div class="modal-title">Suspend User</div>
-    <div id="suspend-user-info" style="background:var(--g50);border-radius:9px;padding:12px;margin-bottom:16px;font-size:13px;"></div>
-    <div class="mfield"><label>Reason for Suspension</label><textarea id="suspend-reason" placeholder="e.g. Spam, harassment, terms violation..."></textarea></div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('suspend')">Cancel</button>
-      <button class="modal-danger" onclick="confirmSuspend()">Suspend Account</button>
+<div class="modal-bg" id="modal-suspend">
+  <div class="modal" style="position:relative;">
+    <div class="modal-title" style="color:var(--am);">&#128683; Suspend User</div>
+    <div id="suspend-info" style="background:var(--ambg);border-radius:9px;padding:12px;font-size:13px;color:var(--am);margin-bottom:14px;"></div>
+    <div class="field"><label>Reason</label><input class="inp" id="suspend-reason" placeholder="Violation of community guidelines..."/></div>
+    <div class="modal-foot">
+      <button class="btn btn-s" onclick="closeModal('suspend')">Cancel</button>
+      <button class="btn btn-am" onclick="confirmSuspend()">Confirm Suspend</button>
     </div>
+    <button class="modal-close" onclick="closeModal('suspend')">&#x2715;</button>
   </div>
 </div>
 
-<!-- PROMOTE MODAL -->
-<div class="modal-ov" id="modal-promote">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('promote')">✕</button>
-    <div class="modal-title">Promote to Admin</div>
-    <div class="mfield"><label>User Email</label><input id="promote-email" type="email" placeholder="user@example.com"/></div>
-    <div style="background:var(--ambg);border:1px solid #fcd34d;border-radius:9px;padding:10px 13px;font-size:12px;color:var(--amber);margin-bottom:14px;">Admins have full access to this panel. Only promote trusted team members.</div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('promote')">Cancel</button>
-      <button class="modal-save" onclick="promoteUser()">Promote to Admin</button>
+<!-- DELETE USER MODAL -->
+<div class="modal-bg" id="modal-delete">
+  <div class="modal" style="position:relative;">
+    <div class="modal-title" style="color:var(--r);">&#128465; Delete User Account</div>
+    <div style="background:var(--rbg);border-radius:9px;padding:12px;font-size:13px;color:var(--r);margin-bottom:14px;line-height:1.6;"><strong id="delete-name">This user</strong> and ALL their data (posts, holdings, goals, comments) will be permanently deleted. They can re-register with the same email.</div>
+    <div class="field"><label>Type DELETE to confirm</label><input class="inp" id="delete-confirm" placeholder="DELETE"/></div>
+    <div class="modal-foot">
+      <button class="btn btn-s" onclick="closeModal('delete')">Cancel</button>
+      <button class="btn btn-r" onclick="confirmDelete()">&#128465; Permanently Delete</button>
     </div>
+    <button class="modal-close" onclick="closeModal('delete')">&#x2715;</button>
   </div>
 </div>
 
-<!-- VIEW USER MODAL -->
-<div class="modal-ov" id="modal-view-user">
-  <div class="modal" style="max-width:520px;">
-    <button class="modal-close" onclick="closeModal('view-user')">✕</button>
-    <div class="modal-title">User Details</div>
-    <div id="view-user-content"></div>
-  </div>
-</div>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-<div class="toast" id="toast"></div>
+var sb = createClient(
+  'https://lzlitanvlkycrkkpwczm.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+);
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script>
-var SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co';
-var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g';
-var _sb = supabase.createClient(SB_URL, SB_ANON);
-var _session = null;
-var _allUsers = [], _filteredUsers = [];
-var _currentPage = 1, _pageSize = 15;
-var _suspendTarget = null, _deleteTargetId = null;
-var _activeCourseId = null;
+var S = null; // session
+var USERS = [], FILTERED = [], PAGE = 1, PER = 15;
+var SUSPEND_ID = null, DELETE_ID = null, LESSON_COURSE = null;
+var NEWS_IMG = null;
 
-function setEl(id, v) { var e = document.getElementById(id); if (e) e.textContent = v; }
-function setHTML(id, v) { var e = document.getElementById(id); if (e) e.innerHTML = v; }
-function setBar(id, pct) { var e = document.getElementById(id); if (e) e.style.width = Math.min(pct, 100) + '%'; }
+// ── HELPERS ────────────────────────────────────────────────────
+function el(id) { return document.getElementById(id); }
+function txt(id, v) { var e = el(id); if (e) e.textContent = v; }
+function html(id, v) { var e = el(id); if (e) e.innerHTML = v; }
+function show(id) { var e = el(id); if (e) e.style.display = ''; }
+function hide(id) { var e = el(id); if (e) e.style.display = 'none'; }
+function fmtTime(ts) {
+  if (!ts) return '—';
+  var m = Math.max(0, Math.floor((Date.now() - new Date(ts).getTime()) / 60000));
+  return m < 1 ? 'Just now' : m < 60 ? (m + 'm ago') : m < 1440 ? (Math.floor(m/60) + 'h ago') : (Math.floor(m/1440) + 'd ago');
+}
+function fmtDate(ts) {
+  if (!ts) return '—';
+  return new Date(ts).toLocaleDateString('en-NG', {day:'numeric',month:'short',year:'numeric'});
+}
+function toast(msg, type) {
+  var t = el('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3500);
+}
+function openModal(id) { var e = el('modal-' + id); if (e) e.classList.add('open'); }
+window.closeModal = function(id) { var e = el('modal-' + id); if (e) e.classList.remove('open'); };
 
-// ── INIT ──────────────────────────────────────────────────────
-// ── PLACEHOLDER so clicks work before auth loads ──
-window.showSection = window.showSection || function(id, btn) {
+// ── INIT ────────────────────────────────────────────────────────
+async function init() {
+  try {
+    var res = await sb.auth.getSession();
+    var session = res.data.session;
+    if (!session) {
+      var ref = await sb.auth.refreshSession();
+      session = ref.data.session;
+    }
+    if (!session) { window.location.href = 'landing.html'; return; }
+    S = session;
+
+    var pr = await sb.from('profiles').select('role,name,initials').eq('id', S.user.id).single();
+    if (!pr.data || !['admin','editor'].includes(pr.data.role)) {
+      el('loading').innerHTML = '<div style="color:#fff;text-align:center;font-family:Inter,sans-serif;"><div style="font-size:48px;margin-bottom:14px;">&#128683;</div><div style="font-size:16px;font-weight:700;margin-bottom:8px;">Access Denied</div><div style="font-size:13px;opacity:.6;margin-bottom:20px;">Admin privileges required.</div><a href="home.html" style="background:#6366f1;color:#fff;padding:10px 24px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;">&#8592; Back to App</a></div>';
+      return;
+    }
+    var ini = pr.data.initials || pr.data.name.charAt(0).toUpperCase();
+    txt('sb-av', ini); txt('sb-name', pr.data.name || 'Admin'); txt('top-av', ini);
+    el('loading').style.display = 'none';
+    loadDashboard();
+  } catch(e) {
+    el('loading').innerHTML = '<div style="color:#fff;text-align:center;font-family:Inter,sans-serif;"><div style="font-size:36px;margin-bottom:12px;">&#9888;</div><div style="font-size:14px;font-weight:700;margin-bottom:8px;">Error loading panel</div><div style="font-size:12px;opacity:.6;margin-bottom:16px;">' + (e.message||'Unknown error') + '</div><button onclick="location.reload()" style="background:#6366f1;color:#fff;border:none;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Retry</button></div>';
+  }
+}
+init();
+
+// ── NAVIGATION ──────────────────────────────────────────────────
+var PAGES = ['dashboard','users','suspended','admins','posts','news','courses','portfolios','market','settings','logs'];
+var TITLES = {dashboard:'Dashboard',users:'All Users',suspended:'Suspended',admins:'Admins',posts:'All Posts',news:'Post News',courses:'Manage Courses',portfolios:'Portfolios',market:'Market Data',settings:'Settings',logs:'Activity Logs'};
+
+window.go = function(page, btn) {
+  PAGES.forEach(function(p) { hide('pg-' + p); });
+  show('pg-' + page);
   document.querySelectorAll('.sb-item').forEach(function(b) { b.classList.remove('on'); });
   if (btn) btn.classList.add('on');
+  txt('page-title', TITLES[page] || page);
+  if (page === 'users')       loadUsers('all');
+  else if (page === 'posts')  loadPosts('recent');
+  else if (page === 'suspended') loadSuspended();
+  else if (page === 'admins') loadAdmins();
+  else if (page === 'market') loadMarket();
+  else if (page === 'portfolios') loadPortfolios();
+  else if (page === 'logs')   loadLogs();
+  else if (page === 'news')   loadNews();
+  else if (page === 'courses') loadCourses();
 };
 
-async function init() {
-  var authRes = await _sb.auth.getSession();
-  if (!authRes.data.session) { window.location.href = 'landing.html'; return; }
-  _session = authRes.data.session;
-
-  var profRes = await _sb.from('profiles').select('role,name,initials').eq('id', _session.user.id).single();
-  if (!profRes.data || !['admin','editor'].includes(profRes.data.role)) {
-    alert('Access denied. Admin or Editor accounts only.');
-    window.location.href = 'home.html';
-    return;
-  }
-
-  var isAdmin  = profRes.data.role === 'admin';
-  var isEditor = profRes.data.role === 'editor';
-
-  // Hide admin-only sections for editors
-  if (isEditor) {
-    var adminOnly = ['sec-users','sec-suspended','sec-admins','sec-portfolios','sec-settings'];
-    adminOnly.forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-    // Hide sidebar items editors can't use
-    document.querySelectorAll('.sb-item').forEach(function(item) {
-      var text = item.textContent.trim();
-      if (['All Users','Suspended','Admins','Portfolios','Settings'].some(function(t){ return text.includes(t); })) {
-        item.style.display = 'none';
-      }
-    });
-    // Show editor notice
-    var notice = document.createElement('div');
-    notice.style.cssText = 'background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:8px 12px;font-size:11px;color:#6d28d9;font-weight:600;margin:8px;';
-    notice.textContent = '&#9997; Editor — limited access';
-    var footer = document.querySelector('.sb-footer');
-    if (footer) footer.parentNode.insertBefore(notice, footer);
-  }
-
-  var initials = profRes.data.initials || _session.user.email.charAt(0).toUpperCase();
-  setEl('sb-av', initials); setEl('top-av', initials);
-  setEl('sb-uname', profRes.data.name || 'Admin');
-
-  // Hide loading overlay — show the panel
-  var loader = document.getElementById('admin-loading');
-  if (loader) loader.style.display = 'none';
-
-  await loadDashboard();
-}
-document.addEventListener('DOMContentLoaded', function() { init(); });
-
-// ── DASHBOARD ─────────────────────────────────────────────────
+// ── DASHBOARD ────────────────────────────────────────────────────
 async function loadDashboard() {
-  var [uRes, pRes, hRes, vRes, sRes] = await Promise.all([
-    _sb.from('profiles').select('id', {count:'exact', head:true}),
-    _sb.from('posts').select('id', {count:'exact', head:true}),
-    _sb.from('holdings').select('id', {count:'exact', head:true}),
-    _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_verified', true),
-    _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_suspended', true)
+  var results = await Promise.allSettled([
+    sb.from('profiles').select('id', {count:'exact', head:true}),
+    sb.from('posts').select('id', {count:'exact', head:true}),
+    sb.from('holdings').select('id', {count:'exact', head:true}),
+    sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_verified', true),
+    sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_suspended', true),
+    sb.from('profiles').select('country'),
+    sb.from('stock_prices').select('last_updated').order('last_updated', {ascending:false}).limit(1).single()
   ]);
 
-  var uCount = uRes.count || 0;
-  var pCount = pRes.count || 0;
-  var hCount = hRes.count || 0;
-  var vCount = vRes.count || 0;
-  var sCount = sRes.count || 0;
-  var activeCount = Math.max(0, uCount - sCount);
+  var uCount = results[0].status === 'fulfilled' ? (results[0].value.count || 0) : 0;
+  var pCount = results[1].status === 'fulfilled' ? (results[1].value.count || 0) : 0;
+  var hCount = results[2].status === 'fulfilled' ? (results[2].value.count || 0) : 0;
+  var vCount = results[3].status === 'fulfilled' ? (results[3].value.count || 0) : 0;
+  var sCount = results[4].status === 'fulfilled' ? (results[4].value.count || 0) : 0;
+  var cData  = results[5].status === 'fulfilled' ? (results[5].value.data || []) : [];
+  var priceData = results[6].status === 'fulfilled' ? results[6].value.data : null;
 
-  // Stat cards
-  setEl('dash-users', uCount.toLocaleString());
-  setEl('dash-posts', pCount.toLocaleString());
-  setEl('dash-holdings', hCount.toLocaleString());
-  setEl('sb-user-count', uCount);
-  setEl('sb-post-count', pCount);
+  txt('d-users', uCount.toLocaleString());
+  txt('d-posts', pCount.toLocaleString());
+  txt('d-holdings', hCount.toLocaleString());
+  txt('badge-users', uCount);
+  txt('badge-posts', pCount);
+  if (priceData) txt('d-lastprice', fmtTime(priceData.last_updated));
 
-  // Platform health bars
-  setEl('ph-active', activeCount);
-  setEl('ph-suspended', sCount);
-  setEl('ph-verified', vCount);
-
-  // Update bar fills dynamically
-  var activeBar = document.querySelector('#sec-dashboard .bar-item:nth-child(1) .bar-fill');
-  var suspBar   = document.querySelector('#sec-dashboard .bar-item:nth-child(2) .bar-fill');
-  var verBar    = document.querySelector('#sec-dashboard .bar-item:nth-child(3) .bar-fill');
-  if (activeBar && uCount > 0) activeBar.style.width = Math.round(activeCount/uCount*100) + '%';
-  if (suspBar && uCount > 0)   suspBar.style.width   = Math.round(sCount/uCount*100) + '%';
-  if (verBar && uCount > 0)    verBar.style.width    = Math.round(vCount/uCount*100) + '%';
-
-  // Investors with holdings
-  var ihRes = await _sb.from('holdings').select('user_id');
-  var unique = new Set();
-  if (ihRes.data) ihRes.data.forEach(function(r) { unique.add(r.user_id); });
-  setEl('ph-holdings', unique.size);
-  var holdBar = document.querySelector('#sec-dashboard .bar-item:nth-child(4) .bar-fill');
-  if (holdBar && uCount > 0) holdBar.style.width = Math.round(unique.size/uCount*100) + '%';
-  setEl('port-investors', unique.size);
-  setEl('port-total', hCount);
-
-  // Last price update
-  var priceRes = await _sb.from('stock_prices').select('last_updated').order('last_updated', {ascending:false}).limit(1).single();
-  if (priceRes.data) {
-    var mins = Math.floor((Date.now() - new Date(priceRes.data.last_updated).getTime()) / 60000);
-    setEl('last-price-update', mins < 2 ? 'Just now' : (mins + ' min ago'));
-  }
-
-  // Country breakdown — fetch all profiles and group
-  var countryRes = await _sb.from('profiles').select('country');
+  // Country bars
   var countries = {};
-  if (countryRes.data) {
-    countryRes.data.forEach(function(p) {
-      var c = (p.country || 'Nigeria').trim();
-      countries[c] = (countries[c] || 0) + 1;
+  cData.forEach(function(p) { var c = p.country || 'Nigeria'; countries[c] = (countries[c]||0) + 1; });
+  var total = cData.length || 1;
+  var topCountries = Object.entries(countries).sort(function(a,b){return b[1]-a[1];}).slice(0,4);
+  var cHtml = '';
+  topCountries.forEach(function(entry) {
+    var pct = Math.round(entry[1]/total*100);
+    cHtml += '<div class="bar-row"><div class="bar-lbl">' + entry[0].substring(0,10) + '</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:var(--p);"></div></div><div class="bar-val">'+entry[1]+'</div></div>';
+  });
+  html('country-bars', cHtml || '<div style="font-size:12px;color:var(--tx3);">No data yet</div>');
+
+  // Health bars
+  var activeCount = Math.max(0, uCount - sCount);
+  var hHealthData = [
+    {label:'Active', val:activeCount, total:uCount, color:'var(--g)'},
+    {label:'Suspended', val:sCount, total:uCount, color:'var(--r)'},
+    {label:'Verified', val:vCount, total:uCount, color:'var(--p)'},
+    {label:'With Holdings', val:hCount, total:uCount, color:'var(--pu)'}
+  ];
+  var hHtml = '';
+  hHealthData.forEach(function(item) {
+    var pct = item.total > 0 ? Math.round(item.val/item.total*100) : 0;
+    hHtml += '<div class="bar-row"><div class="bar-lbl">'+item.label+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+item.color+'"></div></div><div class="bar-val">'+item.val+'</div></div>';
+  });
+  html('health-bars', hHtml);
+}
+
+// ── USERS ────────────────────────────────────────────────────────
+async function loadUsers(filter) {
+  html('users-body', '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--tx3);">Loading...</td></tr>');
+  var res = await sb.from('profiles').select('*').order('joined_at', {ascending:false});
+  USERS = res.data || [];
+  filterUsers(filter, null, true);
+}
+
+window.filterUsers = function(filter, btn, skipLoad) {
+  if (!skipLoad) {
+    if (btn) { document.querySelectorAll('#user-filters .fb').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); }
+  }
+  if (filter === 'active')    FILTERED = USERS.filter(function(u){return !u.is_suspended;});
+  else if (filter === 'suspended') FILTERED = USERS.filter(function(u){return u.is_suspended;});
+  else if (filter === 'verified')  FILTERED = USERS.filter(function(u){return u.is_verified;});
+  else FILTERED = USERS;
+  PAGE = 1;
+  renderUsers();
+};
+
+window.searchUsers = function(q) {
+  if (!q) { FILTERED = USERS; } else {
+    q = q.toLowerCase();
+    FILTERED = USERS.filter(function(u) {
+      return (u.name && u.name.toLowerCase().includes(q)) || (u.username && u.username.toLowerCase().includes(q));
     });
   }
-  var total = countryRes.data ? countryRes.data.length : 1;
-  var ngCount = countries['Nigeria'] || 0;
-  var ghCount = countries['Ghana'] || 0;
-  var keCount = countries['Kenya'] || 0;
-  var other = total - ngCount - ghCount - keCount;
+  PAGE = 1;
+  renderUsers();
+};
 
-  // Update country bar fills
-  var bars = document.querySelectorAll('#country-chart .bar-fill');
-  var vals = document.querySelectorAll('#country-chart .bar-val');
-  if (bars[0]) bars[0].style.width = (total > 0 ? Math.round(ngCount/total*100) : 0) + '%';
-  if (bars[1]) bars[1].style.width = (total > 0 ? Math.round(ghCount/total*100) : 0) + '%';
-  if (bars[2]) bars[2].style.width = (total > 0 ? Math.round(keCount/total*100) : 0) + '%';
-  if (bars[3]) bars[3].style.width = (total > 0 ? Math.round(other/total*100) : 0) + '%';
-  if (vals[0]) vals[0].textContent = ngCount;
-  if (vals[1]) vals[1].textContent = ghCount;
-  if (vals[2]) vals[2].textContent = keCount;
-  if (vals[3]) vals[3].textContent = other;
-}
-
-// ── USERS ─────────────────────────────────────────────────────
-async function loadUsers(filter) {
-  var body = document.getElementById('users-table-body');
-  if (body) body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading users...</div>';
-
-  var res = await _sb.from('profiles').select('*').order('joined_at', {ascending:false});
-  _allUsers = res.data || [];
-
-  if (filter === 'active')      _filteredUsers = _allUsers.filter(function(u) { return !u.is_suspended; });
-  else if (filter === 'verified') _filteredUsers = _allUsers.filter(function(u) { return u.is_verified; });
-  else if (filter === 'unverified') _filteredUsers = _allUsers.filter(function(u) { return !u.is_verified && !u.is_suspended; });
-  else if (filter === 'suspended') _filteredUsers = _allUsers.filter(function(u) { return u.is_suspended; });
-  else _filteredUsers = _allUsers;
-
-  _currentPage = 1;
-  renderUsersTable();
-}
-
-function renderUsersTable() {
-  var body = document.getElementById('users-table-body');
-  if (!body) return;
-  var start = (_currentPage - 1) * _pageSize;
-  var page = _filteredUsers.slice(start, start + _pageSize);
-  if (!page.length) { body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No users found.</div>'; return; }
-
-  var html = '';
+function renderUsers() {
+  var start = (PAGE-1)*PER;
+  var page = FILTERED.slice(start, start+PER);
+  txt('users-info', 'Showing ' + (start+1) + '-' + Math.min(start+PER, FILTERED.length) + ' of ' + FILTERED.length);
+  if (!page.length) { html('users-body', '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--tx3);">No users found.</td></tr>'); html('users-pag',''); return; }
+  var rows = '';
   page.forEach(function(u) {
     var ini = u.initials || (u.name ? u.name.charAt(0).toUpperCase() : 'U');
-    var joined = u.joined_at ? new Date(u.joined_at).toLocaleDateString('en-NG', {day:'numeric', month:'short', year:'numeric'}) : '—';
-    var statusClass = u.is_suspended ? 'sp-suspended' : (u.role === 'admin' ? 'sp-admin' : (u.is_verified ? 'sp-active' : 'sp-unverified'));
-    var statusText  = u.is_suspended ? 'Suspended' : (u.role === 'admin' ? 'Admin' : (u.is_verified ? 'Verified' : 'Unverified'));
-    var safeName = (u.name||'User').replace(/'/g,'');
-    html += '<div class="user-row">'
-      + '<div class="ur-user"><div class="ur-av">' + ini + '</div>'
-      + '<div><div class="ur-name">' + (u.name||'No Name') + '</div>'
-      + '<div class="ur-email">@' + (u.username||'—') + '</div></div></div>'
-      + '<div class="ur-text" style="font-size:11px;">' + (u.location||'—') + '</div>'
-      + '<div class="ur-text">' + (u.country||'Nigeria') + '</div>'
-      + '<div class="ur-text">' + (u.total_posts||0) + '</div>'
-      + '<div><span class="status-pill ' + statusClass + '">' + statusText + '</span></div>'
-      + '<div class="ur-text" style="font-size:11px;">' + joined + '</div>'
-      + '<div class="action-btns">'
-      + '<button class="ab" onclick="viewUser('' + u.id + '')">View</button>'
+    var pill = u.is_suspended ? '<span class="pill pill-sus">Suspended</span>' : (u.role === 'admin' ? '<span class="pill pill-adm">Admin</span>' : (u.is_verified ? '<span class="pill pill-ok">Verified</span>' : '<span class="pill pill-unv">Unverified</span>'));
+    rows += '<tr>'
+      + '<td><div style="display:flex;align-items:center;gap:8px;"><div class="av">'+ini+'</div><div><div style="font-size:13px;font-weight:600;">'+(u.name||'No Name')+'</div></div></div></td>'
+      + '<td style="color:var(--tx3);">@'+(u.username||'—')+'</td>'
+      + '<td>'+(u.country||'—')+'</td>'
+      + '<td>'+(u.total_posts||0)+'</td>'
+      + '<td>'+pill+'</td>'
+      + '<td style="font-size:11px;color:var(--tx3);">'+fmtDate(u.joined_at)+'</td>'
+      + '<td><div style="display:flex;gap:5px;">'
+      + '<button class="btn btn-s" style="padding:4px 9px;" onclick="viewUser(\''+u.id+'\')">View</button>'
       + (!u.is_suspended
-          ? '<button class="ab danger" onclick="initSuspend('' + u.id + '','' + safeName + '')">Suspend</button>'
-          : '<button class="ab" onclick="unsuspendUser('' + u.id + '')">Unsuspend</button>')
-      + '<button class="ab danger" onclick="initDeleteUser('' + u.id + '','' + safeName + '')" style="background:#fee2e2;">&#128465;</button>'
-      + '</div></div>';
+          ? '<button class="btn btn-am" style="padding:4px 9px;" onclick="initSuspend(\''+u.id+'\',\''+ini+'\')">Suspend</button>'
+          : '<button class="btn btn-g" style="padding:4px 9px;" onclick="doUnsuspend(\''+u.id+'\')">Unsuspend</button>')
+      + '<button class="btn btn-r" style="padding:4px 9px;" onclick="initDelete(\''+u.id+'\',\''+(u.name||'User').replace(/'/g,'')+'\')">&#128465;</button>'
+      + '</div></td></tr>';
   });
-  body.innerHTML = html;
+  html('users-body', rows);
 
-  setEl('page-info', 'Page ' + _currentPage + ' of ' + Math.ceil(_filteredUsers.length / _pageSize) + ' (' + _filteredUsers.length + ' users)');
-  var pag = document.getElementById('users-pagination');
-  if (pag) pag.style.display = _filteredUsers.length > _pageSize ? 'flex' : 'none';
+  // Pagination
+  var pages = Math.ceil(FILTERED.length/PER);
+  var pHtml = '';
+  if (pages > 1) {
+    if (PAGE > 1) pHtml += '<button class="btn btn-s" onclick="changePage(-1)">&#8592;</button>';
+    for (var i = Math.max(1,PAGE-2); i <= Math.min(pages,PAGE+2); i++) {
+      pHtml += '<button class="btn '+(i===PAGE?'btn-p':'btn-s')+'" onclick="jumpPage('+i+')">'+i+'</button>';
+    }
+    if (PAGE < pages) pHtml += '<button class="btn btn-s" onclick="changePage(1)">&#8594;</button>';
+  }
+  html('users-pag', pHtml);
 }
 
-window.changePage = function(dir) {
-  var max = Math.ceil(_filteredUsers.length / _pageSize);
-  _currentPage = Math.max(1, Math.min(_currentPage + dir, max));
-  renderUsersTable();
-};
+window.changePage = function(d) { PAGE = Math.max(1, Math.min(PAGE+d, Math.ceil(FILTERED.length/PER))); renderUsers(); };
+window.jumpPage = function(n) { PAGE = n; renderUsers(); };
 
-window.filterUsers = function(f, btn) {
-  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('on'); });
-  btn.classList.add('on');
-  loadUsers(f);
-};
-
-// ── VIEW USER ─────────────────────────────────────────────────
 window.viewUser = async function(uid) {
-  var user = _allUsers.find(function(u) { return u.id === uid; });
-  if (!user) return;
-  var [pRes, hRes, fRes] = await Promise.all([
-    _sb.from('posts').select('id', {count:'exact', head:true}).eq('user_id', uid),
-    _sb.from('holdings').select('id', {count:'exact', head:true}).eq('user_id', uid),
-    _sb.from('follows').select('id', {count:'exact', head:true}).eq('following_id', uid)
+  var u = USERS.find(function(x){return x.id===uid;});
+  if (!u) return;
+  var results = await Promise.allSettled([
+    sb.from('posts').select('id',{count:'exact',head:true}).eq('user_id',uid),
+    sb.from('holdings').select('id',{count:'exact',head:true}).eq('user_id',uid),
+    sb.from('follows').select('id',{count:'exact',head:true}).eq('following_id',uid)
   ]);
-  var content = document.getElementById('view-user-content');
-  if (!content) return;
-  var safeName = (user.name||'User').replace(/'/g,'');
-  content.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">NAME</div><div style="font-size:14px;font-weight:700;">' + (user.name||'—') + '</div></div>'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">USERNAME</div><div style="font-size:14px;font-weight:700;">@' + (user.username||'—') + '</div></div>'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">POSTS</div><div style="font-size:20px;font-weight:800;color:var(--p);">' + (pRes.count||0) + '</div></div>'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">HOLDINGS</div><div style="font-size:20px;font-weight:800;color:var(--green);">' + (hRes.count||0) + '</div></div>'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">FOLLOWERS</div><div style="font-size:20px;font-weight:800;color:var(--amber);">' + (fRes.count||0) + '</div></div>'
-    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">STATUS</div><div style="font-size:14px;font-weight:700;">' + (user.is_suspended ? '&#128683; Suspended' : (user.is_verified ? '&#10003; Verified' : '&#9675; Unverified')) + '</div></div>'
-    + '</div>'
-    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:6px;">Phone: ' + (user.phone||'Not set') + '</div>'
-    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:14px;">Email: ' + (user.location||'—') + '</div>'
-    + '<div style="font-size:11px;color:var(--tx3);margin-bottom:14px;">ID: <code style="background:var(--g100);padding:2px 6px;border-radius:4px;">' + user.id + '</code></div>'
-    + '<div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--bdr);">'
-    + (!user.is_suspended
-        ? '<button class="ta-btn" style="background:#fef3c7;border-color:#fcd34d;color:#92400e;" onclick="closeModal('view-user');initSuspend('' + uid + '','' + safeName + '')">&#128683; Suspend</button>'
-        : '<button class="ta-btn" onclick="closeModal('view-user');unsuspendUser('' + uid + '')">&#10003; Unsuspend</button>')
-    + '<button class="ta-btn" onclick="makeAdmin('' + uid + '')">&#128737; Make Admin</button>'
-    + '<button class="ta-btn" style="background:#fee2e2;border-color:#fca5a5;color:#991b1b;" onclick="closeModal('view-user');initDeleteUser('' + uid + '','' + safeName + '')">&#128465; Delete Account</button>'
-    + '</div>';
-  openModal('view-user');
+  var pCount = results[0].status==='fulfilled'?(results[0].value.count||0):0;
+  var hCount = results[1].status==='fulfilled'?(results[1].value.count||0):0;
+  var fCount = results[2].status==='fulfilled'?(results[2].value.count||0):0;
+  var ini = u.initials||(u.name?u.name.charAt(0).toUpperCase():'U');
+  var safeName = (u.name||'User').replace(/'/g,'');
+  html('view-content',
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">'
+    +'<div style="background:var(--g50);border-radius:9px;padding:11px;"><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;">Name</div><div style="font-size:14px;font-weight:700;">'+(u.name||'—')+'</div></div>'
+    +'<div style="background:var(--g50);border-radius:9px;padding:11px;"><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;">Username</div><div style="font-size:14px;font-weight:700;">@'+(u.username||'—')+'</div></div>'
+    +'<div style="background:var(--g50);border-radius:9px;padding:11px;"><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;">Posts</div><div style="font-size:20px;font-weight:800;color:var(--p);">'+pCount+'</div></div>'
+    +'<div style="background:var(--g50);border-radius:9px;padding:11px;"><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;">Holdings</div><div style="font-size:20px;font-weight:800;color:var(--g);">'+hCount+'</div></div>'
+    +'<div style="background:var(--g50);border-radius:9px;padding:11px;"><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;">Followers</div><div style="font-size:20px;font-weight:800;color:var(--am);">'+fCount+'</div></div>'
+    +'<div style="background:var(--g50);border-radius:9px;padding:11px;"><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;">Status</div><div style="font-size:13px;font-weight:700;">'+(u.is_suspended?'&#128683; Suspended':(u.is_verified?'&#10003; Verified':'&#9675; Unverified'))+'</div></div>'
+    +'</div>'
+    +'<div style="font-size:12px;color:var(--tx3);margin-bottom:5px;">Phone: '+(u.phone||'Not set')+'</div>'
+    +'<div style="font-size:11px;color:var(--tx3);margin-bottom:14px;font-family:monospace;">ID: '+u.id+'</div>'
+    +'<div style="display:flex;gap:7px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--bdr);">'
+    +(!u.is_suspended
+      ? '<button class="btn btn-am" onclick="closeModal(\'view\');initSuspend(\''+uid+'\',\''+safeName+'\')">&#128683; Suspend</button>'
+      : '<button class="btn btn-g" onclick="closeModal(\'view\');doUnsuspend(\''+uid+'\')">&#10003; Unsuspend</button>')
+    +'<button class="btn btn-s" onclick="doMakeAdmin(\''+uid+'\')">&#128737; Make Admin</button>'
+    +'<button class="btn btn-r" onclick="closeModal(\'view\');initDelete(\''+uid+'\',\''+safeName+'\')">&#128465; Delete</button>'
+    +'</div>'
+  );
+  openModal('view');
 };
 
-window.makeAdmin = async function(uid) {
-  if (!confirm('Give this user admin privileges?')) return;
-  await _sb.from('profiles').update({role:'admin'}).eq('id', uid);
-  showToast('User promoted to admin!', 'success');
-  closeModal('view-user');
-  loadUsers('all');
-};
-
-// ── SUSPEND / DELETE USER ─────────────────────────────────────
 window.initSuspend = function(uid, name) {
-  _suspendTarget = uid;
-  var info = document.getElementById('suspend-user-info');
-  if (info) info.innerHTML = '<strong>' + name + '</strong> will lose access to GopexFund.';
+  SUSPEND_ID = uid;
+  html('suspend-info', '<strong>'+(name||'This user')+'</strong> will lose access to GopexFund.');
+  el('suspend-reason').value = '';
   openModal('suspend');
 };
-
 window.confirmSuspend = async function() {
-  if (!_suspendTarget) return;
-  var reason = document.getElementById('suspend-reason').value.trim() || 'No reason given';
-  await _sb.from('profiles').update({is_suspended:true, suspension_reason:reason}).eq('id', _suspendTarget);
-  closeModal('suspend'); _suspendTarget = null;
-  showToast('User suspended', 'success');
+  if (!SUSPEND_ID) return;
+  var reason = el('suspend-reason').value.trim() || 'No reason given';
+  await sb.from('profiles').update({is_suspended:true, suspension_reason:reason}).eq('id', SUSPEND_ID);
+  closeModal('suspend');
+  toast('User suspended', 'ok');
   loadUsers('all');
+  SUSPEND_ID = null;
 };
-
-window.unsuspendUser = async function(uid) {
+window.doUnsuspend = async function(uid) {
   if (!confirm('Unsuspend this user?')) return;
-  await _sb.from('profiles').update({is_suspended:false, suspension_reason:null}).eq('id', uid);
-  showToast('User unsuspended', 'success');
+  await sb.from('profiles').update({is_suspended:false, suspension_reason:null}).eq('id', uid);
+  toast('User unsuspended', 'ok');
   loadUsers('all');
 };
-
-window.initDeleteUser = function(uid, name) {
-  _deleteTargetId = uid;
-  var nameEl = document.getElementById('delete-user-name');
-  if (nameEl) nameEl.textContent = name || 'This user';
-  var confEl = document.getElementById('delete-user-confirm');
-  if (confEl) confEl.value = '';
-  openModal('delete-user');
+window.initDelete = function(uid, name) {
+  DELETE_ID = uid;
+  txt('delete-name', name || 'This user');
+  el('delete-confirm').value = '';
+  openModal('delete');
 };
-
-window.confirmDeleteUser = async function() {
-  var conf = document.getElementById('delete-user-confirm').value.trim();
-  if (conf !== 'DELETE') { showToast('Type DELETE in caps to confirm', 'error'); return; }
-  if (!_deleteTargetId) return;
-  showToast('Deleting all user data...', '');
-  var r = await _sb.rpc('delete_user_completely', {target_user_id: _deleteTargetId});
-  if (r.error) { showToast('Error: ' + r.error.message, 'error'); return; }
-  if (r.data && r.data.success) {
-    showToast('User and all data deleted successfully', 'success');
-    closeModal('delete-user');
-    _deleteTargetId = null;
-    loadUsers('all');
-    loadDashboard();
-  } else {
-    showToast('Failed: ' + (r.data && r.data.error ? r.data.error : 'Unknown error'), 'error');
-  }
+window.confirmDelete = async function() {
+  if (el('delete-confirm').value.trim() !== 'DELETE') { toast('Type DELETE in caps', 'err'); return; }
+  if (!DELETE_ID) return;
+  toast('Deleting...', '');
+  var r = await sb.rpc('delete_user_completely', {target_user_id: DELETE_ID});
+  if (r.error) { toast('Error: '+r.error.message, 'err'); return; }
+  toast('User deleted successfully', 'ok');
+  closeModal('delete');
+  DELETE_ID = null;
+  loadUsers('all');
+  loadDashboard();
 };
-
-// ── ADMINS ────────────────────────────────────────────────────
-async function loadAdmins() {
-  var res = await _sb.from('profiles').select('*').eq('role','admin');
-  var body = document.getElementById('admins-body');
-  if (!body) return;
-  if (!res.data || !res.data.length) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No admins found.</div>';
-    return;
-  }
-  var html = '';
-  res.data.forEach(function(u) {
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
-      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'Admin') + '</div>'
-      + '<div style="font-size:11px;color:var(--purple);">&#128737; Administrator · @' + (u.username||'—') + '</div></div>'
-      + (u.id !== _session.user.id
-          ? '<button class="ab danger" onclick="demoteAdmin('' + u.id + '')">Remove Admin</button>'
-          : '<span style="font-size:11px;color:var(--tx3);">You</span>')
-      + '</div>';
+window.doMakeAdmin = async function(uid) {
+  if (!confirm('Give this user admin privileges?')) return;
+  await sb.from('profiles').update({role:'admin'}).eq('id', uid);
+  toast('User promoted to admin', 'ok');
+  closeModal('view');
+  loadUsers('all');
+};
+window.exportUsers = function() {
+  var csv = 'Name,Username,Country,Role,Verified,Posts,Joined\n';
+  USERS.forEach(function(u) {
+    csv += '"'+(u.name||'')+'",'+(u.username||'')+','+(u.country||'')+','+(u.role||'user')+','+(u.is_verified?'Yes':'No')+','+(u.total_posts||0)+','+(u.joined_at||'')+'\n';
   });
-  body.innerHTML = html;
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'users-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  toast('CSV exported', 'ok');
+};
+
+// ── SUSPENDED ────────────────────────────────────────────────────
+async function loadSuspended() {
+  html('suspended-list', '<div style="color:var(--tx3);font-size:13px;padding:10px;">Loading...</div>');
+  var res = await sb.from('profiles').select('*').eq('is_suspended', true);
+  if (!res.data || !res.data.length) { html('suspended-list', '<div style="text-align:center;padding:40px;color:var(--tx3);">&#10003; No suspended accounts</div>'); return; }
+  var h = '';
+  res.data.forEach(function(u) {
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
+      +'<div><div style="font-size:13px;font-weight:600;">'+(u.name||'No Name')+'<span style="font-size:11px;color:var(--tx3);margin-left:6px;">@'+(u.username||'—')+'</span></div>'
+      +'<div style="font-size:11px;color:var(--r);margin-top:2px;">Reason: '+(u.suspension_reason||'None given')+'</div></div>'
+      +'<div style="display:flex;gap:6px;">'
+      +'<button class="btn btn-g" onclick="doUnsuspend(\''+u.id+'\')">Unsuspend</button>'
+      +'<button class="btn btn-r" onclick="initDelete(\''+u.id+'\',\''+(u.name||'User').replace(/'/g,'')+'\')">&#128465;</button>'
+      +'</div></div>';
+  });
+  html('suspended-list', h);
 }
 
-window.demoteAdmin = async function(uid) {
-  if (!confirm('Remove admin privileges from this user?')) return;
-  await _sb.from('profiles').update({role:'user'}).eq('id', uid);
-  showToast('Admin privileges removed', 'success');
+// ── ADMINS ───────────────────────────────────────────────────────
+async function loadAdmins() {
+  html('admins-list', '<div style="color:var(--tx3);font-size:13px;padding:10px;">Loading...</div>');
+  var res = await sb.from('profiles').select('*').eq('role', 'admin');
+  if (!res.data || !res.data.length) { html('admins-list', '<div style="text-align:center;padding:40px;color:var(--tx3);">No admins found.</div>'); return; }
+  var h = '';
+  res.data.forEach(function(u) {
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
+      +'<div><div style="font-size:13px;font-weight:700;">'+(u.name||'Admin')+'</div><div style="font-size:11px;color:var(--pu);">&#128737; Administrator &middot; @'+(u.username||'—')+'</div></div>'
+      +(u.id !== S.user.id
+        ? '<button class="btn btn-r" onclick="doDemote(\''+u.id+'\')">Remove Admin</button>'
+        : '<span style="font-size:11px;color:var(--tx3);">You</span>')
+      +'</div>';
+  });
+  html('admins-list', h);
+}
+window.doDemote = async function(uid) {
+  if (!confirm('Remove admin privileges?')) return;
+  await sb.from('profiles').update({role:'user'}).eq('id', uid);
+  toast('Admin removed', 'ok');
   loadAdmins();
 };
 
-// ── SUSPENDED ─────────────────────────────────────────────────
-async function loadSuspended() {
-  var res = await _sb.from('profiles').select('*').eq('is_suspended', true);
-  var body = document.getElementById('suspended-body');
-  if (!body) return;
-  if (!res.data || !res.data.length) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);"><div style="font-size:32px;margin-bottom:10px;">&#10003;</div><div>No suspended accounts</div></div>';
-    return;
-  }
-  var html = '';
-  res.data.forEach(function(u) {
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--bdr);">'
-      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'No Name') + ' <span style="font-size:11px;color:var(--tx3);">@' + (u.username||'—') + '</span></div>'
-      + '<div style="font-size:11px;color:var(--red);margin-top:2px;">Reason: ' + (u.suspension_reason||'None given') + '</div></div>'
-      + '<div style="display:flex;gap:6px;">'
-      + '<button class="ab" onclick="unsuspendUser('' + u.id + '')">Unsuspend</button>'
-      + '<button class="ab danger" onclick="initDeleteUser('' + u.id + '','' + (u.name||'User').replace(/'/g,'') + '')">&#128465;</button>'
-      + '</div></div>';
-  });
-  body.innerHTML = html;
-}
-
-// ── POSTS ─────────────────────────────────────────────────────
+// ── POSTS ────────────────────────────────────────────────────────
 async function loadPosts(filter) {
-  var body = document.getElementById('posts-table-body');
-  if (body) body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">&#9203; Loading...</div>';
-  var query = _sb.from('posts')
-    .select('id,body,created_at,likes_count,comments_count,user_id,profiles!posts_user_id_fkey(name,initials)');
-  if (filter === 'popular') query = query.order('likes_count', {ascending:false});
-  else query = query.order('created_at', {ascending:false});
-  var res = await query.limit(50);
-  if (!body) return;
-  if (!res.data || !res.data.length) { body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No posts yet.</div>'; return; }
-  var html = '';
+  html('posts-body', '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--tx3);">Loading...</td></tr>');
+  var q = sb.from('posts').select('id,body,created_at,likes_count,comments_count,user_id,profiles!posts_user_id_fkey(name)');
+  if (filter === 'popular') q = q.order('likes_count', {ascending:false});
+  else q = q.order('created_at', {ascending:false});
+  var res = await q.limit(60);
+  if (!res.data || !res.data.length) { html('posts-body', '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--tx3);">No posts yet.</td></tr>'); return; }
+  var rows = '';
   res.data.forEach(function(p) {
-    var author = (p.profiles && p.profiles.name) ? p.profiles.name : 'Unknown';
-    var mins = Math.max(0, Math.floor((Date.now() - new Date(p.created_at).getTime()) / 60000));
-    var tstr = mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
-    html += '<div class="post-row">'
-      + '<div><div class="pr-body">' + p.body.substring(0,100) + (p.body.length>100?'...':'') + '</div>'
-      + '<div class="pr-author">' + tstr + '</div></div>'
-      + '<div class="pr-author">' + author + '</div>'
-      + '<div style="font-size:12px;font-weight:700;">&#10084; ' + (p.likes_count||0) + '</div>'
-      + '<div style="font-size:12px;font-weight:700;">&#128172; ' + (p.comments_count||0) + '</div>'
-      + '<div><button class="ab danger" onclick="deletePost('' + p.id + '',this)">Delete</button></div>'
-      + '</div>';
+    var author = p.profiles && p.profiles.name ? p.profiles.name : 'Unknown';
+    rows += '<tr>'
+      +'<td style="max-width:280px;"><div style="font-size:12px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+p.body.substring(0,80)+(p.body.length>80?'...':'')+'</div></td>'
+      +'<td style="font-size:12px;font-weight:600;">'+author+'</td>'
+      +'<td style="font-size:12px;font-weight:700;">&#10084; '+(p.likes_count||0)+'</td>'
+      +'<td style="font-size:12px;font-weight:700;">&#128172; '+(p.comments_count||0)+'</td>'
+      +'<td style="font-size:11px;color:var(--tx3);">'+fmtTime(p.created_at)+'</td>'
+      +'<td><button class="btn btn-r" style="padding:4px 9px;" onclick="doDeletePost(\''+p.id+'\',this)">Delete</button></td>'
+      +'</tr>';
   });
-  body.innerHTML = html;
+  html('posts-body', rows);
 }
-
 window.filterPosts = function(f, btn) {
-  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('on'); });
+  document.querySelectorAll('#pg-posts .fb').forEach(function(b){b.classList.remove('on');});
   btn.classList.add('on');
   loadPosts(f);
 };
-
-window.deletePost = async function(id, el) {
+window.doDeletePost = async function(id, btn) {
   if (!confirm('Delete this post?')) return;
-  await _sb.from('posts').delete().eq('id', id);
-  var row = el.closest('.post-row');
+  await sb.from('posts').delete().eq('id', id);
+  var row = btn.closest('tr');
   if (row) row.remove();
-  showToast('Post deleted', 'success');
+  toast('Post deleted', 'ok');
 };
 
-// ── MARKET DATA ───────────────────────────────────────────────
-async function loadMarket() {
-  var body = document.getElementById('market-body');
-  if (body) body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--tx3);">&#9203; Loading prices...</div>';
-  var res = await _sb.from('stock_prices').select('ticker,company_name,price,change_pct,volume,last_updated').order('ticker');
-  if (!body || !res.data) return;
-  var html = '';
-  res.data.forEach(function(s) {
-    var up = (s.change_pct || 0) >= 0;
-    var mins = s.last_updated ? Math.floor((Date.now() - new Date(s.last_updated).getTime()) / 60000) : null;
-    var timeStr = mins == null ? '—' : mins < 2 ? 'Live' : mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
-    html += '<div style="display:grid;grid-template-columns:80px 1fr 90px 80px 90px;gap:8px;padding:9px 18px;border-bottom:1px solid var(--bdr);font-size:12px;">'
-      + '<div style="font-weight:700;font-family:monospace;">' + s.ticker + '</div>'
-      + '<div style="color:var(--tx2);">' + (s.company_name||'—') + '</div>'
-      + '<div style="font-weight:700;">&#8358;' + parseFloat(s.price||0).toLocaleString() + '</div>'
-      + '<div style="font-weight:700;color:' + (up?'var(--green)':'var(--red)') + ';">' + (up?'&#9650;':'&#9660;') + ' ' + Math.abs(s.change_pct||0).toFixed(2) + '%</div>'
-      + '<div style="color:var(--tx3);">' + timeStr + '</div>'
-      + '</div>';
-  });
-  body.innerHTML = html || '<div style="text-align:center;padding:30px;color:var(--tx3);">No prices yet. Run load-all-ngx-stocks.sql</div>';
-}
-
-window.refreshPrices = async function() {
-  showToast('Triggering price refresh...', '');
-  try {
-    var r = await _sb.rpc('fetch_all_ngx_prices');
-    showToast('Prices refreshed successfully!', 'success');
-    if (document.getElementById('sec-market').style.display !== 'none') loadMarket();
-    loadDashboard();
-  } catch(e) {
-    showToast('Queued — pg_cron will refresh in next cycle', '');
-  }
-};
-
-// ── PORTFOLIOS ────────────────────────────────────────────────
-async function loadPortfolios() {
-  var res = await _sb.from('holdings').select('*, profiles!holdings_user_id_fkey(name)').order('created_at', {ascending:false}).limit(30);
-  var body = document.getElementById('portfolios-body');
-  if (!body || !res.data) return;
-  var html = '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--bdr);">'
-    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">USER / TICKER</div>'
-    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">SHARES</div>'
-    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">BUY PRICE</div>'
-    + '<div style="font-size:10px;font-weight:700;color:var(--tx3);">COST BASIS</div></div>';
-  res.data.forEach(function(h) {
-    var cost = h.shares * h.buy_price;
-    html += '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:12px;">'
-      + '<div><div style="font-weight:700;">' + h.ticker + ' <span style="color:var(--tx3);font-weight:400;">&#183; ' + ((h.profiles&&h.profiles.name)||'Unknown') + '</span></div>'
-      + '<div style="color:var(--tx3);font-size:11px;">' + (h.company_name||'') + '</div></div>'
-      + '<div style="font-weight:700;">' + h.shares + '</div>'
-      + '<div>&#8358;' + parseFloat(h.buy_price).toLocaleString() + '</div>'
-      + '<div style="font-weight:700;">&#8358;' + cost.toLocaleString('en-NG',{maximumFractionDigits:0}) + '</div></div>';
-  });
-  body.innerHTML = html;
-}
-
-// ── LOGS ──────────────────────────────────────────────────────
-async function loadLogs() {
-  var body = document.getElementById('logs-body');
-  if (!body) return;
-  body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--tx3);">&#9203; Loading...</div>';
-  var res = await _sb.from('posts')
-    .select('body,created_at,user_id,profiles!posts_user_id_fkey(name)')
-    .order('created_at',{ascending:false}).limit(30);
-  if (!res.data || !res.data.length) { body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">No activity yet.</div>'; return; }
-  var html = '';
-  res.data.forEach(function(p) {
-    var mins = Math.max(0, Math.floor((Date.now() - new Date(p.created_at).getTime()) / 60000));
-    var tstr = mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
-    html += '<div style="display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--bdr);font-size:12px;">'
-      + '<span style="font-size:16px;">&#128203;</span>'
-      + '<div style="flex:1;"><strong>' + ((p.profiles&&p.profiles.name)||'User') + '</strong> posted: ' + p.body.substring(0,60) + (p.body.length>60?'...':'') + '</div>'
-      + '<div style="color:var(--tx3);white-space:nowrap;">' + tstr + '</div></div>';
-  });
-  body.innerHTML = html;
-}
-
-// ── NEWS ──────────────────────────────────────────────────────
+// ── NEWS ─────────────────────────────────────────────────────────
 async function loadNews() {
-  var el = document.getElementById('news-list');
-  if (!el) return;
-  el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">&#9203; Loading...</div>';
-  var r = await _sb.from('news_posts').select('*, profiles!news_posts_author_id_fkey(name)').order('created_at',{ascending:false}).limit(20);
-  var countEl = document.getElementById('news-count');
-  if (countEl) countEl.textContent = (r.data ? r.data.length : 0) + ' articles';
-  if (!r.data || !r.data.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">No news posted yet. Write your first article above.</div>'; return; }
+  html('news-list', '<div style="color:var(--tx3);font-size:13px;padding:10px;">Loading...</div>');
+  var r = await sb.from('news_posts').select('*, profiles!news_posts_author_id_fkey(name)').order('created_at',{ascending:false}).limit(20);
+  txt('news-count', (r.data?r.data.length:0) + ' articles');
+  if (!r.data || !r.data.length) { html('news-list', '<div style="text-align:center;padding:30px;color:var(--tx3);">No news posted yet.</div>'); return; }
   var h = '';
   r.data.forEach(function(n) {
-    var mins = Math.max(0, Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000));
-    var tstr = mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
-    h += '<div style="padding:14px 0;border-bottom:1px solid var(--bdr);display:flex;gap:12px;align-items:flex-start;">'
-      + (n.image_url ? '<img src="' + n.image_url + '" style="width:72px;height:54px;object-fit:cover;border-radius:7px;border:1px solid var(--bdr);flex-shrink:0;"/>' : '')
-      + '<div style="flex:1;min-width:0;">'
-      + '<div style="font-size:13px;font-weight:700;margin-bottom:3px;">' + n.title + '</div>'
-      + '<div style="font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:5px;">' + n.body.substring(0,120) + (n.body.length>120?'...':'') + '</div>'
-      + '<div style="font-size:10px;color:var(--tx3);">' + tstr + ' &#183; ' + ((n.profiles&&n.profiles.name)||'Admin') + (n.source?' &#183; '+n.source:'') + '</div>'
-      + '<button class="ab danger" onclick="deleteNews(\'' + n.id + '\',this)" style="margin-top:6px;">&#128465; Delete</button>'
-      + '</div></div>';
+    h += '<div style="display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--bdr);align-items:flex-start;">'
+      +(n.image_url ? '<img src="'+n.image_url+'" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--bdr);flex-shrink:0;"/>' : '')
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:13px;font-weight:700;margin-bottom:2px;">'+n.title+'</div>'
+      +'<div style="font-size:11px;color:var(--tx2);margin-bottom:4px;">'+n.body.substring(0,100)+(n.body.length>100?'...':'')+'</div>'
+      +'<div style="font-size:10px;color:var(--tx3);">'+fmtTime(n.created_at)+' &middot; '+((n.profiles&&n.profiles.name)||'Admin')+(n.source?' &middot; '+n.source:'')+'</div>'
+      +'<button class="btn btn-r" style="margin-top:6px;padding:3px 9px;font-size:11px;" onclick="doDeleteNews(\''+n.id+'\',this)">&#128465; Delete</button>'
+      +'</div></div>';
   });
-  el.innerHTML = h;
+  html('news-list', h);
 }
 
-var _newsImageFile = null;
-
-window.previewNewsImage = function(inp) {
-  var file = inp.files[0]; if (!file) return;
-  _newsImageFile = file;
+window.previewNewsImg = function(inp) {
+  var file = inp.files[0];
+  if (!file) return;
+  NEWS_IMG = file;
   var reader = new FileReader();
   reader.onload = function(e) {
-    var thumb = document.getElementById('news-img-thumb');
-    var prev  = document.getElementById('news-img-preview');
-    if (thumb) thumb.src = e.target.result;
-    if (prev)  prev.style.display = 'block';
+    el('news-img-thumb').src = e.target.result;
+    el('news-img-prev').style.display = 'block';
   };
   reader.readAsDataURL(file);
 };
-
-window.clearNewsImage = function() {
-  _newsImageFile = null;
-  var inp = document.getElementById('news-img-input');
-  var prev = document.getElementById('news-img-preview');
-  if (inp) inp.value = '';
-  if (prev) prev.style.display = 'none';
+window.clearNewsImg = function() {
+  NEWS_IMG = null;
+  el('news-img').value = '';
+  el('news-img-prev').style.display = 'none';
 };
-
 window.postNews = async function() {
-  var title  = document.getElementById('news-title').value.trim();
-  var body   = document.getElementById('news-body').value.trim();
-  var source = document.getElementById('news-source').value.trim();
-  if (!title) { showToast('Headline is required', 'error'); return; }
-  if (!body)  { showToast('Article content is required', 'error'); return; }
-  var btn = document.querySelector('#sec-news .ta-btn.primary');
-  if (btn) { btn.textContent = 'Publishing...'; btn.disabled = true; }
-  // Upload image if provided
+  var title = el('news-title').value.trim();
+  var body  = el('news-body').value.trim();
+  var source = el('news-source').value.trim();
+  if (!title) { toast('Headline required', 'err'); return; }
+  if (!body)  { toast('Article content required', 'err'); return; }
+  var btn = el('news-post-btn');
+  btn.textContent = 'Publishing...'; btn.disabled = true;
+  // Upload image
   var imageUrl = null;
-  if (_newsImageFile) {
-    var path = 'news/' + Date.now() + '-' + _newsImageFile.name.replace(/\s/g,'_');
-    var upRes = await _sb.storage.from('post-images').upload(path, _newsImageFile, {contentType:_newsImageFile.type});
-    if (!upRes.error) { imageUrl = _sb.storage.from('post-images').getPublicUrl(path).data.publicUrl; }
+  if (NEWS_IMG) {
+    var path = 'news/' + Date.now() + '-' + NEWS_IMG.name.replace(/\s/g,'_');
+    var up = await sb.storage.from('post-images').upload(path, NEWS_IMG, {contentType:NEWS_IMG.type});
+    if (!up.error) imageUrl = sb.storage.from('post-images').getPublicUrl(path).data.publicUrl;
   }
   // Save to news_posts
-  var r = await _sb.from('news_posts').insert({title:title, body:body, source:source||null, image_url:imageUrl, author_id:_session.user.id}).select().single();
-  if (r.error) {
-    if (btn) { btn.innerHTML = '&#128240; Publish News to All Users'; btn.disabled = false; }
-    showToast('Error: ' + r.error.message, 'error'); return;
-  }
-  // Also post to main feed so users see it while scrolling
-  var excerpt = body.length > 200 ? body.substring(0, 200) + '...' : body;
-  var feedBody = '&#128240; [NEWS] ' + title + '\n\n' + excerpt + (source ? '\n\nSource: ' + source : '');
-  await _sb.from('posts').insert({user_id:_session.user.id, body:feedBody, ticker_holdings:[]});
-  // Reset
-  document.getElementById('news-title').value = '';
-  document.getElementById('news-body').value = '';
-  document.getElementById('news-source').value = '';
-  clearNewsImage();
-  if (btn) { btn.innerHTML = '&#128240; Publish News to All Users'; btn.disabled = false; }
-  showToast('News published! Visible in News tab + main feed.', 'success');
+  var r = await sb.from('news_posts').insert({title:title, body:body, source:source||null, image_url:imageUrl, author_id:S.user.id}).select().single();
+  if (r.error) { btn.textContent = '&#128240; Publish to All Users'; btn.disabled = false; toast('Error: '+r.error.message,'err'); return; }
+  // Also post to main feed
+  var excerpt = body.length > 200 ? body.substring(0,200)+'...' : body;
+  await sb.from('posts').insert({user_id:S.user.id, body:'&#128240; [NEWS] '+title+'\n\n'+excerpt+(source?'\n\nSource: '+source:''), ticker_holdings:[]});
+  el('news-title').value = ''; el('news-body').value = ''; el('news-source').value = '';
+  clearNewsImg();
+  btn.innerHTML = '&#128240; Publish to All Users'; btn.disabled = false;
+  toast('News published and visible to all users!', 'ok');
   loadNews();
 };
-
-window.deleteNews = async function(id, el) {
+window.doDeleteNews = async function(id, btn) {
   if (!confirm('Delete this news article?')) return;
-  await _sb.from('news_posts').delete().eq('id', id);
-  var row = el.closest('div[style*="border-bottom"]');
+  await sb.from('news_posts').delete().eq('id', id);
+  var row = btn.closest('div[style*="border-bottom"]');
   if (row) row.remove();
-  showToast('News article deleted', 'success');
+  toast('News deleted', 'ok');
 };
 
-
-// ── COURSES ───────────────────────────────────────────────────
+// ── COURSES ──────────────────────────────────────────────────────
 async function loadCourses() {
-  var el = document.getElementById('courses-list');
-  if (!el) return;
-  el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">&#9203; Loading courses...</div>';
-  var r = await _sb.from('courses').select('*, profiles!courses_created_by_fkey(name)').order('created_at',{ascending:false});
-  if (!r.data || !r.data.length) { el.innerHTML = '<div style="color:var(--tx3);font-size:13px;">No courses yet. Create one!</div>'; return; }
+  html('courses-list', '<div style="color:var(--tx3);font-size:13px;padding:10px;">Loading...</div>');
+  var r = await sb.from('courses').select('*, profiles!courses_created_by_fkey(name)').order('created_at',{ascending:false});
+  if (!r.data || !r.data.length) { html('courses-list', '<div style="text-align:center;padding:30px;color:var(--tx3);">No courses yet. Create one!</div>'); return; }
   var h = '';
   r.data.forEach(function(c) {
-    h += '<div style="padding:10px 0;border-bottom:1px solid var(--bdr);">'
-      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
-      + '<div><div style="font-size:13px;font-weight:700;">' + c.title + '</div>'
-      + '<div style="font-size:10px;color:var(--tx3);margin-top:2px;">' + c.category + ' &#183; ' + c.difficulty + ' &#183; ' + (c.points_reward||100) + ' pts &#183; ' + (c.lesson_count||0) + ' lessons</div>'
-      + '<div style="font-size:10px;margin-top:2px;"><span style="background:' + (c.is_published?'var(--gbg)':'var(--ambg)') + ';color:' + (c.is_published?'var(--green)':'var(--am)') + ';padding:2px 7px;border-radius:10px;font-weight:700;">' + (c.is_published?'&#9679; Published':'&#9675; Draft') + '</span></div></div>'
-      + '<div style="display:flex;gap:5px;flex-wrap:wrap;">'
-      + '<button class="ab" onclick="openLessonPanel('' + c.id + '','' + c.title.replace(/'/g,'') + '')">+ Lesson</button>'
-      + '<button class="ab ' + (c.is_published?'':'promote') + '" onclick="togglePublish('' + c.id + '',' + c.is_published + ')">' + (c.is_published?'Unpublish':'Publish') + '</button>'
-      + '<button class="ab danger" onclick="deleteCourse('' + c.id + '',this)">Delete</button>'
-      + '</div></div></div>';
+    h += '<div style="padding:11px 0;border-bottom:1px solid var(--bdr);">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
+      +'<div><div style="font-size:13px;font-weight:700;">'+c.title+'</div>'
+      +'<div style="font-size:10px;color:var(--tx3);margin-top:2px;">'+c.category+' &middot; '+c.difficulty+' &middot; '+(c.points_reward||100)+' pts &middot; '+(c.lesson_count||0)+' lessons</div>'
+      +'<div style="margin-top:4px;"><span class="pill '+(c.is_published?'pill-ok':'pill-unv')+'">'+(c.is_published?'&#9679; Published':'Draft')+'</span></div></div>'
+      +'<div style="display:flex;gap:5px;flex-wrap:wrap;">'
+      +'<button class="btn btn-s" style="padding:4px 9px;" onclick="openLessonPanel(\''+c.id+'\',\''+c.title.replace(/'/g,'')+'\')">+ Lesson</button>'
+      +'<button class="btn '+(c.is_published?'btn-am':'btn-g')+'" style="padding:4px 9px;" onclick="doTogglePublish(\''+c.id+'\','+(c.is_published?'true':'false')+')">'+(c.is_published?'Unpublish':'Publish')+'</button>'
+      +'<button class="btn btn-r" style="padding:4px 9px;" onclick="doDeleteCourse(\''+c.id+'\',this)">&#128465;</button>'
+      +'</div></div></div>';
   });
-  el.innerHTML = h;
+  html('courses-list', h);
+}
+window.createCourse = async function() {
+  var title = el('co-title').value.trim();
+  if (!title) { toast('Course title required','err'); return; }
+  var r = await sb.from('courses').insert({title:title, description:el('co-desc').value.trim(), category:el('co-cat').value, difficulty:el('co-diff').value, duration_mins:parseInt(el('co-dur').value)||30, points_reward:parseInt(el('co-pts').value)||100, created_by:S.user.id, is_published:false});
+  if (r.error) { toast('Error: '+r.error.message,'err'); return; }
+  el('co-title').value=''; el('co-desc').value='';
+  toast('Course created! Add lessons and publish.','ok');
+  loadCourses();
+};
+window.openLessonPanel = function(cid, cname) {
+  LESSON_COURSE = cid;
+  txt('lesson-course-name', cname);
+  el('lesson-panel').style.display = 'block';
+  el('lesson-panel').scrollIntoView({behavior:'smooth'});
+};
+window.addLesson = async function() {
+  if (!LESSON_COURSE) return;
+  var title = el('ls-title').value.trim();
+  var content = el('ls-content').value.trim();
+  if (!title || !content) { toast('Title and content required','err'); return; }
+  var cnt = await sb.from('course_lessons').select('id',{count:'exact',head:true}).eq('course_id',LESSON_COURSE);
+  var order = (cnt.count||0)+1;
+  var lr = await sb.from('course_lessons').insert({course_id:LESSON_COURSE, title:title, content:content, video_url:el('ls-video').value.trim()||null, lesson_type:el('ls-type').value, lesson_order:order, duration_mins:parseInt(el('ls-dur').value)||10}).select().single();
+  if (lr.error) { toast('Error: '+lr.error.message,'err'); return; }
+  var q = el('as-q').value.trim();
+  if (q) {
+    var opts = [el('as-a').value, el('as-b').value, el('as-c').value, el('as-d').value];
+    await sb.from('course_assessments').insert({course_id:LESSON_COURSE, lesson_id:lr.data.id, question:q, options:JSON.stringify(opts), correct_index:parseInt(el('as-correct').value), explanation:el('as-exp').value.trim()||null});
+  }
+  await sb.from('courses').update({lesson_count:order}).eq('id',LESSON_COURSE);
+  ['ls-title','ls-video','ls-content','as-q','as-a','as-b','as-c','as-d','as-exp'].forEach(function(id){var e=el(id);if(e)e.value='';});
+  toast('Lesson '+order+' added!','ok');
+  loadCourses();
+};
+window.doTogglePublish = async function(id, current) {
+  await sb.from('courses').update({is_published:!current}).eq('id',id);
+  toast(!current?'Course published!':'Course unpublished','ok');
+  loadCourses();
+};
+window.doDeleteCourse = async function(id, btn) {
+  if (!confirm('Delete this course and all lessons?')) return;
+  await sb.from('courses').delete().eq('id',id);
+  toast('Course deleted','ok');
+  loadCourses();
+};
+
+// ── PORTFOLIOS ───────────────────────────────────────────────────
+async function loadPortfolios() {
+  html('port-body','<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--tx3);">Loading...</td></tr>');
+  var res = await sb.from('holdings').select('*, profiles!holdings_user_id_fkey(name)').order('created_at',{ascending:false}).limit(50);
+  if (!res.data||!res.data.length) { html('port-body','<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--tx3);">No holdings yet.</td></tr>'); return; }
+  var rows = '';
+  res.data.forEach(function(h) {
+    var cost = (h.shares * h.buy_price).toLocaleString('en-NG',{maximumFractionDigits:0});
+    rows += '<tr><td>'+(h.profiles&&h.profiles.name?h.profiles.name:'Unknown')+'</td><td style="font-weight:700;font-family:monospace;">'+h.ticker+'</td><td>'+h.shares+'</td><td>&#8358;'+parseFloat(h.buy_price).toLocaleString()+'</td><td style="font-weight:700;">&#8358;'+cost+'</td></tr>';
+  });
+  html('port-body',rows);
 }
 
-window.createCourse = async function() {
-  var title = document.getElementById('co-title').value.trim();
-  var desc  = document.getElementById('co-desc').value.trim();
-  var cat   = document.getElementById('co-cat').value;
-  var diff  = document.getElementById('co-diff').value;
-  var dur   = parseInt(document.getElementById('co-dur').value) || 30;
-  var pts   = parseInt(document.getElementById('co-pts').value) || 100;
-  if (!title) { showToast('Course title required', 'error'); return; }
-  var r = await _sb.from('courses').insert({title:title, description:desc, category:cat, difficulty:diff, duration_mins:dur, points_reward:pts, created_by:_session.user.id, is_published:false});
-  if (r.error) { showToast('Error: ' + r.error.message, 'error'); return; }
-  document.getElementById('co-title').value = '';
-  document.getElementById('co-desc').value = '';
-  showToast('Course created! Now add lessons and publish it.', 'success');
-  loadCourses();
-};
-
-window.openLessonPanel = function(courseId, courseName) {
-  _activeCourseId = courseId;
-  setEl('lesson-course-name', courseName);
-  var lp = document.getElementById('lesson-panel');
-  if (lp) { lp.style.display = 'block'; lp.scrollIntoView({behavior:'smooth'}); }
-};
-
-window.addLesson = async function() {
-  if (!_activeCourseId) return;
-  var title   = document.getElementById('ls-title').value.trim();
-  var type    = document.getElementById('ls-type').value;
-  var video   = document.getElementById('ls-video').value.trim();
-  var content = document.getElementById('ls-content').value.trim();
-  var dur     = parseInt(document.getElementById('ls-dur').value) || 10;
-  if (!title || !content) { showToast('Title and content required', 'error'); return; }
-  var cnt = await _sb.from('course_lessons').select('id', {count:'exact', head:true}).eq('course_id', _activeCourseId);
-  var order = (cnt.count || 0) + 1;
-  var lr = await _sb.from('course_lessons').insert({course_id:_activeCourseId, title:title, content:content, video_url:video||null, lesson_type:type, lesson_order:order, duration_mins:dur}).select().single();
-  if (lr.error) { showToast('Error: ' + lr.error.message, 'error'); return; }
-  var q = document.getElementById('as-q').value.trim();
-  if (q) {
-    var opts = [document.getElementById('as-a').value, document.getElementById('as-b').value, document.getElementById('as-c').value, document.getElementById('as-d').value];
-    var correct = parseInt(document.getElementById('as-correct').value);
-    var exp = document.getElementById('as-exp').value.trim();
-    await _sb.from('course_assessments').insert({course_id:_activeCourseId, lesson_id:lr.data.id, question:q, options:JSON.stringify(opts), correct_index:correct, explanation:exp||null});
-  }
-  await _sb.from('courses').update({lesson_count:order}).eq('id', _activeCourseId);
-  ['ls-title','ls-video','ls-content','as-q','as-a','as-b','as-c','as-d','as-exp'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
-  showToast('Lesson ' + order + ' added!', 'success');
-  loadCourses();
-};
-
-window.togglePublish = async function(id, current) {
-  await _sb.from('courses').update({is_published:!current}).eq('id', id);
-  showToast(!current ? '&#9679; Course published and visible to users!' : 'Course unpublished', 'success');
-  loadCourses();
-};
-
-window.deleteCourse = async function(id, el) {
-  if (!confirm('Delete this course and all its lessons?')) return;
-  await _sb.from('courses').delete().eq('id', id);
-  showToast('Course deleted', 'success');
-  loadCourses();
-};
-
-// ── SEARCH ────────────────────────────────────────────────────
-window.globalSearch = function(q) {
-  if (!q || q.length < 2) { renderUsersTable(); return; }
-  q = q.toLowerCase();
-  _filteredUsers = _allUsers.filter(function(u) {
-    return (u.name && u.name.toLowerCase().includes(q))
-      || (u.username && u.username.toLowerCase().includes(q))
-      || (u.location && u.location.toLowerCase().includes(q));
+// ── MARKET ───────────────────────────────────────────────────────
+async function loadMarket() {
+  html('market-body','<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--tx3);">Loading prices...</td></tr>');
+  var res = await sb.from('stock_prices').select('ticker,company_name,price,change_pct,volume,last_updated').order('ticker');
+  if (!res.data) return;
+  var rows = '';
+  res.data.forEach(function(s) {
+    var up = (s.change_pct||0) >= 0;
+    rows += '<tr>'
+      +'<td style="font-weight:800;font-family:monospace;color:var(--p);">'+s.ticker+'</td>'
+      +'<td style="font-size:12px;color:var(--tx2);">'+(s.company_name||'—')+'</td>'
+      +'<td style="font-weight:700;">&#8358;'+parseFloat(s.price||0).toFixed(2)+'</td>'
+      +'<td style="font-weight:700;color:'+(up?'var(--g)':'var(--r)') + ';">'+(up?'&#9650;':'&#9660;')+' '+Math.abs(s.change_pct||0).toFixed(2)+'%</td>'
+      +'<td style="font-size:11px;color:var(--tx3);">'+(s.volume?s.volume.toLocaleString():'—')+'</td>'
+      +'<td style="font-size:11px;color:var(--tx3);">'+fmtTime(s.last_updated)+'</td>'
+      +'</tr>';
   });
-  _currentPage = 1;
-  renderUsersTable();
+  html('market-body', rows||'<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--tx3);">No prices. Run load-all-ngx-stocks.sql</td></tr>');
+}
+window.doRefreshPrices = async function() {
+  toast('Triggering price refresh...','');
+  try { await sb.rpc('fetch_all_ngx_prices'); toast('Prices refreshed!','ok'); }
+  catch(e) { toast('pg_cron will refresh in next cycle',''); }
+  if (el('pg-market').style.display !== 'none') loadMarket();
 };
 
-// ── EXPORT ────────────────────────────────────────────────────
-window.exportUsers = function() {
-  var csv = 'Name,Username,Country,Location,Role,Verified,Posts,Joined\n';
-  _allUsers.forEach(function(u) {
-    csv += '"' + (u.name||'') + '","@' + (u.username||'') + '","' + (u.country||'') + '","' + (u.location||'') + '","' + (u.role||'user') + '","' + (u.is_verified?'Yes':'No') + '","' + (u.total_posts||0) + '","' + (u.joined_at||'') + '"\n';
+// ── LOGS ─────────────────────────────────────────────────────────
+async function loadLogs() {
+  html('logs-list','<div style="color:var(--tx3);font-size:13px;padding:10px;">Loading...</div>');
+  var res = await sb.from('posts').select('body,created_at,profiles!posts_user_id_fkey(name)').order('created_at',{ascending:false}).limit(30);
+  if (!res.data||!res.data.length) { html('logs-list','<div style="text-align:center;padding:30px;color:var(--tx3);">No activity yet.</div>'); return; }
+  var h = '';
+  res.data.forEach(function(p) {
+    h += '<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--bdr);font-size:12px;">'
+      +'<span style="font-size:15px;">&#128203;</span>'
+      +'<div style="flex:1;"><strong>'+((p.profiles&&p.profiles.name)||'User')+'</strong> posted: '+p.body.substring(0,60)+(p.body.length>60?'...':'')+'</div>'
+      +'<div style="color:var(--tx3);white-space:nowrap;">'+fmtTime(p.created_at)+'</div></div>';
   });
-  var blob = new Blob([csv], {type:'text/csv'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'gopexfund-users-' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
-  showToast('CSV exported!', 'success');
+  html('logs-list',h);
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────────
+window.promoteAdmin = function() {
+  var email = el('promote-email').value.trim();
+  if (!email) { toast('Enter an email address','err'); return; }
+  toast('Run in Supabase SQL Editor: UPDATE public.profiles SET role = \'admin\' WHERE id = (SELECT id FROM auth.users WHERE email = \''+email+'\');','');
 };
 
-window.promoteUser = async function() {
-  var em = document.getElementById('promote-email').value.trim();
-  if (!em) { showToast('Enter an email address', 'error'); return; }
-  showToast('Run in SQL: UPDATE public.profiles SET role = \'admin\' WHERE id = (SELECT id FROM auth.users WHERE email = \'' + em + '\');', '');
-  closeModal('promote');
-};
-
-window.createUser = async function() {
-  showToast('To create users, go to Supabase Dashboard → Authentication → Users → Invite User', '');
-  closeModal('add-user');
-};
-
-// ── SECTION NAV ───────────────────────────────────────────────
-window.showSection = function(id, btn) {
-  var sections = ['dashboard','users','suspended','admins','posts','news','courses','reports','portfolios','market','settings','logs'];
-  sections.forEach(function(s) {
-    var el = document.getElementById('sec-' + s);
-    if (el) el.style.display = s === id ? 'block' : 'none';
-  });
-  document.querySelectorAll('.sb-item').forEach(function(b) { b.classList.remove('on'); });
-  if (btn) btn.classList.add('on');
-
-  var titles = {dashboard:'Dashboard',users:'All Users',suspended:'Suspended',admins:'Admins',posts:'All Posts',news:'Post News',courses:'Manage Courses',reports:'Reports',portfolios:'Portfolios',market:'Market Data',settings:'Settings',logs:'Activity Logs'};
-  setEl('page-title', titles[id] || id);
-
-  if (id === 'users')      loadUsers('all');
-  else if (id === 'posts') loadPosts('recent');
-  else if (id === 'suspended') loadSuspended();
-  else if (id === 'admins')    loadAdmins();
-  else if (id === 'market')    loadMarket();
-  else if (id === 'portfolios') loadPortfolios();
-  else if (id === 'logs')   loadLogs();
-  else if (id === 'news')   loadNews();
-  else if (id === 'courses') loadCourses();
-};
-
-// ── LOGOUT ────────────────────────────────────────────────────
+// ── LOGOUT ───────────────────────────────────────────────────────
 window.doLogout = async function() {
   if (!confirm('Log out?')) return;
-  await _sb.auth.signOut();
+  await sb.auth.signOut();
   sessionStorage.clear();
   window.location.href = 'landing.html';
 };
 
-// ── MODALS ────────────────────────────────────────────────────
-window.openModal  = function(id) { var e = document.getElementById('modal-'+id); if (e) e.classList.add('open'); };
-window.closeModal = function(id) { var e = document.getElementById('modal-'+id); if (e) e.classList.remove('open'); };
-document.querySelectorAll('.modal-ov').forEach(function(el) {
-  el.addEventListener('click', function(e) { if (e.target === el) el.classList.remove('open'); });
+// Close modals on bg click
+document.querySelectorAll('.modal-bg').forEach(function(bg) {
+  bg.addEventListener('click', function(e) { if (e.target === bg) bg.classList.remove('open'); });
 });
-
-// ── TOAST ─────────────────────────────────────────────────────
-window.showToast = function(msg, type) {
-  var t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg;
-  t.className = 'toast ' + (type||'');
-  t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 4000);
-};
 </script>
 </body>
 </html>
