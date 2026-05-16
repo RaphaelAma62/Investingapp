@@ -3,903 +3,893 @@
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>GopexFund — Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--red:#dc2626;--rbg:#fee2e2;--amber:#d97706;--ambg:#fef3c7;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);}
-*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input,textarea{font-family:var(--fb);}
+:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--g:#16a34a;--gbg:#dcfce7;--gbr:#86efac;--r:#dc2626;--rbg:#fee2e2;--am:#d97706;--ambg:#fef3c7;--pu:#7c3aed;--pubg:#ede9fe;--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.06);--shm:0 4px 16px rgba(0,0,0,.08);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input,textarea{font-family:var(--fb);}
 /* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
-.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 24px;gap:12px;}
-.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;color:var(--tx);}
-.logo-mark{width:29px;height:29px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
-.nav-links{display:flex;gap:2px;}
-.nl{padding:7px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;transition:all .15s;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;padding:0 20px;gap:10px;}
+.logo{font-family:var(--fd);font-size:18px;font-weight:800;display:flex;align-items:center;gap:7px;color:var(--tx);}
+.lm{width:28px;height:28px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;}
+.nav-links{display:flex;gap:1px;}
+.nl{padding:6px 11px;border-radius:7px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;transition:all .15s;}
 .nl:hover{background:var(--g100);color:var(--tx);}
 .nl.on{background:var(--plt);color:var(--p);font-weight:600;}
-.nav-r{display:flex;align-items:center;gap:8px;}
-.nav-notif{width:34px;height:34px;border-radius:8px;background:var(--g50);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;cursor:pointer;transition:background .15s;}
-.nav-notif:hover{background:var(--g100);}
-.n-dot{position:absolute;top:7px;right:7px;width:6px;height:6px;background:var(--p);border-radius:50%;border:1.5px solid #fff;}
-.nav-prof{display:flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--bdr);border-radius:10px;padding:4px 12px 4px 5px;cursor:pointer;transition:all .15s;text-decoration:none;}
-.nav-prof:hover{background:var(--g100);}
-.nav-av{width:28px;height:28px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
-.nav-name{font-size:12px;font-weight:600;}
-.burger{display:none;background:none;border:none;font-size:22px;color:var(--tx2);cursor:pointer;padding:4px;}
-.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px 14px;flex-direction:column;gap:4px;z-index:299;box-shadow:var(--shm);}
+.nav-r{display:flex;align-items:center;gap:7px;}
+.notif-btn{width:32px;height:32px;border-radius:8px;background:var(--g50);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;position:relative;}
+.ndot{position:absolute;top:6px;right:6px;width:6px;height:6px;background:var(--p);border-radius:50%;border:1.5px solid #fff;}
+.prof-pill{display:flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--bdr);border-radius:9px;padding:3px 10px 3px 4px;text-decoration:none;transition:all .14s;}
+.prof-pill:hover{background:var(--g100);}
+.nav-av{width:26px;height:26px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.nav-un{font-size:12px;font-weight:600;color:var(--tx);}
+.burger{display:none;background:none;border:none;font-size:21px;color:var(--g500);cursor:pointer;}
+.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:8px 14px 12px;flex-direction:column;gap:3px;z-index:299;box-shadow:var(--shm);}
 .mob-nav.open{display:flex;}
-.mob-link{padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}
-.mob-link.on{color:var(--p);background:var(--plt);font-weight:600;}
+.mob-link{padding:9px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;}
+.mob-link.on{color:var(--p);background:var(--plt);}
 /* LAYOUT */
-.layout{display:grid;grid-template-columns:256px 1fr 272px;padding-top:60px;min-height:100vh;}
-/* SIDEBAR LEFT */
-.l-side{background:var(--surf);border-right:1px solid var(--bdr);padding:16px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
-.bal-card{background:linear-gradient(135deg,var(--p) 0%,var(--pdk) 100%);border-radius:14px;padding:18px;margin-bottom:16px;color:#fff;}
-.bal-lbl{font-size:10px;opacity:.7;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;}
-.bal-amt{font-family:var(--fd);font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:3px;}
-.bal-chg{font-size:12px;font-weight:600;background:rgba(255,255,255,.15);display:inline-block;padding:2px 8px;border-radius:20px;margin-top:2px;}
-.side-nav{display:flex;flex-direction:column;gap:2px;margin-bottom:16px;}
-.sn-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .15s;text-decoration:none;}
-.sn-item:hover{background:var(--g100);color:var(--tx);}
-.sn-item.on{background:var(--plt);color:var(--p);font-weight:600;}
-.sn-ico{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
-.goals-widget{background:var(--g50);border:1px solid var(--bdr);border-radius:13px;padding:14px;}
-.gw-title{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:11px;}
-.gw-item{margin-bottom:10px;}
-.gw-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
-.gw-bar{background:var(--g200);border-radius:4px;height:4px;overflow:hidden;}
-.gw-fill{height:100%;border-radius:4px;background:var(--p);transition:width .6s;}
+.layout{display:grid;grid-template-columns:252px 1fr 268px;padding-top:60px;min-height:100vh;}
+/* LEFT */
+.l-side{background:var(--surf);border-right:1px solid var(--bdr);padding:14px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.port-card{background:linear-gradient(135deg,var(--p),var(--pdk));border-radius:13px;padding:16px;color:#fff;margin-bottom:14px;}
+.pc-lbl{font-size:9px;opacity:.7;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.pc-val{font-family:var(--fd);font-size:22px;font-weight:800;letter-spacing:-.3px;margin-bottom:2px;}
+.pc-chg{font-size:11px;background:rgba(255,255,255,.15);display:inline-block;padding:2px 7px;border-radius:20px;}
+.s-nav{display:flex;flex-direction:column;gap:1px;margin-bottom:14px;}
+.sn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .14s;text-decoration:none;}
+.sn:hover{background:var(--g100);color:var(--tx);}
+.sn.on{background:var(--plt);color:var(--p);font-weight:600;}
+.sn-ico{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.goals-box{background:var(--g50);border:1px solid var(--bdr);border-radius:12px;padding:12px;}
+.gb-title{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.gb-item{margin-bottom:8px;}
+.gb-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;}
+.gb-bar{background:var(--g200);border-radius:3px;height:3px;overflow:hidden;}
+.gb-fill{height:100%;border-radius:3px;background:var(--p);}
 /* CENTER */
 .center{border-right:1px solid var(--bdr);min-height:calc(100vh - 60px);}
-/* Portfolio strip */
-.port-strip{background:var(--surf);border-bottom:1px solid var(--bdr);padding:16px 20px;}
-.ps-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.ps-greet{font-size:11px;color:var(--tx3);}
-.ps-name{font-family:var(--fd);font-size:18px;font-weight:800;color:var(--tx);}
-.ps-right{text-align:right;}
-.ps-val{font-family:var(--fd);font-size:24px;font-weight:800;}
-.ps-chg{font-size:12px;font-weight:700;color:var(--green);margin-top:1px;}
-.spark-wrap{height:36px;}
+/* Header strip */
+.hd-strip{background:var(--surf);border-bottom:1px solid var(--bdr);padding:14px 18px;}
+.hd-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.hd-greet{font-size:10px;color:var(--tx3);}
+.hd-name{font-family:var(--fd);font-size:17px;font-weight:800;}
+.hd-right{text-align:right;}
+.hd-val{font-family:var(--fd);font-size:22px;font-weight:800;}
+.hd-chg{font-size:11px;font-weight:700;color:var(--g);}
+.spark{height:32px;}
 /* Feed tabs */
-.feed-tabs{background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;padding:0 20px;position:sticky;top:60px;z-index:50;}
-.ft{padding:12px 14px;font-size:13px;font-weight:600;color:var(--tx3);background:none;border:none;border-bottom:2px solid transparent;transition:all .18s;cursor:pointer;}
+.feed-tabs{background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;padding:0 18px;position:sticky;top:60px;z-index:50;}
+.ft{padding:11px 13px;font-size:13px;font-weight:600;color:var(--tx3);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .15s;}
 .ft:hover{color:var(--tx2);}
 .ft.on{color:var(--p);border-bottom-color:var(--p);}
-/* Compose */
-.compose{background:var(--surf);border-bottom:1px solid var(--bdr);padding:14px 20px;}
+/* COMPOSE */
+.compose-wrap{background:var(--surf);border-bottom:2px solid var(--bdr);box-shadow:0 2px 8px rgba(26,110,255,.06);}
+.compose-inner{padding:14px 18px;}
 .compose-row{display:flex;gap:10px;align-items:flex-start;}
-.c-av{width:36px;height:36px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
-.c-right{flex:1;}
-.c-input{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:10px 13px;border-radius:10px;font-size:14px;outline:none;resize:none;min-height:42px;max-height:180px;transition:border-color .18s;}
-.c-input:focus{border-color:var(--p);background:var(--white);}
-.c-input::placeholder{color:var(--tx3);}
-.c-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
-.c-opts{display:flex;gap:8px;}
-.c-opt{font-size:12px;color:var(--tx3);padding:4px 6px;border-radius:5px;cursor:pointer;transition:background .15s;}
-.c-opt:hover{background:var(--g100);color:var(--tx2);}
-.c-post{background:var(--p);color:#fff;border:none;padding:7px 18px;border-radius:8px;font-size:13px;font-weight:700;transition:all .18s;}
-.c-post:hover{background:var(--pdk);}
-/* Post card */
-.post{background:var(--surf);border-bottom:1px solid var(--bdr);padding:16px 20px;transition:background .12s;}
+.c-av{width:38px;height:38px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;border:2px solid var(--plt);}
+.c-body{flex:1;}
+.c-textarea{width:100%;background:var(--g50);border:2px solid var(--bdr);color:var(--tx);padding:10px 13px;border-radius:12px;font-size:14px;outline:none;resize:none;min-height:60px;max-height:240px;transition:all .2s;line-height:1.6;font-family:var(--fb);}
+.c-textarea:focus{border-color:var(--p);background:#fff;box-shadow:0 0 0 3px rgba(26,110,255,.08);}
+.c-textarea::placeholder{color:var(--tx3);}
+.c-opt{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--tx3);background:none;border:1.5px solid var(--bdr);padding:6px 11px;border-radius:20px;transition:all .15s;cursor:pointer;}
+.c-opt:hover{background:var(--plt);color:var(--p);border-color:var(--pbr);}
+.post-btn{background:linear-gradient(135deg,var(--p),var(--pdk));color:#fff;border:none;padding:9px 24px;border-radius:20px;font-size:13px;font-weight:700;transition:all .2s;box-shadow:0 2px 8px rgba(26,110,255,.25);}
+.post-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,110,255,.4);}
+.post-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+/* image preview */
+.img-preview-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px;}
+.img-prev{width:72px;height:72px;border-radius:8px;object-fit:cover;border:1px solid var(--bdr);}
+.img-prev-wrap{position:relative;}
+.img-del{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--r);border:none;border-radius:50%;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;}
+/* ticker chips in compose */
+.compose-tickers{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px;}
+.ctk{display:inline-flex;align-items:center;gap:5px;background:var(--plt);border:1px solid var(--pbr);color:var(--p);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.ctk-x{cursor:pointer;font-size:9px;opacity:.6;}
+/* ticker search dropdown */
+.tk-search-wrap{position:relative;margin-bottom:7px;}
+.tk-input{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:7px 11px;border-radius:8px;font-size:12px;outline:none;text-transform:uppercase;}
+.tk-input:focus{border-color:var(--p);}
+.tk-input::placeholder{text-transform:none;color:var(--tx3);}
+.tk-dropdown{position:absolute;top:calc(100% + 3px);left:0;right:0;background:#fff;border:1.5px solid var(--bdr);border-radius:9px;box-shadow:var(--shm);z-index:100;max-height:160px;overflow-y:auto;display:none;}
+.tk-dropdown.open{display:block;}
+.tk-opt{padding:8px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background .1s;}
+.tk-opt:hover{background:var(--plt);}
+.tk-opt-sym{font-weight:700;color:var(--p);}
+.tk-opt-name{color:var(--tx3);}
+/* perf toggle */
+.perf-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px;color:var(--tx2);}
+.perf-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;}
+.perf-toggle input{cursor:pointer;}
+.perf-preview{background:var(--gbg);border:1px solid var(--gbr);color:var(--g);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;display:none;}
+/* bottom bar */
+.c-bar{display:flex;align-items:center;justify-content:space-between;}
+.c-opts{display:flex;gap:4px;}
+.c-opt{background:none;border:none;color:var(--tx3);font-size:12px;padding:5px 7px;border-radius:6px;display:flex;align-items:center;gap:4px;transition:all .14s;}
+.c-opt:hover{background:var(--g100);color:var(--p);}
+.c-opt input[type="file"]{display:none;}
+.post-btn{background:var(--p);color:#fff;border:none;padding:7px 20px;border-radius:8px;font-size:13px;font-weight:700;transition:all .15s;}
+.post-btn:hover{background:var(--pdk);}
+.post-btn:disabled{opacity:.5;cursor:not-allowed;}
+/* POSTS */
+.post{background:var(--surf);border-bottom:1px solid var(--bdr);padding:14px 18px;transition:background .1s;}
 .post:hover{background:var(--g50);}
-.p-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
-.p-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
-.p-meta{flex:1;}
-.p-name{font-size:13px;font-weight:700;color:var(--tx);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.p-vbadge{background:var(--plt);color:var(--p);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;}
-.p-perf{background:var(--gbg);color:var(--green);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;}
-.p-time{font-size:11px;color:var(--tx3);margin-top:2px;}
-.p-follow{background:var(--plt);color:var(--p);border:1px solid var(--pbr);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;cursor:pointer;transition:all .18s;flex-shrink:0;}
-.p-follow:hover{background:var(--p);color:#fff;}
-.p-follow.on{background:var(--g100);color:var(--tx2);border-color:var(--bdr);}
-.p-body{font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:10px;}
-.p-tags{margin-bottom:8px;}
-.p-tag{display:inline-block;background:var(--g100);color:var(--g500);font-size:11px;padding:3px 8px;border-radius:5px;margin:0 4px 4px 0;cursor:pointer;}
-.p-tag:hover{background:var(--plt);color:var(--p);}
-.ticker-chip{display:inline-flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--bdr);border-radius:8px;padding:5px 12px;font-size:12px;margin-bottom:8px;}
-.tc-up{color:var(--green);font-weight:700;}
-.tc-dn{color:var(--red);font-weight:700;}
-.p-actions{display:flex;gap:6px;padding-top:10px;border-top:1px solid var(--bdr);}
-.p-act{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--tx3);background:none;border:none;padding:5px 8px;border-radius:7px;transition:all .15s;}
-.p-act:hover{background:var(--g100);color:var(--tx2);}
-.p-act.liked{color:var(--red);}
-.emo-bar{display:flex;gap:2px;margin-top:6px;}
-.emo{font-size:16px;background:none;border:none;padding:3px 5px;border-radius:6px;transition:all .15s;}
-.emo:hover{background:var(--g100);transform:scale(1.25);}
-.comments{display:none;margin-top:10px;}
-.comments.open{display:block;}
-.comment{display:flex;gap:8px;margin-bottom:8px;}
-.cm-av{width:26px;height:26px;border-radius:50%;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--tx2);flex-shrink:0;}
-.cm-body{background:var(--g50);border-radius:9px;padding:8px 11px;flex:1;}
-.cm-name{font-size:12px;font-weight:600;margin-bottom:2px;}
-.cm-text{font-size:12px;color:var(--tx2);line-height:1.5;}
-.cm-acts{display:flex;gap:10px;margin-top:4px;}
-.cm-act{font-size:11px;color:var(--tx3);cursor:pointer;}
-.cm-act:hover{color:var(--p);}
-.cm-input-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
-.cm-input-row input{flex:1;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:8px 12px;border-radius:20px;font-size:13px;outline:none;}
-.cm-input-row input:focus{border-color:var(--p);}
-.cm-send{background:var(--p);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-/* RIGHT SIDEBAR */
-.r-side{background:var(--surf);padding:16px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
-.rs-label{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin:0 0 12px;}
-.inv-card{background:var(--g50);border:1px solid var(--bdr);border-radius:13px;padding:13px;margin-bottom:10px;transition:all .18s;}
-.inv-card:hover{background:var(--white);box-shadow:var(--sh);border-color:var(--g300);}
-.ic-top{display:flex;gap:9px;align-items:center;margin-bottom:9px;}
-.ic-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid var(--p);}
-.ic-name{font-size:13px;font-weight:700;cursor:pointer;}
-.ic-name:hover{color:var(--p);}
-.ic-sub{font-size:10px;color:var(--tx3);}
-.ic-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px;}
-.ic-s{background:var(--g100);border-radius:7px;padding:6px 8px;}
-.ic-sv{font-size:13px;font-weight:800;}
-.ic-sl{font-size:9px;color:var(--tx3);}
-.ic-follow{width:100%;background:var(--plt);border:1px solid var(--pbr);color:var(--p);padding:7px;border-radius:8px;font-size:12px;font-weight:700;transition:all .18s;}
-.ic-follow:hover{background:var(--p);color:#fff;}
-.ic-follow.on{background:var(--g100);color:var(--tx2);border-color:var(--bdr);}
-.trend-list{background:var(--g50);border:1px solid var(--bdr);border-radius:13px;padding:4px 12px;}
-.trend-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr);cursor:pointer;}
-.trend-row:last-child{border:none;}
-.tr-rank{font-size:11px;color:var(--tx3);width:16px;}
-.tr-tag{font-size:13px;font-weight:600;flex:1;transition:color .15s;}
-.trend-row:hover .tr-tag{color:var(--p);}
-.tr-cnt{font-size:10px;color:var(--tx3);}
-/* News feed items */
-.news-item{background:var(--surf);padding:14px 20px;border-bottom:1px solid var(--bdr);}
-.ni-src{font-size:10px;color:var(--tx3);font-weight:700;text-transform:uppercase;margin-bottom:3px;}
+.p-hd{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px;}
+.p-av{width:36px;height:36px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.p-meta{flex:1;min-width:0;}
+.p-name{font-size:13px;font-weight:700;color:var(--tx);display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.p-badge{font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;}
+.pb-v{background:var(--plt);color:var(--p);}
+.pb-a{background:#1e1b4b;color:#a5b4fc;}
+.p-time{font-size:10px;color:var(--tx3);margin-top:1px;}
+.p-follow{background:var(--plt);color:var(--p);border:1px solid var(--pbr);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0;}
+.p-follow.on{background:var(--g100);color:var(--tx3);border-color:var(--bdr);}
+/* perf badge on post */
+.p-perf{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;margin-bottom:7px;}
+.pp-up{background:var(--gbg);color:var(--g);border:1px solid var(--gbr);}
+.pp-dn{background:var(--rbg);color:var(--r);border:1px solid #fca5a5;}
+/* ticker chips on post */
+.p-tickers{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.ptk{background:#fff;border:1px solid var(--bdr);border-radius:9px;padding:6px 10px;}
+.ptk-sym{font-size:10px;font-weight:800;color:var(--tx);font-family:monospace;}
+.ptk-price{font-size:12px;font-weight:700;}
+.ptk-held{font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;display:inline-block;margin-top:3px;}
+.ptk-yes{background:var(--gbg);color:var(--g);}
+.ptk-no{background:var(--g100);color:var(--tx3);}
+/* post body */
+.p-body{font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:8px;word-break:break-word;}
+/* post images */
+.p-images{display:grid;gap:6px;margin-bottom:8px;border-radius:10px;overflow:hidden;}
+.p-images.cnt-1{grid-template-columns:1fr;}
+.p-images.cnt-2{grid-template-columns:1fr 1fr;}
+.p-images.cnt-3{grid-template-columns:1fr 1fr 1fr;}
+.p-img{width:100%;height:200px;object-fit:cover;cursor:pointer;}
+.p-images.cnt-1 .p-img{height:280px;}
+/* reactions summary */
+.p-reactions{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;}
+.react-summary{font-size:11px;background:var(--g50);border:1px solid var(--bdr);border-radius:20px;padding:2px 8px;cursor:pointer;}
+/* actions */
+.p-acts{display:flex;gap:2px;padding-top:8px;border-top:1px solid var(--bdr);}
+.pa{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:var(--tx3);background:none;border:none;padding:4px 7px;border-radius:6px;transition:all .13s;}
+.pa:hover{background:var(--g100);color:var(--tx2);}
+.pa.liked{color:var(--r);}
+/* emoji picker */
+.emoji-row{display:flex;gap:2px;padding:4px 0;}
+.emo-btn{font-size:16px;background:none;border:none;padding:3px 5px;border-radius:6px;cursor:pointer;transition:transform .15s;}
+.emo-btn:hover{transform:scale(1.3);background:var(--g100);}
+/* comments */
+.cmts-wrap{display:none;margin-top:8px;border-top:1px solid var(--bdr);padding-top:8px;}
+.cmts-wrap.open{display:block;}
+.cmt{display:flex;gap:7px;margin-bottom:7px;}
+.cmt-av{width:26px;height:26px;border-radius:50%;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--tx2);flex-shrink:0;}
+.cmt-body{background:var(--g50);border-radius:8px;padding:7px 10px;flex:1;}
+.cmt-name{font-size:11px;font-weight:700;margin-bottom:1px;}
+.cmt-text{font-size:12px;color:var(--tx2);line-height:1.5;}
+.cmt-input-row{display:flex;gap:6px;align-items:center;margin-top:6px;}
+.cmt-input{flex:1;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:7px 11px;border-radius:20px;font-size:12px;outline:none;}
+.cmt-input:focus{border-color:var(--p);}
+.cmt-send{width:28px;height:28px;border-radius:50%;background:var(--p);border:none;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+/* post edit overlay */
+.post-menu{position:absolute;top:0;right:0;background:#fff;border:1px solid var(--bdr);border-radius:9px;box-shadow:var(--shm);z-index:20;min-width:140px;display:none;}
+.post-menu.open{display:block;}
+.pm-item{padding:9px 14px;font-size:13px;color:var(--tx2);cursor:pointer;transition:background .1s;}
+.pm-item:hover{background:var(--g50);}
+.pm-item.danger{color:var(--r);}
+/* news items */
+.news-item{background:var(--surf);padding:13px 18px;border-bottom:1px solid var(--bdr);}
+.ni-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tx3);margin-bottom:3px;}
 .ni-title{font-size:13px;font-weight:600;color:var(--tx);line-height:1.5;cursor:pointer;}
 .ni-title:hover{color:var(--p);}
-.ni-time{font-size:10px;color:var(--tx3);margin-top:3px;}
-/* ── COMPOSE ENHANCEMENTS ── */
-.compose-extras{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-/* Ticker picker */
-.ticker-picker{background:var(--g50);border:1.5px solid var(--pbr);border-radius:10px;padding:10px 12px;display:none;}
-.ticker-picker.open{display:block;}
-.tp-label{font-size:10px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
-.tp-row{display:flex;gap:7px;align-items:center;}
-.tp-input{flex:1;background:var(--white);border:1.5px solid var(--bdr);color:var(--tx);padding:7px 11px;border-radius:8px;font-size:13px;outline:none;text-transform:uppercase;}
-.tp-input:focus{border-color:var(--p);}
-.tp-input::placeholder{text-transform:none;color:var(--tx3);}
-.tp-add{background:var(--p);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;}
-.tp-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-.tp-chip{display:inline-flex;align-items:center;gap:5px;background:var(--plt);border:1px solid var(--pbr);color:var(--p);font-size:12px;font-weight:700;padding:3px 9px;border-radius:20px;}
-.tp-chip-x{cursor:pointer;opacity:.6;font-size:11px;}
-.tp-chip-x:hover{opacity:1;}
-/* Portfolio share toggle */
-.perf-share{background:var(--gbg);border:1px solid var(--gbr);border-radius:10px;padding:10px 12px;display:none;}
-.perf-share.open{display:block;}
-.ps-label{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
-.ps-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.ps-toggle{display:flex;align-items:center;gap:7px;cursor:pointer;}
-.ps-toggle input{width:16px;height:16px;cursor:pointer;}
-.ps-toggle span{font-size:13px;font-weight:600;color:var(--green);}
-.ps-preview{font-size:12px;color:var(--tx2);background:var(--white);border:1px solid var(--gbr);border-radius:7px;padding:4px 10px;}
-/* ── POST TICKER CARDS ── */
-.post-tickers{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;}
-.ptk{background:var(--white);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;min-width:120px;}
-.ptk-sym{font-size:11px;font-weight:800;color:var(--tx);font-family:monospace;margin-bottom:3px;}
-.ptk-price{font-size:13px;font-weight:700;margin-bottom:4px;}
-.ptk-held{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;}
-.ptk-held-yes{background:var(--gbg);color:var(--green);}
-.ptk-held-no{background:var(--g100);color:var(--tx3);}
-/* Portfolio gain badge on post */
-.post-perf-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;margin-bottom:8px;}
-.ppb-up{background:var(--gbg);color:var(--green);border:1px solid var(--gbr);}
-.ppb-dn{background:var(--rbg);color:var(--red);border:1px solid #fca5a5;}
+.ni-time{font-size:10px;color:var(--tx3);margin-top:2px;}
+/* empty state */
+.empty-feed{padding:60px 20px;text-align:center;color:var(--tx3);}
+.empty-ico{font-size:36px;margin-bottom:12px;}
+/* RIGHT */
+.r-side{background:var(--surf);padding:14px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.rs-lbl{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.inv-card{background:var(--g50);border:1px solid var(--bdr);border-radius:12px;padding:12px;margin-bottom:9px;transition:all .15s;}
+.inv-card:hover{background:#fff;box-shadow:var(--sh);}
+.ic-top{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.ic-av{width:36px;height:36px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.ic-name{font-size:12px;font-weight:700;cursor:pointer;}
+.ic-name:hover{color:var(--p);}
+.ic-sub{font-size:10px;color:var(--tx3);}
+.ic-pct{font-size:13px;font-weight:800;color:var(--g);margin-bottom:7px;}
+.ic-pct.dn{color:var(--r);}
+.ic-note{font-size:9px;color:var(--tx3);margin-top:2px;}
+.ic-follow{width:100%;background:var(--plt);border:1px solid var(--pbr);color:var(--p);padding:6px;border-radius:7px;font-size:11px;font-weight:700;transition:all .15s;}
+.ic-follow:hover{background:var(--p);color:#fff;}
+.ic-follow.on{background:var(--g100);color:var(--tx3);border-color:var(--bdr);}
+.trend-list{background:var(--g50);border:1px solid var(--bdr);border-radius:12px;padding:3px 11px;}
+.tr-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr);cursor:pointer;}
+.tr-row:last-child{border:none;}
+.tr-rank{font-size:10px;color:var(--tx3);width:14px;}
+.tr-tag{font-size:12px;font-weight:600;flex:1;transition:color .13s;}
+.tr-row:hover .tr-tag{color:var(--p);}
+.tr-cnt{font-size:10px;color:var(--tx3);}
+/* Loading spinner */
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--bdr);border-top-color:var(--p);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:none;align-items:center;justify-content:center;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:90vw;max-height:90vh;border-radius:8px;}
+.lb-close{position:absolute;top:16px;right:16px;color:#fff;font-size:28px;cursor:pointer;background:none;border:none;}
+/* Edit post modal */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:480px;margin:16px;position:relative;transform:translateY(10px);transition:transform .2s;box-shadow:0 20px 60px rgba(0,0,0,.13);}
+.modal-ov.open .modal{transform:translateY(0);}
+.modal-close{position:absolute;top:13px;right:13px;background:var(--g100);border:none;width:26px;height:26px;border-radius:6px;font-size:13px;color:var(--tx2);}
+.modal-title{font-family:var(--fd);font-size:16px;font-weight:800;margin-bottom:14px;}
+.modal-save{width:100%;background:var(--p);border:none;color:#fff;padding:11px;border-radius:9px;font-size:14px;font-weight:700;margin-top:6px;}
 /* RESPONSIVE */
-@media(max-width:1100px){.r-side{display:none;}.layout{grid-template-columns:256px 1fr;}}
+@media(max-width:1100px){.r-side{display:none;}.layout{grid-template-columns:252px 1fr;}}
 @media(max-width:768px){.l-side{display:none;}.layout{grid-template-columns:1fr;}.nav-links{display:none;}.burger{display:block;}}
-@media(max-width:480px){.p-actions{gap:2px;}.p-act{padding:4px 5px;font-size:11px;}}
+@media(max-width:480px){.p-acts{gap:0;}.pa{padding:3px 5px;font-size:11px;}}
 </style>
 </head>
 <body>
-<script>
-// ── AUTH GUARD ── runs before anything else
-(function(){
-  const raw = sessionStorage.getItem('gopex_user');
-  const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
-  const hasSession = raw || (tok && JSON.parse(tok) && JSON.parse(tok).access_token);
-  if (!hasSession) { window.location.replace('landing.html'); }
-})();
 
-</script>
 <nav class="nav">
   <div class="nav-in">
-    <a href="landing.html" class="logo"><div class="logo-mark">G</div>GopexFund</a>
+    <a href="landing.html" class="logo"><div class="lm">G</div>GopexFund</a>
     <div class="nav-links">
-      <a href="home.html" class="nl on">🏠 Home</a>
-      <a href="market.html" class="nl">📈 Market</a>
-      <a href="portfolio.html" class="nl">💼 Portfolio</a>
-      <a href="learn.html" class="nl">📚 Learn</a>
-      <a href="about.html" class="nl">ℹ About</a>
+      <a href="home.html" class="nl on">Home</a>
+      <a href="market.html" class="nl">Market</a>
+      <a href="portfolio.html" class="nl">Portfolio</a>
+      <a href="learn.html" class="nl">Learn</a>
     </div>
     <div class="nav-r">
-      <div class="nav-notif">🔔<div class="n-dot"></div></div>
-      <a href="profile.html" class="nav-prof"><div class="nav-av" id="nav-av">AO</div><span class="nav-name" id="nav-name">Adaeze</span></a>
-      <button onclick="gxLogout()" title="Log out" style="background:#fee2e2;border:1.5px solid #fca5a5;border-radius:8px;color:#dc2626;font-size:11px;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap;display:none;" class="logout-btn">↩ Logout</button>
-      <button class="burger" onclick="document.getElementById('mn').classList.toggle('open')">☰</button>
+      <div class="notif-btn" id="notif-btn"><span>&#128276;</span><div class="ndot" id="notif-dot" style="display:none;"></div></div>
+      <a href="profile.html" class="prof-pill">
+        <div class="nav-av" id="nav-av">?</div>
+        <span class="nav-un" id="nav-un">Loading</span>
+      </a>
+      <button class="burger" onclick="document.getElementById('mnav').classList.toggle('open')">&#9776;</button>
     </div>
   </div>
 </nav>
-<div class="mob-nav" id="mn">
-  <a href="home.html" class="mob-link on">🏠 Home</a>
-  <a href="market.html" class="mob-link">📈 Market</a>
-  <a href="portfolio.html" class="mob-link">💼 Portfolio</a>
-  <a href="learn.html" class="mob-link">📚 Learn</a>
-  <a href="profile.html" class="mob-link">👤 Profile</a>
+<div class="mob-nav" id="mnav">
+  <a href="home.html" class="mob-link on">Home</a>
+  <a href="market.html" class="mob-link">Market</a>
+  <a href="portfolio.html" class="mob-link">Portfolio</a>
+  <a href="learn.html" class="mob-link">Learn</a>
+  <a href="profile.html" class="mob-link">My Account</a>
 </div>
 
 <div class="layout">
-<!-- LEFT SIDEBAR -->
+<!-- LEFT -->
 <aside class="l-side">
-  <div class="bal-card">
-    <div class="bal-lbl">Total Portfolio</div>
-    <div class="bal-amt">₦4,823,500</div>
-    <div class="bal-chg">▲ +₦142,300 today (+3.04%)</div>
+  <div class="port-card">
+    <div class="pc-lbl">Portfolio</div>
+    <div class="pc-val" id="ls-val">&#8358;—</div>
+    <div class="pc-chg" id="ls-chg">Loading...</div>
   </div>
-  <div class="side-nav">
-    <a href="home.html" class="sn-item on"><span class="sn-ico">🏠</span>Home Feed</a>
-    <a href="portfolio.html" class="sn-item"><span class="sn-ico">💼</span>My Portfolio</a>
-    <a href="portfolio.html" class="sn-item"><span class="sn-ico">🎯</span>Wealth Goals</a>
-    <a href="market.html" class="sn-item"><span class="sn-ico">📈</span>Markets</a>
-    <a href="learn.html" class="sn-item"><span class="sn-ico">📚</span>Learn &amp; Earn</a>
-    <a href="profile.html" class="sn-item"><span class="sn-ico">👤</span>My Profile</a>
+  <div class="s-nav">
+    <a href="home.html" class="sn on"><span class="sn-ico">&#127968;</span>Home Feed</a>
+    <a href="portfolio.html" class="sn"><span class="sn-ico">&#128188;</span>Portfolio</a>
+    <a href="market.html" class="sn"><span class="sn-ico">&#128200;</span>Markets</a>
+    <a href="learn.html" class="sn"><span class="sn-ico">&#128218;</span>Learn &amp; Earn</a>
+    <a href="profile.html" class="sn"><span class="sn-ico">&#128100;</span>My Account</a>
   </div>
-  <div class="goals-widget">
-    <div class="gw-title">Active Goals</div>
-    <div class="gw-item">
-      <div class="gw-row"><span style="font-size:12px;font-weight:500;">✈️ Japa Fund</span><span style="font-size:12px;font-weight:700;color:var(--p);">55%</span></div>
-      <div class="gw-bar"><div class="gw-fill" style="width:55%"></div></div>
-    </div>
-    <div class="gw-item">
-      <div class="gw-row"><span style="font-size:12px;font-weight:500;">🚗 First Car</span><span style="font-size:12px;font-weight:700;color:var(--p);">60%</span></div>
-      <div class="gw-bar"><div class="gw-fill" style="width:60%"></div></div>
-    </div>
-    <div class="gw-item">
-      <div class="gw-row"><span style="font-size:12px;font-weight:500;">🏠 House Fund</span><span style="font-size:12px;font-weight:700;color:var(--amber);">35%</span></div>
-      <div class="gw-bar"><div class="gw-fill" style="width:35%;background:var(--amber)"></div></div>
-    </div>
+  <div class="goals-box">
+    <div class="gb-title">Active Goals</div>
+    <div id="goals-widget"><div style="font-size:12px;color:var(--tx3);">Loading...</div></div>
   </div>
 </aside>
 
-<!-- CENTER FEED -->
+<!-- CENTER -->
 <main class="center">
-  <!-- Portfolio strip -->
-  <div class="port-strip">
-    <div class="ps-top">
-      <div><div class="ps-greet">Good morning 👋</div><div class="ps-name" id="ps-name">Adaeze</div></div>
-      <div class="ps-right"><div class="ps-val">₦4,823,500</div><div class="ps-chg">▲ +₦142,300 (+3.04%) today</div></div>
+  <div class="hd-strip">
+    <div class="hd-top">
+      <div><div class="hd-greet" id="hd-greet">Good morning &#128075;</div><div class="hd-name" id="hd-name">Loading...</div></div>
+      <div class="hd-right"><div class="hd-val" id="hd-val">&#8358;—</div><div class="hd-chg" id="hd-chg">—</div></div>
     </div>
-    <div class="spark-wrap"><canvas id="spark-chart"></canvas></div>
+    <div class="spark"><canvas id="spark-canvas"></canvas></div>
   </div>
 
-  <!-- Feed tabs -->
   <div class="feed-tabs">
-    <button class="ft on" onclick="switchFeed('fy',this)">✨ For You</button>
-    <button class="ft" onclick="switchFeed('fl',this)">👥 Following</button>
-    <button class="ft" onclick="switchFeed('nw',this)">📰 News</button>
+    <button class="ft on" id="tab-fy" onclick="switchFeed('fy',this)">&#10024; For You</button>
+    <button class="ft" id="tab-fl" onclick="switchFeed('fl',this)">&#128101; Following</button>
+    <button class="ft" id="tab-nw" onclick="switchFeed('nw',this)">&#128240; News</button>
   </div>
 
-  <!-- Compose box -->
-  <div class="compose">
-    <div class="compose-row">
-      <div class="c-av" id="c-av">AO</div>
-      <div class="c-right">
-        <textarea class="c-input" id="c-input" placeholder="What's your investment move today?" oninput="autoH(this)" onfocus="showC()"></textarea>
+  <!-- COMPOSE BOX — always visible -->
+  <div class="compose-wrap">
+    <div class="compose-inner">
+      <!-- Top row: avatar + textarea -->
+      <div class="compose-row">
+        <div class="c-av" id="c-av">?</div>
+        <div class="c-body">
+          <textarea class="c-textarea" id="c-text"
+            placeholder="What's your investment move today? Share insights, stock picks, portfolio wins..."
+            oninput="autoH(this)" onfocus="openCompose()" rows="2"></textarea>
+        </div>
+      </div>
 
-        <div class="compose-extras" id="c-extras" style="display:none;">
+      <!-- Image preview -->
+      <div id="img-preview-row" class="img-preview-row" style="margin-top:8px;display:flex;gap:7px;flex-wrap:wrap;"></div>
 
-          <!-- Ticker picker -->
-          <div class="ticker-picker" id="ticker-picker">
-            <div class="tp-label">📈 Tag stock tickers</div>
-            <div class="tp-row">
-              <input class="tp-input" id="tp-input" placeholder="Type ticker e.g. MTNN" maxlength="12"
-                onkeydown="if(event.key==='Enter'){event.preventDefault();addTicker();}"
-                oninput="this.value=this.value.toUpperCase()"/>
-              <button class="tp-add" onclick="addTicker()">Add</button>
-            </div>
-            <div class="tp-chips" id="tp-chips"></div>
-          </div>
+      <!-- Tagged tickers -->
+      <div id="compose-tickers" class="compose-tickers" style="margin-top:6px;"></div>
 
-          <!-- Portfolio performance share -->
-          <div class="perf-share" id="perf-share">
-            <div class="ps-label">📊 Share portfolio performance</div>
-            <div class="ps-row">
-              <label class="ps-toggle">
-                <input type="checkbox" id="ps-toggle-check" onchange="togglePerfShare(this)"/>
-                <span>Include my % gain/loss</span>
-              </label>
-              <div class="ps-preview" id="ps-preview" style="display:none;"></div>
-            </div>
-          </div>
+      <!-- Ticker search dropdown -->
+      <div class="tk-search-wrap" id="tk-search-wrap" style="display:none;margin-top:6px;">
+        <input class="tk-input" id="tk-search" placeholder="Type a ticker symbol e.g. MTNN, GTCO, DANGCEM..." oninput="searchTicker(this.value)" autocomplete="off"/>
+        <div class="tk-dropdown" id="tk-dropdown"></div>
+      </div>
 
-          <!-- Action bar -->
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <div class="c-opts">
-              <span class="c-opt" id="opt-ticker" onclick="toggleTickerPicker()" title="Tag stocks">📈 Ticker</span>
-              <span class="c-opt" id="opt-perf" onclick="togglePerfPicker()" title="Share % gain">📊 Performance</span>
-              <span class="c-opt" title="Coming soon">📷 Photo</span>
-            </div>
-            <button class="c-post" onclick="doPost()" id="c-post-btn">Post</button>
-          </div>
+      <!-- Performance share toggle -->
+      <div id="perf-row" style="display:none;margin-top:7px;background:var(--gbg);border:1px solid var(--gbr);border-radius:9px;padding:9px 12px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--g);">
+          <input type="checkbox" id="perf-check" onchange="togglePerfShare(this)" style="cursor:pointer;"/>
+          Share my portfolio % return with this post
+        </label>
+        <div id="perf-preview" style="font-size:11px;color:var(--g);margin-top:5px;display:none;font-weight:700;"></div>
+        <div style="font-size:10px;color:var(--tx3);margin-top:3px;">Your &#8358; portfolio value will never be shown — only the % change.</div>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:var(--bdr);margin:10px 0;"></div>
+
+      <!-- Toolbar + Post button — always visible -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div style="display:flex;gap:2px;flex-wrap:wrap;">
+
+          <!-- Photo upload -->
+          <label class="c-opt" title="Add up to 4 photos" style="cursor:pointer;">
+            <span>&#128247;</span> Photo
+            <input type="file" id="img-input" accept="image/*" multiple onchange="handleImages(this)" style="display:none;"/>
+          </label>
+
+          <!-- Tag ticker -->
+          <button class="c-opt" onclick="toggleTkSearch()" title="Tag an NGX stock">
+            &#128200; Tag Stock
+          </button>
+
+          <!-- Share performance -->
+          <button class="c-opt" onclick="togglePerfRow()" title="Share your portfolio % return">
+            &#128202; Performance
+          </button>
+
         </div>
 
+        <!-- Character count + Post button -->
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span id="char-count" style="font-size:11px;color:var(--tx3);">0 / 500</span>
+          <button class="post-btn" id="post-btn" onclick="submitPost()">
+            Post
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- FOR YOU tab -->
-  <div id="feed-fy">
-    <!-- Post 1 -->
-    <div class="post">
-      <div class="p-head">
-        <div class="p-av" style="background:var(--plt);color:var(--p);">KA</div>
-        <div class="p-meta">
-          <div class="p-name">Kunle Adeyemi <span class="p-vbadge">✓ Verified</span><span class="p-perf">+34.2% YTD</span></div>
-          <div class="p-time">14 min ago · 1.2K followers</div>
-        </div>
-        <button class="p-follow" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'Following ✓':'+ Follow'">+ Follow</button>
-      </div>
-      <div class="p-body">Just crossed ₦5M in total portfolio value 🎉 Started 18 months ago with ₦150K. NGX rally this quarter has been incredible — anyone loading up on banking stocks before Q2 dividends? Drop your picks 👇</div>
-      <div class="p-tags"><span class="p-tag">#NGX</span><span class="p-tag">#PortfolioMilestone</span><span class="p-tag">#Investing</span></div>
-      <div class="p-actions">
-        <button class="p-act" onclick="like(this)">❤ <span>312</span></button>
-        <button class="p-act" onclick="toggleC('c1')">💬 <span>58</span></button>
-        <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
-        <button class="p-act">↗ Share</button>
-      </div>
-      <div class="emo-bar"><button class="emo">🔥</button><button class="emo">💯</button><button class="emo">🚀</button><button class="emo">👏</button><button class="emo">💰</button></div>
-      <div class="comments" id="c1">
-        <div id="cl1">
-          <div class="comment"><div class="cm-av" style="background:var(--plt);color:var(--p);">AO</div><div class="cm-body"><div class="cm-name">Adaeze Obi ✓</div><div class="cm-text">This is so inspiring! What was your initial allocation?</div><div class="cm-acts"><span class="cm-act">❤ 12</span><span class="cm-act">Reply</span></div></div></div>
-          <div class="comment"><div class="cm-av" style="background:var(--ambg);color:var(--amber);">NE</div><div class="cm-body"><div class="cm-name">Ngozi Eze</div><div class="cm-text">GTCO and Zenith have been carrying my portfolio this quarter 💪</div><div class="cm-acts"><span class="cm-act">❤ 8</span><span class="cm-act">Reply</span></div></div></div>
-        </div>
-        <div class="cm-input-row"><div class="cm-av" id="ca1" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">AO</div><input placeholder="Write a comment…" id="ci1" onkeydown="if(event.key==='Enter')sendC('cl1','ci1')"/><button class="cm-send" onclick="sendC('cl1','ci1')">→</button></div>
-      </div>
-    </div>
-
-    <!-- Post 2 -->
-    <div class="post">
-      <div class="p-head">
-        <div class="p-av" style="background:var(--gbg);color:var(--green);">AO</div>
-        <div class="p-meta">
-          <div class="p-name">Adaeze Obi <span class="p-vbadge">✓ Verified</span><span class="p-perf">+41.5%</span></div>
-          <div class="p-time">1 hour ago · 890 followers</div>
-        </div>
-        <button class="p-follow on" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'Following ✓':'+ Follow'">Following ✓</button>
-      </div>
-      <div class="p-body">Thread 🧵: Why I switched from naira savings to dollar ETFs — and how it changed my wealth trajectory.<br><br>The naira lost ~40% vs the dollar in 18 months. My dollar-index ETF (via Risevest) is up 18% in the same period. Diversifying currency exposure is no longer optional for Nigerian investors.</div>
-      <div class="ticker-chip"><span>USD/NGN</span><span class="tc-dn">▼ ₦1,366</span></div>
-      <div class="p-tags"><span class="p-tag">#Thread</span><span class="p-tag">#DollarInvesting</span><span class="p-tag">#Naira</span></div>
-      <div class="p-actions">
-        <button class="p-act" onclick="like(this)">❤ <span>178</span></button>
-        <button class="p-act" onclick="toggleC('c2')">💬 <span>34</span></button>
-        <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
-        <button class="p-act">↗ Share</button>
-      </div>
-      <div class="emo-bar"><button class="emo">🔥</button><button class="emo">💡</button><button class="emo">📈</button><button class="emo">🇳🇬</button></div>
-      <div class="comments" id="c2">
-        <div id="cl2">
-          <div class="comment"><div class="cm-av" style="background:var(--pbg);color:var(--purple);">BB</div><div class="cm-body"><div class="cm-name">Bola Bakare</div><div class="cm-text">Which platform do you use — Bamboo or Risevest?</div><div class="cm-acts"><span class="cm-act">❤ 6</span><span class="cm-act">Reply</span></div></div></div>
-        </div>
-        <div class="cm-input-row"><div class="cm-av" id="ca2" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">AO</div><input placeholder="Write a comment…" id="ci2" onkeydown="if(event.key==='Enter')sendC('cl2','ci2')"/><button class="cm-send" onclick="sendC('cl2','ci2')">→</button></div>
-      </div>
-    </div>
-
-    <!-- Post 3 -->
-    <div class="post">
-      <div class="p-head">
-        <div class="p-av" style="background:var(--pbg);color:var(--purple);">QA</div>
-        <div class="p-meta">
-          <div class="p-name">Kwame Asante <span class="p-vbadge">✓ Verified</span><span class="p-perf">+28.7% YTD</span></div>
-          <div class="p-time">3 hours ago · 2.1K followers</div>
-        </div>
-        <button class="p-follow" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'Following ✓':'+ Follow'">+ Follow</button>
-      </div>
-      <div class="p-body">My top 3 NGX picks for H2 2025:<br>1. <strong>MTNN</strong> — Dividend yield + 5G rollout 📡<br>2. <strong>GEREGU</strong> — Power sector reform tailwinds 💡<br>3. <strong>AIRTELAFRI</strong> — Fintech pivot gaining traction 📱<br><br>Not financial advice. What's your pick?</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <div class="ticker-chip"><span>MTNN</span><span class="tc-up">+6.5%</span></div>
-        <div class="ticker-chip"><span>GEREGU</span><span class="tc-up">+5.1%</span></div>
-        <div class="ticker-chip"><span>AIRTELAFRI</span><span class="tc-dn">-0.8%</span></div>
-      </div>
-      <div class="p-actions">
-        <button class="p-act" onclick="like(this)">❤ <span>445</span></button>
-        <button class="p-act" onclick="toggleC('c3')">💬 <span>92</span></button>
-        <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
-        <button class="p-act">↗ Share</button>
-      </div>
-      <div class="emo-bar"><button class="emo">🔥</button><button class="emo">💯</button><button class="emo">🚀</button><button class="emo">📈</button></div>
-      <div class="comments" id="c3">
-        <div id="cl3"></div>
-        <div class="cm-input-row"><div class="cm-av" id="ca3" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">AO</div><input placeholder="Write a comment…" id="ci3" onkeydown="if(event.key==='Enter')sendC('cl3','ci3')"/><button class="cm-send" onclick="sendC('cl3','ci3')">→</button></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOLLOWING tab -->
-  <div id="feed-fl" style="display:none;padding:60px 20px;text-align:center;color:var(--tx3);">
-    <div style="font-size:40px;margin-bottom:14px;">👥</div>
-    <div style="font-size:15px;font-weight:700;color:var(--tx2);margin-bottom:6px;">Follow investors to see their posts</div>
-    <div style="font-size:13px;">Tap "+ Follow" on any post or profile to build your feed</div>
-  </div>
-
-  <!-- NEWS tab -->
-  <div id="feed-nw" style="display:none;">
-    <div class="news-item"><div class="ni-src">BusinessDay · 2h ago</div><div class="ni-title">NGX All-Share Index hits all-time high of 252,508 as banking stocks lead Friday rally</div></div>
-    <div class="news-item"><div class="ni-src">Reuters · 4h ago</div><div class="ni-title">Nigeria's inflation eases to 31.2% in April — first decline in 12 months</div></div>
-    <div class="news-item"><div class="ni-src">TechCabal · 5h ago</div><div class="ni-title">Flutterwave closes $250M Series D at $3B valuation, plans pan-African expansion</div></div>
-    <div class="news-item"><div class="ni-src">Nairametrics · 6h ago</div><div class="ni-title">MTN Nigeria announces Q1 dividend of ₦5.04 per share — yield hits 7.2%</div></div>
-    <div class="news-item"><div class="ni-src">The Punch · 8h ago</div><div class="ni-title">Dangote Cement posts ₦800B revenue in FY2024, beats analyst expectations</div></div>
-  </div>
+  <!-- FEEDS -->
+  <div id="feed-fy"><div class="empty-feed"><div class="spinner"></div><div style="margin-top:12px;font-size:13px;">Loading posts...</div></div></div>
+  <div id="feed-fl" style="display:none;"><div class="empty-feed"><div class="empty-ico">&#128101;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">Follow investors to see their posts</div></div></div>
+  <div id="feed-nw" style="display:none;"><div class="empty-feed"><div class="spinner"></div></div></div>
 </main>
 
-<!-- RIGHT SIDEBAR -->
+<!-- RIGHT -->
 <aside class="r-side">
-  <div class="rs-label" style="margin-top:4px;">⭐ Suggested Investors</div>
-  <div class="inv-card">
-    <div class="ic-top"><div class="ic-av" style="background:var(--plt);color:var(--p);">KA</div><div><div class="ic-name">Kunle Adeyemi</div><div class="ic-sub">NGX &amp; Crypto · 1.2K followers</div></div></div>
-    <div class="ic-stats"><div class="ic-s"><div class="ic-sv" style="color:var(--green);">+34.2%</div><div class="ic-sl">YTD Return</div></div><div class="ic-s"><div class="ic-sv">₦5.1M</div><div class="ic-sl">Portfolio</div></div></div>
-    <button class="ic-follow" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'Following ✓':'+ Follow'">+ Follow</button>
-  </div>
-  <div class="inv-card">
-    <div class="ic-top"><div class="ic-av" style="background:var(--gbg);color:var(--green);">AM</div><div><div class="ic-name">Amara Osei</div><div class="ic-sub">US Stocks &amp; ETFs · 890 followers</div></div></div>
-    <div class="ic-stats"><div class="ic-s"><div class="ic-sv" style="color:var(--green);">+41.5%</div><div class="ic-sl">All-time</div></div><div class="ic-s"><div class="ic-sv">₦3.8M</div><div class="ic-sl">Portfolio</div></div></div>
-    <button class="ic-follow" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'Following ✓':'+ Follow'">+ Follow</button>
-  </div>
-  <div class="inv-card">
-    <div class="ic-top"><div class="ic-av" style="background:var(--pbg);color:var(--purple);">QA</div><div><div class="ic-name">Kwame Asante</div><div class="ic-sub">Ghana &amp; NGX · 2.1K followers</div></div></div>
-    <div class="ic-stats"><div class="ic-s"><div class="ic-sv" style="color:var(--green);">+28.7%</div><div class="ic-sl">YTD</div></div><div class="ic-s"><div class="ic-sv">$24K</div><div class="ic-sl">Portfolio</div></div></div>
-    <button class="ic-follow" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'Following ✓':'+ Follow'">+ Follow</button>
-  </div>
-
-  <div class="rs-label" style="margin-top:20px;">🔥 Trending</div>
-  <div class="trend-list">
-    <div class="trend-row"><div class="tr-rank">1</div><div class="tr-tag">#NGXRally</div><div class="tr-cnt">2.4K posts</div></div>
-    <div class="trend-row"><div class="tr-rank">2</div><div class="tr-tag">#JapaFund</div><div class="tr-cnt">1.8K</div></div>
-    <div class="trend-row"><div class="tr-rank">3</div><div class="tr-tag">#DollarInvesting</div><div class="tr-cnt">1.2K</div></div>
-    <div class="trend-row"><div class="tr-rank">4</div><div class="tr-tag">#MTNN</div><div class="tr-cnt">940</div></div>
-    <div class="trend-row"><div class="tr-rank">5</div><div class="tr-tag">#CryptoNG</div><div class="tr-cnt">780</div></div>
+  <div class="rs-lbl" style="margin-bottom:10px;">&#11088; Suggested Investors</div>
+  <div id="suggested-investors"><div style="font-size:12px;color:var(--tx3);">Loading...</div></div>
+  <div style="margin-top:18px;" class="rs-lbl">&#128293; Trending</div>
+  <div class="trend-list" id="trending-list">
+    <div class="tr-row"><div class="tr-rank">1</div><div class="tr-tag">#NGXRally</div></div>
+    <div class="tr-row"><div class="tr-rank">2</div><div class="tr-tag">#Investing</div></div>
+    <div class="tr-row"><div class="tr-rank">3</div><div class="tr-tag">#JapaFund</div></div>
+    <div class="tr-row"><div class="tr-rank">4</div><div class="tr-tag">#MTNN</div></div>
+    <div class="tr-row"><div class="tr-rank">5</div><div class="tr-tag">#DollarInvesting</div></div>
   </div>
 </aside>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">&#x2715;</button>
+  <img id="lb-img" src="" alt=""/>
+</div>
+
+<!-- EDIT POST MODAL -->
+<div class="modal-ov" id="edit-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEditModal()">&#x2715;</button>
+    <div class="modal-title">Edit Post</div>
+    <textarea id="edit-text" style="width:100%;background:var(--g50);border:1.5px solid var(--bdr);border-radius:9px;padding:10px 12px;font-size:14px;outline:none;min-height:100px;resize:none;" oninput="autoH(this)"></textarea>
+    <button class="modal-save" onclick="saveEditPost()">Save Changes</button>
+  </div>
 </div>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+var sb = createClient('https://lzlitanvlkycrkkpwczm.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g');
 
-var SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co';
-var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g';
-var _sb = createClient(SB_URL, SB_ANON);
-var _session = null;
-var _myInitials = 'AO';
-var _myFirstName = 'You';
-var _myTickers = [];
-var _pendingTickers = [];
-var _sharePerf = false;
-var _myPctGain = null;
-var PRICES = {};
-
-// ── SPARKLINE ────────────────────────────────────────────────
-window.addEventListener('load', function() {
-  var ctx = document.getElementById('spark-chart').getContext('2d');
-  new Chart(ctx, {type:'line', data:{labels:[1,2,3,4,5,6,7,8,9,10], datasets:[{data:[4200,4310,4280,4390,4510,4600,4700,4750,4800,4823], borderColor:'#1a6eff', borderWidth:2, pointRadius:0, tension:0.4, fill:true, backgroundColor:'rgba(26,110,255,0.07)'}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{enabled:false}}, scales:{x:{display:false}, y:{display:false}}}});
-});
+var _s=null,_u=null,_prices={},_myHoldings=[],_myPctGain=null;
+var _pendingImgs=[],_pendingTickers=[],_sharePerf=false,_editPostId=null;
 
 // ── INIT ─────────────────────────────────────────────────────
-async function init() {
-  // Auth check
-  var authRes = await _sb.auth.getSession();
-  if (!authRes.data.session) { window.location.href = 'landing.html'; return; }
-  _session = authRes.data.session;
-
-  // Profile
-  var profRes = await _sb.from('profiles').select('*').eq('id', _session.user.id).single();
-  var profile = profRes.data;
-  if (profile && profile.first_name) { _myFirstName = profile.first_name; }
-  else if (profile && profile.name)  { _myFirstName = profile.name.split(' ')[0]; }
-  else { _myFirstName = _session.user.email.split('@')[0]; }
-  _myInitials = (profile && profile.initials) ? profile.initials : _myFirstName.charAt(0).toUpperCase();
-
-  // Update nav
-  var els = document.querySelectorAll('#nav-av, #c-av, #ca1, #ca2, #ca3');
-  for (var i = 0; i < els.length; i++) { if (els[i]) els[i].textContent = _myInitials; }
-  var nn = document.getElementById('nav-name'); if (nn) nn.textContent = _myFirstName;
-  var pn = document.getElementById('ps-name'); if (pn) pn.textContent = _myFirstName;
-
-  sessionStorage.setItem('gopex_user', JSON.stringify({
-    id: _session.user.id,
-    name: (profile && profile.name) ? profile.name : _myFirstName,
-    firstName: _myFirstName,
-    initials: _myInitials,
-    email: _session.user.email,
-    joined: new Date(_session.user.created_at).toLocaleDateString('en-NG', {month:'long', year:'numeric'})
-  }));
-
-  // Load prices
+async function init(){
+  var a=await sb.auth.getSession();
+  if(!a.data.session){window.location.href='landing.html';return;}
+  _s=a.data.session; _u=_s.user;
+  var pr=await sb.from('profiles').select('*').eq('id',_u.id).single();
+  var p=pr.data||{};
+  var fn=(p.first_name||(p.name?p.name.split(' ')[0]:_u.email.split('@')[0]));
+  var ini=p.initials||(fn.charAt(0).toUpperCase());
+  sessionStorage.setItem('gopex_user',JSON.stringify({id:_u.id,name:p.name||fn,firstName:fn,initials:ini,email:_u.email,role:p.role||'user'}));
+  setEl('nav-av',ini); setEl('nav-un',fn); setEl('c-av',ini);
+  var hr=new Date().getHours();
+  setEl('hd-greet',(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+' \uD83D\uDC4B');
+  setEl('hd-name',fn);
   await loadPrices();
-
-  // Load ticker holdings
-  try {
-    var thRes = await _sb.rpc('get_my_ticker_holdings', { user_uuid: _session.user.id });
-    if (thRes.data) _myTickers = thRes.data;
-  } catch(e) {}
-
-  // Portfolio % gain
-  var hRes = await _sb.from('holdings').select('shares,buy_price,ticker').eq('user_id', _session.user.id);
-  if (hRes.data && hRes.data.length) {
-    var cost = 0, mval = 0;
-    for (var j = 0; j < hRes.data.length; j++) {
-      var h = hRes.data[j];
-      var mp = (PRICES[h.ticker] && PRICES[h.ticker].p) ? PRICES[h.ticker].p : h.buy_price;
-      cost += h.shares * h.buy_price;
-      mval += h.shares * mp;
-    }
-    if (cost > 0) {
-      _myPctGain = parseFloat(((mval - cost) / cost * 100).toFixed(2));
-      await _sb.from('profiles').update({ portfolio_pct_gain: _myPctGain }).eq('id', _session.user.id);
-    }
-  }
-  updatePerfPreview();
-
-  // Load posts
-  await loadPosts();
-
-  // Real-time
-  _sb.channel('social')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, function(payload) { prependPost(payload.new); })
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'posts' }, function(payload) { updateLikes(payload.new); })
-    .subscribe();
+  await loadMyHoldings();
+  await loadPortfolioSummary();
+  await loadGoals();
+  await loadPosts('fy');
+  await loadNews();
+  await loadSuggested();
+  initSparkline();
+  // Realtime
+  sb.channel('feed').on('postgres_changes',{event:'INSERT',schema:'public',table:'posts'},function(pl){prependPost(pl.new,false);}).subscribe();
 }
 init();
 
-// ── PRICES ───────────────────────────────────────────────────
-async function loadPrices() {
-  try {
-    var url = SB_URL + '/rest/v1/stock_prices?select=ticker,price,change_pct,is_market_open&order=ticker';
-    var res = await fetch(url, { headers: { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON } });
-    var rows = await res.json();
-    if (!Array.isArray(rows)) return;
-    for (var i = 0; i < rows.length; i++) {
-      PRICES[rows[i].ticker] = { p: rows[i].price, c: Math.abs(rows[i].change_pct || 0), u: (rows[i].change_pct || 0) >= 0 };
-    }
-  } catch(e) { console.warn('Price fetch failed', e); }
+function setEl(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+
+// ── PRICES ────────────────────────────────────────────────────
+async function loadPrices(){
+  var r=await fetch('https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,price,change_pct,company_name',{headers:{apikey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'}});
+  var d=await r.json();
+  if(Array.isArray(d))d.forEach(function(s){_prices[s.ticker]={p:s.price,c:s.change_pct||0,n:s.company_name||s.ticker};});
 }
 
-// ── LOAD POSTS ───────────────────────────────────────────────
-async function loadPosts() {
-  var res = await _sb.from('posts')
-    .select('*, profiles(name, initials, is_verified, share_performance, portfolio_pct_gain, portfolio_pct_period)')
-    .order('created_at', { ascending: false }).limit(30);
-  if (!res.data || !res.data.length) return;
-  var feed = document.getElementById('feed-fy');
-  var compose = document.querySelector('.compose');
-  var old = feed.querySelectorAll('.post');
-  for (var i = 0; i < old.length; i++) old[i].remove();
-  for (var j = 0; j < res.data.length; j++) {
-    feed.insertBefore(buildPost(res.data[j]), compose.nextSibling);
+// ── MY HOLDINGS ───────────────────────────────────────────────
+async function loadMyHoldings(){
+  var r=await sb.from('holdings').select('ticker,shares,buy_price').eq('user_id',_u.id);
+  _myHoldings=r.data||[];
+  var cost=0,mval=0;
+  _myHoldings.forEach(function(h){var mp=_prices[h.ticker]?_prices[h.ticker].p:h.buy_price;cost+=h.shares*h.buy_price;mval+=h.shares*mp;});
+  if(cost>0)_myPctGain=parseFloat(((mval-cost)/cost*100).toFixed(2));
+  var perf=document.getElementById('perf-preview');
+  if(perf&&_myPctGain!=null){perf.style.display='inline';perf.textContent=(_myPctGain>=0?'▲ +':' ▼ ')+Math.abs(_myPctGain).toFixed(1)+'%';}
+}
+
+// ── PORTFOLIO SUMMARY ─────────────────────────────────────────
+async function loadPortfolioSummary(){
+  var total=0;
+  _myHoldings.forEach(function(h){var mp=_prices[h.ticker]?_prices[h.ticker].p:h.buy_price;total+=h.shares*mp;});
+  var valStr=total>=1e6?('&#8358;'+(total/1e6).toFixed(2)+'M'):(total>=1e3?('&#8358;'+(total/1e3).toFixed(0)+'K'):'&#8358;'+total.toFixed(0));
+  document.getElementById('ls-val').innerHTML=total>0?valStr:'&#8358;0';
+  document.getElementById('hd-val').innerHTML=total>0?valStr:'&#8358;0';
+  if(_myPctGain!=null){
+    var chgEl=document.getElementById('ls-chg');var hdchg=document.getElementById('hd-chg');
+    var sign=_myPctGain>=0?'+':'';var col=_myPctGain>=0?'#86efac':'#fca5a5';
+    if(chgEl){chgEl.textContent=sign+_myPctGain.toFixed(2)+'% return';}
+    if(hdchg){hdchg.style.color=_myPctGain>=0?'var(--g)':'var(--r)';hdchg.textContent=sign+_myPctGain.toFixed(2)+'% all-time';}
+  }else{setEl('ls-chg','No holdings yet');}
+}
+
+// ── GOALS ─────────────────────────────────────────────────────
+async function loadGoals(){
+  var r=await sb.from('goals').select('*').eq('user_id',_u.id).limit(3);
+  var w=document.getElementById('goals-widget');
+  if(!r.data||!r.data.length){w.innerHTML='<div style="font-size:12px;color:var(--tx3);">No goals yet. <a href="portfolio.html" style="color:var(--p);">Add one</a></div>';return;}
+  var h='';
+  r.data.forEach(function(g){
+    var pct=g.target_amount>0?Math.min(Math.round(g.saved_amount/g.target_amount*100),100):0;
+    var col=pct>=70?'var(--g)':pct>=40?'var(--p)':'var(--am)';
+    h+='<div class="gb-item"><div class="gb-row"><span style="font-size:11px;">'+(g.icon||'&#127919;')+' '+g.name+'</span><span style="font-size:11px;font-weight:700;color:'+col+'">'+pct+'%</span></div><div class="gb-bar"><div class="gb-fill" style="width:'+pct+'%;background:'+col+'"></div></div></div>';
+  });
+  w.innerHTML=h;
+}
+
+// ── SPARKLINE ─────────────────────────────────────────────────
+function initSparkline(){
+  var ctx=document.getElementById('spark-canvas').getContext('2d');
+  new Chart(ctx,{type:'line',data:{labels:[1,2,3,4,5,6,7],datasets:[{data:[0,0,0,0,0,0,0],borderColor:'#1a6eff',borderWidth:1.5,pointRadius:0,tension:.4,fill:true,backgroundColor:'rgba(26,110,255,.06)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+}
+
+// ── LOAD POSTS ────────────────────────────────────────────────
+async function loadPosts(tab){
+  var feed=document.getElementById('feed-'+tab);
+  if(!feed)return;
+  var query=sb.from('posts').select('*, profiles(name,initials,role,share_performance,portfolio_pct_gain)').order('created_at',{ascending:false}).limit(40);
+  if(tab==='fl'){
+    var fr=await sb.from('follows').select('following_id').eq('follower_id',_u.id);
+    var ids=(fr.data||[]).map(function(f){return f.following_id;});
+    if(!ids.length){feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128101;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">Follow investors to see their posts</div></div>';return;}
+    query=query.in('user_id',ids);
   }
+  var r=await query;
+  if(!r.data||!r.data.length){feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128203;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">No posts yet</div><div style="font-size:12px;margin-top:6px;">Be the first to post something!</div></div>';return;}
+  feed.innerHTML='';
+  for(var i=0;i<r.data.length;i++){feed.appendChild(await buildPostEl(r.data[i],false));}
+}
+
+async function loadNews(){
+  var feed=document.getElementById('feed-nw');
+  var r=await sb.from('news_posts').select('*, profiles(name)').order('created_at',{ascending:false}).limit(30);
+  if(!r.data||!r.data.length){feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128240;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">No news yet</div><div style="font-size:12px;margin-top:6px;">Admins will post market news here</div></div>';return;}
+  feed.innerHTML='';
+  r.data.forEach(function(n){
+    var d=document.createElement('div');d.className='news-item';
+    var mins=Math.floor((Date.now()-new Date(n.created_at))/60000);
+    var tstr=mins<60?(mins+'m ago'):mins<1440?(Math.floor(mins/60)+'h ago'):(Math.floor(mins/1440)+'d ago');
+    d.innerHTML='<div class="ni-badge">GopexFund News &middot; '+(n.profiles&&n.profiles.name?n.profiles.name:'Admin')+'</div>'
+      +'<div class="ni-title">'+n.title+'</div>'
+      +(n.body?'<div style="font-size:12px;color:var(--tx2);margin-top:4px;line-height:1.6;">'+n.body.substring(0,120)+(n.body.length>120?'...':'')+'</div>':'')
+      +'<div class="ni-time">'+tstr+'</div>';
+    feed.appendChild(d);
+  });
 }
 
 // ── BUILD POST ────────────────────────────────────────────────
-function buildPost(p) {
-  var d = document.createElement('div');
-  d.className = 'post';
-  d.dataset.postId = p.id;
+async function buildPostEl(p,prepend){
+  var d=document.createElement('div');d.className='post';d.dataset.pid=p.id;
+  var name=(p.profiles&&p.profiles.name)?p.profiles.name:'GopexFund User';
+  var inits=(p.profiles&&p.profiles.initials)?p.profiles.initials:name.charAt(0).toUpperCase();
+  var role=(p.profiles&&p.profiles.role)||'user';
+  var isAdmin=role==='admin';
+  var isMe=p.user_id===_u.id;
+  var mins=Math.floor((Date.now()-new Date(p.created_at))/60000);
+  var tstr=mins<1?'Just now':mins<60?(mins+'m ago'):mins<1440?(Math.floor(mins/60)+'h ago'):(Math.floor(mins/1440)+'d ago');
 
-  var name    = (p.profiles && p.profiles.name)     ? p.profiles.name     : 'GopexFund User';
-  var inits   = (p.profiles && p.profiles.initials) ? p.profiles.initials : name.charAt(0).toUpperCase();
-  var verified = p.profiles && p.profiles.is_verified;
-  var mins    = Math.floor((Date.now() - new Date(p.created_at)) / 60000);
-  var tstr    = mins < 1 ? 'Just now' : mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
-  var isMe    = _session && p.user_id === _session.user.id;
-  var pid     = p.id;
-
-  // Perf badge
-  var perfBadge = '';
-  if (p.portfolio_pct_gain != null && p.profiles && p.profiles.share_performance) {
-    var pct = p.portfolio_pct_gain;
-    var up  = pct >= 0;
-    perfBadge = '<div class="post-perf-badge ' + (up ? 'ppb-up' : 'ppb-dn') + '">'
-      + (up ? '▲' : '▼') + ' ' + Math.abs(pct).toFixed(1) + '% portfolio ' + (p.portfolio_period || 'return')
-      + ' <span style="opacity:.6;font-size:9px;">% only</span></div>';
+  // Perf badge — only if poster opted in AND we hide raw value
+  var perfHtml='';
+  if(p.portfolio_pct_gain!=null&&p.profiles&&p.profiles.share_performance){
+    var pct=p.portfolio_pct_gain;var up=pct>=0;
+    perfHtml='<div class="p-perf '+(up?'pp-up':'pp-dn')+'">'+(up?'&#9650;':'&#9660;')+' '+Math.abs(pct).toFixed(1)+'% portfolio return <span style="opacity:.55;font-size:9px;">% only</span></div>';
   }
 
-  // Ticker chips
-  var tkHtml = '';
-  if (p.ticker_holdings && p.ticker_holdings.length) {
-    tkHtml = '<div class="post-tickers">';
-    for (var i = 0; i < p.ticker_holdings.length; i++) {
-      var th = p.ticker_holdings[i];
-      var tk = th.ticker;
-      var mp = PRICES[tk];
-      var price = mp ? ('&#8358;' + mp.p.toLocaleString()) : '&mdash;';
-      var chgColor = mp ? (mp.u ? 'var(--green)' : 'var(--red)') : '';
-      var chg = mp ? ('<span style="color:' + chgColor + ';font-size:11px;font-weight:700;">' + (mp.u ? '▲' : '▼') + ' ' + Math.abs(mp.c).toFixed(2) + '%</span>') : '';
-      var myH = null;
-      for (var k = 0; k < _myTickers.length; k++) { if (_myTickers[k].ticker === tk) { myH = _myTickers[k]; break; } }
-      var held = myH
-        ? '<div class="ptk-held ptk-held-yes">✓ I hold ' + myH.pct + '% of portfolio</div>'
-        : '<div class="ptk-held ptk-held-no">&mdash; Not in my portfolio</div>';
-      tkHtml += '<div class="ptk"><div class="ptk-sym">NGX: ' + tk + '</div><div class="ptk-price">' + price + ' ' + chg + '</div>' + held + '</div>';
-    }
-    tkHtml += '</div>';
+  // Ticker chips — show live price + whether viewer holds it
+  var tkHtml='';
+  if(p.ticker_holdings&&p.ticker_holdings.length){
+    tkHtml='<div class="p-tickers">';
+    p.ticker_holdings.forEach(function(th){
+      var tk=th.ticker;var mp=_prices[tk];
+      var priceStr=mp?('&#8358;'+mp.p.toLocaleString()):'&#8212;';
+      var chgCol=mp?(mp.c>=0?'var(--g)':'var(--r)'):'var(--tx3)';
+      var chgStr=mp?((mp.c>=0?'&#9650;':'&#9660;')+' '+Math.abs(mp.c).toFixed(2)+'%'):'';
+      var myH=null;for(var k=0;k<_myHoldings.length;k++){if(_myHoldings[k].ticker===tk){myH=_myHoldings[k];break;}}
+      var myPct=0;
+      if(myH){var tot=0;_myHoldings.forEach(function(h){var mp2=_prices[h.ticker]?_prices[h.ticker].p:h.buy_price;tot+=h.shares*mp2;});var myVal=(_prices[myH.ticker]?_prices[myH.ticker].p:myH.buy_price)*myH.shares;myPct=tot>0?Math.round(myVal/tot*100):0;}
+      var heldHtml=myH?('<div class="ptk-held ptk-yes">&#10003; I hold '+myPct+'% of portfolio</div>'):('<div class="ptk-held ptk-no">&#8212; Not in my portfolio</div>');
+      tkHtml+='<div class="ptk"><div class="ptk-sym">'+tk+'</div><div class="ptk-price" style="color:'+chgCol+';">'+priceStr+' '+chgStr+'</div>'+heldHtml+'</div>';
+    });
+    tkHtml+='</div>';
   }
 
-  var followBtn = isMe ? '' : '<button class="p-follow" data-uid="' + p.user_id + '" onclick="toggleFollow(this)">+ Follow</button>';
-  var vbadge = verified ? '<span class="p-vbadge">✓ Verified</span>' : '';
-  var bodyTxt = p.body.replace(/
-/g, '<br>');
+  // Images
+  var imgHtml='';
+  var imgs=await sb.from('post_images').select('image_url').eq('post_id',p.id);
+  if(imgs.data&&imgs.data.length){
+    var cnt=Math.min(imgs.data.length,3);
+    imgHtml='<div class="p-images cnt-'+cnt+'">';
+    for(var i=0;i<cnt;i++){imgHtml+='<img class="p-img" src="'+imgs.data[i].image_url+'" onclick="openLightbox(\''+imgs.data[i].image_url+'\')" alt="Post image"/>';}
+    imgHtml+='</div>';
+  }
 
-  d.innerHTML = '<div class="p-head">'
-    + '<div class="p-av" style="background:var(--plt);color:var(--p);">' + inits + '</div>'
-    + '<div class="p-meta"><div class="p-name">' + name + ' ' + vbadge + '</div><div class="p-time">' + tstr + '</div></div>'
-    + followBtn + '</div>'
-    + perfBadge + tkHtml
-    + '<div class="p-body">' + bodyTxt + '</div>'
-    + '<div class="p-actions">'
-    + '<button class="p-act like-btn" data-pid="' + pid + '" onclick="toggleLike(this)">&#10084; <span>' + (p.likes_count || 0) + '</span></button>'
-    + '<button class="p-act" onclick="toggleCmts(this,'' + pid + '')">&#128172; <span>' + (p.comments_count || 0) + '</span></button>'
-    + '<button class="p-act" onclick="this.classList.toggle('saved')">&#128278; Save</button>'
-    + '<button class="p-act">&#8599; Share</button>'
-    + '</div>'
-    + '<div class="emo-bar">'
-    + '<button class="emo" onclick="emo(this,'' + pid + '','fire')">&#128293;</button>'
-    + '<button class="emo" onclick="emo(this,'' + pid + '','100')">&#128175;</button>'
-    + '<button class="emo" onclick="emo(this,'' + pid + '','rocket')">&#128640;</button>'
-    + '<button class="emo" onclick="emo(this,'' + pid + '','chart')">&#128200;</button>'
-    + '<button class="emo" onclick="emo(this,'' + pid + '','money')">&#128176;</button>'
-    + '</div>'
-    + '<div class="comments" id="cmt-' + pid + '" style="display:none;margin-top:10px;">'
-    + '<div id="cml-' + pid + '"></div>'
-    + '<div class="cm-input-row">'
-    + '<div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;flex-shrink:0;">' + _myInitials + '</div>'
-    + '<input placeholder="Write a comment..." id="cmi-' + pid + '" onkeydown="if(event.key==='Enter')postCmt('' + pid + '')" />'
-    + '<button class="cm-send" onclick="postCmt('' + pid + '')">&#8594;</button>'
-    + '</div></div>';
+  // Check liked
+  var likedRes=await sb.from('likes').select('user_id').eq('post_id',p.id).eq('user_id',_u.id).single();
+  var liked=!likedRes.error&&likedRes.data;
+
+  // Reactions summary
+  var reactRes=await sb.from('post_reactions').select('emoji').eq('post_id',p.id);
+  var reactMap={};
+  if(reactRes.data)reactRes.data.forEach(function(r){reactMap[r.emoji]=(reactMap[r.emoji]||0)+1;});
+  var reactHtml='';
+  Object.keys(reactMap).forEach(function(e){reactHtml+='<span class="react-summary">'+e+' '+reactMap[e]+'</span>';});
+
+  // Build HTML
+  var menuHtml='';
+  if(isMe||role==='admin'){
+    menuHtml='<div style="position:relative;margin-left:auto;">'
+      +'<button class="pa" onclick="togglePostMenu(\'pm-'+p.id+'\')">&#8943;</button>'
+      +'<div class="post-menu" id="pm-'+p.id+'">'
+      +(isMe?'<div class="pm-item" onclick="openEditModal(\''+p.id+'\',this)">&#9998; Edit post</div>':'')
+      +'<div class="pm-item danger" onclick="deletePost(\''+p.id+'\',this)">&#128465; Delete post</div>'
+      +'</div></div>';
+  }
+
+  d.innerHTML='<div class="p-hd">'
+    +'<div class="p-av">'+inits+'</div>'
+    +'<div class="p-meta"><div class="p-name">'+name
+    +(isAdmin?'<span class="p-badge pb-a">Admin</span>':'')
+    +'</div><div class="p-time">'+tstr+'</div></div>'
+    +(!isMe?'<button class="p-follow" data-uid="'+p.user_id+'" onclick="toggleFollow(this)">+ Follow</button>':'')
+    +menuHtml
+    +'</div>'
+    +perfHtml+tkHtml
+    +'<div class="p-body">'+p.body.replace(/\n/g,'<br>')+'</div>'
+    +imgHtml
+    +(reactHtml?'<div class="p-reactions">'+reactHtml+'</div>':'')
+    +'<div class="p-acts">'
+    +'<button class="pa'+(liked?' liked':'')+'" data-pid="'+p.id+'" onclick="toggleLike(this)">'+(liked?'&#10084;':'&#9825;')+' <span>'+((p.likes_count||0))+'</span></button>'
+    +'<button class="pa" onclick="toggleCmts(this,\''+p.id+'\')">&#128172; <span>'+((p.comments_count||0))+'</span></button>'
+    +'<button class="pa" onclick="navigator.clipboard&&navigator.clipboard.writeText(window.location.origin+\'/home.html?post='+p.id+'\')">&#8599; Share</button>'
+    +'<div style="margin-left:auto;display:flex;gap:2px;" class="emoji-row">'
+    +['&#128293;','&#128175;','&#128640;','&#128200;','&#128076;'].map(function(e){return '<button class="emo-btn" onclick="reactEmoji(\''+p.id+'\',\''+e+'\')">'+e+'</button>';}).join('')
+    +'</div>'
+    +'</div>'
+    +'<div class="cmts-wrap" id="cmts-'+p.id+'"><div id="cmts-list-'+p.id+'"></div>'
+    +'<div class="cmt-input-row"><div class="cmt-av" id="cmt-av-'+p.id+'">?</div>'
+    +'<input class="cmt-input" id="cmt-inp-'+p.id+'" placeholder="Write a comment..." onkeydown="if(event.key===\'Enter\')submitComment(\''+p.id+'\')" />'
+    +'<button class="cmt-send" onclick="submitComment(\''+p.id+'\')">&#8594;</button></div></div>';
+
+  // Set cmt avatar
+  setTimeout(function(){var ca=document.getElementById('cmt-av-'+p.id);if(ca){var raw=sessionStorage.getItem('gopex_user');if(raw){var u=JSON.parse(raw);ca.textContent=u.initials||'?';}}},50);
   return d;
 }
 
-function prependPost(p) {
-  var feed = document.getElementById('feed-fy');
-  var compose = document.querySelector('.compose');
-  feed.insertBefore(buildPost(p), compose.nextSibling);
+function prependPost(p,scroll){
+  var feed=document.getElementById('feed-fy');
+  if(!feed)return;
+  buildPostEl(p,true).then(function(el){
+    var first=feed.firstElementChild;
+    if(first&&first.classList.contains('empty-feed'))feed.innerHTML='';
+    feed.insertBefore(el,feed.firstElementChild);
+    if(scroll)el.scrollIntoView({behavior:'smooth'});
+  });
 }
 
-function updateLikes(p) {
-  var btn = document.querySelector('.like-btn[data-pid="' + p.id + '"] span');
-  if (btn) btn.textContent = p.likes_count || 0;
+// ── SUGGESTED INVESTORS ───────────────────────────────────────
+async function loadSuggested(){
+  var r=await sb.from('profiles').select('id,name,initials,portfolio_pct_gain,share_performance,followers_count').neq('id',_u.id).eq('share_performance',true).not('portfolio_pct_gain','is',null).order('portfolio_pct_gain',{ascending:false}).limit(3);
+  var w=document.getElementById('suggested-investors');
+  if(!r.data||!r.data.length){w.innerHTML='<div style="font-size:12px;color:var(--tx3);">No investors sharing performance yet.</div>';return;}
+  w.innerHTML='';
+  r.data.forEach(function(inv){
+    var ini=inv.initials||(inv.name?inv.name.charAt(0).toUpperCase():'U');
+    var pct=inv.portfolio_pct_gain||0;var up=pct>=0;
+    var d=document.createElement('div');d.className='inv-card';
+    d.innerHTML='<div class="ic-top"><div class="ic-av">'+ini+'</div><div><div class="ic-name">'+inv.name+'</div><div class="ic-sub">'+(inv.followers_count||0)+' followers</div></div></div>'
+      +'<div class="ic-pct'+(up?'':' dn')+'">'+(up?'&#9650;':'&#9660;')+' '+Math.abs(pct).toFixed(1)+'% return</div>'
+      +'<div class="ic-note">&#128274; Portfolio value is private</div>'
+      +'<button class="ic-follow" data-uid="'+inv.id+'" onclick="toggleFollow(this)">+ Follow</button>';
+    w.appendChild(d);
+  });
 }
 
-// ── INTERACTIONS ─────────────────────────────────────────────
-window.toggleLike = async function(btn) {
-  if (!_sb || !_session) return;
-  var pid = btn.dataset.pid;
-  var liked = btn.classList.contains('liked');
+// ── INTERACTIONS ──────────────────────────────────────────────
+window.toggleLike=async function(btn){
+  var pid=btn.dataset.pid;var liked=btn.classList.contains('liked');
   btn.classList.toggle('liked');
-  var s = btn.querySelector('span');
-  s.textContent = parseInt(s.textContent) + (liked ? -1 : 1);
-  if (liked) { await _sb.from('likes').delete().eq('post_id', pid).eq('user_id', _session.user.id); }
-  else { await _sb.from('likes').insert({ post_id: pid, user_id: _session.user.id }); }
+  var s=btn.querySelector('span');s.textContent=parseInt(s.textContent)+(liked?-1:1);
+  btn.innerHTML=(btn.classList.contains('liked')?'&#10084;':'&#9825;')+' <span>'+s.textContent+'</span>';
+  if(liked){await sb.from('likes').delete().eq('post_id',pid).eq('user_id',_u.id);}
+  else{await sb.from('likes').insert({post_id:pid,user_id:_u.id});}
 };
 
-window.toggleCmts = async function(btn, pid) {
-  var box = document.getElementById('cmt-' + pid);
-  if (!box) return;
-  var open = box.style.display !== 'none';
-  box.style.display = open ? 'none' : 'block';
-  if (!open && _sb) {
-    var res = await _sb.from('comments').select('*, profiles(name,initials)').eq('post_id', pid).order('created_at', {ascending:true});
-    var list = document.getElementById('cml-' + pid);
-    if (list) {
-      list.innerHTML = '';
-      if (res.data) {
-        for (var i = 0; i < res.data.length; i++) {
-          var c = res.data[i];
-          var div = document.createElement('div'); div.className = 'comment';
-          div.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + ((c.profiles && c.profiles.initials) ? c.profiles.initials : 'U') + '</div>'
-            + '<div class="cm-body"><div class="cm-name">' + ((c.profiles && c.profiles.name) ? c.profiles.name : 'User') + '</div>'
-            + '<div class="cm-text">' + c.body + '</div></div>';
-          list.appendChild(div);
-        }
+window.toggleCmts=async function(btn,pid){
+  var box=document.getElementById('cmts-'+pid);if(!box)return;
+  var open=box.classList.contains('open');
+  box.classList.toggle('open',!open);
+  if(!open){
+    var r=await sb.from('comments').select('*,profiles(name,initials)').eq('post_id',pid).order('created_at',{ascending:true});
+    var list=document.getElementById('cmts-list-'+pid);list.innerHTML='';
+    (r.data||[]).forEach(function(c){
+      var div=document.createElement('div');div.className='cmt';
+      var ini=(c.profiles&&c.profiles.initials)||(c.profiles&&c.profiles.name?c.profiles.name.charAt(0):'U');
+      div.innerHTML='<div class="cmt-av">'+ini+'</div><div class="cmt-body"><div class="cmt-name">'+((c.profiles&&c.profiles.name)||'User')+'</div><div class="cmt-text">'+c.body+'</div></div>';
+      list.appendChild(div);
+    });
+  }
+};
+
+window.submitComment=async function(pid){
+  var inp=document.getElementById('cmt-inp-'+pid);var txt=inp.value.trim();if(!txt)return;
+  inp.value='';
+  var list=document.getElementById('cmts-list-'+pid);
+  var raw=sessionStorage.getItem('gopex_user');var u=raw?JSON.parse(raw):{initials:'?',firstName:'You'};
+  var div=document.createElement('div');div.className='cmt';
+  div.innerHTML='<div class="cmt-av">'+u.initials+'</div><div class="cmt-body"><div class="cmt-name">'+u.firstName+'</div><div class="cmt-text">'+txt+'</div></div>';
+  if(list)list.appendChild(div);
+  await sb.from('comments').insert({post_id:pid,user_id:_u.id,body:txt});
+};
+
+window.reactEmoji=async function(pid,emoji){
+  await sb.from('post_reactions').upsert({post_id:pid,user_id:_u.id,emoji:emoji},{onConflict:'post_id,user_id,emoji'});
+};
+
+window.toggleFollow=async function(btn){
+  var uid=btn.dataset.uid;var on=btn.classList.contains('on');
+  btn.classList.toggle('on',!on);
+  btn.textContent=on?'+ Follow':'Following &#10003;';
+  if(on){await sb.from('follows').delete().eq('follower_id',_u.id).eq('following_id',uid);}
+  else{await sb.from('follows').insert({follower_id:_u.id,following_id:uid});}
+};
+
+// ── COMPOSE ───────────────────────────────────────────────────
+window.openCompose=function(){
+  // nothing needed — compose is always visible
+};
+window.autoH=function(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,240)+'px';
+  // Update char count
+  var cc=document.getElementById('char-count');
+  if(cc){var len=el.value.length;cc.textContent=len+' / 500';cc.style.color=len>450?'var(--r)':len>400?'var(--am)':'var(--tx3)';}
+};
+
+window.handleImages=function(inp){
+  var files=inp.files;if(!files||!files.length)return;
+  var row=document.getElementById('img-preview-row');
+  for(var i=0;i<Math.min(files.length,4-_pendingImgs.length);i++){
+    (function(file){
+      var reader=new FileReader();
+      reader.onload=function(e){
+        _pendingImgs.push({file:file,dataUrl:e.target.result});
+        var wrap=document.createElement('div');wrap.className='img-prev-wrap';
+        wrap.innerHTML='<img class="img-prev" src="'+e.target.result+'"/><button class="img-del" onclick="removeImg('+(_pendingImgs.length-1)+',this)">&#x2715;</button>';
+        row.appendChild(wrap);
+      };
+      reader.readAsDataURL(file);
+    })(files[i]);
+  }
+};
+
+window.removeImg=function(idx,btn){
+  _pendingImgs.splice(idx,1);
+  var wrap=btn.parentElement;if(wrap)wrap.remove();
+};
+
+window.toggleTkSearch=function(){
+  var w=document.getElementById('tk-search-wrap');
+  if(w)w.style.display=w.style.display==='none'?'block':'none';
+};
+
+window.togglePerfRow=function(){
+  var r=document.getElementById('perf-row');
+  if(r)r.style.display=r.style.display==='none'?'flex':'none';
+};
+
+window.togglePerfShare=function(cb){
+  _sharePerf=cb.checked;
+  var prev=document.getElementById('perf-preview');
+  if(prev)prev.style.display=_sharePerf?'inline':'none';
+};
+
+// Ticker search from stock_prices DB
+window.searchTicker=async function(q){
+  var dd=document.getElementById('tk-dropdown');
+  if(!q||q.length<1){dd.classList.remove('open');return;}
+  q=q.toUpperCase();
+  var matches=Object.keys(_prices).filter(function(t){return t.includes(q)||(_prices[t].n&&_prices[t].n.toUpperCase().includes(q));}).slice(0,8);
+  if(!matches.length){dd.classList.remove('open');return;}
+  dd.innerHTML='';
+  matches.forEach(function(tk){
+    var d=document.createElement('div');d.className='tk-opt';
+    d.innerHTML='<span class="tk-opt-sym">'+tk+'</span><span class="tk-opt-name">'+(_prices[tk].n||tk)+'</span>';
+    d.onclick=function(){
+      if(!_pendingTickers.find(function(t){return t.ticker===tk;})){
+        _pendingTickers.push({ticker:tk,name:_prices[tk].n||tk});
+        renderComposeTickers();
+      }
+      document.getElementById('tk-search').value='';
+      dd.classList.remove('open');
+    };
+    dd.appendChild(d);
+  });
+  dd.classList.add('open');
+};
+
+function renderComposeTickers(){
+  var c=document.getElementById('compose-tickers');c.innerHTML='';
+  _pendingTickers.forEach(function(t,i){
+    var s=document.createElement('span');s.className='ctk';
+    s.innerHTML=t.ticker+' <span class="ctk-x" onclick="removeTicker('+i+')">&#x2715;</span>';
+    c.appendChild(s);
+  });
+}
+window.removeTicker=function(i){_pendingTickers.splice(i,1);renderComposeTickers();};
+
+// ── SUBMIT POST ───────────────────────────────────────────────
+window.submitPost=async function(){
+  var txt=document.getElementById('c-text').value.trim();
+  if(!txt){document.getElementById('c-text').focus();return;}
+  if(txt.length>500){alert('Post is too long. Maximum 500 characters.');return;}
+  var btn=document.getElementById('post-btn');btn.disabled=true;btn.textContent='Posting...';
+
+  // Build ticker payload (% of portfolio only - no ₦ values)
+  var tkPayload=_pendingTickers.map(function(t){
+    var myH=null;for(var k=0;k<_myHoldings.length;k++){if(_myHoldings[k].ticker===t.ticker){myH=_myHoldings[k];break;}}
+    var myPct=0;
+    if(myH){var tot=0;_myHoldings.forEach(function(h){var mp=_prices[h.ticker]?_prices[h.ticker].p:h.buy_price;tot+=h.shares*mp;});var myVal=(_prices[myH.ticker]?_prices[myH.ticker].p:myH.buy_price)*myH.shares;myPct=tot>0?Math.round(myVal/tot*100):0;}
+    return{ticker:t.ticker,i_hold:!!myH,my_pct:myH?myPct:null};
+  });
+
+  var postData={user_id:_u.id,body:txt,ticker_holdings:tkPayload,
+    portfolio_pct_gain:_sharePerf?_myPctGain:null,
+    portfolio_period:_sharePerf?'all-time':null};
+
+  var r=await sb.from('posts').insert(postData).select().single();
+  if(r.error){btn.disabled=false;btn.textContent='Post';alert('Error: '+r.error.message);return;}
+
+  // Upload images to Supabase Storage if any
+  if(_pendingImgs.length&&r.data){
+    for(var i=0;i<_pendingImgs.length;i++){
+      var pi=_pendingImgs[i];var path='posts/'+r.data.id+'/'+Date.now()+'-'+i+'.jpg';
+      var up=await sb.storage.from('post-images').upload(path,pi.file,{contentType:pi.file.type});
+      if(!up.error){
+        var pu=sb.storage.from('post-images').getPublicUrl(path);
+        await sb.from('post_images').insert({post_id:r.data.id,image_url:pu.data.publicUrl});
       }
     }
   }
+
+  // Reset compose
+  document.getElementById('c-text').value='';
+  document.getElementById('c-text').style.height='auto';
+  var cc=document.getElementById('char-count');if(cc)cc.textContent='0 / 500';
+  document.getElementById('img-preview-row').innerHTML='';document.getElementById('compose-tickers').innerHTML='';
+  document.getElementById('c-expanded').classList.remove('open');
+  document.getElementById('tk-search-wrap').style.display='none';
+  document.getElementById('perf-row').style.display='none';
+  document.getElementById('perf-check').checked=false;
+  _pendingImgs=[];_pendingTickers=[];_sharePerf=false;
+  btn.disabled=false;btn.textContent='Post';
+
+  // If user chose to share performance, update profile flag
+  if(_sharePerf&&_myPctGain!=null)await sb.from('profiles').update({share_performance:true,portfolio_pct_gain:_myPctGain}).eq('id',_u.id);
+
+  // Prepend the new post
+  if(r.data)prependPost(r.data,true);
 };
 
-window.postCmt = async function(pid) {
-  var inp = document.getElementById('cmi-' + pid);
-  if (!inp) return;
-  var txt = inp.value.trim(); if (!txt) return;
-  inp.value = '';
-  var list = document.getElementById('cml-' + pid);
-  if (list) {
-    var div = document.createElement('div'); div.className = 'comment';
-    div.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + _myInitials + '</div>'
-      + '<div class="cm-body"><div class="cm-name">' + _myFirstName + '</div><div class="cm-text">' + txt + '</div></div>';
-    list.appendChild(div);
-  }
-  if (_sb && _session) await _sb.from('comments').insert({ post_id: pid, user_id: _session.user.id, body: txt });
+// ── DELETE / EDIT POST ────────────────────────────────────────
+window.deletePost=async function(pid,el){
+  if(!confirm('Delete this post?'))return;
+  await sb.from('posts').delete().eq('id',pid);
+  var post=el.closest('.post');if(post)post.remove();
+};
+window.togglePostMenu=function(id){
+  document.querySelectorAll('.post-menu.open').forEach(function(m){if(m.id!==id)m.classList.remove('open');});
+  var m=document.getElementById(id);if(m)m.classList.toggle('open');
+};
+window.openEditModal=function(pid,el){
+  _editPostId=pid;
+  var post=el.closest('.post');
+  var body=post?post.querySelector('.p-body'):null;
+  if(body){document.getElementById('edit-text').value=body.innerHTML.replace(/<br>/g,'\n');}
+  document.getElementById('edit-modal').classList.add('open');
+  var m=document.getElementById('pm-'+pid);if(m)m.classList.remove('open');
+};
+window.closeEditModal=function(){document.getElementById('edit-modal').classList.remove('open');_editPostId=null;};
+window.saveEditPost=async function(){
+  if(!_editPostId)return;
+  var txt=document.getElementById('edit-text').value.trim();if(!txt)return;
+  await sb.from('posts').update({body:txt}).eq('id',_editPostId).eq('user_id',_u.id);
+  var post=document.querySelector('.post[data-pid="'+_editPostId+'"]');
+  if(post){var body=post.querySelector('.p-body');if(body)body.innerHTML=txt.replace(/\n/g,'<br>');}
+  closeEditModal();
 };
 
-window.toggleFollow = async function(btn) {
-  if (!_sb || !_session) return;
-  var uid = btn.dataset.uid;
-  var following = btn.classList.contains('on');
-  btn.classList.toggle('on');
-  btn.textContent = following ? '+ Follow' : 'Following ✓';
-  if (following) { await _sb.from('follows').delete().eq('follower_id', _session.user.id).eq('following_id', uid); }
-  else { await _sb.from('follows').insert({ follower_id: _session.user.id, following_id: uid }); }
-};
+// ── LIGHTBOX ──────────────────────────────────────────────────
+window.openLightbox=function(url){var lb=document.getElementById('lightbox');var img=document.getElementById('lb-img');if(lb&&img){img.src=url;lb.classList.add('open');}};
+window.closeLightbox=function(){var lb=document.getElementById('lightbox');if(lb)lb.classList.remove('open');};
 
-window.emo = function(btn) {
-  btn.style.transform = 'scale(1.4)';
-  setTimeout(function() { btn.style.transform = ''; }, 280);
-};
-
-// ── COMPOSE ──────────────────────────────────────────────────
-window.autoH = function(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 180) + 'px'; };
-window.showC = function() {
-  var ex = document.getElementById('c-extras');
-  if (ex) { ex.style.display = 'flex'; ex.style.flexDirection = 'column'; }
-};
-
-window.toggleTickerPicker = function() {
-  var el = document.getElementById('ticker-picker');
-  if (el) el.classList.toggle('open');
-};
-window.togglePerfPicker = function() {
-  var el = document.getElementById('perf-share');
-  if (el) el.classList.toggle('open');
-};
-
-window.addTicker = function() {
-  var inp = document.getElementById('tp-input');
-  var tk = inp.value.trim().toUpperCase(); if (!tk) return;
-  for (var i = 0; i < _pendingTickers.length; i++) { if (_pendingTickers[i].ticker === tk) { inp.value = ''; return; } }
-  var myH = null;
-  for (var j = 0; j < _myTickers.length; j++) { if (_myTickers[j].ticker === tk) { myH = _myTickers[j]; break; } }
-  _pendingTickers.push({ ticker: tk, iHold: !!myH, myPct: myH ? myH.pct : 0 });
-  renderChips();
-  inp.value = '';
-};
-
-window.removeTicker = function(tk) {
-  _pendingTickers = _pendingTickers.filter(function(t) { return t.ticker !== tk; });
-  renderChips();
-};
-
-function renderChips() {
-  var c = document.getElementById('tp-chips');
-  if (!c) return;
-  var html = '';
-  for (var i = 0; i < _pendingTickers.length; i++) {
-    var t = _pendingTickers[i];
-    html += '<div class="tp-chip">' + t.ticker
-      + (t.iHold ? '<span style="font-size:9px;opacity:.7;">(I hold ' + t.myPct + '%)</span>' : '')
-      + '<span class="tp-chip-x" onclick="removeTicker('' + t.ticker + '')">&#x2715;</span></div>';
-  }
-  c.innerHTML = html;
-}
-
-window.togglePerfShare = function(cb) {
-  _sharePerf = cb.checked;
-  updatePerfPreview();
-};
-
-function updatePerfPreview() {
-  var p = document.getElementById('ps-preview'); if (!p) return;
-  if (_myPctGain == null) { p.style.display = 'block'; p.textContent = 'Add holdings to share % gain'; return; }
-  var up = _myPctGain >= 0;
-  p.style.display = 'block';
-  p.innerHTML = 'Will show: <strong style="color:' + (up ? 'var(--green)' : 'var(--red)') + ';">' + (up ? '▲' : '▼') + ' ' + Math.abs(_myPctGain).toFixed(1) + '%</strong> (&#8358; value hidden)';
-}
-
-window.doPost = async function() {
-  var inp = document.getElementById('c-input');
-  var txt = inp.value.trim(); if (!txt) return;
-  var btn = document.getElementById('c-post-btn');
-  if (btn) { btn.textContent = 'Posting...'; btn.disabled = true; }
-
-  var tkPayload = [];
-  for (var i = 0; i < _pendingTickers.length; i++) {
-    var t = _pendingTickers[i];
-    tkPayload.push({ ticker: t.ticker, i_hold: t.iHold, my_pct: t.iHold ? t.myPct : null });
-  }
-
-  // Optimistic post
-  var u = JSON.parse(sessionStorage.getItem('gopex_user') || '{}');
-  var fakePost = {
-    id: 'tmp-' + Date.now(), user_id: (_session ? _session.user.id : ''), body: txt,
-    created_at: new Date().toISOString(), likes_count: 0, comments_count: 0,
-    ticker_holdings: tkPayload,
-    portfolio_pct_gain: _sharePerf ? _myPctGain : null,
-    portfolio_period: _sharePerf ? '1M' : null,
-    profiles: { name: u.name || _myFirstName, initials: _myInitials, is_verified: false, share_performance: _sharePerf }
-  };
-  var feed = document.getElementById('feed-fy');
-  var compose = document.querySelector('.compose');
-  feed.insertBefore(buildPost(fakePost), compose.nextSibling);
-
-  // Save to DB
-  if (_sb && _session) {
-    await _sb.from('posts').insert({ user_id: _session.user.id, body: txt, ticker_holdings: tkPayload, portfolio_pct_gain: _sharePerf ? _myPctGain : null, portfolio_period: _sharePerf ? '1M' : null });
-    if (_sharePerf) await _sb.from('profiles').update({ share_performance: true, portfolio_pct_gain: _myPctGain }).eq('id', _session.user.id);
-  }
-
-  // Reset
-  inp.value = ''; inp.style.height = 'auto';
-  _pendingTickers = []; renderChips(); _sharePerf = false;
-  var psc = document.getElementById('ps-toggle-check'); if (psc) psc.checked = false;
-  var tp = document.getElementById('ticker-picker'); if (tp) tp.classList.remove('open');
-  var pp = document.getElementById('perf-share'); if (pp) pp.classList.remove('open');
-  var ex = document.getElementById('c-extras'); if (ex) ex.style.display = 'none';
-  if (btn) { btn.textContent = 'Post'; btn.disabled = false; }
-};
-
-// ── FEED TABS ─────────────────────────────────────────────────
-window.switchFeed = function(t, btn) {
-  var tabs = ['fy', 'fl', 'nw'];
-  for (var i = 0; i < tabs.length; i++) {
-    var el = document.getElementById('feed-' + tabs[i]);
-    if (el) el.style.display = tabs[i] === t ? 'block' : 'none';
-  }
-  var fts = document.querySelectorAll('.ft');
-  for (var j = 0; j < fts.length; j++) fts[j].classList.remove('on');
+// ── FEED SWITCH ───────────────────────────────────────────────
+window.switchFeed=function(tab,btn){
+  ['fy','fl','nw'].forEach(function(t){var el=document.getElementById('feed-'+t);if(el)el.style.display=t===tab?'block':'none';});
+  document.querySelectorAll('.ft').forEach(function(b){b.classList.remove('on');});
   btn.classList.add('on');
-  if (t === 'fl') loadFollowing();
+  if(tab==='fl'&&document.getElementById('feed-fl').querySelector('.empty-feed')){loadPosts('fl');}
 };
 
-async function loadFollowing() {
-  if (!_session) return;
-  var fRes = await _sb.from('follows').select('following_id').eq('follower_id', _session.user.id);
-  if (!fRes.data || !fRes.data.length) return;
-  var ids = fRes.data.map(function(f) { return f.following_id; });
-  var pRes = await _sb.from('posts')
-    .select('*, profiles(name,initials,is_verified,share_performance,portfolio_pct_gain,portfolio_pct_period)')
-    .in('user_id', ids).order('created_at', {ascending:false}).limit(20);
-  var feed = document.getElementById('feed-fl');
-  feed.innerHTML = '';
-  if (!pRes.data || !pRes.data.length) {
-    feed.innerHTML = '<div style="padding:60px 20px;text-align:center;color:var(--tx3);"><div style="font-size:40px;margin-bottom:14px;">&#128101;</div><div style="font-size:15px;font-weight:700;color:var(--tx2);">No posts from people you follow yet</div></div>';
-    return;
+// Close menus on outside click
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.post-menu')&&!e.target.closest('.pa[onclick*="togglePostMenu"]')){
+    document.querySelectorAll('.post-menu.open').forEach(function(m){m.classList.remove('open');});
   }
-  for (var i = 0; i < pRes.data.length; i++) feed.appendChild(buildPost(pRes.data[i]));
-}
-
-// ── LEGACY HANDLERS (used by seed posts in HTML) ──────────────
-window.like = function(btn) {
-  btn.classList.toggle('liked');
-  var s = btn.querySelector('span');
-  s.textContent = parseInt(s.textContent) + (btn.classList.contains('liked') ? 1 : -1);
-};
-window.toggleC = function(id) {
-  var el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
-};
-window.sendC = function(listId, inputId) {
-  var inp = document.getElementById(inputId);
-  var txt = inp.value.trim(); if (!txt) return;
-  var raw = sessionStorage.getItem('gopex_user');
-  var u = raw ? JSON.parse(raw) : { initials: 'AO', firstName: 'You' };
-  var list = document.getElementById(listId);
-  var d = document.createElement('div'); d.className = 'comment';
-  d.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + u.initials + '</div>'
-    + '<div class="cm-body"><div class="cm-name">' + (u.firstName || 'You') + '</div><div class="cm-text">' + txt + '</div></div>';
-  list.appendChild(d); inp.value = '';
-};
-
-// ── LOGOUT ────────────────────────────────────────────────────
-window.gxLogout = async function() {
-  if (!confirm('Log out of GopexFund?')) return;
-  if (_sb) await _sb.auth.signOut();
-  sessionStorage.clear();
-  var keys = Object.keys(localStorage);
-  for (var i = 0; i < keys.length; i++) {
-    if (keys[i].indexOf('supabase') !== -1 || keys[i].indexOf('sb-') !== -1) {
-      localStorage.removeItem(keys[i]);
-    }
-  }
-  window.location.href = 'landing.html';
-};
+  if(!e.target.closest('#tk-search-wrap')){var dd=document.getElementById('tk-dropdown');if(dd)dd.classList.remove('open');}
+});
+document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeEditModal();});
 </script>
 </body>
 </html>
