@@ -148,6 +148,16 @@
 </style>
 </head>
 <body>
+<!-- LOADING OVERLAY -->
+<div id="admin-loading" style="position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;">
+  <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;">G</div>
+  <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,.5);">Loading admin panel...</div>
+  <div style="width:180px;height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;">
+    <div style="height:100%;background:#6366f1;border-radius:3px;animation:loadbar 1.5s ease-in-out infinite;"></div>
+  </div>
+  <style>@keyframes loadbar{0%{width:0;margin-left:0;}50%{width:60%;margin-left:20%;}100%{width:0;margin-left:100%;}}</style>
+</div>
+
 <div class="admin-layout">
 
 <!-- SIDEBAR -->
@@ -622,12 +632,11 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
 var SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co';
 var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g';
-var _sb = createClient(SB_URL, SB_ANON);
+var _sb = supabase.createClient(SB_URL, SB_ANON);
 var _session = null;
 var _allUsers = [], _filteredUsers = [];
 var _currentPage = 1, _pageSize = 15;
@@ -639,6 +648,12 @@ function setHTML(id, v) { var e = document.getElementById(id); if (e) e.innerHTM
 function setBar(id, pct) { var e = document.getElementById(id); if (e) e.style.width = Math.min(pct, 100) + '%'; }
 
 // ── INIT ──────────────────────────────────────────────────────
+// ── PLACEHOLDER so clicks work before auth loads ──
+window.showSection = window.showSection || function(id, btn) {
+  document.querySelectorAll('.sb-item').forEach(function(b) { b.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+};
+
 async function init() {
   var authRes = await _sb.auth.getSession();
   if (!authRes.data.session) { window.location.href = 'landing.html'; return; }
@@ -680,9 +695,13 @@ async function init() {
   setEl('sb-av', initials); setEl('top-av', initials);
   setEl('sb-uname', profRes.data.name || 'Admin');
 
+  // Hide loading overlay — show the panel
+  var loader = document.getElementById('admin-loading');
+  if (loader) loader.style.display = 'none';
+
   await loadDashboard();
 }
-init();
+document.addEventListener('DOMContentLoaded', function() { init(); });
 
 // ── DASHBOARD ─────────────────────────────────────────────────
 async function loadDashboard() {
