@@ -219,13 +219,27 @@ footer{background:#0f172a;padding:36px clamp(16px,4vw,64px);}
           <div class="field"><label>First Name</label><input id="su-fn" placeholder="Adaeze"/></div>
           <div class="field"><label>Last Name</label><input id="su-ln" placeholder="Obi"/></div>
         </div>
+        <div class="field">
+          <label>Username <span style="color:#6366f1;font-size:10px;">must be unique</span></label>
+          <div style="position:relative;">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;color:#94a3b8;font-weight:600;">@</span>
+            <input id="su-un" placeholder="adaeze_invests" oninput="checkUsername(this.value)" autocomplete="off"
+              style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;color:#0f172a;padding:11px 38px 11px 28px;border-radius:10px;font-size:14px;outline:none;transition:all .18s;"/>
+            <span id="un-status" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:15px;"></span>
+          </div>
+          <div id="un-msg" style="font-size:11px;margin-top:3px;height:15px;"></div>
+        </div>
+        <div class="field"><label>Phone Number</label>
+          <input id="su-ph" type="tel" placeholder="+234 800 000 0000"
+            style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;color:#0f172a;padding:11px 13px;border-radius:10px;font-size:14px;outline:none;transition:all .18s;"/>
+        </div>
         <div class="field"><label>Email</label><input id="su-em" type="email" placeholder="you@example.com"/></div>
         <div class="field"><label>Password</label><input id="su-pw" type="password" placeholder="Min. 8 characters"/></div>
         <button class="auth-submit" id="su-btn" onclick="doSignup()">Create my account →</button>
         <div class="or-row">or</div>
         <div class="oauth-row">
           <button class="oauth-btn">G Google</button>
-          <button class="oauth-btn">🍎 Apple</button>
+          <button class="oauth-btn">&#127822; Apple</button>
         </div>
         <div class="auth-terms">By signing up you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></div>
       </div>
@@ -354,59 +368,211 @@ window.switchTab = window.openAuth = (tab) => {
   if (window.innerWidth < 960) document.getElementById('auth-section').scrollIntoView({behavior:'smooth'})
 }
 
-function showErr(msg) { const e = document.getElementById('auth-err'); e.textContent = msg; e.classList.add('show') }
-function hideErr() { document.getElementById('auth-err').classList.remove('show') }
-function setBusy(id, busy, label) { const b = document.getElementById(id); b.disabled = busy; b.textContent = busy ? '⏳ Please wait…' : label }
+function showErr(msg) { var e = document.getElementById('auth-err'); e.textContent = msg; e.classList.add('show'); }
+function hideErr() { document.getElementById('auth-err').classList.remove('show'); }
+function setBusy(id, busy, label) { var b = document.getElementById(id); b.disabled = busy; b.textContent = busy ? '⏳ Please wait…' : label; }
 
-window.doSignup = async () => {
-  hideErr()
-  const fn = document.getElementById('su-fn').value.trim()
-  const ln = document.getElementById('su-ln').value.trim()
-  const em = document.getElementById('su-em').value.trim()
-  const pw = document.getElementById('su-pw').value
-  if (!fn || !em || !pw) return showErr('Please fill in all fields.')
-  if (pw.length < 8) return showErr('Password must be at least 8 characters.')
-  setBusy('su-btn', true, 'Create my account →')
-  const { data, error } = await sb.auth.signUp({ email: em, password: pw })
-  if (error) { setBusy('su-btn', false, 'Create my account →'); return showErr(error.message) }
-  const fullName = (fn + ' ' + ln).trim()
-  const initials = fn[0].toUpperCase() + (ln[0] || '').toUpperCase()
-  await sb.from('profiles').upsert({ id: data.user.id, name: fullName, first_name: fn, initials })
-  sessionStorage.setItem('gopex_user', JSON.stringify({ id: data.user.id, name: fullName, firstName: fn, initials, email: em, joined: new Date().toLocaleDateString('en-NG',{month:'long',year:'numeric'}) }))
-  window.location.href = 'home.html'
-}
+// ── USERNAME AVAILABILITY CHECK ───────────────────────────────
+var _unTimer = null;
+var _unValid = false;
 
-window.doLogin = async () => {
-  hideErr()
-  const em = document.getElementById('li-em').value.trim()
-  const pw = document.getElementById('li-pw').value
-  if (!em || !pw) return showErr('Please enter your email and password.')
-  setBusy('li-btn', true, 'Sign in to GopexFund →')
-  const { data, error } = await sb.auth.signInWithPassword({ email: em, password: pw })
-  if (error) { setBusy('li-btn', false, 'Sign in to GopexFund →'); return showErr('Incorrect email or password.') }
-  const { data: profile } = await sb.from('profiles').select('*').eq('id', data.user.id).single()
-  var fn = (profile && profile.first_name) ? profile.first_name : ((profile && profile.name) ? profile.name.split(' ')[0] : em.split('@')[0])
-  sessionStorage.setItem('gopex_user', JSON.stringify({ id: data.user.id, name: (profile && profile.name) ? profile.name : fn, firstName: fn, initials: (profile && profile.initials) || fn[0].toUpperCase(), email: em, joined: new Date(data.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'}) }))
-  window.location.href = 'home.html'
-}
+window.checkUsername = function(val) {
+  var status = document.getElementById('un-status');
+  var msg = document.getElementById('un-msg');
+  var input = document.getElementById('su-un');
+  _unValid = false;
 
-window.sendContact = () => {
-  const n = document.getElementById('cf-name').value.trim()
-  const e = document.getElementById('cf-email').value.trim()
-  const m = document.getElementById('cf-msg').value.trim()
-  if (!n || !e || !m) return alert('Please fill in all fields.')
-  alert('Thanks ' + n + '! We will get back to you at ' + e + ' soon.')
-  document.getElementById('cf-name').value = ''
-  document.getElementById('cf-email').value = ''
-  document.getElementById('cf-msg').value = ''
-}
+  // Clear previous timer
+  if (_unTimer) clearTimeout(_unTimer);
 
-// Enter key
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return
-  if (document.getElementById('form-su').style.display !== 'none') doSignup()
-  else if (document.getElementById('form-li').style.display !== 'none') doLogin()
-})
+  // Sanitise — only letters, numbers, underscores
+  var clean = val.toLowerCase().replace(/[^a-z0-9_]/g, '');
+  if (clean !== val.toLowerCase()) {
+    input.value = clean;
+    val = clean;
+  }
+
+  if (!val) {
+    status.textContent = '';
+    msg.textContent = '';
+    input.style.borderColor = '#e2e8f0';
+    return;
+  }
+
+  if (val.length < 3) {
+    status.textContent = '✗';
+    status.style.color = '#dc2626';
+    msg.textContent = 'At least 3 characters required';
+    msg.style.color = '#dc2626';
+    input.style.borderColor = '#dc2626';
+    return;
+  }
+
+  if (val.length > 20) {
+    status.textContent = '✗';
+    status.style.color = '#dc2626';
+    msg.textContent = 'Maximum 20 characters';
+    msg.style.color = '#dc2626';
+    input.style.borderColor = '#dc2626';
+    return;
+  }
+
+  // Show checking state
+  status.textContent = '⏳';
+  msg.textContent = 'Checking availability...';
+  msg.style.color = '#94a3b8';
+  input.style.borderColor = '#6366f1';
+
+  // Debounce — wait 500ms after user stops typing
+  _unTimer = setTimeout(async function() {
+    try {
+      var r = await sb.from('profiles').select('id').eq('username', val).single();
+      if (r.data) {
+        // Username taken
+        status.textContent = '✗';
+        status.style.color = '#dc2626';
+        msg.textContent = '@' + val + ' is already taken';
+        msg.style.color = '#dc2626';
+        input.style.borderColor = '#dc2626';
+        _unValid = false;
+      } else {
+        // Available
+        status.textContent = '✓';
+        status.style.color = '#16a34a';
+        msg.textContent = '@' + val + ' is available!';
+        msg.style.color = '#16a34a';
+        input.style.borderColor = '#16a34a';
+        _unValid = true;
+      }
+    } catch(e) {
+      // No row found = username is free
+      status.textContent = '✓';
+      status.style.color = '#16a34a';
+      msg.textContent = '@' + val + ' is available!';
+      msg.style.color = '#16a34a';
+      input.style.borderColor = '#16a34a';
+      _unValid = true;
+    }
+  }, 500);
+};
+
+// ── SIGN UP ───────────────────────────────────────────────────
+window.doSignup = async function() {
+  hideErr();
+  var fn = document.getElementById('su-fn').value.trim();
+  var ln = document.getElementById('su-ln').value.trim();
+  var un = document.getElementById('su-un').value.trim().toLowerCase();
+  var ph = document.getElementById('su-ph').value.trim();
+  var em = document.getElementById('su-em').value.trim();
+  var pw = document.getElementById('su-pw').value;
+
+  if (!fn) return showErr('Please enter your first name.');
+  if (!un || un.length < 3) return showErr('Please choose a username (min. 3 characters).');
+  if (!_unValid) return showErr('That username is taken. Please choose another one.');
+  if (!ph) return showErr('Please enter your phone number.');
+  if (!em) return showErr('Please enter your email address.');
+  if (pw.length < 8) return showErr('Password must be at least 8 characters.');
+
+  setBusy('su-btn', true, 'Create my account →');
+
+  // Double-check username isn't taken (in case of race condition)
+  var unCheck = await sb.from('profiles').select('id').eq('username', un);
+  if (unCheck.data && unCheck.data.length > 0) {
+    setBusy('su-btn', false, 'Create my account →');
+    return showErr('@' + un + ' was just taken by someone else. Please choose another username.');
+  }
+
+  // Create auth account
+  var signUpRes = await sb.auth.signUp({ email: em, password: pw });
+  if (signUpRes.error) {
+    setBusy('su-btn', false, 'Create my account →');
+    return showErr(signUpRes.error.message);
+  }
+
+  var uid = signUpRes.data.user.id;
+  var fullName = (fn + ' ' + ln).trim();
+  var initials = fn[0].toUpperCase() + (ln ? ln[0].toUpperCase() : '');
+
+  // Save profile with username + phone
+  var profileRes = await sb.from('profiles').upsert({
+    id: uid,
+    name: fullName,
+    first_name: fn,
+    initials: initials,
+    username: un,
+    phone: ph,
+    joined_at: new Date().toISOString()
+  }, { onConflict: 'id' });
+
+  if (profileRes.error) {
+    setBusy('su-btn', false, 'Create my account →');
+    return showErr('Account created but profile error: ' + profileRes.error.message + '. Please log in.');
+  }
+
+  sessionStorage.setItem('gopex_user', JSON.stringify({
+    id: uid,
+    name: fullName,
+    firstName: fn,
+    initials: initials,
+    username: un,
+    email: em,
+    joined: new Date().toLocaleDateString('en-NG', {month:'long', year:'numeric'})
+  }));
+
+  window.location.href = 'home.html';
+};
+
+// ── SIGN IN ───────────────────────────────────────────────────
+window.doLogin = async function() {
+  hideErr();
+  var em = document.getElementById('li-em').value.trim();
+  var pw = document.getElementById('li-pw').value;
+  if (!em || !pw) return showErr('Please enter your email and password.');
+  setBusy('li-btn', true, 'Sign in to GopexFund →');
+
+  var loginRes = await sb.auth.signInWithPassword({ email: em, password: pw });
+  if (loginRes.error) {
+    setBusy('li-btn', false, 'Sign in to GopexFund →');
+    return showErr('Incorrect email or password.');
+  }
+
+  var uid = loginRes.data.user.id;
+  var profileRes = await sb.from('profiles').select('*').eq('id', uid).single();
+  var profile = profileRes.data || {};
+  var fn = profile.first_name || (profile.name ? profile.name.split(' ')[0] : em.split('@')[0]);
+  var ini = profile.initials || fn[0].toUpperCase();
+
+  sessionStorage.setItem('gopex_user', JSON.stringify({
+    id: uid,
+    name: profile.name || fn,
+    firstName: fn,
+    initials: ini,
+    username: profile.username || '',
+    email: em,
+    role: profile.role || 'user',
+    joined: new Date(loginRes.data.user.created_at).toLocaleDateString('en-NG', {month:'long', year:'numeric'})
+  }));
+
+  window.location.href = 'home.html';
+};
+
+window.sendContact = function() {
+  var n = document.getElementById('cf-name').value.trim();
+  var e = document.getElementById('cf-email').value.trim();
+  var m = document.getElementById('cf-msg').value.trim();
+  if (!n || !e || !m) return alert('Please fill in all fields.');
+  alert('Thanks ' + n + '! We will get back to you at ' + e + ' soon.');
+  document.getElementById('cf-name').value = '';
+  document.getElementById('cf-email').value = '';
+  document.getElementById('cf-msg').value = '';
+};
+
+// Enter key support
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter') return;
+  if (document.getElementById('form-su').style.display !== 'none') doSignup();
+  else if (document.getElementById('form-li').style.display !== 'none') doLogin();
+});
 </script>
 </body>
 </html>

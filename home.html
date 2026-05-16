@@ -420,6 +420,20 @@ async function init(){
   _s=a.data.session; _u=_s.user;
   var pr=await sb.from('profiles').select('*').eq('id',_u.id).single();
   var p=pr.data||{};
+
+  // Auto-create profile row if it doesn't exist
+  if(!pr.data){
+    var emailName=_u.email.split('@')[0];
+    var newProfile={
+      id:_u.id,
+      name:emailName,
+      first_name:emailName,
+      initials:emailName.charAt(0).toUpperCase(),
+      joined_at:new Date().toISOString()
+    };
+    await sb.from('profiles').upsert(newProfile,{onConflict:'id'});
+    p=newProfile;
+  }
   var fn=(p.first_name||(p.name?p.name.split(' ')[0]:_u.email.split('@')[0]));
   var ini=p.initials||(fn.charAt(0).toUpperCase());
   sessionStorage.setItem('gopex_user',JSON.stringify({id:_u.id,name:p.name||fn,firstName:fn,initials:ini,email:_u.email,role:p.role||'user'}));
@@ -499,17 +513,43 @@ function initSparkline(){
 async function loadPosts(tab){
   var feed=document.getElementById('feed-'+tab);
   if(!feed)return;
-  var query=sb.from('posts').select('*, profiles(name,initials,role,share_performance,portfolio_pct_gain)').order('created_at',{ascending:false}).limit(40);
+
+  // Show loading state
+  feed.innerHTML='<div class="empty-feed"><div class="spinner"></div><div style="margin-top:10px;font-size:13px;color:var(--tx3);">Loading posts...</div></div>';
+
+  var query=sb.from('posts')
+    .select('id,user_id,body,ticker_holdings,portfolio_pct_gain,portfolio_period,likes_count,comments_count,created_at,profiles(name,initials,role,share_performance,portfolio_pct_gain)')
+    .order('created_at',{ascending:false})
+    .limit(40);
+
   if(tab==='fl'){
     var fr=await sb.from('follows').select('following_id').eq('follower_id',_u.id);
     var ids=(fr.data||[]).map(function(f){return f.following_id;});
-    if(!ids.length){feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128101;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">Follow investors to see their posts</div></div>';return;}
+    if(!ids.length){
+      feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128101;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">Follow investors to see their posts</div></div>';
+      return;
+    }
     query=query.in('user_id',ids);
   }
+
   var r=await query;
-  if(!r.data||!r.data.length){feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128203;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">No posts yet</div><div style="font-size:12px;margin-top:6px;">Be the first to post something!</div></div>';return;}
+
+  // Log for debugging
+  if(r.error){
+    console.error('loadPosts error:',r.error);
+    feed.innerHTML='<div class="empty-feed"><div style="font-size:32px;">&#9888;</div><div style="font-size:14px;font-weight:600;color:var(--r);">Error loading posts</div><div style="font-size:12px;margin-top:4px;color:var(--tx3);">'+r.error.message+'</div></div>';
+    return;
+  }
+
+  if(!r.data||!r.data.length){
+    feed.innerHTML='<div class="empty-feed"><div class="empty-ico">&#128203;</div><div style="font-size:14px;font-weight:600;color:var(--tx2);">No posts yet</div><div style="font-size:12px;margin-top:6px;">Be the first to post something!</div></div>';
+    return;
+  }
+
   feed.innerHTML='';
-  for(var i=0;i<r.data.length;i++){feed.appendChild(await buildPostEl(r.data[i],false));}
+  for(var i=0;i<r.data.length;i++){
+    feed.appendChild(await buildPostEl(r.data[i],false));
+  }
 }
 
 async function loadNews(){
