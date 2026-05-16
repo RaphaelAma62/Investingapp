@@ -654,24 +654,61 @@ async function loadStats() {
   var holdCount = holdRes.count || 0;
   if (holdCount > 0) earnBadge('bdg-holding');
 
-  // Portfolio value
-  var holdData = await _sb.from('holdings').select('shares,buy_price').eq('user_id', _session.user.id);
+  // Portfolio value — fetch live prices then calculate same as portfolio page
+  var holdData = await _sb.from('holdings').select('shares,buy_price,ticker').eq('user_id', _session.user.id);
   if (holdData.data && holdData.data.length) {
-    var total = 0;
-    for (var i = 0; i < holdData.data.length; i++) {
-      total += holdData.data[i].shares * holdData.data[i].buy_price;
+
+    // Fetch live prices from stock_prices table
+    var priceRes = await fetch(
+      'https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,price',
+      { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g' } }
+    );
+    var priceData = await priceRes.json();
+    var livePrices = {};
+    if (Array.isArray(priceData)) {
+      priceData.forEach(function(s) { livePrices[s.ticker] = s.price; });
     }
+
+    // Calculate using live price if available, otherwise fall back to buy_price
+    var marketTotal = 0;
+    var costTotal = 0;
+    holdData.data.forEach(function(h) {
+      var livePrice = livePrices[h.ticker] ? parseFloat(livePrices[h.ticker]) : h.buy_price;
+      marketTotal += h.shares * livePrice;
+      costTotal += h.shares * h.buy_price;
+    });
+
+    // Format value
+    function fmtVal(v) {
+      if (v >= 1000000000) return '&#8358;' + (v/1000000000).toFixed(2) + 'B';
+      if (v >= 1000000) return '&#8358;' + (v/1000000).toFixed(2) + 'M';
+      if (v >= 1000) return '&#8358;' + (v/1000).toFixed(0) + 'K';
+      return '&#8358;' + v.toLocaleString('en-NG', {maximumFractionDigits:0});
+    }
+
     var spv = document.getElementById('stat-portfolio');
-    if (spv) spv.innerHTML = total >= 1000000
-      ? ('&#8358;' + (total/1000000).toFixed(2) + 'M')
-      : ('&#8358;' + total.toLocaleString('en-NG', {maximumFractionDigits:0}));
+    if (spv) spv.innerHTML = fmtVal(marketTotal);
+
+    // Also update return % based on live prices
+    if (costTotal > 0) {
+      var pctGain = ((marketTotal - costTotal) / costTotal * 100);
+      var sr = document.getElementById('stat-return');
+      if (sr) {
+        sr.textContent = (pctGain >= 0 ? '+' : '') + pctGain.toFixed(2) + '%';
+        sr.style.color = pctGain >= 0 ? 'var(--g)' : 'var(--r)';
+      }
+      // Save to profile for sharing
+      await _sb.from('profiles').update({ portfolio_pct_gain: parseFloat(pctGain.toFixed(2)) }).eq('id', _session.user.id);
+      return; // skip the fallback return line below
+    }
+
   } else {
     var spv2 = document.getElementById('stat-portfolio');
-    if (spv2) spv2.textContent = '\u20a60';
+    if (spv2) spv2.innerHTML = '&#8358;0';
   }
 
-  var sr = document.getElementById('stat-return');
-  if (sr) sr.textContent = (_profile.portfolio_pct_gain != null) ? ((_profile.portfolio_pct_gain >= 0 ? '+' : '') + _profile.portfolio_pct_gain.toFixed(1) + '%') : '—';
+  var sr2 = document.getElementById('stat-return');
+  if (sr2) sr2.textContent = (_profile.portfolio_pct_gain != null) ? ((_profile.portfolio_pct_gain >= 0 ? '+' : '') + _profile.portfolio_pct_gain.toFixed(2) + '%') : '—';
 }
 
 // ── ACTIVITY ──────────────────────────────────────────────────
