@@ -198,7 +198,7 @@
 (function(){
   const raw = sessionStorage.getItem('gopex_user');
   const tok = localStorage.getItem('sb-lzlitanvlkycrkkpwczm-auth-token');
-  const hasSession = raw || (tok && JSON.parse(tok)?.access_token);
+  const hasSession = raw || (tok && JSON.parse(tok) && JSON.parse(tok).access_token);
   if (!hasSession) { window.location.replace('landing.html'); }
 })();
 
@@ -463,630 +463,443 @@
 </aside>
 </div>
 
-<script>
-// ── CONFIG ────────────────────────────────────────────────────
-const _SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
-const _SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-// NGX prices — loaded live from DB via Edge Function
-const PRICES = {}
-let _pricesLoaded = false
-let _marketOpen = false
+var SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co';
+var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g';
+var _sb = createClient(SB_URL, SB_ANON);
+var _session = null;
+var _myInitials = 'AO';
+var _myFirstName = 'You';
+var _myTickers = [];
+var _pendingTickers = [];
+var _sharePerf = false;
+var _myPctGain = null;
+var PRICES = {};
 
-async function loadPrices(tickers = null) {
-  try {
-    // Read directly from Supabase stock_prices table — fully automated, updates every 10 min
-    let url = 'https://lzlitanvlkycrkkpwczm.supabase.co/rest/v1/stock_prices?select=ticker,price,prev_close,change_pct,change_amt,is_market_open,last_updated'
-    if (tickers?.length) url += '&ticker=in.(' + tickers.join(',') + ')'
-    const res = await fetch(url, {
-      headers: { 'apikey': _SB_ANON, 'Authorization': 'Bearer ' + _SB_ANON }
-    })
-    const rows = await res.json()
-    if (!Array.isArray(rows)) return null
+// ── SPARKLINE ────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  var ctx = document.getElementById('spark-chart').getContext('2d');
+  new Chart(ctx, {type:'line', data:{labels:[1,2,3,4,5,6,7,8,9,10], datasets:[{data:[4200,4310,4280,4390,4510,4600,4700,4750,4800,4823], borderColor:'#1a6eff', borderWidth:2, pointRadius:0, tension:0.4, fill:true, backgroundColor:'rgba(26,110,255,0.07)'}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{enabled:false}}, scales:{x:{display:false}, y:{display:false}}}});
+});
 
-    rows.forEach(row => {
-      PRICES[row.ticker] = {
-        p: row.price,
-        c: Math.abs(row.change_pct || 0),
-        u: (row.change_pct || 0) >= 0
-      }
-    })
-    _pricesLoaded = true
-    _marketOpen = rows[0]?.is_market_open || false
-
-    const mu = document.getElementById('prices-updated')
-    if (mu && rows[0]?.last_updated) {
-      const mins = Math.floor((Date.now() - new Date(rows[0].last_updated).getTime()) / 60000)
-      mu.textContent = mins < 2 ? 'Just updated' : `Updated ${mins}m ago`
-    }
-    return rows
-  } catch (e) {
-    console.warn('Price fetch failed', e)
-    return null
-  }
-}
-
-// ── STATE ─────────────────────────────────────────────────────
-let _sb = null, _session = null, _myInitials = 'AO', _myFirstName = 'You'
-let _myTickers = []      // [{ticker, pct}] — my holdings from DB
-let _pendingTickers = [] // tickers being added to current post
-let _sharePerf = false   // whether to share % gain in post
-let _myPctGain = null    // my portfolio % gain
-
-// ── SUPABASE INIT ─────────────────────────────────────────────
-const sbScript = document.createElement('script')
-sbScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
-sbScript.onload = async () => {
-  _sb = supabase.createClient(_SB_URL, _SB_ANON)
-
-  // Auth guard
-  const { data: { session } } = await _sb.auth.getSession()
-  if (!session) { window.location.href = 'landing.html'; return }
-  _session = session
+// ── INIT ─────────────────────────────────────────────────────
+async function init() {
+  // Auth check
+  var authRes = await _sb.auth.getSession();
+  if (!authRes.data.session) { window.location.href = 'landing.html'; return; }
+  _session = authRes.data.session;
 
   // Profile
-  const { data: profile } = await _sb.from('profiles').select('*').eq('id', session.user.id).single()
-  _myFirstName = profile?.first_name || profile?.name?.split(' ')[0] || session.user.email.split('@')[0]
-  _myInitials  = profile?.initials || _myFirstName[0].toUpperCase()
+  var profRes = await _sb.from('profiles').select('*').eq('id', _session.user.id).single();
+  var profile = profRes.data;
+  if (profile && profile.first_name) { _myFirstName = profile.first_name; }
+  else if (profile && profile.name)  { _myFirstName = profile.name.split(' ')[0]; }
+  else { _myFirstName = _session.user.email.split('@')[0]; }
+  _myInitials = (profile && profile.initials) ? profile.initials : _myFirstName.charAt(0).toUpperCase();
 
-  // Sync nav
-  document.querySelectorAll('#nav-av,#c-av').forEach(el => { if(el) el.textContent = _myInitials })
-  const nn = document.getElementById('nav-name'); if(nn) nn.textContent = _myFirstName
-  const pn = document.getElementById('ps-name'); if(pn) pn.textContent = _myFirstName
+  // Update nav
+  var els = document.querySelectorAll('#nav-av, #c-av, #ca1, #ca2, #ca3');
+  for (var i = 0; i < els.length; i++) { if (els[i]) els[i].textContent = _myInitials; }
+  var nn = document.getElementById('nav-name'); if (nn) nn.textContent = _myFirstName;
+  var pn = document.getElementById('ps-name'); if (pn) pn.textContent = _myFirstName;
 
   sessionStorage.setItem('gopex_user', JSON.stringify({
-    id: session.user.id, name: profile?.name || _myFirstName,
-    firstName: _myFirstName, initials: _myInitials, email: session.user.email,
-    joined: new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
-  }))
+    id: _session.user.id,
+    name: (profile && profile.name) ? profile.name : _myFirstName,
+    firstName: _myFirstName,
+    initials: _myInitials,
+    email: _session.user.email,
+    joined: new Date(_session.user.created_at).toLocaleDateString('en-NG', {month:'long', year:'numeric'})
+  }));
 
-  // Load live prices from DB
-  await loadPrices()
+  // Load prices
+  await loadPrices();
 
-  // Load my ticker holdings (% only, no ₦ values)
+  // Load ticker holdings
   try {
-    const { data: th } = await _sb.rpc('get_my_ticker_holdings', { user_uuid: session.user.id })
-    if (th) _myTickers = th
+    var thRes = await _sb.rpc('get_my_ticker_holdings', { user_uuid: _session.user.id });
+    if (thRes.data) _myTickers = thRes.data;
   } catch(e) {}
 
-  // Calculate my portfolio % gain for sharing
-  const { data: holdings } = await _sb.from('holdings').select('shares,buy_price,ticker').eq('user_id', session.user.id)
-  if (holdings?.length) {
-    // Use market prices vs buy price to compute % gain
-    let costBasis = 0, marketVal = 0
-    holdings.forEach(h => {
-      const mp = PRICES[h.ticker]?.p || h.buy_price
-      costBasis  += h.shares * h.buy_price
-      marketVal  += h.shares * mp
-    })
-    if (costBasis > 0) {
-      _myPctGain = parseFloat(((marketVal - costBasis) / costBasis * 100).toFixed(2))
-      // Update profile with latest % gain (opt-in controlled by share_performance flag)
-      await _sb.from('profiles').update({ portfolio_pct_gain: _myPctGain }).eq('id', session.user.id)
+  // Portfolio % gain
+  var hRes = await _sb.from('holdings').select('shares,buy_price,ticker').eq('user_id', _session.user.id);
+  if (hRes.data && hRes.data.length) {
+    var cost = 0, mval = 0;
+    for (var j = 0; j < hRes.data.length; j++) {
+      var h = hRes.data[j];
+      var mp = (PRICES[h.ticker] && PRICES[h.ticker].p) ? PRICES[h.ticker].p : h.buy_price;
+      cost += h.shares * h.buy_price;
+      mval += h.shares * mp;
+    }
+    if (cost > 0) {
+      _myPctGain = parseFloat(((mval - cost) / cost * 100).toFixed(2));
+      await _sb.from('profiles').update({ portfolio_pct_gain: _myPctGain }).eq('id', _session.user.id);
     }
   }
-  // Update performance share preview
-  updatePerfPreview()
+  updatePerfPreview();
 
   // Load posts
-  await loadPosts()
+  await loadPosts();
 
-  // Real-time: new posts & likes
+  // Real-time
   _sb.channel('social')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' },
-      payload => prependPost(payload.new))
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'posts' },
-      payload => updatePostLikes(payload.new))
-    .subscribe()
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, function(payload) { prependPost(payload.new); })
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'posts' }, function(payload) { updateLikes(payload.new); })
+    .subscribe();
 }
-document.head.appendChild(sbScript)
+init();
 
-// ── LOAD POSTS ────────────────────────────────────────────────
+// ── PRICES ───────────────────────────────────────────────────
+async function loadPrices() {
+  try {
+    var url = SB_URL + '/rest/v1/stock_prices?select=ticker,price,change_pct,is_market_open&order=ticker';
+    var res = await fetch(url, { headers: { 'apikey': SB_ANON, 'Authorization': 'Bearer ' + SB_ANON } });
+    var rows = await res.json();
+    if (!Array.isArray(rows)) return;
+    for (var i = 0; i < rows.length; i++) {
+      PRICES[rows[i].ticker] = { p: rows[i].price, c: Math.abs(rows[i].change_pct || 0), u: (rows[i].change_pct || 0) >= 0 };
+    }
+  } catch(e) { console.warn('Price fetch failed', e); }
+}
+
+// ── LOAD POSTS ───────────────────────────────────────────────
 async function loadPosts() {
-  const { data: posts } = await _sb
-    .from('posts')
+  var res = await _sb.from('posts')
     .select('*, profiles(name, initials, is_verified, share_performance, portfolio_pct_gain, portfolio_pct_period)')
-    .order('created_at', { ascending: false })
-    .limit(30)
-
-  const feed = document.getElementById('feed-fy')
-  const compose = document.querySelector('.compose')
-  feed.querySelectorAll('.post').forEach(p => p.remove())
-
-  if (!posts?.length) return
-  posts.forEach(p => feed.insertBefore(buildPostEl(p), compose.nextSibling))
+    .order('created_at', { ascending: false }).limit(30);
+  if (!res.data || !res.data.length) return;
+  var feed = document.getElementById('feed-fy');
+  var compose = document.querySelector('.compose');
+  var old = feed.querySelectorAll('.post');
+  for (var i = 0; i < old.length; i++) old[i].remove();
+  for (var j = 0; j < res.data.length; j++) {
+    feed.insertBefore(buildPost(res.data[j]), compose.nextSibling);
+  }
 }
 
-// ── BUILD POST ELEMENT ────────────────────────────────────────
-function buildPostEl(p) {
-  const d = document.createElement('div')
-  d.className = 'post'; d.dataset.postId = p.id
-  const name    = p.profiles?.name || 'GopexFund User'
-  const inits   = p.profiles?.initials || name[0].toUpperCase()
-  const verified = p.profiles?.is_verified
-  const mins    = Math.floor((Date.now() - new Date(p.created_at)) / 60000)
-  const timeStr = mins < 1 ? 'Just now' : mins < 60 ? mins+'m ago' : mins < 1440 ? Math.floor(mins/60)+'h ago' : Math.floor(mins/1440)+'d ago'
-  const isMe    = _session && p.user_id === _session.user.id
+// ── BUILD POST ────────────────────────────────────────────────
+function buildPost(p) {
+  var d = document.createElement('div');
+  d.className = 'post';
+  d.dataset.postId = p.id;
 
-  // Portfolio performance badge (only if poster opted to share)
-  let perfBadge = ''
-  if (p.portfolio_pct_gain != null && p.profiles?.share_performance) {
-    const pct = p.portfolio_pct_gain
-    const up  = pct >= 0
-    perfBadge = `<div class="post-perf-badge ${up?'ppb-up':'ppb-dn'}">
-      ${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}% portfolio ${p.portfolio_period||'return'}
-      <span style="opacity:.6;font-size:9px;">% only · value hidden</span>
-    </div>`
+  var name    = (p.profiles && p.profiles.name)     ? p.profiles.name     : 'GopexFund User';
+  var inits   = (p.profiles && p.profiles.initials) ? p.profiles.initials : name.charAt(0).toUpperCase();
+  var verified = p.profiles && p.profiles.is_verified;
+  var mins    = Math.floor((Date.now() - new Date(p.created_at)) / 60000);
+  var tstr    = mins < 1 ? 'Just now' : mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
+  var isMe    = _session && p.user_id === _session.user.id;
+  var pid     = p.id;
+
+  // Perf badge
+  var perfBadge = '';
+  if (p.portfolio_pct_gain != null && p.profiles && p.profiles.share_performance) {
+    var pct = p.portfolio_pct_gain;
+    var up  = pct >= 0;
+    perfBadge = '<div class="post-perf-badge ' + (up ? 'ppb-up' : 'ppb-dn') + '">'
+      + (up ? '▲' : '▼') + ' ' + Math.abs(pct).toFixed(1) + '% portfolio ' + (p.portfolio_period || 'return')
+      + ' <span style="opacity:.6;font-size:9px;">% only</span></div>';
   }
 
-  // Ticker chips with "do I hold this?" context
-  let tickerHtml = ''
-  if (p.ticker_holdings?.length) {
-    tickerHtml = '<div class="post-tickers">'
-    p.ticker_holdings.forEach(th => {
-      const tk  = th.ticker
-      const mp  = PRICES[tk]
-      const price = mp ? `₦${mp.p.toLocaleString()}` : '—'
-      const chg   = mp ? `<span style="color:${mp.u?'var(--green)':'var(--red)'};font-size:11px;font-weight:700;">${mp.u?'▲':'▼'} ${Math.abs(mp.c).toFixed(2)}%</span>` : ''
-      // Check if viewer holds this ticker
-      const myHolding = _myTickers?.find(h => h.ticker === tk)
-      const heldHtml = myHolding
-        ? `<div class="ptk-held ptk-held-yes">✓ I hold ${myHolding.pct}% of portfolio</div>`
-        : `<div class="ptk-held ptk-held-no">— Not in my portfolio</div>`
-      tickerHtml += `<div class="ptk">
-        <div class="ptk-sym">NGX: ${tk}</div>
-        <div class="ptk-price">${price} ${chg}</div>
-        ${heldHtml}
-      </div>`
-    })
-    tickerHtml += '</div>'
+  // Ticker chips
+  var tkHtml = '';
+  if (p.ticker_holdings && p.ticker_holdings.length) {
+    tkHtml = '<div class="post-tickers">';
+    for (var i = 0; i < p.ticker_holdings.length; i++) {
+      var th = p.ticker_holdings[i];
+      var tk = th.ticker;
+      var mp = PRICES[tk];
+      var price = mp ? ('&#8358;' + mp.p.toLocaleString()) : '&mdash;';
+      var chgColor = mp ? (mp.u ? 'var(--green)' : 'var(--red)') : '';
+      var chg = mp ? ('<span style="color:' + chgColor + ';font-size:11px;font-weight:700;">' + (mp.u ? '▲' : '▼') + ' ' + Math.abs(mp.c).toFixed(2) + '%</span>') : '';
+      var myH = null;
+      for (var k = 0; k < _myTickers.length; k++) { if (_myTickers[k].ticker === tk) { myH = _myTickers[k]; break; } }
+      var held = myH
+        ? '<div class="ptk-held ptk-held-yes">✓ I hold ' + myH.pct + '% of portfolio</div>'
+        : '<div class="ptk-held ptk-held-no">&mdash; Not in my portfolio</div>';
+      tkHtml += '<div class="ptk"><div class="ptk-sym">NGX: ' + tk + '</div><div class="ptk-price">' + price + ' ' + chg + '</div>' + held + '</div>';
+    }
+    tkHtml += '</div>';
   }
 
-  d.innerHTML = `
-    <div class="p-head">
-      <div class="p-av" style="background:var(--plt);color:var(--p);">${inits}</div>
-      <div class="p-meta">
-        <div class="p-name">
-          ${name}
-          ${verified ? '<span class="p-vbadge">✓ Verified</span>' : ''}
-        </div>
-        <div class="p-time">${timeStr}</div>
-      </div>
-      ${!isMe ? `<button class="p-follow" data-uid="${p.user_id}" onclick="toggleFollow(this)">+ Follow</button>` : ''}
-    </div>
-    ${perfBadge}
-    ${tickerHtml}
-    <div class="p-body">${p.body.replace(/\n/g,'<br>')}</div>
-    <div class="p-actions">
-      <button class="p-act like-btn" data-pid="${p.id}" onclick="toggleLike(this)">❤ <span>${p.likes_count||0}</span></button>
-      <button class="p-act" onclick="toggleComments(this,'${p.id}')">💬 <span>${p.comments_count||0}</span></button>
-      <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
-      <button class="p-act" onclick="sharePost('${p.id}')">↗ Share</button>
-    </div>
-    <div class="emo-bar">
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','🔥')">🔥</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','💯')">💯</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','🚀')">🚀</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','📈')">📈</button>
-      <button class="emo" onclick="reactEmoji(this,'${p.id}','💰')">💰</button>
-    </div>
-    <div class="comments" id="cmt-${p.id}" style="display:none;margin-top:10px;">
-      <div id="cml-${p.id}"></div>
-      <div class="cm-input-row">
-        <div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;flex-shrink:0;">${_myInitials}</div>
-        <input placeholder="Write a comment…" id="cmi-${p.id}" onkeydown="if(event.key==='Enter')postComment('${p.id}')"/>
-        <button class="cm-send" onclick="postComment('${p.id}')">→</button>
-      </div>
-    </div>`
-  return d
+  var followBtn = isMe ? '' : '<button class="p-follow" data-uid="' + p.user_id + '" onclick="toggleFollow(this)">+ Follow</button>';
+  var vbadge = verified ? '<span class="p-vbadge">✓ Verified</span>' : '';
+  var bodyTxt = p.body.replace(/
+/g, '<br>');
+
+  d.innerHTML = '<div class="p-head">'
+    + '<div class="p-av" style="background:var(--plt);color:var(--p);">' + inits + '</div>'
+    + '<div class="p-meta"><div class="p-name">' + name + ' ' + vbadge + '</div><div class="p-time">' + tstr + '</div></div>'
+    + followBtn + '</div>'
+    + perfBadge + tkHtml
+    + '<div class="p-body">' + bodyTxt + '</div>'
+    + '<div class="p-actions">'
+    + '<button class="p-act like-btn" data-pid="' + pid + '" onclick="toggleLike(this)">&#10084; <span>' + (p.likes_count || 0) + '</span></button>'
+    + '<button class="p-act" onclick="toggleCmts(this,'' + pid + '')">&#128172; <span>' + (p.comments_count || 0) + '</span></button>'
+    + '<button class="p-act" onclick="this.classList.toggle('saved')">&#128278; Save</button>'
+    + '<button class="p-act">&#8599; Share</button>'
+    + '</div>'
+    + '<div class="emo-bar">'
+    + '<button class="emo" onclick="emo(this,'' + pid + '','fire')">&#128293;</button>'
+    + '<button class="emo" onclick="emo(this,'' + pid + '','100')">&#128175;</button>'
+    + '<button class="emo" onclick="emo(this,'' + pid + '','rocket')">&#128640;</button>'
+    + '<button class="emo" onclick="emo(this,'' + pid + '','chart')">&#128200;</button>'
+    + '<button class="emo" onclick="emo(this,'' + pid + '','money')">&#128176;</button>'
+    + '</div>'
+    + '<div class="comments" id="cmt-' + pid + '" style="display:none;margin-top:10px;">'
+    + '<div id="cml-' + pid + '"></div>'
+    + '<div class="cm-input-row">'
+    + '<div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;flex-shrink:0;">' + _myInitials + '</div>'
+    + '<input placeholder="Write a comment..." id="cmi-' + pid + '" onkeydown="if(event.key==='Enter')postCmt('' + pid + '')" />'
+    + '<button class="cm-send" onclick="postCmt('' + pid + '')">&#8594;</button>'
+    + '</div></div>';
+  return d;
 }
 
 function prependPost(p) {
-  const feed = document.getElementById('feed-fy')
-  const compose = document.querySelector('.compose')
-  feed.insertBefore(buildPostEl(p), compose.nextSibling)
+  var feed = document.getElementById('feed-fy');
+  var compose = document.querySelector('.compose');
+  feed.insertBefore(buildPost(p), compose.nextSibling);
 }
 
-function updatePostLikes(p) {
-  const btn = document.querySelector(`.like-btn[data-pid="${p.id}"] span`)
-  if (btn) btn.textContent = p.likes_count || 0
+function updateLikes(p) {
+  var btn = document.querySelector('.like-btn[data-pid="' + p.id + '"] span');
+  if (btn) btn.textContent = p.likes_count || 0;
 }
 
-// ── LIKE / UNLIKE ─────────────────────────────────────────────
-async function toggleLike(btn) {
-  if (!_sb || !_session) return
-  const pid = btn.dataset.pid
-  const isLiked = btn.classList.contains('liked')
-  btn.classList.toggle('liked')
-  const span = btn.querySelector('span')
-  span.textContent = parseInt(span.textContent) + (isLiked ? -1 : 1)
-  if (isLiked) {
-    await _sb.from('likes').delete().eq('post_id', pid).eq('user_id', _session.user.id)
-  } else {
-    await _sb.from('likes').insert({ post_id: pid, user_id: _session.user.id })
+// ── INTERACTIONS ─────────────────────────────────────────────
+window.toggleLike = async function(btn) {
+  if (!_sb || !_session) return;
+  var pid = btn.dataset.pid;
+  var liked = btn.classList.contains('liked');
+  btn.classList.toggle('liked');
+  var s = btn.querySelector('span');
+  s.textContent = parseInt(s.textContent) + (liked ? -1 : 1);
+  if (liked) { await _sb.from('likes').delete().eq('post_id', pid).eq('user_id', _session.user.id); }
+  else { await _sb.from('likes').insert({ post_id: pid, user_id: _session.user.id }); }
+};
+
+window.toggleCmts = async function(btn, pid) {
+  var box = document.getElementById('cmt-' + pid);
+  if (!box) return;
+  var open = box.style.display !== 'none';
+  box.style.display = open ? 'none' : 'block';
+  if (!open && _sb) {
+    var res = await _sb.from('comments').select('*, profiles(name,initials)').eq('post_id', pid).order('created_at', {ascending:true});
+    var list = document.getElementById('cml-' + pid);
+    if (list) {
+      list.innerHTML = '';
+      if (res.data) {
+        for (var i = 0; i < res.data.length; i++) {
+          var c = res.data[i];
+          var div = document.createElement('div'); div.className = 'comment';
+          div.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + ((c.profiles && c.profiles.initials) ? c.profiles.initials : 'U') + '</div>'
+            + '<div class="cm-body"><div class="cm-name">' + ((c.profiles && c.profiles.name) ? c.profiles.name : 'User') + '</div>'
+            + '<div class="cm-text">' + c.body + '</div></div>';
+          list.appendChild(div);
+        }
+      }
+    }
   }
-}
+};
 
-// ── COMMENTS ──────────────────────────────────────────────────
-async function toggleComments(btn, postId) {
-  const box = document.getElementById('cmt-'+postId)
-  const isOpen = box.style.display !== 'none'
-  box.style.display = isOpen ? 'none' : 'block'
-  if (!isOpen && _sb) {
-    // Load comments from DB
-    const { data: cmts } = await _sb.from('comments')
-      .select('*, profiles(name,initials)')
-      .eq('post_id', postId).order('created_at', { ascending: true })
-    const list = document.getElementById('cml-'+postId)
-    list.innerHTML = ''
-    cmts?.forEach(c => {
-      const d = document.createElement('div'); d.className = 'comment'
-      d.innerHTML = `<div class="cm-av" style="background:var(--plt);color:var(--p);">${c.profiles?.initials||'U'}</div>
-        <div class="cm-body"><div class="cm-name">${c.profiles?.name||'User'}</div>
-        <div class="cm-text">${c.body}</div></div>`
-      list.appendChild(d)
-    })
+window.postCmt = async function(pid) {
+  var inp = document.getElementById('cmi-' + pid);
+  if (!inp) return;
+  var txt = inp.value.trim(); if (!txt) return;
+  inp.value = '';
+  var list = document.getElementById('cml-' + pid);
+  if (list) {
+    var div = document.createElement('div'); div.className = 'comment';
+    div.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + _myInitials + '</div>'
+      + '<div class="cm-body"><div class="cm-name">' + _myFirstName + '</div><div class="cm-text">' + txt + '</div></div>';
+    list.appendChild(div);
   }
-}
+  if (_sb && _session) await _sb.from('comments').insert({ post_id: pid, user_id: _session.user.id, body: txt });
+};
 
-async function postComment(postId) {
-  const inp = document.getElementById('cmi-'+postId)
-  const txt = inp.value.trim(); if (!txt) return
-  if (!_sb || !_session) return
-  inp.value = ''
-  // Optimistic UI
-  const list = document.getElementById('cml-'+postId)
-  const d = document.createElement('div'); d.className = 'comment'
-  d.innerHTML = `<div class="cm-av" style="background:var(--plt);color:var(--p);">${_myInitials}</div>
-    <div class="cm-body"><div class="cm-name">${_myFirstName}</div><div class="cm-text">${txt}</div></div>`
-  list.appendChild(d)
-  // Save to DB
-  await _sb.from('comments').insert({ post_id: postId, user_id: _session.user.id, body: txt })
-}
+window.toggleFollow = async function(btn) {
+  if (!_sb || !_session) return;
+  var uid = btn.dataset.uid;
+  var following = btn.classList.contains('on');
+  btn.classList.toggle('on');
+  btn.textContent = following ? '+ Follow' : 'Following ✓';
+  if (following) { await _sb.from('follows').delete().eq('follower_id', _session.user.id).eq('following_id', uid); }
+  else { await _sb.from('follows').insert({ follower_id: _session.user.id, following_id: uid }); }
+};
 
-// ── FOLLOW / UNFOLLOW ─────────────────────────────────────────
-async function toggleFollow(btn) {
-  if (!_sb || !_session) return
-  const uid = btn.dataset.uid
-  const isFollowing = btn.classList.contains('on')
-  btn.classList.toggle('on')
-  btn.textContent = isFollowing ? '+ Follow' : 'Following ✓'
-  if (isFollowing) {
-    await _sb.from('follows').delete()
-      .eq('follower_id', _session.user.id).eq('following_id', uid)
-  } else {
-    await _sb.from('follows').insert({ follower_id: _session.user.id, following_id: uid })
+window.emo = function(btn) {
+  btn.style.transform = 'scale(1.4)';
+  setTimeout(function() { btn.style.transform = ''; }, 280);
+};
+
+// ── COMPOSE ──────────────────────────────────────────────────
+window.autoH = function(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 180) + 'px'; };
+window.showC = function() {
+  var ex = document.getElementById('c-extras');
+  if (ex) { ex.style.display = 'flex'; ex.style.flexDirection = 'column'; }
+};
+
+window.toggleTickerPicker = function() {
+  var el = document.getElementById('ticker-picker');
+  if (el) el.classList.toggle('open');
+};
+window.togglePerfPicker = function() {
+  var el = document.getElementById('perf-share');
+  if (el) el.classList.toggle('open');
+};
+
+window.addTicker = function() {
+  var inp = document.getElementById('tp-input');
+  var tk = inp.value.trim().toUpperCase(); if (!tk) return;
+  for (var i = 0; i < _pendingTickers.length; i++) { if (_pendingTickers[i].ticker === tk) { inp.value = ''; return; } }
+  var myH = null;
+  for (var j = 0; j < _myTickers.length; j++) { if (_myTickers[j].ticker === tk) { myH = _myTickers[j]; break; } }
+  _pendingTickers.push({ ticker: tk, iHold: !!myH, myPct: myH ? myH.pct : 0 });
+  renderChips();
+  inp.value = '';
+};
+
+window.removeTicker = function(tk) {
+  _pendingTickers = _pendingTickers.filter(function(t) { return t.ticker !== tk; });
+  renderChips();
+};
+
+function renderChips() {
+  var c = document.getElementById('tp-chips');
+  if (!c) return;
+  var html = '';
+  for (var i = 0; i < _pendingTickers.length; i++) {
+    var t = _pendingTickers[i];
+    html += '<div class="tp-chip">' + t.ticker
+      + (t.iHold ? '<span style="font-size:9px;opacity:.7;">(I hold ' + t.myPct + '%)</span>' : '')
+      + '<span class="tp-chip-x" onclick="removeTicker('' + t.ticker + '')">&#x2715;</span></div>';
   }
+  c.innerHTML = html;
 }
 
-// ── COMPOSE: TICKER PICKER ────────────────────────────────────
-function showC() {
-  document.getElementById('c-extras').style.display = 'flex'
-  document.getElementById('c-extras').style.flexDirection = 'column'
-}
-function toggleTickerPicker() {
-  const el = document.getElementById('ticker-picker')
-  const isOpen = el.classList.contains('open')
-  el.classList.toggle('open', !isOpen)
-  document.getElementById('opt-ticker').style.color = !isOpen ? 'var(--p)' : ''
-}
-function togglePerfPicker() {
-  const el = document.getElementById('perf-share')
-  const isOpen = el.classList.contains('open')
-  el.classList.toggle('open', !isOpen)
-  document.getElementById('opt-perf').style.color = !isOpen ? 'var(--green)' : ''
-}
-function addTicker() {
-  const inp = document.getElementById('tp-input')
-  const tk = inp.value.trim().toUpperCase(); if (!tk) return
-  if (_pendingTickers.find(t => t.ticker === tk)) { inp.value=''; return }
-  // Find if I hold this ticker
-  const myH = _myTickers?.find(h => h.ticker === tk)
-  _pendingTickers.push({ ticker: tk, iHold: !!myH, myPct: myH?.pct || 0 })
-  renderTickerChips()
-  inp.value = ''
-}
-function removeTicker(tk) {
-  _pendingTickers = _pendingTickers.filter(t => t.ticker !== tk)
-  renderTickerChips()
-}
-function renderTickerChips() {
-  const c = document.getElementById('tp-chips')
-  c.innerHTML = _pendingTickers.map(t =>
-    `<div class="tp-chip">
-      ${t.ticker}
-      ${t.iHold ? `<span style="font-size:9px;opacity:.7;">(I hold ${t.myPct}%)</span>` : ''}
-      <span class="tp-chip-x" onclick="removeTicker('${t.ticker}')">✕</span>
-    </div>`
-  ).join('')
-}
+window.togglePerfShare = function(cb) {
+  _sharePerf = cb.checked;
+  updatePerfPreview();
+};
 
-// ── COMPOSE: PERFORMANCE SHARE ────────────────────────────────
-function togglePerfShare(checkbox) {
-  _sharePerf = checkbox.checked
-  updatePerfPreview()
-}
 function updatePerfPreview() {
-  const preview = document.getElementById('ps-preview')
-  if (!preview) return
-  if (_myPctGain == null) {
-    preview.style.display = 'block'
-    preview.textContent = 'No portfolio data yet — add holdings first'
-    return
-  }
-  const up = _myPctGain >= 0
-  preview.style.display = 'block'
-  preview.innerHTML = `Will show: <strong style="color:${up?'var(--green)':'var(--red)'};">${up?'▲':'▼'} ${Math.abs(_myPctGain).toFixed(1)}%</strong> (₦ value stays hidden)`
+  var p = document.getElementById('ps-preview'); if (!p) return;
+  if (_myPctGain == null) { p.style.display = 'block'; p.textContent = 'Add holdings to share % gain'; return; }
+  var up = _myPctGain >= 0;
+  p.style.display = 'block';
+  p.innerHTML = 'Will show: <strong style="color:' + (up ? 'var(--green)' : 'var(--red)') + ';">' + (up ? '▲' : '▼') + ' ' + Math.abs(_myPctGain).toFixed(1) + '%</strong> (&#8358; value hidden)';
 }
 
-// ── DO POST ───────────────────────────────────────────────────
-async function doPost() {
-  const inp = document.getElementById('c-input')
-  const txt = inp.value.trim(); if (!txt) return
-  const btn = document.getElementById('c-post-btn')
-  btn.textContent = '⏳ Posting…'; btn.disabled = true
+window.doPost = async function() {
+  var inp = document.getElementById('c-input');
+  var txt = inp.value.trim(); if (!txt) return;
+  var btn = document.getElementById('c-post-btn');
+  if (btn) { btn.textContent = 'Posting...'; btn.disabled = true; }
 
-  // Build ticker_holdings payload — only pct, no ₦ values
-  const tickerHoldingsPayload = _pendingTickers.map(t => ({
-    ticker: t.ticker,
-    i_hold: t.iHold,
-    my_pct: t.iHold ? t.myPct : null
-  }))
-
-  const postData = {
-    user_id:          _session.user.id,
-    body:             txt,
-    ticker_holdings:  tickerHoldingsPayload,
-    portfolio_pct_gain: _sharePerf ? _myPctGain : null,
-    portfolio_period:   _sharePerf ? '1M' : null,
+  var tkPayload = [];
+  for (var i = 0; i < _pendingTickers.length; i++) {
+    var t = _pendingTickers[i];
+    tkPayload.push({ ticker: t.ticker, i_hold: t.iHold, my_pct: t.iHold ? t.myPct : null });
   }
 
-  // Optimistic UI first
-  const u = JSON.parse(sessionStorage.getItem('gopex_user') || '{}')
-  const feed = document.getElementById('feed-fy')
-  const compose = document.querySelector('.compose')
-  const fakePost = {
-    id: 'tmp-'+Date.now(), user_id: _session.user.id,
-    body: txt, created_at: new Date().toISOString(),
-    likes_count: 0, comments_count: 0,
-    ticker_holdings: tickerHoldingsPayload,
+  // Optimistic post
+  var u = JSON.parse(sessionStorage.getItem('gopex_user') || '{}');
+  var fakePost = {
+    id: 'tmp-' + Date.now(), user_id: (_session ? _session.user.id : ''), body: txt,
+    created_at: new Date().toISOString(), likes_count: 0, comments_count: 0,
+    ticker_holdings: tkPayload,
     portfolio_pct_gain: _sharePerf ? _myPctGain : null,
     portfolio_period: _sharePerf ? '1M' : null,
-    profiles: { name: u.name||_myFirstName, initials: _myInitials, is_verified: false, share_performance: _sharePerf }
-  }
-  feed.insertBefore(buildPostEl(fakePost), compose.nextSibling)
+    profiles: { name: u.name || _myFirstName, initials: _myInitials, is_verified: false, share_performance: _sharePerf }
+  };
+  var feed = document.getElementById('feed-fy');
+  var compose = document.querySelector('.compose');
+  feed.insertBefore(buildPost(fakePost), compose.nextSibling);
 
   // Save to DB
-  if (_sb) await _sb.from('posts').insert(postData)
-
-  // If user wants to share perf publicly, update their profile flag
-  if (_sharePerf && _sb) {
-    await _sb.from('profiles').update({ share_performance: true, portfolio_pct_gain: _myPctGain }).eq('id', _session.user.id)
+  if (_sb && _session) {
+    await _sb.from('posts').insert({ user_id: _session.user.id, body: txt, ticker_holdings: tkPayload, portfolio_pct_gain: _sharePerf ? _myPctGain : null, portfolio_period: _sharePerf ? '1M' : null });
+    if (_sharePerf) await _sb.from('profiles').update({ share_performance: true, portfolio_pct_gain: _myPctGain }).eq('id', _session.user.id);
   }
 
-  // Reset compose
-  inp.value = ''; inp.style.height = 'auto'
-  _pendingTickers = []; renderTickerChips()
-  _sharePerf = false
-  document.getElementById('ps-toggle-check').checked = false
-  document.getElementById('ticker-picker').classList.remove('open')
-  document.getElementById('perf-share').classList.remove('open')
-  document.getElementById('c-extras').style.display = 'none'
-  btn.textContent = 'Post'; btn.disabled = false
-}
-
-// ── EMOJI REACT ───────────────────────────────────────────────
-function reactEmoji(btn, postId, emoji) {
-  btn.style.transform = 'scale(1.5)'; setTimeout(()=>btn.style.transform='',300)
-  // Future: save reactions to DB
-}
-
-// ── SHARE POST ────────────────────────────────────────────────
-function sharePost(postId) {
-  const url = `${window.location.origin}/home.html?post=${postId}`
-  if (navigator.share) {
-    navigator.share({ title: 'GopexFund post', url })
-  } else {
-    navigator.clipboard?.writeText(url)
-    alert('Link copied to clipboard!')
-  }
-}
+  // Reset
+  inp.value = ''; inp.style.height = 'auto';
+  _pendingTickers = []; renderChips(); _sharePerf = false;
+  var psc = document.getElementById('ps-toggle-check'); if (psc) psc.checked = false;
+  var tp = document.getElementById('ticker-picker'); if (tp) tp.classList.remove('open');
+  var pp = document.getElementById('perf-share'); if (pp) pp.classList.remove('open');
+  var ex = document.getElementById('c-extras'); if (ex) ex.style.display = 'none';
+  if (btn) { btn.textContent = 'Post'; btn.disabled = false; }
+};
 
 // ── FEED TABS ─────────────────────────────────────────────────
-function switchFeed(t, btn) {
-  ['fy','fl','nw'].forEach(id => { const el=document.getElementById('feed-'+id); if(el) el.style.display=id===t?'block':'none' })
-  document.querySelectorAll('.ft').forEach(b => b.classList.remove('on')); btn.classList.add('on')
-  if (t === 'fl' && _sb) loadFollowingFeed()
-}
-
-async function loadFollowingFeed() {
-  if (!_session) return
-  const { data: follows } = await _sb.from('follows').select('following_id').eq('follower_id', _session.user.id)
-  if (!follows?.length) return
-  const ids = follows.map(f => f.following_id)
-  const { data: posts } = await _sb.from('posts')
-    .select('*, profiles(name,initials,is_verified,share_performance,portfolio_pct_gain,portfolio_pct_period)')
-    .in('user_id', ids).order('created_at', { ascending: false }).limit(20)
-  const feed = document.getElementById('feed-fl')
-  feed.innerHTML = ''
-  if (!posts?.length) {
-    feed.innerHTML = '<div style="padding:60px 20px;text-align:center;color:var(--tx3);"><div style="font-size:40px;margin-bottom:14px;">👥</div><div style="font-size:15px;font-weight:700;color:var(--tx2);">No posts yet from people you follow</div></div>'
-    return
+window.switchFeed = function(t, btn) {
+  var tabs = ['fy', 'fl', 'nw'];
+  for (var i = 0; i < tabs.length; i++) {
+    var el = document.getElementById('feed-' + tabs[i]);
+    if (el) el.style.display = tabs[i] === t ? 'block' : 'none';
   }
-  posts.forEach(p => feed.appendChild(buildPostEl(p)))
+  var fts = document.querySelectorAll('.ft');
+  for (var j = 0; j < fts.length; j++) fts[j].classList.remove('on');
+  btn.classList.add('on');
+  if (t === 'fl') loadFollowing();
+};
+
+async function loadFollowing() {
+  if (!_session) return;
+  var fRes = await _sb.from('follows').select('following_id').eq('follower_id', _session.user.id);
+  if (!fRes.data || !fRes.data.length) return;
+  var ids = fRes.data.map(function(f) { return f.following_id; });
+  var pRes = await _sb.from('posts')
+    .select('*, profiles(name,initials,is_verified,share_performance,portfolio_pct_gain,portfolio_pct_period)')
+    .in('user_id', ids).order('created_at', {ascending:false}).limit(20);
+  var feed = document.getElementById('feed-fl');
+  feed.innerHTML = '';
+  if (!pRes.data || !pRes.data.length) {
+    feed.innerHTML = '<div style="padding:60px 20px;text-align:center;color:var(--tx3);"><div style="font-size:40px;margin-bottom:14px;">&#128101;</div><div style="font-size:15px;font-weight:700;color:var(--tx2);">No posts from people you follow yet</div></div>';
+    return;
+  }
+  for (var i = 0; i < pRes.data.length; i++) feed.appendChild(buildPost(pRes.data[i]));
 }
 
-// ── SPARKLINE ─────────────────────────────────────────────────
-;(function(){
-  const ctx = document.getElementById('spark-chart').getContext('2d')
-  new Chart(ctx, {type:'line',data:{labels:[1,2,3,4,5,6,7,8,9,10],datasets:[{data:[4200,4310,4280,4390,4510,4600,4700,4750,4800,4823],borderColor:'#1a6eff',borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:'rgba(26,110,255,.07)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}})
-})()
+// ── LEGACY HANDLERS (used by seed posts in HTML) ──────────────
+window.like = function(btn) {
+  btn.classList.toggle('liked');
+  var s = btn.querySelector('span');
+  s.textContent = parseInt(s.textContent) + (btn.classList.contains('liked') ? 1 : -1);
+};
+window.toggleC = function(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+};
+window.sendC = function(listId, inputId) {
+  var inp = document.getElementById(inputId);
+  var txt = inp.value.trim(); if (!txt) return;
+  var raw = sessionStorage.getItem('gopex_user');
+  var u = raw ? JSON.parse(raw) : { initials: 'AO', firstName: 'You' };
+  var list = document.getElementById(listId);
+  var d = document.createElement('div'); d.className = 'comment';
+  d.innerHTML = '<div class="cm-av" style="background:var(--plt);color:var(--p);">' + u.initials + '</div>'
+    + '<div class="cm-body"><div class="cm-name">' + (u.firstName || 'You') + '</div><div class="cm-text">' + txt + '</div></div>';
+  list.appendChild(d); inp.value = '';
+};
 
-// ── MISC ──────────────────────────────────────────────────────
-function autoH(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,180)+'px' }
-
-// Fallback nav from sessionStorage while Supabase loads
-;(function(){
-  const raw = sessionStorage.getItem('gopex_user'); if(!raw) return
-  const u = JSON.parse(raw)
-  document.querySelectorAll('#nav-av,#c-av').forEach(el=>{if(el)el.textContent=u.initials||'AO'})
-  const nn=document.getElementById('nav-name'); const pn=document.getElementById('ps-name')
-  if(nn) nn.textContent=u.firstName||'You'; if(pn) pn.textContent=u.firstName||'You'
-})()
-</script>
-
-// Load Supabase then init
-const sbScript = document.createElement('script')
-sbScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
-sbScript.onload = async () => {
-  const sb = supabase.createClient(_SB_URL, _SB_ANON)
-
-  // 1. Check auth — redirect if not logged in
-  const { data: { session } } = await sb.auth.getSession()
-  if (!session) { window.location.href = 'landing.html'; return }
-
-  // 2. Fetch profile
-  const { data: profile } = await sb.from('profiles').select('*').eq('id', session.user.id).single()
-  const firstName = profile?.first_name || profile?.name?.split(' ')[0] || session.user.email.split('@')[0]
-  const initials  = profile?.initials || firstName[0].toUpperCase()
-
-  // 3. Update nav + greeting
-  document.querySelectorAll('#nav-av, #c-av, #ca1, #ca2, #ca3').forEach(el => { if(el) el.textContent = initials })
-  const nn = document.getElementById('nav-name'); if(nn) nn.textContent = firstName
-  const pn = document.getElementById('ps-name'); if(pn) pn.textContent = firstName
-
-  // Keep sessionStorage in sync for other scripts
-  sessionStorage.setItem('gopex_user', JSON.stringify({
-    id: session.user.id, name: profile?.name || firstName,
-    firstName, initials, email: session.user.email,
-    joined: new Date(session.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'})
-  }))
-
-  // 4. Load posts from DB
-  await loadPosts(sb, session.user.id, initials, firstName)
-
-  // 5. Real-time: new posts appear live
-  sb.channel('posts').on('postgres_changes',
-    { event: 'INSERT', schema: 'public', table: 'posts' },
-    payload => prependDBPost(payload.new, initials)
-  ).subscribe()
-}
-document.head.appendChild(sbScript)
-
-async function loadPosts(sb, myId, myInitials, myName) {
-  const { data: posts } = await sb
-    .from('posts')
-    .select('*, profiles(name, initials)')
-    .order('created_at', { ascending: false })
-    .limit(20)
-  if (!posts?.length) return
-  const feed = document.getElementById('feed-fy')
-  const compose = document.querySelector('.compose')
-  // Remove seed posts, keep compose
-  feed.querySelectorAll('.post').forEach(p => p.remove())
-  posts.forEach(p => {
-    const el = buildPostEl(p, myId, myInitials)
-    feed.insertBefore(el, compose.nextSibling)
-  })
-}
-
-function buildPostEl(p, myId, myInitials) {
-  const d = document.createElement('div'); d.className = 'post'; d.dataset.postId = p.id
-  const name = p.profiles?.name || 'GopexFund User'
-  const inits = p.profiles?.initials || name[0].toUpperCase()
-  const mins = Math.floor((Date.now() - new Date(p.created_at)) / 60000)
-  const timeStr = mins < 1 ? 'Just now' : mins < 60 ? mins+'m ago' : Math.floor(mins/60)+'h ago'
-  d.innerHTML = `
-    <div class="p-head">
-      <div class="p-av" style="background:var(--plt);color:var(--p);">${inits}</div>
-      <div class="p-meta">
-        <div class="p-name">${name}</div>
-        <div class="p-time">${timeStr}</div>
-      </div>
-    </div>
-    <div class="p-body">${p.body.replace(/\n/g,'<br>')}</div>
-    <div class="p-actions">
-      <button class="p-act" onclick="like(this)">❤ <span>${p.likes_count||0}</span></button>
-      <button class="p-act" onclick="toggleC('pc${p.id}')">💬 <span>${p.comments_count||0}</span></button>
-      <button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button>
-      <button class="p-act">↗ Share</button>
-    </div>
-    <div class="comments" id="pc${p.id}">
-      <div id="pcl${p.id}"></div>
-      <div class="cm-input-row">
-        <div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">${myInitials}</div>
-        <input placeholder="Write a comment…" id="pci${p.id}" onkeydown="if(event.key==='Enter')sendC('pcl${p.id}','pci${p.id}')"/>
-        <button class="cm-send" onclick="sendC('pcl${p.id}','pci${p.id}')">→</button>
-      </div>
-    </div>`
-  return d
-}
-
-function prependDBPost(p, myInitials) {
-  const feed = document.getElementById('feed-fy')
-  const compose = document.querySelector('.compose')
-  const el = buildPostEl(p, null, myInitials)
-  feed.insertBefore(el, compose.nextSibling)
-}
-
-// Override doPost to save to DB
-async function savePostToDB(txt) {
-  const raw = sessionStorage.getItem('gopex_user')
-  if (!raw) return
-  const u = JSON.parse(raw)
-  const sb = supabase.createClient(_SB_URL, _SB_ANON)
-  await sb.from('posts').insert({ user_id: u.id, body: txt })
-}
-// Init user (fallback from sessionStorage while Supabase loads)
-;(function(){
-  const raw = sessionStorage.getItem('gopex_user'); if(!raw) return
-  const u = JSON.parse(raw)
-  document.querySelectorAll('#nav-av,#c-av,#ca1,#ca2,#ca3').forEach(el=>{if(el)el.textContent=u.initials||'AO'})
-  const nn=document.getElementById('nav-name');const pn=document.getElementById('ps-name')
-  if(nn)nn.textContent=u.firstName||'You'; if(pn)pn.textContent=u.firstName||'You'
-})()
-// Sparkline
-(function(){
-  const ctx=document.getElementById('spark-chart').getContext('2d');
-  new Chart(ctx,{type:'line',data:{labels:[1,2,3,4,5,6,7,8,9,10],datasets:[{data:[4200,4310,4280,4390,4510,4600,4700,4750,4800,4823],borderColor:'#1a6eff',borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:'rgba(26,110,255,.07)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
-})();
-function switchFeed(t,btn){
-  ['fy','fl','nw'].forEach(id=>{const el=document.getElementById('feed-'+id);if(el)el.style.display=id===t?'block':'none';});
-  document.querySelectorAll('.ft').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-}
-function autoH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,180)+'px';}
-function showC(){document.getElementById('c-actions').style.display='flex';}
-function doPost(){
-  const inp=document.getElementById('c-input');const txt=inp.value.trim();if(!txt)return;
-  const raw=sessionStorage.getItem('gopex_user');const u=raw?JSON.parse(raw):{initials:'AO',firstName:'You'};
-  const id='p'+Date.now();const feed=document.getElementById('feed-fy');
-  const d=document.createElement('div');d.className='post';
-  d.innerHTML=`<div class="p-head"><div class="p-av" style="background:var(--plt);color:var(--p);">${u.initials}</div><div class="p-meta"><div class="p-name">${u.firstName||'You'}</div><div class="p-time">Just now</div></div></div><div class="p-body">${txt.replace(/\n/g,'<br>')}</div><div class="p-actions"><button class="p-act" onclick="like(this)">❤ <span>0</span></button><button class="p-act" onclick="toggleC('${id}')">💬 0</button><button class="p-act" onclick="this.classList.toggle('saved')">🔖 Save</button></div><div class="comments" id="${id}"><div id="cl${id}"></div><div class="cm-input-row"><div class="cm-av" style="background:var(--plt);color:var(--p);width:28px;height:28px;font-size:9px;">${u.initials}</div><input placeholder="Comment…" id="ci${id}" onkeydown="if(event.key==='Enter')sendC('cl${id}','ci${id}')"/><button class="cm-send" onclick="sendC('cl${id}','ci${id}')">→</button></div></div>`;
-  const compose=document.querySelector('.compose');feed.insertBefore(d,compose.nextSibling);
-  inp.value='';inp.style.height='auto';document.getElementById('c-actions').style.display='none';
-  // Save to database
-  savePostToDB(txt);
-}
-function like(btn){btn.classList.toggle('liked');const s=btn.querySelector('span');s.textContent=parseInt(s.textContent)+(btn.classList.contains('liked')?1:-1);}
-function toggleC(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
-function sendC(listId,inputId){
-  const inp=document.getElementById(inputId);const txt=inp.value.trim();if(!txt)return;
-  const raw=sessionStorage.getItem('gopex_user');const u=raw?JSON.parse(raw):{initials:'AO',firstName:'You'};
-  const list=document.getElementById(listId);
-  const d=document.createElement('div');d.className='comment';
-  d.innerHTML=`<div class="cm-av" style="background:var(--plt);color:var(--p);">${u.initials}</div><div class="cm-body"><div class="cm-name">${u.firstName||'You'}</div><div class="cm-text">${txt}</div></div>`;
-  list.appendChild(d);inp.value='';
-}
-
-function gxLogout() {
+// ── LOGOUT ────────────────────────────────────────────────────
+window.gxLogout = async function() {
   if (!confirm('Log out of GopexFund?')) return;
+  if (_sb) await _sb.auth.signOut();
   sessionStorage.clear();
-  // Clear Supabase session
-  const key = Object.keys(localStorage).find(k => k.includes('supabase') || k.includes('sb-'));
-  if (key) localStorage.removeItem(key);
+  var keys = Object.keys(localStorage);
+  for (var i = 0; i < keys.length; i++) {
+    if (keys[i].indexOf('supabase') !== -1 || keys[i].indexOf('sb-') !== -1) {
+      localStorage.removeItem(keys[i]);
+    }
+  }
   window.location.href = 'landing.html';
-}
-
+};
 </script>
 </body>
 </html>
