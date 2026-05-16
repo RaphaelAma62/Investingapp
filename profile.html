@@ -662,10 +662,12 @@ async function loadStats() {
       total += holdData.data[i].shares * holdData.data[i].buy_price;
     }
     var spv = document.getElementById('stat-portfolio');
-    if (spv) spv.textContent = total >= 1000000 ? ('&#8358;' + (total/1000000).toFixed(2) + 'M') : ('&#8358;' + total.toLocaleString('en-NG', {maximumFractionDigits:0}));
+    if (spv) spv.innerHTML = total >= 1000000
+      ? ('&#8358;' + (total/1000000).toFixed(2) + 'M')
+      : ('&#8358;' + total.toLocaleString('en-NG', {maximumFractionDigits:0}));
   } else {
     var spv2 = document.getElementById('stat-portfolio');
-    if (spv2) spv2.textContent = '₦0';
+    if (spv2) spv2.textContent = '\u20a60';
   }
 
   var sr = document.getElementById('stat-return');
@@ -708,8 +710,9 @@ async function loadActivity() {
   var html = '';
   for (var k = 0; k < items.length; k++) {
     var it = items[k];
-    var mins = Math.floor((Date.now() - new Date(it.time)) / 60000);
-    var tstr = mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
+    var mins = it.time ? Math.floor((Date.now() - new Date(it.time).getTime()) / 60000) : 0;
+    mins = Math.max(0, mins);
+    var tstr = mins < 1 ? 'Just now' : mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
     html += '<div class="act-item">'
       + '<div class="act-ico ' + it.cls + '">' + it.ico + '</div>'
       + '<div class="act-body"><div class="act-title">' + it.title + '</div><div class="act-desc">' + it.desc + '</div></div>'
@@ -733,8 +736,8 @@ async function loadPosts() {
   var html = '';
   for (var i = 0; i < res.data.length; i++) {
     var p = res.data[i];
-    var mins = Math.floor((Date.now() - new Date(p.created_at)) / 60000);
-    var tstr = mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
+    var mins = p.created_at ? Math.max(0, Math.floor((Date.now() - new Date(p.created_at).getTime()) / 60000)) : 0;
+    var tstr = mins < 1 ? 'Just now' : mins < 60 ? (mins + 'm ago') : mins < 1440 ? (Math.floor(mins/60) + 'h ago') : (Math.floor(mins/1440) + 'd ago');
     html += '<div class="post-item">'
       + '<div class="pi-body">' + p.body.replace(/\n/g,'<br>') + '</div>'
       + '<div class="pi-acts">'
