@@ -1,360 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GopexFund — Invest Smarter, Together</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GopexFund — Africa's Social Investing Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--red:#dc2626;--amber:#d97706;--ambg:#fef3c7;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g600:#475569;--g900:#0f172a;--bg:#f0f4f9;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;}
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{font-family:var(--fb);background:var(--white);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased;}
-a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input{font-family:var(--fb);}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:#fff;color:#0f172a;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:'Inter',sans-serif;}input,textarea{font-family:'Inter',sans-serif;}
+
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);height:60px;display:flex;align-items:center;padding:0 clamp(16px,4vw,48px);}
-.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1200px;margin:0 auto;gap:12px;}
-.logo{font-family:var(--fd);font-size:19px;font-weight:800;display:flex;align-items:center;gap:8px;}
-.logo-mark{width:30px;height:30px;background:var(--p);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,5vw,64px);background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);border-bottom:1px solid #e2e8f0;box-shadow:0 1px 12px rgba(0,0,0,0.06);}
+.logo{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;display:flex;align-items:center;gap:9px;color:#0f172a;}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:900;box-shadow:0 4px 12px rgba(99,102,241,0.35);}
 .nav-links{display:flex;gap:2px;}
-.nlink{padding:7px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--tx2);transition:all .15s;}
-.nlink:hover{background:var(--g100);color:var(--tx);}
-.nav-btns{display:flex;gap:8px;}
-.btn-ghost{padding:8px 18px;border:1.5px solid var(--bdr);border-radius:9px;font-size:13px;font-weight:600;color:var(--tx2);background:var(--white);transition:all .15s;}
-.btn-ghost:hover{border-color:var(--p);color:var(--p);}
-.btn-cta{padding:8px 18px;background:var(--p);border:none;border-radius:9px;font-size:13px;font-weight:700;color:#fff;transition:all .15s;box-shadow:0 2px 12px rgba(26,110,255,.25);}
-.btn-cta:hover{background:var(--pdk);transform:translateY(-1px);}
-.burger{display:none;background:none;border:none;font-size:22px;color:var(--tx2);}
-.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px 14px;flex-direction:column;gap:3px;z-index:199;box-shadow:0 8px 24px rgba(0,0,0,.08);}
-.mob-nav.open{display:flex;}
-.mob-link{padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--tx2);}
+.nav-link{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#64748b;transition:all .15s;}
+.nav-link:hover{background:#f1f5f9;color:#0f172a;}
+.nav-btns{display:flex;gap:10px;}
+.btn-ghost{padding:8px 20px;border:1.5px solid #e2e8f0;border-radius:9px;font-size:13px;font-weight:600;color:#475569;background:#fff;transition:all .15s;}
+.btn-ghost:hover{border-color:#6366f1;color:#6366f1;}
+.btn-primary{padding:8px 20px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:9px;font-size:13px;font-weight:700;color:#fff;transition:all .2s;box-shadow:0 4px 14px rgba(99,102,241,0.3);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(99,102,241,0.4);}
+.burger{display:none;background:none;border:none;font-size:22px;color:#475569;cursor:pointer;}
+.mob-menu{display:none;position:fixed;top:66px;left:0;right:0;background:#fff;border-bottom:1px solid #e2e8f0;padding:12px 16px 18px;flex-direction:column;gap:4px;z-index:199;box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+.mob-menu.open{display:flex;}
+.mob-link{padding:11px 14px;border-radius:9px;font-size:14px;color:#475569;}
+.mob-link:hover{background:#f1f5f9;}
+
 /* HERO */
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;padding:80px clamp(16px,4vw,48px) 60px;max-width:1200px;margin:0 auto;}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--plt);border:1px solid var(--pbr);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--p);margin-bottom:20px;}
-.pulse{width:6px;height:6px;border-radius:50%;background:var(--p);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(26,110,255,.5);}50%{box-shadow:0 0 0 6px rgba(26,110,255,0);}}
-h1{font-family:var(--fd);font-size:clamp(30px,4.5vw,56px);font-weight:800;line-height:1.1;letter-spacing:-1.5px;color:var(--g900);margin-bottom:16px;}
-h1 span{color:var(--p);}
-.hero-sub{font-size:clamp(14px,1.8vw,17px);color:var(--tx2);line-height:1.7;max-width:480px;margin-bottom:28px;}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
-.btn-big{padding:13px 28px;border-radius:10px;font-size:15px;font-weight:700;transition:all .2s;}
-.btn-big-p{background:var(--p);color:#fff;border:none;box-shadow:0 4px 18px rgba(26,110,255,.3);}
-.btn-big-p:hover{background:var(--pdk);transform:translateY(-2px);}
-.btn-big-s{background:var(--white);color:var(--tx);border:1.5px solid var(--bdr);}
-.btn-big-s:hover{border-color:var(--p);color:var(--p);}
-.hero-trust{display:flex;gap:24px;flex-wrap:wrap;}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px clamp(16px,5vw,64px) 60px;position:relative;overflow:hidden;background:linear-gradient(160deg,#f0f4ff 0%,#faf5ff 30%,#f0fdfa 60%,#fff7ed 100%);}
+/* Colorful blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.45;pointer-events:none;}
+.b1{width:500px;height:500px;background:radial-gradient(circle,#c7d2fe,#a5b4fc);top:-80px;left:-80px;animation:blob 10s ease-in-out infinite;}
+.b2{width:400px;height:400px;background:radial-gradient(circle,#ddd6fe,#c4b5fd);top:60px;right:-60px;animation:blob 12s ease-in-out infinite 2s;}
+.b3{width:350px;height:350px;background:radial-gradient(circle,#99f6e4,#6ee7b7);bottom:-40px;left:25%;animation:blob 9s ease-in-out infinite 4s;}
+.b4{width:280px;height:280px;background:radial-gradient(circle,#fed7aa,#fbbf24);bottom:60px;right:10%;animation:blob 11s ease-in-out infinite 1s;}
+@keyframes blob{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(20px,-20px) scale(1.05);}66%{transform:translate(-15px,15px) scale(0.97);}}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;max-width:1180px;width:100%;margin:0 auto;}
+/* Left */
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#eef2ff,#f5f3ff);border:1px solid #c7d2fe;border-radius:100px;padding:6px 16px;font-size:12px;font-weight:700;color:#6366f1;margin-bottom:22px;}
+.badge-pulse{width:7px;height:7px;background:#6366f1;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,0.5);}50%{box-shadow:0 0 0 7px rgba(99,102,241,0);}}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(34px,5vw,62px);font-weight:900;line-height:1.08;letter-spacing:-2px;margin-bottom:18px;color:#0f172a;}
+.highlight{background:linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(15px,1.8vw,18px);color:#64748b;line-height:1.75;max-width:480px;margin-bottom:32px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;}
+.btn-big-p{padding:14px 32px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:12px;font-size:16px;font-weight:700;color:#fff;transition:all .2s;box-shadow:0 6px 24px rgba(99,102,241,0.35);}
+.btn-big-p:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(99,102,241,0.45);}
+.btn-big-s{padding:14px 32px;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;font-size:16px;font-weight:700;color:#475569;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.btn-big-s:hover{border-color:#6366f1;color:#6366f1;transform:translateY(-2px);}
+/* Trust row */
+.trust-row{display:flex;gap:28px;flex-wrap:wrap;}
 .trust-item{display:flex;flex-direction:column;}
-.trust-num{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--g900);}
-.trust-num em{color:var(--p);font-style:normal;}
-.trust-lbl{font-size:11px;color:var(--tx3);margin-top:1px;}
-/* Feature pills floating */
-.hero-visual{position:relative;height:460px;display:flex;align-items:center;justify-content:center;}
-.center-card{background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.10);width:220px;z-index:2;position:relative;}
-.cc-av{width:44px;height:44px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;margin-bottom:10px;}
-.cc-name{font-size:14px;font-weight:700;margin-bottom:2px;}
-.cc-role{font-size:11px;color:var(--tx3);margin-bottom:12px;}
-.cc-stat{background:var(--g50);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;margin-bottom:6px;}
-.cc-sl{font-size:10px;color:var(--tx3);}
-.cc-sv{font-size:13px;font-weight:700;}
-.cc-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-top:6px;}
-.verified{background:var(--gbg);color:var(--green);}
-.float-card{position:absolute;background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.10);z-index:3;}
-.fc1{top:20px;left:-10px;animation:fc 6s ease-in-out infinite;}
-.fc2{top:20px;right:-10px;animation:fc 7s ease-in-out infinite .5s;}
-.fc3{bottom:60px;left:0;animation:fc 5s ease-in-out infinite 1s;}
-.fc4{bottom:40px;right:-5px;animation:fc 6.5s ease-in-out infinite 1.5s;}
-@keyframes fc{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-.fc-lbl{font-size:10px;color:var(--tx3);}
-.fc-val{font-size:13px;font-weight:800;margin-top:2px;}
-.fc-val.up{color:var(--green);}
-.fc-val.dn{color:var(--red);}
-/* AUTH CARD */
-.auth-card{background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:28px;box-shadow:0 8px 32px rgba(0,0,0,.08);}
-.auth-tabs{display:flex;background:var(--g100);border-radius:10px;padding:3px;gap:3px;margin-bottom:22px;}
-.atab{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--tx3);transition:all .18s;}
-.atab.on{background:var(--white);color:var(--tx);box-shadow:0 1px 4px rgba(0,0,0,.10);}
+.trust-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:#0f172a;}
+.trust-num span{color:#6366f1;}
+.trust-lbl{font-size:11px;color:#94a3b8;margin-top:1px;}
+/* Right — Auth card */
+.auth-card{background:#fff;border-radius:22px;padding:32px;box-shadow:0 20px 60px rgba(99,102,241,0.12),0 4px 16px rgba(0,0,0,0.06);border:1px solid #e2e8f0;position:relative;overflow:hidden;}
+.auth-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6,#06b6d4,#10b981);}
+.ac-head{text-align:center;margin-bottom:20px;}
+.ac-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px;}
+.ac-sub{font-size:13px;color:#94a3b8;}
+.ac-tabs{display:flex;background:#f1f5f9;border-radius:10px;padding:3px;gap:3px;margin-bottom:22px;}
+.ac-tab{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;border:none;background:transparent;color:#94a3b8;transition:all .18s;}
+.ac-tab.on{background:#fff;color:#0f172a;box-shadow:0 1px 6px rgba(0,0,0,0.10);}
 .field{margin-bottom:13px;}
-.field label{display:block;font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
-.field input{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:10px 13px;border-radius:9px;font-size:14px;outline:none;transition:border-color .18s;}
-.field input:focus{border-color:var(--p);background:var(--white);}
-.field input::placeholder{color:var(--tx3);}
+.field label{display:block;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
+.field input{width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;color:#0f172a;padding:11px 13px;border-radius:10px;font-size:14px;outline:none;transition:all .18s;}
+.field input:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 3px rgba(99,102,241,0.1);}
+.field input::placeholder{color:#cbd5e1;}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.auth-btn{width:100%;background:var(--p);border:none;color:#fff;padding:13px;border-radius:10px;font-size:15px;font-weight:700;margin-top:4px;transition:all .2s;box-shadow:0 3px 12px rgba(26,110,255,.25);}
-.auth-btn:hover{background:var(--pdk);transform:translateY(-1px);}
-.or-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--tx3);margin:14px 0;}
-.or-row::before,.or-row::after{content:'';flex:1;height:1px;background:var(--bdr);}
-.oauth{display:flex;gap:8px;}
-.oauth-btn{flex:1;background:var(--white);border:1.5px solid var(--bdr);color:var(--tx);padding:9px;border-radius:9px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;}
-.oauth-btn:hover{border-color:var(--p);color:var(--p);}
-.auth-terms{font-size:11px;color:var(--tx3);text-align:center;margin-top:12px;line-height:1.6;}
-.auth-terms a{color:var(--p);}
+.auth-submit{width:100%;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;padding:13px;border-radius:11px;font-size:15px;font-weight:700;margin-top:4px;transition:all .2s;box-shadow:0 4px 16px rgba(99,102,241,0.3);}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(99,102,241,0.4);}
+.auth-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.or-row{display:flex;align-items:center;gap:10px;font-size:12px;color:#cbd5e1;margin:14px 0;}
+.or-row::before,.or-row::after{content:'';flex:1;height:1px;background:#f1f5f9;}
+.oauth-row{display:flex;gap:8px;}
+.oauth-btn{flex:1;background:#fff;border:1.5px solid #e2e8f0;color:#475569;padding:10px;border-radius:10px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .15s;}
+.oauth-btn:hover{border-color:#6366f1;color:#6366f1;}
+.auth-terms{font-size:11px;color:#cbd5e1;text-align:center;margin-top:12px;line-height:1.6;}
+.auth-terms a{color:#6366f1;}
+.auth-error{background:#fee2e2;border:1px solid #fca5a5;border-radius:9px;padding:10px 13px;font-size:13px;color:#dc2626;margin-bottom:14px;display:none;}
+.auth-error.show{display:block;}
+
 /* FEATURES */
-.features{background:var(--g50);padding:72px clamp(16px,4vw,48px);border-top:1px solid var(--bdr);}
-.features-wrap{max-width:1200px;margin:0 auto;}
-.section-label{display:inline-flex;align-items:center;gap:6px;background:var(--plt);color:var(--p);border:1px solid var(--pbr);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;margin-bottom:14px;}
-.section-h{font-family:var(--fd);font-size:clamp(24px,3vw,38px);font-weight:800;letter-spacing:-.8px;color:var(--g900);margin-bottom:10px;}
-.section-sub{font-size:16px;color:var(--tx2);max-width:500px;line-height:1.6;margin-bottom:44px;}
-.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
-.feat{background:var(--white);border:1px solid var(--bdr);border-radius:16px;padding:22px;transition:all .2s;}
-.feat:hover{box-shadow:0 4px 20px rgba(0,0,0,.08);transform:translateY(-3px);border-color:var(--g300);}
-.feat-ico{width:44px;height:44px;border-radius:11px;background:var(--plt);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
-.feat-title{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--g900);margin-bottom:6px;}
-.feat-desc{font-size:13px;color:var(--tx2);line-height:1.6;}
+.features{padding:96px clamp(16px,5vw,64px);background:#fff;}
+.section-wrap{max-width:1180px;margin:0 auto;}
+.sec-badge{display:inline-flex;align-items:center;gap:6px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:100px;padding:5px 14px;font-size:11px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;}
+.sec-h{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-1px;color:#0f172a;margin-bottom:10px;}
+.sec-sub{font-size:16px;color:#64748b;max-width:500px;line-height:1.7;margin-bottom:48px;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;}
+.feat{border-radius:18px;padding:26px;transition:all .22s;border:1px solid transparent;position:relative;overflow:hidden;}
+.feat:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.08);}
+.f1{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-color:#c7d2fe;}
+.f2{background:linear-gradient(135deg,#ecfeff,#e0f2fe);border-color:#a5f3fc;}
+.f3{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border-color:#ddd6fe;}
+.f4{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fcd34d;}
+.f5{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;}
+.f6{background:linear-gradient(135deg,#fff1f2,#ffe4e6);border-color:#fda4af;}
+.feat-ico{font-size:28px;margin-bottom:14px;}
+.feat-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:#0f172a;margin-bottom:7px;}
+.feat-desc{font-size:13px;color:#64748b;line-height:1.65;}
+
+/* HOW IT WORKS */
+.how{padding:96px clamp(16px,5vw,64px);background:linear-gradient(135deg,#f8faff,#faf5ff,#f0fdfa);}
+.how-wrap{max-width:960px;margin:0 auto;text-align:center;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:52px;position:relative;}
+.steps::before{content:'';position:absolute;top:38px;left:calc(16.67% + 24px);right:calc(16.67% + 24px);height:2px;background:linear-gradient(90deg,#c7d2fe,#ddd6fe,#a5f3fc);z-index:0;}
+.step{text-align:center;position:relative;z-index:1;}
+.step-ico{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;margin:0 auto 16px;box-shadow:0 8px 24px rgba(99,102,241,0.2);}
+.si1{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;}
+.si2{background:linear-gradient(135deg,#06b6d4,#0891b2);color:#fff;}
+.si3{background:linear-gradient(135deg,#10b981,#059669);color:#fff;}
+.step-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;color:#0f172a;}
+.step-desc{font-size:13px;color:#64748b;line-height:1.65;}
+
+/* ABOUT */
+.about{padding:96px clamp(16px,5vw,64px);background:#fff;}
+.about-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px;}
+.about-card{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1px solid #e2e8f0;border-radius:18px;padding:28px;text-align:center;transition:all .22s;}
+.about-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,0,0,0.07);}
+.ac-ico{font-size:34px;margin-bottom:14px;}
+.ac-ttl{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;}
+.ac-dsc{font-size:13px;color:#64748b;line-height:1.7;}
+.stats-bar{margin-top:48px;background:linear-gradient(135deg,#6366f1,#7c3aed,#0891b2);border-radius:20px;padding:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;}
+.sb-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(22px,3vw,34px);font-weight:900;color:#fff;margin-bottom:4px;}
+.sb-lbl{font-size:12px;color:rgba(255,255,255,0.65);}
+
+/* CONTACT */
+.contact{padding:96px clamp(16px,5vw,64px);background:linear-gradient(135deg,#f8faff,#faf5ff);}
+.contact-wrap{max-width:620px;margin:0 auto;text-align:center;}
+.contact-info{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin:18px 0 32px;}
+.ci-item{display:flex;align-items:center;gap:7px;font-size:13px;color:#64748b;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:7px 14px;}
+.contact-form{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:32px;text-align:left;box-shadow:0 8px 32px rgba(99,102,241,0.08);}
+.cf-lbl{display:block;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.cf-inp{width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;color:#0f172a;padding:11px 13px;border-radius:10px;font-size:14px;outline:none;transition:all .18s;margin-bottom:14px;}
+.cf-inp:focus{border-color:#6366f1;background:#fff;}
+.cf-inp::placeholder{color:#cbd5e1;}
+textarea.cf-inp{resize:none;min-height:96px;}
+.btn-contact{width:100%;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;padding:13px;border-radius:11px;font-size:15px;font-weight:700;transition:all .2s;box-shadow:0 4px 16px rgba(99,102,241,0.28);}
+.btn-contact:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(99,102,241,0.4);}
+
 /* FOOTER */
-footer{background:var(--g900);color:var(--g500);padding:40px clamp(16px,4vw,48px);}
-.footer-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+footer{background:#0f172a;padding:36px clamp(16px,4vw,64px);}
+.footer-in{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px;}
+.flm{width:28px;height:28px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;}
+.footer-links{display:flex;gap:20px;}
+.footer-link{font-size:13px;color:#64748b;transition:color .15s;}
+.footer-link:hover{color:#fff;}
+.footer-copy{font-size:12px;color:#475569;}
+
 /* RESPONSIVE */
-@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:80px;gap:32px;}.nav-links,.nav-btns{display:none;}.burger{display:block;}.hero-visual{height:220px;}.fc3,.fc4{display:none;}.center-card{width:180px;padding:14px;}.fc1{top:10px;left:0;}.fc2{top:10px;right:0;}}
-@media(max-width:600px){.hero{padding:80px 16px 40px;}.hero-cta{flex-direction:column;}.btn-big{width:100%;text-align:center;}.hero-trust{gap:16px;}.features{padding:52px 16px;}.feat-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:420px){.feat-grid{grid-template-columns:1fr;}.auth-card{padding:20px;}.row2{grid-template-columns:1fr;}}
+@media(max-width:960px){.hero-inner{grid-template-columns:1fr;gap:40px;}.nav-links,.nav-btns{display:none;}.burger{display:block;}.steps{grid-template-columns:1fr;gap:28px;}.steps::before{display:none;}.about-cards{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.feat-grid{grid-template-columns:1fr;}.hero-btns{flex-direction:column;}.btn-big-p,.btn-big-s{width:100%;text-align:center;}.trust-row{gap:18px;}.stats-bar{padding:24px 18px;}}
+@media(max-width:480px){.row2{grid-template-columns:1fr;}.stats-bar{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nav-in">
-    <div class="logo"><div class="logo-mark">G</div>GopexFund</div>
-    <div class="nav-links">
-      <a href="about.html" class="nlink">About</a>
-      <a href="market.html" class="nlink">Markets</a>
-      <a href="learn.html" class="nlink">Learn</a>
-    </div>
-    <div class="nav-btns">
-      <button class="btn-ghost" onclick="switchTab('login')">Log in</button>
-      <button class="btn-cta" onclick="switchTab('signup');document.getElementById('auth').scrollIntoView({behavior:'smooth'})">Get started free</button>
-    </div>
-    <button class="burger" onclick="document.getElementById('mnav').classList.toggle('open')">☰</button>
+
+<nav class="nav">
+  <div class="logo"><div class="logo-mark">G</div>GopexFund</div>
+  <div class="nav-links">
+    <a href="#features" class="nav-link">Features</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#contact" class="nav-link">Contact</a>
   </div>
+  <div class="nav-btns">
+    <button class="btn-ghost" onclick="openAuth('login')">Sign In</button>
+    <button class="btn-primary" onclick="openAuth('signup')">Get Started Free</button>
+  </div>
+  <button class="burger" onclick="document.getElementById('mm').classList.toggle('open')">☰</button>
 </nav>
-<div class="mob-nav" id="mnav">
-  <a href="about.html" class="mob-link">About</a>
-  <a href="market.html" class="mob-link">Markets</a>
-  <a href="learn.html" class="mob-link">Learn</a>
-  <a href="#auth" class="mob-link" style="color:var(--p);font-weight:600;" onclick="document.getElementById('mnav').classList.remove('open')">→ Sign up free</a>
+<div class="mob-menu" id="mm">
+  <a href="#features" class="mob-link" onclick="document.getElementById('mm').classList.remove('open')">Features</a>
+  <a href="#about" class="mob-link" onclick="document.getElementById('mm').classList.remove('open')">About</a>
+  <a href="#contact" class="mob-link" onclick="document.getElementById('mm').classList.remove('open')">Contact</a>
+  <div style="height:1px;background:#f1f5f9;margin:8px 0;"></div>
+  <button class="btn-ghost" style="width:100%;margin-bottom:8px;text-align:center;" onclick="openAuth('login');document.getElementById('mm').classList.remove('open')">Sign In</button>
+  <button class="btn-primary" style="width:100%;text-align:center;" onclick="openAuth('signup');document.getElementById('mm').classList.remove('open')">Get Started Free</button>
 </div>
 
-<div class="hero">
-  <!-- LEFT -->
-  <div>
-    <div class="hero-eyebrow"><span class="pulse"></span>Africa's #1 Social Investing Platform</div>
-    <h1>Build wealth <span>together</span>, invest smarter.</h1>
-    <p class="hero-sub">Join 47,000+ Africans tracking portfolios, sharing investment insights, and growing real wealth — all in one beautifully simple platform.</p>
-    <div class="hero-cta">
-      <button class="btn-big btn-big-p" onclick="switchTab('signup');document.getElementById('auth').scrollIntoView({behavior:'smooth'})">Create free account →</button>
-      <button class="btn-big btn-big-s" onclick="window.location='market.html'">Explore NGX market</button>
-    </div>
-    <div class="hero-trust">
-      <div class="trust-item"><div class="trust-num"><em>47K+</em></div><div class="trust-lbl">Active investors</div></div>
-      <div class="trust-item"><div class="trust-num">₦<em>2.3B</em></div><div class="trust-lbl">Assets tracked</div></div>
-      <div class="trust-item"><div class="trust-num"><em>96%</em></div><div class="trust-lbl">Satisfaction rate</div></div>
-      <div class="trust-item"><div class="trust-num"><em>4.9</em>★</div><div class="trust-lbl">App rating</div></div>
-    </div>
-  </div>
-
-  <!-- RIGHT: AUTH on mobile; visual + auth stacked on desktop -->
-  <div id="auth">
-    <!-- Floating visual (hidden on small screens, shown above auth on large) -->
-    <div class="hero-visual" style="margin-bottom:24px;display:none;" id="hero-vis">
-      <div class="center-card">
-        <div class="cc-av">KA</div>
-        <div class="cc-name">Kunle Adeyemi</div>
-        <div class="cc-role">NGX investor · +34.2% YTD</div>
-        <div class="cc-stat"><span class="cc-sl">Portfolio</span><span class="cc-sv" style="color:var(--p);">₦5.1M</span></div>
-        <div class="cc-stat"><span class="cc-sl">Return (1Y)</span><span class="cc-sv" style="color:var(--green);">+₦1.4M</span></div>
-        <div class="cc-badge verified">✓ Verified Portfolio</div>
+<!-- HERO -->
+<section class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="blob b3"></div><div class="blob b4"></div>
+  <div class="hero-inner">
+    <!-- LEFT: Copy -->
+    <div>
+      <div class="hero-badge"><span class="badge-pulse"></span>Africa's #1 Social Investing Platform</div>
+      <h1>Invest Smarter.<br><span class="highlight">Grow Together.</span></h1>
+      <p class="hero-sub">Track your NGX portfolio, share investment insights, follow top investors, and build real wealth — all in one beautifully simple platform built for Africans.</p>
+      <div class="hero-btns">
+        <button class="btn-big-p" onclick="openAuth('signup')">Create Free Account →</button>
+        <button class="btn-big-s" onclick="openAuth('login')">Sign In</button>
       </div>
-      <div class="float-card fc1"><div class="fc-lbl">MTNN</div><div class="fc-val up">+6.52% ↑</div></div>
-      <div class="float-card fc2"><div class="fc-lbl">NGX ASI</div><div class="fc-val up">252,508 ATH</div></div>
-      <div class="float-card fc3"><div class="fc-lbl">BUA Cement</div><div class="fc-val up">+2.36%</div></div>
-      <div class="float-card fc4"><div class="fc-lbl">ZENITHBANK</div><div class="fc-val dn">-8.66%</div></div>
+      <div class="trust-row">
+        <div class="trust-item"><div class="trust-num"><span>47K+</span></div><div class="trust-lbl">Active investors</div></div>
+        <div class="trust-item"><div class="trust-num">₦<span>2.3B</span></div><div class="trust-lbl">Assets tracked</div></div>
+        <div class="trust-item"><div class="trust-num"><span>124</span></div><div class="trust-lbl">NGX stocks live</div></div>
+        <div class="trust-item"><div class="trust-num"><span>4.9</span>★</div><div class="trust-lbl">User rating</div></div>
+      </div>
     </div>
-
-    <!-- Auth card -->
-    <div class="auth-card">
-      <div style="text-align:center;margin-bottom:18px;">
-        <div style="font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:3px;">Welcome to GopexFund</div>
-        <div style="font-size:12px;color:var(--tx3);">Free forever · No credit card needed</div>
+    <!-- RIGHT: Auth card -->
+    <div class="auth-card" id="auth-section">
+      <div class="ac-head">
+        <div class="ac-title">Welcome to GopexFund</div>
+        <div class="ac-sub">Free forever · No credit card needed</div>
       </div>
-      <div class="auth-tabs">
-        <button class="atab on" id="tab-su" onclick="switchTab('signup')">Create account</button>
-        <button class="atab" id="tab-li" onclick="switchTab('login')">Log in</button>
+      <div class="ac-tabs">
+        <button class="ac-tab on" id="tab-su" onclick="switchTab('signup')">Create Account</button>
+        <button class="ac-tab" id="tab-li" onclick="switchTab('login')">Sign In</button>
       </div>
-      <!-- SIGNUP -->
+      <div class="auth-error" id="auth-err"></div>
+      <!-- SIGNUP FORM -->
       <div id="form-su">
         <div class="row2">
-          <div class="field"><label>First name</label><input id="su-fn" type="text" placeholder="Adaeze"/></div>
-          <div class="field"><label>Last name</label><input id="su-ln" type="text" placeholder="Obi"/></div>
+          <div class="field"><label>First Name</label><input id="su-fn" placeholder="Adaeze"/></div>
+          <div class="field"><label>Last Name</label><input id="su-ln" placeholder="Obi"/></div>
         </div>
         <div class="field"><label>Email</label><input id="su-em" type="email" placeholder="you@example.com"/></div>
         <div class="field"><label>Password</label><input id="su-pw" type="password" placeholder="Min. 8 characters"/></div>
-        <button class="auth-btn" id="su-btn" data-label="Create my account →" onclick="doSignup()">Create my account →</button>
-        <div class="or-row">or continue with</div>
-        <div class="oauth">
+        <button class="auth-submit" id="su-btn" onclick="doSignup()">Create my account →</button>
+        <div class="or-row">or</div>
+        <div class="oauth-row">
           <button class="oauth-btn">G Google</button>
           <button class="oauth-btn">🍎 Apple</button>
         </div>
         <div class="auth-terms">By signing up you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></div>
       </div>
-      <!-- LOGIN -->
+      <!-- LOGIN FORM -->
       <div id="form-li" style="display:none;">
         <div class="field"><label>Email</label><input id="li-em" type="email" placeholder="you@example.com"/></div>
         <div class="field"><label>Password</label><input id="li-pw" type="password" placeholder="••••••••"/></div>
-        <div style="text-align:right;margin-bottom:12px;"><a href="#" style="font-size:12px;color:var(--p);">Forgot password?</a></div>
-        <button class="auth-btn" id="li-btn" data-label="Log in to GopexFund →" onclick="doLogin()">Log in to GopexFund →</button>
-        <div class="or-row">or continue with</div>
-        <div class="oauth">
+        <div style="text-align:right;margin-bottom:14px;"><a href="#" style="font-size:12px;color:#6366f1;">Forgot password?</a></div>
+        <button class="auth-submit" id="li-btn" onclick="doLogin()">Sign in to GopexFund →</button>
+        <div class="or-row">or</div>
+        <div class="oauth-row">
           <button class="oauth-btn">G Google</button>
           <button class="oauth-btn">🍎 Apple</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="features">
-  <div class="features-wrap">
-    <div class="section-label">✦ Platform Features</div>
-    <div class="section-h">Everything you need to invest smarter</div>
-    <div class="section-sub">Built for African investors — from first-timers to seasoned NGX traders.</div>
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-wrap">
+    <div class="sec-badge">✦ Platform Features</div>
+    <h2 class="sec-h">Everything you need to invest smarter</h2>
+    <p class="sec-sub">Built specifically for African investors — from first-timers to seasoned NGX traders.</p>
     <div class="feat-grid">
-      <div class="feat"><div class="feat-ico">📈</div><div class="feat-title">Live NGX Market Data</div><div class="feat-desc">Real-time prices, Fear &amp; Greed Index, sector analysis, and top movers from the Nigerian Exchange.</div></div>
-      <div class="feat"><div class="feat-ico">💼</div><div class="feat-title">Portfolio Tracker</div><div class="feat-desc">Track holdings, P&amp;L by day/week/all-time, and connect your brokerage for a Verified portfolio badge.</div></div>
-      <div class="feat"><div class="feat-ico">👥</div><div class="feat-title">Social Investing Feed</div><div class="feat-desc">Follow top investors, share picks, post insights, and react — like Twitter built for African stocks.</div></div>
-      <div class="feat"><div class="feat-ico">🎯</div><div class="feat-title">Wealth Goals</div><div class="feat-desc">Set Japa Fund, House, Car goals and track monthly progress toward each milestone.</div></div>
-      <div class="feat"><div class="feat-ico">📚</div><div class="feat-title">Learn &amp; Earn Points</div><div class="feat-desc">Take bite-sized investing lessons, pass quizzes, and earn GopexFund Points redeemable for rewards.</div></div>
-      <div class="feat"><div class="feat-ico">✓</div><div class="feat-title">Verified Portfolios</div><div class="feat-desc">Connect a licensed Nigerian brokerage to earn a Verified badge — so followers know your returns are real.</div></div>
+      <div class="feat f1"><div class="feat-ico">📈</div><div class="feat-title">Live NGX Market Data</div><div class="feat-desc">Real-time prices for all 124+ stocks, Fear & Greed Index, sector analysis, and top movers — auto-updated every 10 minutes.</div></div>
+      <div class="feat f2"><div class="feat-ico">💼</div><div class="feat-title">Smart Portfolio Tracker</div><div class="feat-desc">Track holdings, see P&L by day/week/all-time, and visualise your allocation with beautiful donut charts and performance graphs.</div></div>
+      <div class="feat f3"><div class="feat-ico">👥</div><div class="feat-title">Social Investing Feed</div><div class="feat-desc">Follow top investors, share stock picks, post insights, tag tickers, and react with emojis — like Twitter built for Nigerian stocks.</div></div>
+      <div class="feat f4"><div class="feat-ico">🎯</div><div class="feat-title">Wealth Goals</div><div class="feat-desc">Set goals like Japa Fund, House Fund, First Car — and track monthly contributions toward each milestone visually.</div></div>
+      <div class="feat f5"><div class="feat-ico">📚</div><div class="feat-title">Learn & Earn Points</div><div class="feat-desc">Take bite-sized investing lessons, pass quizzes, earn GopexFund Points, and climb the leaderboard while becoming a smarter investor.</div></div>
+      <div class="feat f6"><div class="feat-ico">🔒</div><div class="feat-title">Privacy First</div><div class="feat-desc">Your portfolio ₦ value is always private. Only your % returns can be shared publicly — you always decide what the world sees.</div></div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-wrap">
+    <div class="sec-badge">✦ How It Works</div>
+    <h2 class="sec-h">Up and running in 3 steps</h2>
+    <p class="sec-sub" style="margin:0 auto 0;">Getting started with GopexFund takes less than 2 minutes.</p>
+    <div class="steps">
+      <div class="step"><div class="step-ico si1">1</div><div class="step-title">Create your free account</div><div class="step-desc">Sign up with your email. No credit card, no brokerage needed. Completely free forever.</div></div>
+      <div class="step"><div class="step-ico si2">2</div><div class="step-title">Add your holdings</div><div class="step-desc">Enter your NGX stocks, number of shares, and buy price. Your portfolio builds instantly with live prices.</div></div>
+      <div class="step"><div class="step-ico si3">3</div><div class="step-title">Track, learn & grow</div><div class="step-desc">Follow investors, share insights, take lessons, and watch your wealth grow with live NGX market data.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-wrap">
+    <div class="sec-badge">✦ About Us</div>
+    <h2 class="sec-h">Built for Africans, by Africans</h2>
+    <p class="sec-sub">We were frustrated that every investing tool felt built for someone else. So we built GopexFund.</p>
+    <div class="about-cards">
+      <div class="about-card"><div class="ac-ico">🎯</div><div class="ac-ttl">Our Mission</div><div class="ac-dsc">Democratize wealth-building for 1.4 billion Africans by making investing social, accessible, and culturally relevant.</div></div>
+      <div class="about-card"><div class="ac-ico">🌍</div><div class="ac-ttl">Our Vision</div><div class="ac-dsc">A future where every African participates in global markets and builds generational wealth — starting with just ₦1,000.</div></div>
+      <div class="about-card"><div class="ac-ico">💚</div><div class="ac-ttl">Our Values</div><div class="ac-dsc">Community first. Radical transparency. Education for all. We grow together or not at all. No gatekeeping, ever.</div></div>
+    </div>
+    <div class="stats-bar">
+      <div><div class="sb-num">47K+</div><div class="sb-lbl">Active investors</div></div>
+      <div><div class="sb-num">₦2.3B</div><div class="sb-lbl">Assets tracked</div></div>
+      <div><div class="sb-num">12</div><div class="sb-lbl">African countries</div></div>
+      <div><div class="sb-num">4.9★</div><div class="sb-lbl">User rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-wrap">
+    <div class="sec-badge">✦ Contact Us</div>
+    <h2 class="sec-h">Get In Touch</h2>
+    <p class="sec-sub" style="margin:0 auto;">Have a question or partnership request? We'd love to hear from you.</p>
+    <div class="contact-info">
+      <div class="ci-item">📧 hello@gopexfund.com</div>
+      <div class="ci-item">📍 Lagos, Nigeria</div>
+      <div class="ci-item">🐦 @gopexfund</div>
+    </div>
+    <div class="contact-form">
+      <label class="cf-lbl">Your Name</label>
+      <input class="cf-inp" id="cf-name" placeholder="Adaeze Obi"/>
+      <label class="cf-lbl">Email Address</label>
+      <input class="cf-inp" id="cf-email" type="email" placeholder="you@example.com"/>
+      <label class="cf-lbl">Message</label>
+      <textarea class="cf-inp" id="cf-msg" placeholder="Tell us what's on your mind…"></textarea>
+      <button class="btn-contact" onclick="sendContact()">Send Message →</button>
+    </div>
+  </div>
+</section>
 
 <footer>
   <div class="footer-in">
-    <div>
-      <div style="font-family:var(--fd);font-size:17px;font-weight:800;color:#fff;margin-bottom:4px;">GopexFund</div>
-      <div style="font-size:12px;">Africa's social wealth-building platform · Lagos, Nigeria</div>
+    <div class="footer-logo"><div class="flm">G</div>GopexFund</div>
+    <div class="footer-links">
+      <a href="#features" class="footer-link">Features</a>
+      <a href="#about" class="footer-link">About</a>
+      <a href="#contact" class="footer-link">Contact</a>
     </div>
-    <div style="font-size:12px;">© 2026 GopexFund · Built for African investors</div>
+    <div class="footer-copy">© 2026 GopexFund · Built for African investors · Lagos, Nigeria</div>
   </div>
 </footer>
 
 <script type="module">
-// ── SUPABASE CONFIG ──────────────────────────────────────────
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+const sb = createClient(
+  'https://lzlitanvlkycrkkpwczm.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
+)
 
-const SUPABASE_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co'
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g'
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON)
-
-// ── UI HELPERS ───────────────────────────────────────────────
-function showError(msg) {
-  let el = document.getElementById('auth-error')
-  if (!el) {
-    el = document.createElement('div')
-    el.id = 'auth-error'
-    el.style.cssText = 'background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;border-radius:9px;padding:10px 13px;font-size:13px;margin-bottom:12px;'
-    document.querySelector('.auth-card').insertBefore(el, document.querySelector('.auth-tabs'))
-  }
-  el.textContent = msg
-  el.style.display = 'block'
-}
-function hideError() {
-  const el = document.getElementById('auth-error')
-  if (el) el.style.display = 'none'
-}
-function setLoading(btn, loading) {
-  btn.disabled = loading
-  btn.textContent = loading ? '⏳ Please wait…' : btn.dataset.label
-}
-function saveSession(user, profile) {
-  const fn = profile?.name?.split(' ')[0] || user.email.split('@')[0]
-  const ln = profile?.name?.split(' ')[1] || ''
-  sessionStorage.setItem('gopex_user', JSON.stringify({
-    id: user.id,
-    name: profile?.name || fn,
-    firstName: fn,
-    initials: (fn[0]||'U').toUpperCase() + (ln[0]||'').toUpperCase(),
-    email: user.email,
-    joined: new Date(user.created_at).toLocaleDateString('en-NG', {month:'long', year:'numeric'})
-  }))
-}
-
-// ── CHECK IF ALREADY LOGGED IN ───────────────────────────────
-const { data: { session } } = await supabase.auth.getSession()
+// Already logged in? Go straight to app
+const { data: { session } } = await sb.auth.getSession()
 if (session) window.location.href = 'home.html'
 
-// ── SIGN UP ──────────────────────────────────────────────────
-window.doSignup = async function() {
-  const btn = document.getElementById('su-btn')
-  const fn  = document.getElementById('su-fn').value.trim()
-  const ln  = document.getElementById('su-ln').value.trim()
-  const em  = document.getElementById('su-em').value.trim()
-  const pw  = document.getElementById('su-pw').value
-
-  hideError()
-  if (!fn || !em || !pw) return showError('Please fill in all fields.')
-  if (pw.length < 8)     return showError('Password must be at least 8 characters.')
-
-  setLoading(btn, true)
-
-  // 1. Create auth account
-  const { data, error } = await supabase.auth.signUp({ email: em, password: pw })
-  if (error) { setLoading(btn, false); return showError(error.message) }
-
-  // 2. Save profile to database
-  const fullName = (fn + ' ' + ln).trim()
-  const initials = fn[0].toUpperCase() + (ln[0]||'').toUpperCase()
-  await supabase.from('profiles').insert({
-    id: data.user.id,
-    name: fullName,
-    first_name: fn,
-    initials,
-  })
-
-  // 3. Save to sessionStorage & redirect
-  saveSession(data.user, { name: fullName })
-  window.location.href = 'home.html'
-}
-
-// ── LOG IN ───────────────────────────────────────────────────
-window.doLogin = async function() {
-  const btn = document.getElementById('li-btn')
-  const em  = document.getElementById('li-em').value.trim()
-  const pw  = document.getElementById('li-pw').value
-
-  hideError()
-  if (!em || !pw) return showError('Please enter your email and password.')
-
-  setLoading(btn, true)
-
-  const { data, error } = await supabase.auth.signInWithPassword({ email: em, password: pw })
-  if (error) { setLoading(btn, false); return showError('Incorrect email or password.') }
-
-  // Fetch profile
-  const { data: profile } = await supabase
-    .from('profiles').select('*').eq('id', data.user.id).single()
-
-  saveSession(data.user, profile)
-  window.location.href = 'home.html'
-}
-
-// ── TAB SWITCH ───────────────────────────────────────────────
-window.switchTab = function(t) {
-  const su = t === 'signup'
+// Tab switching
+window.switchTab = window.openAuth = (tab) => {
+  const su = tab === 'signup'
   document.getElementById('form-su').style.display = su ? 'block' : 'none'
   document.getElementById('form-li').style.display = su ? 'none' : 'block'
   document.getElementById('tab-su').classList.toggle('on', su)
   document.getElementById('tab-li').classList.toggle('on', !su)
-  hideError()
+  document.getElementById('auth-err').classList.remove('show')
+  // Scroll to auth card on mobile
+  if (window.innerWidth < 960) document.getElementById('auth-section').scrollIntoView({behavior:'smooth'})
 }
 
-// ── VISUAL SHOW/HIDE ─────────────────────────────────────────
-function checkVis(){document.getElementById('hero-vis').style.display=window.innerWidth>=900?'flex':'none';}
-checkVis(); window.addEventListener('resize', checkVis)
+function showErr(msg) { const e = document.getElementById('auth-err'); e.textContent = msg; e.classList.add('show') }
+function hideErr() { document.getElementById('auth-err').classList.remove('show') }
+function setBusy(id, busy, label) { const b = document.getElementById(id); b.disabled = busy; b.textContent = busy ? '⏳ Please wait…' : label }
 
-// ── ENTER KEY ────────────────────────────────────────────────
+window.doSignup = async () => {
+  hideErr()
+  const fn = document.getElementById('su-fn').value.trim()
+  const ln = document.getElementById('su-ln').value.trim()
+  const em = document.getElementById('su-em').value.trim()
+  const pw = document.getElementById('su-pw').value
+  if (!fn || !em || !pw) return showErr('Please fill in all fields.')
+  if (pw.length < 8) return showErr('Password must be at least 8 characters.')
+  setBusy('su-btn', true, 'Create my account →')
+  const { data, error } = await sb.auth.signUp({ email: em, password: pw })
+  if (error) { setBusy('su-btn', false, 'Create my account →'); return showErr(error.message) }
+  const fullName = (fn + ' ' + ln).trim()
+  const initials = fn[0].toUpperCase() + (ln[0] || '').toUpperCase()
+  await sb.from('profiles').upsert({ id: data.user.id, name: fullName, first_name: fn, initials })
+  sessionStorage.setItem('gopex_user', JSON.stringify({ id: data.user.id, name: fullName, firstName: fn, initials, email: em, joined: new Date().toLocaleDateString('en-NG',{month:'long',year:'numeric'}) }))
+  window.location.href = 'home.html'
+}
+
+window.doLogin = async () => {
+  hideErr()
+  const em = document.getElementById('li-em').value.trim()
+  const pw = document.getElementById('li-pw').value
+  if (!em || !pw) return showErr('Please enter your email and password.')
+  setBusy('li-btn', true, 'Sign in to GopexFund →')
+  const { data, error } = await sb.auth.signInWithPassword({ email: em, password: pw })
+  if (error) { setBusy('li-btn', false, 'Sign in to GopexFund →'); return showErr('Incorrect email or password.') }
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', data.user.id).single()
+  const fn = profile?.first_name || profile?.name?.split(' ')[0] || em.split('@')[0]
+  sessionStorage.setItem('gopex_user', JSON.stringify({ id: data.user.id, name: profile?.name || fn, firstName: fn, initials: profile?.initials || fn[0].toUpperCase(), email: em, joined: new Date(data.user.created_at).toLocaleDateString('en-NG',{month:'long',year:'numeric'}) }))
+  window.location.href = 'home.html'
+}
+
+window.sendContact = () => {
+  const n = document.getElementById('cf-name').value.trim()
+  const e = document.getElementById('cf-email').value.trim()
+  const m = document.getElementById('cf-msg').value.trim()
+  if (!n || !e || !m) return alert('Please fill in all fields.')
+  alert(`Thanks ${n}! We'll get back to you at ${e} soon. 🙏`)
+  document.getElementById('cf-name').value = ''
+  document.getElementById('cf-email').value = ''
+  document.getElementById('cf-msg').value = ''
+}
+
+// Enter key
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    document.getElementById('form-su').style.display !== 'none' ? doSignup() : doLogin()
-  }
+  if (e.key !== 'Enter') return
+  if (document.getElementById('form-su').style.display !== 'none') doSignup()
+  else if (document.getElementById('form-li').style.display !== 'none') doLogin()
 })
 </script>
 </body>
