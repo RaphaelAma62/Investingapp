@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GopexFund — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--p:#1a6eff;--plt:#eef4ff;--pbr:#bdd1ff;--pdk:#0f4dd4;--green:#16a34a;--gbg:#dcfce7;--red:#dc2626;--rbg:#fee2e2;--amber:#d97706;--ambg:#fef3c7;--purple:#7c3aed;--pbg:#ede9fe;--white:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g500:#64748b;--g900:#0f172a;--bg:#f0f4f9;--surf:#fff;--bdr:#e2e8f0;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--admin:#312e81;--admin-lt:#eef2ff;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);}
+*{margin:0;padding:0;box-sizing:border-box;}html,body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fb);}input,select,textarea{font-family:var(--fb);}
+
+/* SIDEBAR NAV */
+.admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh;}
+.sidebar{background:var(--admin);color:#fff;padding:0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
+.sb-logo{width:34px;height:34px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;}
+.sb-brand-name{font-family:var(--fd);font-size:16px;font-weight:800;}
+.sb-brand-sub{font-size:10px;opacity:.55;margin-top:1px;}
+.sb-section{padding:8px 12px 4px;font-size:9px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.7px;margin-top:8px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:9px;margin:1px 8px;font-size:13px;font-weight:500;color:rgba(255,255,255,.65);cursor:pointer;transition:all .15s;}
+.sb-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+.sb-item.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600;}
+.sb-item .ico{font-size:15px;width:18px;text-align:center;}
+.sb-badge{background:rgba(255,255,255,.2);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:auto;}
+.sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);}
+.sb-user{display:flex;align-items:center;gap:9px;}
+.sb-av{width:32px;height:32px;border-radius:50%;background:#6366f1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.sb-uname{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);}
+.sb-urole{font-size:10px;color:rgba(255,255,255,.35);}
+
+/* MAIN */
+.admin-main{padding:0;overflow-y:auto;}
+/* Top bar */
+.top-bar{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.tb-title{font-family:var(--fd);font-size:17px;font-weight:800;color:var(--tx);}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.tb-search{background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:7px 13px;border-radius:9px;font-size:13px;outline:none;width:220px;}
+.tb-search:focus{border-color:var(--p);}
+
+/* CONTENT */
+.content{padding:24px 28px;}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:8px;}
+.sc-top{display:flex;align-items:center;justify-content:space-between;}
+.sc-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.sc-trend{font-size:11px;font-weight:700;}
+.sc-trend.up{color:var(--green);}.sc-trend.dn{color:var(--red);}
+.sc-val{font-family:var(--fd);font-size:26px;font-weight:800;color:var(--tx);}
+.sc-lbl{font-size:12px;color:var(--tx3);}
+
+/* CHARTS ROW */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.chart-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);}
+.cc-title{font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.bar-wrap{display:flex;flex-direction:column;gap:8px;}
+.bar-item{display:flex;align-items:center;gap:10px;}
+.bar-lbl{font-size:11px;color:var(--tx2);width:80px;flex-shrink:0;}
+.bar-track{flex:1;background:var(--g100);border-radius:4px;height:8px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;background:var(--p);transition:width .6s;}
+.bar-val{font-size:11px;font-weight:700;color:var(--tx);width:40px;text-align:right;}
+
+/* USERS TABLE */
+.table-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--sh);overflow:hidden;margin-bottom:24px;}
+.table-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bdr);}
+.table-title{font-family:var(--fd);font-size:14px;font-weight:700;}
+.table-actions{display:flex;gap:8px;}
+.ta-btn{background:var(--g50);border:1px solid var(--bdr);color:var(--tx2);padding:6px 13px;border-radius:7px;font-size:12px;font-weight:600;transition:all .15s;}
+.ta-btn:hover{background:var(--g100);}
+.ta-btn.primary{background:var(--p);color:#fff;border-color:var(--p);}
+.ta-btn.primary:hover{background:var(--pdk);}
+.tbl-cols{display:grid;grid-template-columns:200px 180px 100px 80px 90px 90px 120px;gap:8px;padding:9px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);}
+.th{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;}
+.user-row{display:grid;grid-template-columns:200px 180px 100px 80px 90px 90px 120px;gap:8px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .12s;}
+.user-row:last-child{border:none;}
+.user-row:hover{background:var(--g50);}
+.ur-user{display:flex;align-items:center;gap:9px;}
+.ur-av{width:30px;height:30px;border-radius:50%;background:var(--plt);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.ur-name{font-size:12px;font-weight:700;color:var(--tx);}
+.ur-email{font-size:10px;color:var(--tx3);}
+.ur-text{font-size:12px;color:var(--tx2);}
+.status-pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;}
+.sp-active{background:var(--gbg);color:var(--green);}
+.sp-suspended{background:var(--rbg);color:var(--red);}
+.sp-unverified{background:var(--ambg);color:var(--amber);}
+.sp-admin{background:#ede9fe;color:#7c3aed;}
+.action-btns{display:flex;gap:5px;}
+.ab{background:var(--g100);border:1px solid var(--bdr);color:var(--tx2);font-size:10px;font-weight:600;padding:4px 9px;border-radius:6px;transition:all .15s;white-space:nowrap;}
+.ab:hover{background:var(--g200);}
+.ab.danger{color:var(--red);}
+.ab.promote{color:var(--purple);}
+
+/* POSTS TABLE */
+.post-row{display:grid;grid-template-columns:1fr 120px 80px 80px 100px;gap:8px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--bdr);transition:background .12s;}
+.post-row:last-child{border:none;}
+.post-row:hover{background:var(--g50);}
+.pr-body{font-size:12px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pr-author{font-size:11px;color:var(--tx3);}
+
+/* SYSTEM STATS */
+.system-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.sys-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:18px;box-shadow:var(--sh);}
+.sys-title{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:13px;}
+.sys-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px;}
+.sys-row:last-child{border:none;}
+.sys-key{color:var(--tx2);}
+.sys-val{font-weight:700;color:var(--tx);}
+.sys-val.green{color:var(--green);}
+.sys-val.red{color:var(--red);}
+.sys-val.blue{color:var(--p);}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:18px;padding:28px;width:100%;max-width:440px;margin:16px;position:relative;transform:translateY(12px);transition:transform .2s;box-shadow:0 20px 60px rgba(0,0,0,.14);}
+.modal-ov.open .modal{transform:translateY(0);}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--g100);border:none;width:28px;height:28px;border-radius:7px;font-size:14px;color:var(--tx2);}
+.modal-title{font-family:var(--fd);font-size:17px;font-weight:800;margin-bottom:18px;}
+.mfield{margin-bottom:13px;}
+.mfield label{display:block;font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.mfield input,.mfield select,.mfield textarea{width:100%;background:var(--g50);border:1.5px solid var(--bdr);color:var(--tx);padding:10px 13px;border-radius:9px;font-size:13px;outline:none;}
+.mfield input:focus,.mfield select:focus{border-color:var(--p);}
+.modal-btns{display:flex;gap:10px;margin-top:6px;}
+.modal-cancel{flex:1;background:var(--g100);border:none;color:var(--tx2);padding:11px;border-radius:9px;font-size:13px;font-weight:600;}
+.modal-save{flex:2;background:var(--p);border:none;color:#fff;padding:11px;border-radius:9px;font-size:13px;font-weight:700;}
+.modal-danger{flex:2;background:var(--red);border:none;color:#fff;padding:11px;border-radius:9px;font-size:13px;font-weight:700;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--g900);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{background:var(--green);}
+.toast.error{background:var(--red);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+.filter-btn{background:var(--surf);border:1.5px solid var(--bdr);color:var(--tx2);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;transition:all .15s;}
+.filter-btn:hover,.filter-btn.on{background:var(--p);color:#fff;border-color:var(--p);}
+.filter-count{background:var(--g100);color:var(--tx3);font-size:10px;padding:2px 6px;border-radius:10px;margin-left:4px;}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;border-top:1px solid var(--bdr);}
+.page-btn{width:32px;height:32px;border-radius:7px;background:var(--g50);border:1px solid var(--bdr);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.page-btn:hover,.page-btn.on{background:var(--p);color:#fff;border-color:var(--p);}
+.page-info{font-size:12px;color:var(--tx3);}
+
+@media(max-width:1100px){.tbl-cols,.user-row{grid-template-columns:180px 1fr 90px 100px;}.tbl-cols .th:nth-child(3),.tbl-cols .th:nth-child(4),.user-row div:nth-child(3),.user-row div:nth-child(4){display:none;}}
+@media(max-width:768px){.admin-layout{grid-template-columns:1fr;}.sidebar{display:none;}.stat-grid{grid-template-columns:repeat(2,1fr);}.charts-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="admin-layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">G</div>
+    <div><div class="sb-brand-name">GopexFund</div><div class="sb-brand-sub">Admin Panel</div></div>
+  </div>
+
+  <div class="sb-section">Overview</div>
+  <div class="sb-item on" onclick="showSection('dashboard',this)"><span class="ico">🏠</span>Dashboard</div>
+
+  <div class="sb-section">Users</div>
+  <div class="sb-item" onclick="showSection('users',this)"><span class="ico">👥</span>All Users <span class="sb-badge" id="sb-user-count">—</span></div>
+  <div class="sb-item" onclick="showSection('suspended',this)"><span class="ico">🚫</span>Suspended</div>
+  <div class="sb-item" onclick="showSection('admins',this)"><span class="ico">🛡</span>Admins</div>
+
+  <div class="sb-section">Content</div>
+  <div class="sb-item" onclick="showSection('posts',this)"><span class="ico">📝</span>All Posts <span class="sb-badge" id="sb-post-count">—</span></div>
+  <div class="sb-item" onclick="showSection('reports',this)"><span class="ico">🚨</span>Reports</div>
+
+  <div class="sb-section">Finance</div>
+  <div class="sb-item" onclick="showSection('portfolios',this)"><span class="ico">💼</span>Portfolios</div>
+  <div class="sb-item" onclick="showSection('market',this)"><span class="ico">📈</span>Market Data</div>
+
+  <div class="sb-section">System</div>
+  <div class="sb-item" onclick="showSection('settings',this)"><span class="ico">⚙</span>Settings</div>
+  <div class="sb-item" onclick="showSection('logs',this)"><span class="ico">📋</span>Activity Logs</div>
+
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-av" id="sb-av">A</div>
+      <div><div class="sb-uname" id="sb-uname">Admin</div><div class="sb-urole">🛡 Administrator</div></div>
+    </div>
+    <button onclick="doLogout()" style="width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:8px;border-radius:8px;font-size:12px;font-weight:600;margin-top:10px;cursor:pointer;">↩ Log Out</button>
+    <a href="home.html" style="display:block;text-align:center;font-size:11px;color:rgba(255,255,255,.4);margin-top:8px;">← Back to App</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="admin-main">
+  <div class="top-bar">
+    <div class="tb-title" id="page-title">Dashboard</div>
+    <div class="tb-right">
+      <input class="tb-search" id="global-search" type="text" placeholder="Search users, posts..." oninput="globalSearch(this.value)"/>
+      <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;" id="top-av">A</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD SECTION -->
+    <div id="sec-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#eef4ff;">👥</div><div class="sc-trend up" id="user-trend">↑ —</div></div><div class="sc-val" id="dash-users">—</div><div class="sc-lbl">Total Users</div></div>
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#dcfce7;">📝</div><div class="sc-trend up" id="post-trend">↑ —</div></div><div class="sc-val" id="dash-posts">—</div><div class="sc-lbl">Total Posts</div></div>
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#ede9fe;">💼</div><div class="sc-trend up">↑ active</div></div><div class="sc-val" id="dash-holdings">—</div><div class="sc-lbl">Holdings Tracked</div></div>
+        <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:#fef3c7;">📈</div><div class="sc-trend up">↑ live</div></div><div class="sc-val" id="dash-stocks">124</div><div class="sc-lbl">NGX Stocks Live</div></div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="cc-title">User Registrations <span style="font-size:11px;color:var(--tx3);font-weight:500;">by country</span></div>
+          <div class="bar-wrap" id="country-chart">
+            <div class="bar-item"><div class="bar-lbl">Nigeria</div><div class="bar-track"><div class="bar-fill" style="width:78%;background:#1a6eff;"></div></div><div class="bar-val" id="bc-ng">—</div></div>
+            <div class="bar-item"><div class="bar-lbl">Ghana</div><div class="bar-track"><div class="bar-fill" style="width:12%;background:#7c3aed;"></div></div><div class="bar-val">—</div></div>
+            <div class="bar-item"><div class="bar-lbl">Kenya</div><div class="bar-track"><div class="bar-fill" style="width:6%;background:#059669;"></div></div><div class="bar-val">—</div></div>
+            <div class="bar-item"><div class="bar-lbl">Other</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:#d97706;"></div></div><div class="bar-val">—</div></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-title">Platform Health</div>
+          <div class="bar-wrap">
+            <div class="bar-item"><div class="bar-lbl">Active Users</div><div class="bar-track"><div class="bar-fill" style="width:85%;background:#16a34a;"></div></div><div class="bar-val" id="ph-active">—</div></div>
+            <div class="bar-item"><div class="bar-lbl">Suspended</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:#dc2626;"></div></div><div class="bar-val" id="ph-suspended">0</div></div>
+            <div class="bar-item"><div class="bar-lbl">Verified</div><div class="bar-track"><div class="bar-fill" style="width:15%;background:#1a6eff;"></div></div><div class="bar-val" id="ph-verified">—</div></div>
+            <div class="bar-item"><div class="bar-lbl">With Holdings</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#7c3aed;"></div></div><div class="bar-val" id="ph-holdings">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="system-grid">
+        <div class="sys-card">
+          <div class="sys-title">Database</div>
+          <div class="sys-row"><span class="sys-key">Supabase Status</span><span class="sys-val green">● Healthy</span></div>
+          <div class="sys-row"><span class="sys-key">Region</span><span class="sys-val blue">US East (N. Virginia)</span></div>
+          <div class="sys-row"><span class="sys-key">Compute</span><span class="sys-val">NANO (Free Tier)</span></div>
+          <div class="sys-row"><span class="sys-key">RLS</span><span class="sys-val green">● Enabled</span></div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-title">Market Data</div>
+          <div class="sys-row"><span class="sys-key">Stock Prices</span><span class="sys-val green">● Auto-refreshing</span></div>
+          <div class="sys-row"><span class="sys-key">Refresh Rate</span><span class="sys-val">Every 10 minutes</span></div>
+          <div class="sys-row"><span class="sys-key">Stocks Tracked</span><span class="sys-val">124 NGX stocks</span></div>
+          <div class="sys-row"><span class="sys-key">Last Update</span><span class="sys-val" id="last-price-update">—</span></div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-title">Quick Actions</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+            <button class="ta-btn primary" onclick="refreshPrices()" style="width:100%;text-align:center;padding:9px;">🔄 Refresh Stock Prices Now</button>
+            <button class="ta-btn" onclick="showSection('users',document.querySelector('.sb-item:nth-child(5)'))" style="width:100%;text-align:center;padding:9px;">👥 Manage Users</button>
+            <button class="ta-btn" onclick="showSection('posts',document.querySelector('.sb-item:nth-child(8)'))" style="width:100%;text-align:center;padding:9px;">📝 Review Posts</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS SECTION -->
+    <div id="sec-users" style="display:none;">
+      <div class="filter-bar">
+        <button class="filter-btn on" onclick="filterUsers('all',this)">All Users</button>
+        <button class="filter-btn" onclick="filterUsers('active',this)">Active</button>
+        <button class="filter-btn" onclick="filterUsers('verified',this)">Verified</button>
+        <button class="filter-btn" onclick="filterUsers('unverified',this)">Unverified</button>
+        <button class="filter-btn" onclick="filterUsers('suspended',this)">Suspended</button>
+        <button class="ta-btn primary" onclick="openModal('add-user')" style="margin-left:auto;">+ Add User</button>
+      </div>
+      <div class="table-card">
+        <div class="table-hd">
+          <div class="table-title">All Users</div>
+          <div class="table-actions">
+            <button class="ta-btn" onclick="exportUsers()">⬇ Export CSV</button>
+          </div>
+        </div>
+        <div class="tbl-cols">
+          <div class="th">User</div>
+          <div class="th">Email</div>
+          <div class="th">Country</div>
+          <div class="th">Posts</div>
+          <div class="th">Status</div>
+          <div class="th">Joined</div>
+          <div class="th">Actions</div>
+        </div>
+        <div id="users-table-body">
+          <div style="text-align:center;padding:40px;color:var(--tx3);">⏳ Loading users...</div>
+        </div>
+        <div class="pagination" id="users-pagination" style="display:none;">
+          <button class="page-btn" onclick="changePage(-1)">‹</button>
+          <span class="page-info" id="page-info">Page 1</span>
+          <button class="page-btn" onclick="changePage(1)">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUSPENDED -->
+    <div id="sec-suspended" style="display:none;">
+      <div class="table-card">
+        <div class="table-hd"><div class="table-title">Suspended Accounts</div></div>
+        <div id="suspended-body" style="padding:20px;">
+          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMINS -->
+    <div id="sec-admins" style="display:none;">
+      <div class="table-card">
+        <div class="table-hd">
+          <div class="table-title">Admin Accounts</div>
+          <div class="table-actions"><button class="ta-btn primary" onclick="openModal('promote')">+ Promote User to Admin</button></div>
+        </div>
+        <div id="admins-body" style="padding:20px;">
+          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTS SECTION -->
+    <div id="sec-posts" style="display:none;">
+      <div class="filter-bar">
+        <button class="filter-btn on" onclick="filterPosts('all',this)">All Posts</button>
+        <button class="filter-btn" onclick="filterPosts('recent',this)">Recent</button>
+        <button class="filter-btn" onclick="filterPosts('popular',this)">Most Liked</button>
+      </div>
+      <div class="table-card">
+        <div class="table-hd"><div class="table-title">All Posts</div></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 80px 80px 100px;gap:8px;padding:8px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);">
+          <div class="th">Post</div><div class="th">Author</div><div class="th">Likes</div><div class="th">Comments</div><div class="th">Actions</div>
+        </div>
+        <div id="posts-table-body">
+          <div style="text-align:center;padding:40px;color:var(--tx3);">⏳ Loading posts...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div id="sec-reports" style="display:none;">
+      <div class="table-card">
+        <div class="table-hd"><div class="table-title">Content Reports</div></div>
+        <div style="padding:60px;text-align:center;color:var(--tx3);">
+          <div style="font-size:36px;margin-bottom:12px;">✅</div>
+          <div style="font-size:14px;font-weight:600;color:var(--tx2);">No reports yet</div>
+          <div style="font-size:13px;margin-top:6px;">All content appears clean. Reports from users will appear here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTFOLIOS -->
+    <div id="sec-portfolios" style="display:none;">
+      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="sc-ico" style="background:var(--plt);margin-bottom:8px;">💼</div><div class="sc-val" id="port-total">—</div><div class="sc-lbl">Total Holdings</div></div>
+        <div class="stat-card"><div class="sc-ico" style="background:var(--gbg);margin-bottom:8px;">📊</div><div class="sc-val" id="port-investors">—</div><div class="sc-lbl">Investors with Holdings</div></div>
+        <div class="stat-card"><div class="sc-ico" style="background:var(--ambg);margin-bottom:8px;">💰</div><div class="sc-val">MTNN</div><div class="sc-lbl">Most Held Stock</div></div>
+      </div>
+      <div class="table-card">
+        <div class="table-hd"><div class="table-title">Holdings Overview</div></div>
+        <div id="portfolios-body" style="padding:20px;">
+          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKET DATA -->
+    <div id="sec-market" style="display:none;">
+      <div class="table-card">
+        <div class="table-hd">
+          <div class="table-title">Live NGX Stock Prices</div>
+          <button class="ta-btn primary" onclick="refreshPrices()">🔄 Refresh Now</button>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 1fr 90px 80px 90px;gap:8px;padding:8px 18px;background:var(--g50);border-bottom:1px solid var(--bdr);">
+          <div class="th">Ticker</div><div class="th">Company</div><div class="th">Price</div><div class="th">Change</div><div class="th">Updated</div>
+        </div>
+        <div id="market-body" style="max-height:400px;overflow-y:auto;">
+          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading market data...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="sec-settings" style="display:none;">
+      <div style="max-width:600px;">
+        <div class="sys-card" style="margin-bottom:16px;">
+          <div class="sys-title">Platform Settings</div>
+          <div class="sys-row"><span class="sys-key">Platform Name</span><input value="GopexFund" style="background:var(--g50);border:1px solid var(--bdr);border-radius:7px;padding:5px 10px;font-size:12px;width:160px;"></div>
+          <div class="sys-row"><span class="sys-key">New Registrations</span><span class="sys-val green">● Open</span></div>
+          <div class="sys-row"><span class="sys-key">Maintenance Mode</span><span class="sys-val red">● Off</span></div>
+          <div class="sys-row"><span class="sys-key">Email Verification</span><span class="sys-val green">● Enabled</span></div>
+        </div>
+        <div class="sys-card">
+          <div class="sys-title">Make a User Admin</div>
+          <div style="margin-top:8px;">
+            <div style="font-size:13px;color:var(--tx2);margin-bottom:12px;">Enter the email of the user you want to promote to admin. Run the SQL below in your Supabase SQL Editor.</div>
+            <div style="background:var(--g900);color:#4ade80;padding:14px;border-radius:10px;font-size:12px;font-family:monospace;line-height:1.8;">
+              UPDATE public.profiles<br>
+              SET role = 'admin'<br>
+              WHERE id = (<br>
+              &nbsp;&nbsp;SELECT id FROM auth.users<br>
+              &nbsp;&nbsp;WHERE email = 'YOUR_EMAIL_HERE'<br>
+              );
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGS -->
+    <div id="sec-logs" style="display:none;">
+      <div class="table-card">
+        <div class="table-hd"><div class="table-title">Activity Logs</div></div>
+        <div id="logs-body" style="max-height:500px;overflow-y:auto;">
+          <div style="text-align:center;padding:30px;color:var(--tx3);">⏳ Loading logs...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<!-- ADD USER MODAL -->
+<div class="modal-ov" id="modal-add-user">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-user')">✕</button>
+    <div class="modal-title">Add New User</div>
+    <div class="mfield"><label>Full Name</label><input id="au-name" placeholder="Adaeze Obi"/></div>
+    <div class="mfield"><label>Email</label><input id="au-email" type="email" placeholder="user@example.com"/></div>
+    <div class="mfield"><label>Temporary Password</label><input id="au-pass" type="password" placeholder="Min. 8 characters"/></div>
+    <div class="mfield"><label>Role</label><select id="au-role"><option value="user">User</option><option value="admin">Admin</option></select></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('add-user')">Cancel</button>
+      <button class="modal-save" onclick="createUser()">Create User</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUSPEND MODAL -->
+<div class="modal-ov" id="modal-suspend">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('suspend')">✕</button>
+    <div class="modal-title">Suspend User</div>
+    <div id="suspend-user-info" style="background:var(--g50);border-radius:9px;padding:12px;margin-bottom:16px;font-size:13px;"></div>
+    <div class="mfield"><label>Reason for Suspension</label><textarea id="suspend-reason" placeholder="e.g. Spam, harassment, terms violation..."></textarea></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('suspend')">Cancel</button>
+      <button class="modal-danger" onclick="confirmSuspend()">Suspend Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROMOTE MODAL -->
+<div class="modal-ov" id="modal-promote">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('promote')">✕</button>
+    <div class="modal-title">Promote to Admin</div>
+    <div class="mfield"><label>User Email</label><input id="promote-email" type="email" placeholder="user@example.com"/></div>
+    <div style="background:var(--ambg);border:1px solid #fcd34d;border-radius:9px;padding:10px 13px;font-size:12px;color:var(--amber);margin-bottom:14px;">Admins have full access to this panel. Only promote trusted team members.</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('promote')">Cancel</button>
+      <button class="modal-save" onclick="promoteUser()">Promote to Admin</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW USER MODAL -->
+<div class="modal-ov" id="modal-view-user">
+  <div class="modal" style="max-width:520px;">
+    <button class="modal-close" onclick="closeModal('view-user')">✕</button>
+    <div class="modal-title">User Details</div>
+    <div id="view-user-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+var SB_URL  = 'https://lzlitanvlkycrkkpwczm.supabase.co';
+var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6bGl0YW52bGt5Y3Jra3B3Y3ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODQxNjAsImV4cCI6MjA5NDQ2MDE2MH0.fjpxhBLsO4faR1SK9oSrANJ9GPX_q1IKYVOuJZyuK9g';
+var _sb = createClient(SB_URL, SB_ANON);
+var _session = null;
+var _allUsers = [];
+var _filteredUsers = [];
+var _currentPage = 1;
+var _pageSize = 15;
+var _suspendTarget = null;
+
+// ── INIT ──────────────────────────────────────────────────────
+async function init() {
+  var authRes = await _sb.auth.getSession();
+  if (!authRes.data.session) { window.location.href = 'landing.html'; return; }
+  _session = authRes.data.session;
+
+  // Check admin role
+  var profRes = await _sb.from('profiles').select('role,name,initials').eq('id', _session.user.id).single();
+  if (!profRes.data || profRes.data.role !== 'admin') {
+    alert('Access denied. Admin only.');
+    window.location.href = 'home.html';
+    return;
+  }
+
+  var initials = profRes.data.initials || _session.user.email.charAt(0).toUpperCase();
+  var avsb = document.getElementById('sb-av'); if (avsb) avsb.textContent = initials;
+  var avt = document.getElementById('top-av'); if (avt) avt.textContent = initials;
+  var un = document.getElementById('sb-uname'); if (un) un.textContent = profRes.data.name || 'Admin';
+
+  await loadDashboard();
+}
+init();
+
+// ── DASHBOARD ─────────────────────────────────────────────────
+async function loadDashboard() {
+  // User count
+  var uRes = await _sb.from('profiles').select('id', {count:'exact', head:true});
+  var uCount = uRes.count || 0;
+  var du = document.getElementById('dash-users'); if (du) du.textContent = uCount.toLocaleString();
+  var sbu = document.getElementById('sb-user-count'); if (sbu) sbu.textContent = uCount;
+
+  // Posts count
+  var pRes = await _sb.from('posts').select('id', {count:'exact', head:true});
+  var pCount = pRes.count || 0;
+  var dp = document.getElementById('dash-posts'); if (dp) dp.textContent = pCount.toLocaleString();
+  var sbp = document.getElementById('sb-post-count'); if (sbp) sbp.textContent = pCount;
+
+  // Holdings count
+  var hRes = await _sb.from('holdings').select('id', {count:'exact', head:true});
+  var dh = document.getElementById('dash-holdings'); if (dh) dh.textContent = (hRes.count || 0).toLocaleString();
+
+  // Verified count
+  var vRes = await _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_verified', true);
+  var phv = document.getElementById('ph-verified'); if (phv) phv.textContent = vRes.count || 0;
+
+  // Suspended count
+  var sRes = await _sb.from('profiles').select('id', {count:'exact', head:true}).eq('is_suspended', true);
+  var phs = document.getElementById('ph-suspended'); if (phs) phs.textContent = sRes.count || 0;
+
+  var phactive = document.getElementById('ph-active'); if (phactive) phactive.textContent = Math.max(0, uCount - (sRes.count || 0));
+
+  // Investors with holdings
+  var ihRes = await _sb.from('holdings').select('user_id');
+  var uniqueInvestors = new Set();
+  if (ihRes.data) { for (var i = 0; i < ihRes.data.length; i++) uniqueInvestors.add(ihRes.data[i].user_id); }
+  var phhold = document.getElementById('ph-holdings'); if (phhold) phhold.textContent = uniqueInvestors.size;
+  var piv = document.getElementById('port-investors'); if (piv) piv.textContent = uniqueInvestors.size;
+  var ptv = document.getElementById('port-total'); if (ptv) ptv.textContent = (hRes.count || 0);
+
+  // Last price update
+  var priceRes = await _sb.from('stock_prices').select('last_updated').order('last_updated', {ascending:false}).limit(1).single();
+  var lpu = document.getElementById('last-price-update');
+  if (lpu && priceRes.data) {
+    var mins = Math.floor((Date.now() - new Date(priceRes.data.last_updated)) / 60000);
+    lpu.textContent = mins < 2 ? 'Just now' : (mins + ' min ago');
+  }
+}
+
+// ── LOAD USERS ────────────────────────────────────────────────
+async function loadUsers(filter) {
+  var res = await _sb.from('profiles').select('*').order('joined_at', {ascending:false});
+  _allUsers = res.data || [];
+
+  if (filter === 'active') _filteredUsers = _allUsers.filter(function(u) { return !u.is_suspended; });
+  else if (filter === 'verified') _filteredUsers = _allUsers.filter(function(u) { return u.is_verified; });
+  else if (filter === 'unverified') _filteredUsers = _allUsers.filter(function(u) { return !u.is_verified && !u.is_suspended; });
+  else if (filter === 'suspended') _filteredUsers = _allUsers.filter(function(u) { return u.is_suspended; });
+  else _filteredUsers = _allUsers;
+
+  _currentPage = 1;
+  renderUsersTable();
+}
+
+function renderUsersTable() {
+  var body = document.getElementById('users-table-body');
+  if (!body) return;
+
+  var start = (_currentPage - 1) * _pageSize;
+  var page = _filteredUsers.slice(start, start + _pageSize);
+
+  if (!page.length) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No users found.</div>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < page.length; i++) {
+    var u = page[i];
+    var initials = u.initials || (u.name ? u.name.charAt(0).toUpperCase() : 'U');
+    var joined = u.joined_at ? new Date(u.joined_at).toLocaleDateString('en-NG', {day:'numeric', month:'short', year:'numeric'}) : '—';
+    var statusClass = u.is_suspended ? 'sp-suspended' : (u.role === 'admin' ? 'sp-admin' : (u.is_verified ? 'sp-active' : 'sp-unverified'));
+    var statusText = u.is_suspended ? 'Suspended' : (u.role === 'admin' ? 'Admin' : (u.is_verified ? 'Verified' : 'Unverified'));
+
+    html += '<div class="user-row">'
+      + '<div class="ur-user">'
+      + '<div class="ur-av" style="background:var(--plt);color:var(--p);">' + initials + '</div>'
+      + '<div><div class="ur-name">' + (u.name || 'No Name') + '</div><div class="ur-email">' + (u.bio ? u.bio.substring(0,30) : 'No bio') + '</div></div>'
+      + '</div>'
+      + '<div class="ur-text" style="font-size:11px;">' + (u.location || '—') + '</div>'
+      + '<div class="ur-text">' + (u.country || 'Nigeria') + '</div>'
+      + '<div class="ur-text">' + (u.total_posts || 0) + '</div>'
+      + '<div><span class="status-pill ' + statusClass + '">' + statusText + '</span></div>'
+      + '<div class="ur-text" style="font-size:11px;">' + joined + '</div>'
+      + '<div class="action-btns">'
+      + '<button class="ab" onclick="viewUser(\'' + u.id + '\')">View</button>'
+      + (!u.is_suspended ? '<button class="ab danger" onclick="initSuspend(\'' + u.id + '\',\'' + (u.name||'User').replace(/'/g,'') + '\')">Suspend</button>' : '<button class="ab" onclick="unsuspendUser(\'' + u.id + '\')">Unsuspend</button>')
+      + '</div>'
+      + '</div>';
+  }
+  body.innerHTML = html;
+
+  var pi = document.getElementById('page-info');
+  if (pi) pi.textContent = 'Page ' + _currentPage + ' of ' + Math.ceil(_filteredUsers.length / _pageSize) + ' (' + _filteredUsers.length + ' users)';
+  var pag = document.getElementById('users-pagination');
+  if (pag) pag.style.display = _filteredUsers.length > _pageSize ? 'flex' : 'none';
+}
+
+window.changePage = function(dir) {
+  var max = Math.ceil(_filteredUsers.length / _pageSize);
+  _currentPage = Math.max(1, Math.min(_currentPage + dir, max));
+  renderUsersTable();
+  document.getElementById('sec-users').scrollIntoView({behavior:'smooth'});
+};
+
+window.filterUsers = function(f, btn) {
+  var btns = document.querySelectorAll('.filter-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('on');
+  btn.classList.add('on');
+  loadUsers(f);
+};
+
+// ── VIEW USER ─────────────────────────────────────────────────
+window.viewUser = async function(uid) {
+  var user = null;
+  for (var i = 0; i < _allUsers.length; i++) { if (_allUsers[i].id === uid) { user = _allUsers[i]; break; } }
+  if (!user) return;
+
+  var pRes = await _sb.from('posts').select('id', {count:'exact', head:true}).eq('user_id', uid);
+  var hRes = await _sb.from('holdings').select('id', {count:'exact', head:true}).eq('user_id', uid);
+  var fRes = await _sb.from('follows').select('id', {count:'exact', head:true}).eq('following_id', uid);
+
+  var content = document.getElementById('view-user-content');
+  content.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">NAME</div><div style="font-size:14px;font-weight:700;">' + (user.name||'—') + '</div></div>'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">COUNTRY</div><div style="font-size:14px;font-weight:700;">' + (user.country||'Nigeria') + '</div></div>'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">POSTS</div><div style="font-size:20px;font-weight:800;color:var(--p);">' + (pRes.count||0) + '</div></div>'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">HOLDINGS</div><div style="font-size:20px;font-weight:800;color:var(--green);">' + (hRes.count||0) + '</div></div>'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">FOLLOWERS</div><div style="font-size:20px;font-weight:800;color:var(--amber);">' + (fRes.count||0) + '</div></div>'
+    + '<div style="background:var(--g50);border-radius:9px;padding:12px;"><div style="font-size:10px;color:var(--tx3);margin-bottom:4px;">STATUS</div><div style="font-size:14px;font-weight:700;">' + (user.is_suspended ? '🚫 Suspended' : (user.is_verified ? '✓ Verified' : '◌ Unverified')) + '</div></div>'
+    + '</div>'
+    + '<div style="font-size:12px;color:var(--tx3);margin-bottom:8px;">Bio: ' + (user.bio||'None') + '</div>'
+    + '<div style="font-size:12px;color:var(--tx3);">User ID: <code style="background:var(--g100);padding:2px 6px;border-radius:4px;">' + user.id + '</code></div>';
+
+  openModal('view-user');
+};
+
+// ── SUSPEND ───────────────────────────────────────────────────
+window.initSuspend = function(uid, name) {
+  _suspendTarget = uid;
+  var info = document.getElementById('suspend-user-info');
+  if (info) info.innerHTML = '<strong>' + name + '</strong> will lose access to GopexFund.';
+  openModal('suspend');
+};
+window.confirmSuspend = async function() {
+  if (!_suspendTarget) return;
+  var reason = document.getElementById('suspend-reason').value.trim() || 'No reason given';
+  var res = await _sb.from('profiles').update({ is_suspended: true, suspension_reason: reason }).eq('id', _suspendTarget);
+  if (res.error) { showToast('Error: ' + res.error.message, 'error'); return; }
+  closeModal('suspend'); _suspendTarget = null;
+  showToast('User suspended', 'success');
+  loadUsers('all');
+};
+window.unsuspendUser = async function(uid) {
+  if (!confirm('Unsuspend this user?')) return;
+  await _sb.from('profiles').update({ is_suspended: false, suspension_reason: null }).eq('id', uid);
+  showToast('User unsuspended', 'success'); loadUsers('all');
+};
+
+// ── PROMOTE ───────────────────────────────────────────────────
+window.promoteUser = async function() {
+  var em = document.getElementById('promote-email').value.trim();
+  if (!em) { showToast('Enter an email', 'error'); return; }
+  // Find user by finding profile where we can match (limited by RLS, show SQL instructions instead)
+  showToast('Run the SQL in Settings tab to promote: UPDATE public.profiles SET role = \'admin\' WHERE id = (SELECT id FROM auth.users WHERE email = \'' + em + '\');', 'info');
+  closeModal('promote');
+};
+
+// ── CREATE USER ───────────────────────────────────────────────
+window.createUser = async function() {
+  var name = document.getElementById('au-name').value.trim();
+  var email = document.getElementById('au-email').value.trim();
+  var pass = document.getElementById('au-pass').value;
+  if (!name || !email || !pass) { showToast('Please fill all fields', 'error'); return; }
+  if (pass.length < 8) { showToast('Password must be 8+ characters', 'error'); return; }
+  // Admin cannot create users via anon key (needs service role) — show instructions
+  showToast('To create users, use Supabase Auth dashboard → Users → Invite User', 'info');
+  closeModal('add-user');
+};
+
+// ── POSTS ─────────────────────────────────────────────────────
+async function loadPosts(filter) {
+  var query = _sb.from('posts').select('*, profiles(name,initials)');
+  if (filter === 'popular') query = query.order('likes_count', {ascending:false});
+  else query = query.order('created_at', {ascending:false});
+  query = query.limit(50);
+
+  var res = await query;
+  var body = document.getElementById('posts-table-body');
+  if (!body) return;
+
+  if (!res.data || !res.data.length) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No posts found.</div>'; return;
+  }
+
+  var html = '';
+  for (var i = 0; i < res.data.length; i++) {
+    var p = res.data[i];
+    var author = (p.profiles && p.profiles.name) ? p.profiles.name : 'Unknown';
+    var mins = Math.floor((Date.now() - new Date(p.created_at)) / 60000);
+    var tstr = mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
+    html += '<div class="post-row">'
+      + '<div><div class="pr-body">' + p.body.substring(0,90) + (p.body.length>90?'...':'') + '</div><div class="pr-author">' + tstr + '</div></div>'
+      + '<div class="pr-author">' + author + '</div>'
+      + '<div style="font-size:12px;font-weight:700;">&#10084; ' + (p.likes_count||0) + '</div>'
+      + '<div style="font-size:12px;font-weight:700;">&#128172; ' + (p.comments_count||0) + '</div>'
+      + '<div><button class="ab danger" onclick="deletePost(\'' + p.id + '\',this)">Delete</button></div>'
+      + '</div>';
+  }
+  body.innerHTML = html;
+}
+
+window.filterPosts = function(f, btn) {
+  var btns = document.querySelectorAll('.filter-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('on');
+  btn.classList.add('on');
+  loadPosts(f);
+};
+
+window.deletePost = async function(id, el) {
+  if (!confirm('Delete this post permanently?')) return;
+  await _sb.from('posts').delete().eq('id', id);
+  var row = el.closest('.post-row');
+  if (row) row.remove();
+  showToast('Post deleted', 'success');
+};
+
+// ── MARKET DATA ───────────────────────────────────────────────
+async function loadMarket() {
+  var res = await _sb.from('stock_prices').select('ticker,company_name,price,change_pct,volume,last_updated').order('ticker');
+  var body = document.getElementById('market-body');
+  if (!body || !res.data) return;
+
+  var html = '';
+  for (var i = 0; i < res.data.length; i++) {
+    var s = res.data[i];
+    var up = (s.change_pct || 0) >= 0;
+    var mins = Math.floor((Date.now() - new Date(s.last_updated)) / 60000);
+    html += '<div style="display:grid;grid-template-columns:80px 1fr 90px 80px 90px;gap:8px;padding:9px 18px;border-bottom:1px solid var(--bdr);font-size:12px;">'
+      + '<div style="font-weight:700;font-family:monospace;">' + s.ticker + '</div>'
+      + '<div style="color:var(--tx2);">' + (s.company_name||'—') + '</div>'
+      + '<div style="font-weight:700;">&#8358;' + (s.price||0).toLocaleString() + '</div>'
+      + '<div style="font-weight:700;color:' + (up?'var(--green)':'var(--red)') + ';">' + (up?'▲':'▼') + ' ' + Math.abs(s.change_pct||0).toFixed(2) + '%</div>'
+      + '<div style="color:var(--tx3);">' + (mins < 2 ? 'Just now' : mins + 'm ago') + '</div>'
+      + '</div>';
+  }
+  body.innerHTML = html || '<div style="text-align:center;padding:30px;color:var(--tx3);">No data yet. Run load-all-ngx-stocks.sql</div>';
+}
+
+// ── SUSPENDED / ADMINS ────────────────────────────────────────
+async function loadSuspended() {
+  var res = await _sb.from('profiles').select('*').eq('is_suspended', true);
+  var body = document.getElementById('suspended-body');
+  if (!body) return;
+  if (!res.data || !res.data.length) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);"><div style="font-size:32px;margin-bottom:10px;">✅</div><div>No suspended accounts</div></div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < res.data.length; i++) {
+    var u = res.data[i];
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
+      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'No Name') + '</div>'
+      + '<div style="font-size:11px;color:var(--red);">Reason: ' + (u.suspension_reason||'None given') + '</div></div>'
+      + '<button class="ab" onclick="unsuspendUser(\'' + u.id + '\')">Unsuspend</button></div>';
+  }
+  body.innerHTML = html;
+}
+
+async function loadAdmins() {
+  var res = await _sb.from('profiles').select('*').eq('role', 'admin');
+  var body = document.getElementById('admins-body');
+  if (!body) return;
+  if (!res.data || !res.data.length) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tx3);">No admins found. Promote a user in Settings.</div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < res.data.length; i++) {
+    var u = res.data[i];
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">'
+      + '<div><div style="font-size:13px;font-weight:700;">' + (u.name||'Admin') + '</div>'
+      + '<div style="font-size:11px;color:var(--purple);">🛡 Administrator</div></div>'
+      + (u.id !== _session.user.id ? '<button class="ab danger" onclick="demoteAdmin(\'' + u.id + '\')">Remove Admin</button>' : '<span style="font-size:11px;color:var(--tx3);">That\'s you</span>') + '</div>';
+  }
+  body.innerHTML = html;
+}
+
+window.demoteAdmin = async function(uid) {
+  if (!confirm('Remove admin privileges from this user?')) return;
+  await _sb.from('profiles').update({ role: 'user' }).eq('id', uid);
+  showToast('Admin privileges removed', 'success'); loadAdmins();
+};
+
+// ── PORTFOLIOS ────────────────────────────────────────────────
+async function loadPortfolios() {
+  var res = await _sb.from('holdings').select('*, profiles(name)').order('created_at', {ascending:false}).limit(30);
+  var body = document.getElementById('portfolios-body');
+  if (!body || !res.data) return;
+  var html = '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:8px 0;margin-bottom:8px;"><div style="font-size:10px;font-weight:700;color:var(--tx3);">USER / TICKER</div><div style="font-size:10px;font-weight:700;color:var(--tx3);">SHARES</div><div style="font-size:10px;font-weight:700;color:var(--tx3);">BUY PRICE</div><div style="font-size:10px;font-weight:700;color:var(--tx3);">COST BASIS</div></div>';
+  for (var i = 0; i < res.data.length; i++) {
+    var h = res.data[i];
+    var cost = h.shares * h.buy_price;
+    html += '<div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:12px;"><div><div style="font-weight:700;">' + h.ticker + ' <span style="color:var(--tx3);font-weight:400;">· ' + (h.profiles&&h.profiles.name?h.profiles.name:'Unknown') + '</span></div><div style="color:var(--tx3);font-size:11px;">' + (h.company_name||'') + '</div></div><div style="font-weight:700;">' + h.shares + '</div><div>&#8358;' + h.buy_price + '</div><div style="font-weight:700;">&#8358;' + cost.toLocaleString('en-NG',{maximumFractionDigits:0}) + '</div></div>';
+  }
+  body.innerHTML = html;
+}
+
+// ── LOGS ──────────────────────────────────────────────────────
+async function loadLogs() {
+  var body = document.getElementById('logs-body');
+  if (!body) return;
+  var pRes = await _sb.from('posts').select('body,created_at,user_id,profiles(name)').order('created_at',{ascending:false}).limit(20);
+  if (!pRes.data || !pRes.data.length) { body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx3);">No logs yet.</div>'; return; }
+  var html = '';
+  for (var i = 0; i < pRes.data.length; i++) {
+    var p = pRes.data[i];
+    var mins = Math.floor((Date.now() - new Date(p.created_at)) / 60000);
+    var tstr = mins < 60 ? (mins + 'm ago') : (Math.floor(mins/60) + 'h ago');
+    html += '<div style="display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--bdr);font-size:12px;"><span style="font-size:16px;">📝</span><div style="flex:1;"><strong>' + ((p.profiles&&p.profiles.name)||'User') + '</strong> posted: ' + p.body.substring(0,60) + '</div><div style="color:var(--tx3);white-space:nowrap;">' + tstr + '</div></div>';
+  }
+  body.innerHTML = html;
+}
+
+// ── REFRESH PRICES ────────────────────────────────────────────
+window.refreshPrices = async function() {
+  showToast('Triggering price refresh... check stock_prices table in 30s', 'info');
+  try {
+    await _sb.rpc('fetch_all_ngx_prices');
+    showToast('Prices refreshed!', 'success');
+  } catch(e) {
+    showToast('Prices refresh queued (pg_cron will run in 10min)', 'info');
+  }
+};
+
+// ── GLOBAL SEARCH ─────────────────────────────────────────────
+window.globalSearch = function(q) {
+  if (!q || q.length < 2) { renderUsersTable(); return; }
+  q = q.toLowerCase();
+  _filteredUsers = _allUsers.filter(function(u) {
+    return (u.name && u.name.toLowerCase().includes(q)) || (u.location && u.location.toLowerCase().includes(q));
+  });
+  _currentPage = 1;
+  renderUsersTable();
+};
+
+// ── EXPORT ────────────────────────────────────────────────────
+window.exportUsers = function() {
+  var csv = 'Name,Country,Location,Verified,Role,Joined\n';
+  for (var i = 0; i < _allUsers.length; i++) {
+    var u = _allUsers[i];
+    csv += '"' + (u.name||'') + '","' + (u.country||'') + '","' + (u.location||'') + '","' + (u.is_verified?'Yes':'No') + '","' + (u.role||'user') + '","' + (u.joined_at||'') + '"\n';
+  }
+  var blob = new Blob([csv], {type:'text/csv'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'gopexfund-users.csv'; a.click();
+  showToast('CSV exported!', 'success');
+};
+
+// ── SECTION NAVIGATION ────────────────────────────────────────
+window.showSection = function(id, btn) {
+  var sections = ['dashboard','users','suspended','admins','posts','reports','portfolios','market','settings','logs'];
+  for (var i = 0; i < sections.length; i++) {
+    var s = document.getElementById('sec-' + sections[i]);
+    if (s) s.style.display = sections[i] === id ? 'block' : 'none';
+  }
+  var items = document.querySelectorAll('.sb-item');
+  for (var j = 0; j < items.length; j++) items[j].classList.remove('on');
+  if (btn) btn.classList.add('on');
+
+  var titles = { dashboard:'Dashboard', users:'All Users', suspended:'Suspended Accounts', admins:'Admins', posts:'All Posts', reports:'Content Reports', portfolios:'Portfolios', market:'Market Data', settings:'Settings', logs:'Activity Logs' };
+  var pt = document.getElementById('page-title'); if (pt) pt.textContent = titles[id] || id;
+
+  // Lazy load section data
+  if (id === 'users') loadUsers('all');
+  else if (id === 'posts') loadPosts('recent');
+  else if (id === 'suspended') loadSuspended();
+  else if (id === 'admins') loadAdmins();
+  else if (id === 'market') loadMarket();
+  else if (id === 'portfolios') loadPortfolios();
+  else if (id === 'logs') loadLogs();
+};
+
+// ── LOGOUT ────────────────────────────────────────────────────
+window.doLogout = async function() {
+  if (!confirm('Log out?')) return;
+  await _sb.auth.signOut();
+  sessionStorage.clear();
+  window.location.href = 'landing.html';
+};
+
+// ── MODALS ────────────────────────────────────────────────────
+window.openModal = function(id) { var el = document.getElementById('modal-' + id); if (el) el.classList.add('open'); };
+window.closeModal = function(id) { var el = document.getElementById('modal-' + id); if (el) el.classList.remove('open'); };
+document.querySelectorAll('.modal-ov').forEach(function(el) {
+  el.addEventListener('click', function(e) { if (e.target === el) el.classList.remove('open'); });
+});
+
+// ── TOAST ─────────────────────────────────────────────────────
+window.showToast = function(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + (type||''); t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 4000);
+};
+</script>
+</body>
+</html>
